@@ -1,0 +1,15 @@
+name = "stacc-github-proxy"
+main = "src/index.ts"
+compatibility_date = "2026-01-14"
+
+# Deploy this worker and point your domain/route to it.
+# Example:
+#   wrangler deploy
+#   # then configure a route like:
+#   #   https://proxy.example.com/*  -> this worker
+
+[vars]
+# Optional. Set a secret instead of committing it:
+#   wrangler secret put GITHUB_TOKEN
+#GITHUB_TOKEN = ""
+
