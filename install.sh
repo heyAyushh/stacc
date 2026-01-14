@@ -2,7 +2,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_REF="${BASH_SOURCE[0]-$0}"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_REF}")" && pwd)"
 ROOT_DIR="$SCRIPT_DIR"
 PROJECT_ROOT="$(pwd)"
 TMP_ROOT=""
