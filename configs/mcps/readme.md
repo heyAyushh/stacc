@@ -1,0 +1,1 @@
+.mcp.json for claude code.
