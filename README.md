@@ -71,7 +71,7 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/stack/ios-skills/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |
 | `configs/stack/ios-skills/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |
 
-### From [triggerdotdev/trigger.dev](https://github.com/triggerdotdev/trigger.dev) and community
+### From [triggerdotdev/trigger.dev](https://github.com/triggerdotdev/trigger.dev) and community (Apache-2.0)
 
 | File | Description |
 |------|-------------|
@@ -89,7 +89,8 @@ The `deslop.md` command appears in multiple repositories including:
 | `configs/agents/askuserquestion.md` | AskUserQuestion tool description |
 | `configs/commands/explore.md` | File search specialist agent prompt |
 
-These are adaptations of Claude Code's built-in tool descriptions and agent prompts.
+These are adaptations of Claude Code's built-in tool descriptions and agent prompts. Also documented in:
+- [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) (MIT)
 
 ### From [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) (CC0-1.0)
 
@@ -99,13 +100,19 @@ These are adaptations of Claude Code's built-in tool descriptions and agent prom
 | `configs/stack/typescript.mdc` | TypeScript conventions |
 | `configs/stack/postgresql.mdc` | PostgreSQL guidelines |
 
+### From [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) (CC0-1.0)
+
+| File | Description |
+|------|-------------|
+| `configs/rules/clean-code.mdc` | Clean code guidelines |
+
 ### From [hamzafer/cursor-commands](https://github.com/hamzafer/cursor-commands) (MIT)
 
 | File | Description |
 |------|-------------|
 | `configs/commands/visualize.md` | Mermaid diagram generation |
 | `configs/commands/onboard-new-developer.md` | Developer onboarding checklist |
-| `configs/commands/refactor.md` | Code refactoring checklist |
+| `configs/commands/refactor.md` | Code refactoring checklist (refactor-code.md) |
 
 ### From [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) (MIT)
 
@@ -124,11 +131,15 @@ These are adaptations of Claude Code's built-in tool descriptions and agent prom
 |------|-------------|
 | `configs/commands/review.md` | Security-focused code review |
 
-### From [4regab/agent-rules-mcp](https://github.com/4regab/agent-rules-mcp) (MIT)
+### From [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills)
 
 | File | Description |
 |------|-------------|
-| `configs/rules/clean-code.mdc` | Clean code guidelines |
+| `configs/skills/changelog-generator/` | Changelog generation from git commits |
+
+Also found in:
+- [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT)
+- [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT)
 
 ### Original / Sources Not Found
 
@@ -137,7 +148,6 @@ These are adaptations of Claude Code's built-in tool descriptions and agent prom
 | `configs/commands/ultrathink.md` | Deep reasoning mode protocol (original) |
 | `configs/commands/init.md` | AGENTS.md initialization |
 | `configs/agents/verifier.md` | Work verification agent |
-| `configs/skills/changelog-generator/` | Changelog generation from git commits |
 
 ## License
 
