@@ -7,6 +7,7 @@ SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_REF}")" && pwd)"
 ROOT_DIR="$SCRIPT_DIR"
 PROJECT_ROOT="$(pwd)"
 TMP_ROOT=""
+TTY_DEVICE=""
 
 NON_INTERACTIVE=0
 DRY_RUN=0
@@ -58,6 +59,22 @@ run_cmd() {
   else
     "$@"
   fi
+}
+
+init_tty() {
+  if [ -t 0 ]; then
+    TTY_DEVICE="/dev/tty"
+  elif [ -r /dev/tty ]; then
+    TTY_DEVICE="/dev/tty"
+  fi
+}
+
+prompt_read() {
+  local var_name="$1"
+  if [ -z "${TTY_DEVICE}" ]; then
+    die "non-interactive shell; use --yes or pass options"
+  fi
+  IFS= read -r "${var_name}" < "${TTY_DEVICE}"
 }
 
 download_repo() {
@@ -155,8 +172,8 @@ select_editors() {
   log "  1) Cursor"
   log "  2) Claude Code"
   log "  3) Both"
-  printf "> "
-  read -r choice
+  printf "> " > "${TTY_DEVICE}"
+  prompt_read choice
   case "${choice}" in
     1) SELECTED_EDITORS="cursor" ;;
     2) SELECTED_EDITORS="claude" ;;
@@ -178,8 +195,8 @@ select_scope() {
   log "Select scope:"
   log "  1) Global (~/.cursor or ~/.claude)"
   log "  2) Project (.cursor or .claude in current directory)"
-  printf "> "
-  read -r choice
+  printf "> " > "${TTY_DEVICE}"
+  prompt_read choice
   case "${choice}" in
     1) SELECTED_SCOPE="global" ;;
     2) SELECTED_SCOPE="project" ;;
@@ -205,8 +222,8 @@ select_categories() {
   log "  5) stack"
   log "  6) hooks"
   log "  7) mcps"
-  printf "> "
-  read -r choice
+  printf "> " > "${TTY_DEVICE}"
+  prompt_read choice
 
   if [ "${choice}" = "all" ]; then
     SELECTED_CATEGORIES="commands,rules,agents,skills,stack,hooks,mcps"
@@ -242,8 +259,8 @@ confirm_summary() {
   log "  Scope: ${SELECTED_SCOPE}"
   log "  Categories: ${SELECTED_CATEGORIES}"
   log ""
-  printf "Proceed? [y/N] "
-  read -r confirm
+  printf "Proceed? [y/N] " > "${TTY_DEVICE}"
+  prompt_read confirm
   case "${confirm}" in
     y|Y|yes|YES) ;;
     *) die "aborted" ;;
@@ -271,8 +288,8 @@ prompt_conflict_mode() {
   log "  4) Overwrite all"
   log "  5) Backup all"
   log "  6) Skip all"
-  printf "> "
-  read -r choice
+  printf "> " > "${TTY_DEVICE}"
+  prompt_read choice
   case "${choice}" in
     1) CONFLICT_MODE="overwrite" ;;
     2) CONFLICT_MODE="backup" ;;
@@ -366,9 +383,9 @@ merge_mcp() {
 
   if command -v jq >/dev/null 2>&1; then
     if [ "${NON_INTERACTIVE}" -eq 0 ]; then
-      printf "Merge MCP config into existing %s? [y/N] " "${dest}"
+      printf "Merge MCP config into existing %s? [y/N] " "${dest}" > "${TTY_DEVICE}"
       local confirm
-      read -r confirm
+      prompt_read confirm
       case "${confirm}" in
         y|Y|yes|YES) ;;
         *) return 1 ;;
@@ -442,6 +459,10 @@ install_for_target() {
 
 main() {
   parse_args "$@"
+  init_tty
+  if [ "${NON_INTERACTIVE}" -eq 0 ] && [ -z "${TTY_DEVICE}" ]; then
+    NON_INTERACTIVE=1
+  fi
   ensure_repo_root
 
   select_editors
