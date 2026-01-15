@@ -1,0 +1,29 @@
+# Cloudflare Pages headers
+# Set proper content-type headers for different file types
+
+# Shell scripts
+/*.sh
+  Content-Type: text/x-shellscript; charset=utf-8
+
+# Markdown files
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/*.mdc
+  Content-Type: text/markdown; charset=utf-8
+
+# JSON files
+/*.json
+  Content-Type: application/json; charset=utf-8
+
+# Text files
+/*.txt
+  Content-Type: text/plain; charset=utf-8
+
+# Python files (for reference)
+/*.py
+  Content-Type: text/x-python; charset=utf-8
+
+# XML files
+/*.xml
+  Content-Type: application/xml; charset=utf-8
