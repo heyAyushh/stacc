@@ -2,6 +2,8 @@
 
 A collection of AI agent configurations, skills, commands, and rules for Claude Code and Cursor IDE.
 
+![stacc banner](stacc.png)
+
 ## Installation
 
 ### Quick Install (curl)
