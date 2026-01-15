@@ -34,22 +34,214 @@ log_verbose() {
 }
 die() { log_error "error: $*"; exit 1; }
 
-print_divider() { printf '%s\n' "----------------------------------------" >&2; }
-print_heading() { printf '\n%s\n' "$*" >&2; }
+COLORS_ENABLED=0
+COLOR_RESET=""
+COLOR_BOLD=""
+COLOR_DIM=""
+COLOR_CYAN=""
+COLOR_GREEN=""
+COLOR_YELLOW=""
 
-prompt_choice() {
-  local var_name="$1"
-  local prompt="$2"
-  local default_value="$3"
-  printf "%s" "${prompt}" > "${TTY_DEVICE}"
-  prompt_read "${var_name}"
-  if [ -z "${!var_name}" ]; then
-    printf -v "${var_name}" '%s' "${default_value}"
+init_colors() {
+  if [ -t 2 ] && [ -z "${NO_COLOR-}" ]; then
+    COLORS_ENABLED=1
+    COLOR_RESET=$'\033[0m'
+    COLOR_BOLD=$'\033[1m'
+    COLOR_DIM=$'\033[2m'
+    COLOR_CYAN=$'\033[36m'
+    COLOR_GREEN=$'\033[32m'
+    COLOR_YELLOW=$'\033[33m'
   fi
 }
 
-normalize_choice() {
-  printf '%s' "$1" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]'
+print_divider() { printf '%s\n' "----------------------------------------" >&2; }
+print_heading() { printf '\n%b\n' "${COLOR_BOLD}${COLOR_CYAN}$*${COLOR_RESET}" >&2; }
+
+ui_out() { printf '%b' "$*" > "${TTY_DEVICE}"; }
+
+join_by() {
+  local IFS="$1"
+  shift
+  printf '%s' "$*"
+}
+
+read_key() {
+  local key
+  IFS= read -rsn1 key < "${TTY_DEVICE}" || return 1
+  if [ "${key}" = $'\033' ]; then
+    local rest
+    IFS= read -rsn2 rest < "${TTY_DEVICE}" || true
+    case "${rest}" in
+      "[A") printf '%s' "up" ;;
+      "[B") printf '%s' "down" ;;
+      *) printf '%s' "esc" ;;
+    esac
+    return 0
+  fi
+  case "${key}" in
+    " ") printf '%s' "space" ;;
+    $'\n'|$'\r') printf '%s' "enter" ;;
+    *) printf '%s' "${key}" ;;
+  esac
+}
+
+render_menu_single() {
+  local title="$1"
+  local instructions="$2"
+  local cursor="$3"
+  shift 3
+  local -a items=("$@")
+
+  ui_out "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}\n"
+  ui_out "${COLOR_DIM}${instructions}${COLOR_RESET}\n\n"
+  local i
+  for i in "${!items[@]}"; do
+    if [ "${i}" -eq "${cursor}" ]; then
+      ui_out " ${COLOR_YELLOW}>${COLOR_RESET} ${COLOR_BOLD}${items[$i]}${COLOR_RESET}\n"
+    else
+      ui_out "   ${items[$i]}\n"
+    fi
+  done
+}
+
+render_menu_multi() {
+  local title="$1"
+  local instructions="$2"
+  local cursor="$3"
+  shift 3
+  local -a items=("$@")
+  local -a selected=("${SELECTED_FLAGS[@]}")
+
+  ui_out "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}\n"
+  ui_out "${COLOR_DIM}${instructions}${COLOR_RESET}\n\n"
+  local i
+  for i in "${!items[@]}"; do
+    local marker="[ ]"
+    local label="${items[$i]}"
+    if [ "${selected[$i]}" = "1" ]; then
+      marker="[x]"
+      label="${COLOR_GREEN}${label}${COLOR_RESET}"
+    fi
+    if [ "${i}" -eq "${cursor}" ]; then
+      ui_out " ${COLOR_YELLOW}>${COLOR_RESET} ${marker} ${label}\n"
+    else
+      ui_out "   ${marker} ${label}\n"
+    fi
+  done
+}
+
+menu_single() {
+  local title="$1"
+  local instructions="$2"
+  local default_index="$3"
+  shift 3
+  local -a items=("$@")
+  local cursor="${default_index}"
+  local total="${#items[@]}"
+  local lines=$((3 + total))
+  local key=""
+  local stty_state
+
+  stty_state="$(stty -g < "${TTY_DEVICE}")"
+  stty -echo -icanon time 0 min 1 < "${TTY_DEVICE}"
+  tput civis > "${TTY_DEVICE}" 2>/dev/null || true
+
+  render_menu_single "${title}" "${instructions}" "${cursor}" "${items[@]}"
+  while true; do
+    key="$(read_key)"
+    case "${key}" in
+      up) cursor=$(( (cursor + total - 1) % total )) ;;
+      down) cursor=$(( (cursor + 1) % total )) ;;
+      enter) break ;;
+      *) ;;
+    esac
+    ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
+    ui_out "$(tput ed 2>/dev/null || true)"
+    render_menu_single "${title}" "${instructions}" "${cursor}" "${items[@]}"
+  done
+
+  ui_out "\n"
+  tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
+  stty "${stty_state}" < "${TTY_DEVICE}"
+  MENU_RESULT="${items[$cursor]}"
+}
+
+menu_multi() {
+  local title="$1"
+  local instructions="$2"
+  local default_all="$3"
+  local delimiter="$4"
+  shift 4
+  local -a items=("$@")
+  local total="${#items[@]}"
+  local cursor=0
+  local key=""
+  local stty_state
+  local i
+
+  SELECTED_FLAGS=()
+  for i in "${!items[@]}"; do
+    if [ "${default_all}" -eq 1 ]; then
+      SELECTED_FLAGS[$i]="1"
+    else
+      SELECTED_FLAGS[$i]="0"
+    fi
+  done
+
+  stty_state="$(stty -g < "${TTY_DEVICE}")"
+  stty -echo -icanon time 0 min 1 < "${TTY_DEVICE}"
+  tput civis > "${TTY_DEVICE}" 2>/dev/null || true
+
+  render_menu_multi "${title}" "${instructions}" "${cursor}" "${items[@]}"
+  local lines=$((3 + total))
+  while true; do
+    key="$(read_key)"
+    case "${key}" in
+      up) cursor=$(( (cursor + total - 1) % total )) ;;
+      down) cursor=$(( (cursor + 1) % total )) ;;
+      space)
+        if [ "${SELECTED_FLAGS[$cursor]}" = "1" ]; then
+          SELECTED_FLAGS[$cursor]="0"
+        else
+          SELECTED_FLAGS[$cursor]="1"
+        fi
+        ;;
+      a)
+        local all_selected=1
+        for i in "${!items[@]}"; do
+          if [ "${SELECTED_FLAGS[$i]}" != "1" ]; then
+            all_selected=0
+            break
+          fi
+        done
+        for i in "${!items[@]}"; do
+          if [ "${all_selected}" -eq 1 ]; then
+            SELECTED_FLAGS[$i]="0"
+          else
+            SELECTED_FLAGS[$i]="1"
+          fi
+        done
+        ;;
+      enter) break ;;
+      *) ;;
+    esac
+    ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
+    ui_out "$(tput ed 2>/dev/null || true)"
+    render_menu_multi "${title}" "${instructions}" "${cursor}" "${items[@]}"
+  done
+
+  ui_out "\n"
+  tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
+  stty "${stty_state}" < "${TTY_DEVICE}"
+
+  local -a selected_items=()
+  for i in "${!items[@]}"; do
+    if [ "${SELECTED_FLAGS[$i]}" = "1" ]; then
+      selected_items+=("${items[$i]}")
+    fi
+  done
+
+  MENU_RESULT="$(join_by "${delimiter}" "${selected_items[@]}")"
 }
 
 usage() {
@@ -214,27 +406,22 @@ select_editors() {
     return 0
   fi
 
-  print_heading "Select editor"
-  log_info "Press Enter for default: All"
-  log_info ""
-  log_info "  1) Cursor"
-  log_info "  2) Claude Code"
-  log_info "  3) OpenCode"
-  log_info "  4) Codex"
-  log_info "  5) Both (Cursor + Claude Code)"
-  log_info "  a) All"
-  print_divider
-  prompt_choice choice "> " "a"
-  choice="$(normalize_choice "${choice}")"
-  case "${choice}" in
-    1) SELECTED_EDITORS="cursor" ;;
-    2) SELECTED_EDITORS="claude" ;;
-    3) SELECTED_EDITORS="opencode" ;;
-    4) SELECTED_EDITORS="codex" ;;
-    5) SELECTED_EDITORS="cursor claude" ;;
-    6|a|all) SELECTED_EDITORS="cursor claude opencode codex" ;;
-    *) die "invalid selection" ;;
+  local -a editor_items=("Cursor" "Claude Code" "OpenCode" "Codex")
+  menu_multi "Select editors" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 1 "|" "${editor_items[@]}"
+  case "${MENU_RESULT}" in
+    *Cursor*) SELECTED_EDITORS="${SELECTED_EDITORS} cursor" ;;
   esac
+  case "${MENU_RESULT}" in
+    *"Claude Code"*) SELECTED_EDITORS="${SELECTED_EDITORS} claude" ;;
+  esac
+  case "${MENU_RESULT}" in
+    *OpenCode*) SELECTED_EDITORS="${SELECTED_EDITORS} opencode" ;;
+  esac
+  case "${MENU_RESULT}" in
+    *Codex*) SELECTED_EDITORS="${SELECTED_EDITORS} codex" ;;
+  esac
+  SELECTED_EDITORS="${SELECTED_EDITORS# }"
+  [ -n "${SELECTED_EDITORS}" ] || die "no editors selected"
 }
 
 select_scope() {
@@ -247,18 +434,12 @@ select_scope() {
     return 0
   fi
 
-  print_heading "Select scope"
-  log_info "Press Enter for default: Global"
-  log_info ""
-  log_info "  1) Global (~/.cursor or ~/.claude)"
-  log_info "  2) Project (.cursor or .claude in current directory)"
-  print_divider
-  prompt_choice choice "> " "1"
-  choice="$(normalize_choice "${choice}")"
-  case "${choice}" in
-    1) SELECTED_SCOPE="global" ;;
-    2) SELECTED_SCOPE="project" ;;
-    *) die "invalid selection" ;;
+  local -a scope_items=("Global (~/.cursor or ~/.claude)" "Project (.cursor or .claude in current directory)")
+  menu_single "Select scope" "Use ↑/↓ to move, Enter to select." 0 "${scope_items[@]}"
+  case "${MENU_RESULT}" in
+    "Global"*) SELECTED_SCOPE="global" ;;
+    "Project"*) SELECTED_SCOPE="project" ;;
+    *) die "invalid scope selection" ;;
   esac
 }
 
@@ -272,43 +453,10 @@ select_categories() {
     return 0
   fi
 
-  print_heading "Select categories"
-  log_info "Press Enter for default: All"
-  log_info "Use comma-separated numbers (e.g. 1,3,4) or 'a' for all"
-  log_info ""
-  log_info "  1) commands"
-  log_info "  2) rules"
-  log_info "  3) agents"
-  log_info "  4) skills"
-  log_info "  5) stack"
-  log_info "  6) hooks"
-  log_info "  7) mcps"
-  log_info "  a) all"
-  print_divider
-  prompt_choice choice "> " "a"
-  choice="$(normalize_choice "${choice}")"
-
-  if [ "${choice}" = "all" ] || [ "${choice}" = "a" ]; then
-    SELECTED_CATEGORIES="commands,rules,agents,skills,stack,hooks,mcps"
-    return 0
-  fi
-
-  local selected=""
-  local part
-  IFS=',' read -r -a parts <<< "${choice}"
-  for part in "${parts[@]}"; do
-    case "$(printf '%s' "${part}" | tr -d '[:space:]')" in
-      1) selected="${selected},commands" ;;
-      2) selected="${selected},rules" ;;
-      3) selected="${selected},agents" ;;
-      4) selected="${selected},skills" ;;
-      5) selected="${selected},stack" ;;
-      6) selected="${selected},hooks" ;;
-      7) selected="${selected},mcps" ;;
-      *) die "invalid category selection: ${part}" ;;
-    esac
-  done
-  SELECTED_CATEGORIES="${selected#,}"
+  local -a category_items=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps")
+  menu_multi "Select categories" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 1 "," "${category_items[@]}"
+  SELECTED_CATEGORIES="${MENU_RESULT}"
+  [ -n "${SELECTED_CATEGORIES}" ] || die "no categories selected"
 }
 
 confirm_summary() {
@@ -643,6 +791,7 @@ install_for_target() {
 main() {
   parse_args "$@"
   init_tty
+  init_colors
   if [ "${NON_INTERACTIVE}" -eq 0 ] && [ -z "${TTY_DEVICE}" ]; then
     NON_INTERACTIVE=1
   fi
