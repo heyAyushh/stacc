@@ -699,7 +699,7 @@ download_repo() {
   TMP_ROOT="$(mktemp -d)"
   log_verbose "Temp path: ${TMP_ROOT}"
   if [ "${VERBOSE}" -eq 1 ]; then
-    log_verbose "Cloning stacc repository..."
+    log_verbose "Cloning stacc /simsitory..."
     run_cmd git clone --depth 1 --branch main "${REPO_URL}" "${TMP_ROOT}/stacc"
   else
     run_cmd git clone --quiet --depth 1 --branch main "${REPO_URL}" "${TMP_ROOT}/stacc"
