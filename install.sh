@@ -4,10 +4,11 @@ IFS=$'\n\t'
 
 SCRIPT_REF="${BASH_SOURCE[0]-$0}"
 SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_REF}")" && pwd)"
-ROOT_DIR="$SCRIPT_DIR"
+ROOT_DIR=""
 PROJECT_ROOT="$(pwd)"
 TMP_ROOT=""
 TTY_DEVICE=""
+REPO_URL="https://github.com/heyAyushh/stacc.git"
 
 NON_INTERACTIVE=0
 DRY_RUN=0
@@ -37,11 +38,14 @@ Options:
   --root PATH          Use PATH as repo root (must contain configs/)
   --cursor             Install to Cursor only
   --claude             Install to Claude Code only
+  --opencode           Install to OpenCode only
+  --codex              Install to Codex only
   --both               Install to both Cursor and Claude Code
+  --all                Install to all supported editors
   --global             Install to global locations
   --project            Install to project locations
   --categories LIST    Comma-separated categories (commands,rules,agents,skills,stack,hooks,mcps)
-  --conflict MODE      Conflict mode: overwrite, backup, skip
+  --conflict MODE      Conflict mode: overwrite, backup, skip, selective
   --yes                Non-interactive with safe defaults
   --dry-run            Print actions without changing files
   --help               Show this help
@@ -78,23 +82,18 @@ prompt_read() {
 }
 
 download_repo() {
-  local url="https://codeload.github.com/heyAyushh/stacc/tar.gz/main"
-  command -v curl >/dev/null 2>&1 || die "curl is required to download stacc"
-  command -v tar >/dev/null 2>&1 || die "tar is required to download stacc"
+  command -v git >/dev/null 2>&1 || die "git is required to download stacc"
 
   TMP_ROOT="$(mktemp -d)"
-  log "Downloading stacc repository..."
-  run_cmd curl -fsSL "${url}" | run_cmd tar -xz -C "${TMP_ROOT}"
-  ROOT_DIR="${TMP_ROOT}/stacc-main"
+  log "Cloning stacc repository..."
+  run_cmd git clone --depth 1 --branch main "${REPO_URL}" "${TMP_ROOT}/stacc"
+  ROOT_DIR="${TMP_ROOT}/stacc"
 }
 
 ensure_repo_root() {
-  if [ -n "${ROOT_DIR}" ] && [ -d "${ROOT_DIR}/configs" ]; then
+  if [ -n "${ROOT_DIR}" ]; then
+    [ -d "${ROOT_DIR}/configs" ] || die "configs/ not found in ${ROOT_DIR}"
     return 0
-  fi
-
-  if [ "${ROOT_DIR}" != "${SCRIPT_DIR}" ]; then
-    die "configs/ not found in ${ROOT_DIR}"
   fi
 
   download_repo
@@ -117,8 +116,20 @@ parse_args() {
         SELECTED_EDITORS="claude"
         shift
         ;;
+      --opencode)
+        SELECTED_EDITORS="opencode"
+        shift
+        ;;
+      --codex)
+        SELECTED_EDITORS="codex"
+        shift
+        ;;
       --both)
         SELECTED_EDITORS="cursor claude"
+        shift
+        ;;
+      --all)
+        SELECTED_EDITORS="cursor claude opencode codex"
         shift
         ;;
       --global)
@@ -164,20 +175,26 @@ select_editors() {
   fi
 
   if [ "${NON_INTERACTIVE}" -eq 1 ]; then
-    SELECTED_EDITORS="cursor claude"
+    SELECTED_EDITORS="cursor claude opencode codex"
     return 0
   fi
 
   log "Select editor:"
   log "  1) Cursor"
   log "  2) Claude Code"
-  log "  3) Both"
+  log "  3) OpenCode"
+  log "  4) Codex"
+  log "  5) Both (Cursor + Claude Code)"
+  log "  6) All"
   printf "> " > "${TTY_DEVICE}"
   prompt_read choice
   case "${choice}" in
     1) SELECTED_EDITORS="cursor" ;;
     2) SELECTED_EDITORS="claude" ;;
-    3) SELECTED_EDITORS="cursor claude" ;;
+    3) SELECTED_EDITORS="opencode" ;;
+    4) SELECTED_EDITORS="codex" ;;
+    5) SELECTED_EDITORS="cursor claude" ;;
+    6) SELECTED_EDITORS="cursor claude opencode codex" ;;
     *) die "invalid selection" ;;
   esac
 }
@@ -269,6 +286,9 @@ confirm_summary() {
 
 set_conflict_mode_default() {
   if [ -n "${CONFLICT_MODE}" ]; then
+    if [ "${NON_INTERACTIVE}" -eq 1 ] && [ "${CONFLICT_MODE}" = "selective" ]; then
+      CONFLICT_MODE="backup"
+    fi
     return 0
   fi
   if [ "${NON_INTERACTIVE}" -eq 1 ]; then
@@ -277,6 +297,9 @@ set_conflict_mode_default() {
 }
 
 prompt_conflict_mode() {
+  if [ "${CONFLICT_MODE}" = "selective" ]; then
+    CONFLICT_MODE=""
+  fi
   if [ -n "${CONFLICT_MODE}" ] || [ "${NON_INTERACTIVE}" -eq 1 ]; then
     return 0
   fi
@@ -301,12 +324,43 @@ prompt_conflict_mode() {
   esac
 }
 
+prompt_dir_conflict_mode() {
+  if [ "${CONFLICT_MODE}" = "selective" ]; then
+    return 0
+  fi
+  if [ -n "${CONFLICT_MODE}" ] || [ "${NON_INTERACTIVE}" -eq 1 ]; then
+    return 0
+  fi
+
+  log "Category already exists. Choose action:"
+  log "  1) Overwrite category"
+  log "  2) Backup existing category"
+  log "  3) Skip category"
+  log "  4) Selective (install file-by-file)"
+  log "  5) Overwrite all"
+  log "  6) Backup all"
+  log "  7) Skip all"
+  printf "> " > "${TTY_DEVICE}"
+  prompt_read choice
+  case "${choice}" in
+    1) CONFLICT_MODE="overwrite" ;;
+    2) CONFLICT_MODE="backup" ;;
+    3) CONFLICT_MODE="skip" ;;
+    4) CONFLICT_MODE="selective" ;;
+    5) CONFLICT_MODE="overwrite_all" ;;
+    6) CONFLICT_MODE="backup_all" ;;
+    7) CONFLICT_MODE="skip_all" ;;
+    *) die "invalid selection" ;;
+  esac
+}
+
 apply_conflict_mode() {
   local mode="$1"
   case "${mode}" in
     overwrite_all) echo "overwrite" ;;
     backup_all) echo "backup" ;;
     skip_all) echo "skip" ;;
+    selective) echo "selective" ;;
     overwrite|backup|skip) echo "${mode}" ;;
     *) echo "" ;;
   esac
@@ -333,6 +387,44 @@ handle_conflict() {
     local backup="${target}.bak.${ts}"
     log "Backing up ${target} -> ${backup}"
     run_cmd mv "${target}" "${backup}"
+  fi
+
+  return 0
+}
+
+handle_dir_conflict() {
+  local target="$1"
+  local mode
+
+  prompt_dir_conflict_mode
+  mode="$(apply_conflict_mode "${CONFLICT_MODE}")"
+
+  if [ -z "${mode}" ]; then
+    die "conflict mode not set for ${target}"
+  fi
+
+  if [ "${mode}" = "selective" ]; then
+    return 0
+  fi
+
+  if [ "${mode}" = "skip" ]; then
+    log "Skipping ${target}"
+    return 1
+  fi
+
+  if [ "${mode}" = "backup" ]; then
+    local ts
+    ts="$(date +%Y%m%d%H%M%S)"
+    local backup="${target}.bak.${ts}"
+    log "Backing up ${target} -> ${backup}"
+    run_cmd mv "${target}" "${backup}"
+    return 0
+  fi
+
+  if [ "${mode}" = "overwrite" ]; then
+    log "Removing existing ${target}"
+    run_cmd rm -rf "${target}"
+    return 0
   fi
 
   return 0
@@ -374,6 +466,11 @@ install_category() {
   local dest="${target_root}/${category}"
 
   [ -d "${src}" ] || die "source category not found: ${src}"
+  if [ -d "${dest}" ] && find "${dest}" -mindepth 1 -print -quit | grep -q .; then
+    if ! handle_dir_conflict "${dest}"; then
+      return 0
+    fi
+  fi
   copy_tree "${src}" "${dest}"
 }
 
@@ -421,24 +518,67 @@ install_mcp() {
   copy_file "${src}" "${dest}"
 }
 
+target_root_for() {
+  local editor="$1"
+  local scope="$2"
+
+  case "${editor}" in
+    cursor)
+      if [ "${scope}" = "global" ]; then
+        printf '%s\n' "${HOME}/.cursor"
+      else
+        printf '%s\n' "${PROJECT_ROOT}/.cursor"
+      fi
+      ;;
+    claude)
+      if [ "${scope}" = "global" ]; then
+        printf '%s\n' "${HOME}/.claude"
+      else
+        printf '%s\n' "${PROJECT_ROOT}/.claude"
+      fi
+      ;;
+    opencode)
+      if [ "${scope}" = "global" ]; then
+        printf '%s\n' "${HOME}/.opencode"
+      else
+        printf '%s\n' "${PROJECT_ROOT}/.opencode"
+      fi
+      ;;
+    codex)
+      if [ "${scope}" = "global" ]; then
+        printf '%s\n' "${HOME}/.codex"
+      else
+        printf '%s\n' "${PROJECT_ROOT}/.codex"
+      fi
+      ;;
+    *)
+      die "unknown editor: ${editor}"
+      ;;
+  esac
+}
+
+mcp_path_for() {
+  local editor="$1"
+  local target_root="$2"
+
+  case "${editor}" in
+    claude)
+      printf '%s\n' "${target_root}/.mcp.json"
+      ;;
+    cursor|opencode|codex)
+      printf '%s\n' "${target_root}/mcp.json"
+      ;;
+    *)
+      die "unknown editor: ${editor}"
+      ;;
+  esac
+}
+
 install_for_target() {
   local editor="$1"
   local scope="$2"
-  local target_root=""
-
-  if [ "${editor}" = "cursor" ]; then
-    if [ "${scope}" = "global" ]; then
-      target_root="${HOME}/.cursor"
-    else
-      target_root="${PROJECT_ROOT}/.cursor"
-    fi
-  else
-    if [ "${scope}" = "global" ]; then
-      target_root="${HOME}/.claude"
-    else
-      target_root="${PROJECT_ROOT}/.claude"
-    fi
-  fi
+  local target_root
+  target_root="$(target_root_for "${editor}" "${scope}")"
 
   mkdir -p "${target_root}"
 
@@ -446,11 +586,7 @@ install_for_target() {
   IFS=',' read -r -a cats <<< "${SELECTED_CATEGORIES}"
   for category in "${cats[@]}"; do
     if [ "${category}" = "mcps" ]; then
-      if [ "${editor}" = "cursor" ]; then
-        install_mcp "${target_root}" "${target_root}/mcp.json"
-      else
-        install_mcp "${target_root}" "${target_root}/.mcp.json"
-      fi
+      install_mcp "${target_root}" "$(mcp_path_for "${editor}" "${target_root}")"
     else
       install_category "${category}" "${target_root}"
     fi
