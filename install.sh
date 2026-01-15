@@ -41,6 +41,7 @@ COLOR_DIM=""
 COLOR_CYAN=""
 COLOR_GREEN=""
 COLOR_YELLOW=""
+COLOR_RED=""
 
 init_colors() {
   if [ -t 2 ] && [ -z "${NO_COLOR-}" ]; then
@@ -51,6 +52,7 @@ init_colors() {
     COLOR_CYAN=$'\033[36m'
     COLOR_GREEN=$'\033[32m'
     COLOR_YELLOW=$'\033[33m'
+    COLOR_RED=$'\033[31m'
   fi
 }
 
@@ -116,7 +118,8 @@ menu_single_lines() {
 menu_multi_lines() {
   local title="$1"
   local instructions="$2"
-  shift 2
+  local footer="$3"
+  shift 3
   local -a items=("$@")
   local cols
   local total=0
@@ -125,7 +128,12 @@ menu_multi_lines() {
   cols="$(tput cols 2>/dev/null || printf '80')"
   total=$((total + $(ui_count_lines "${title}" "${cols}")))
   total=$((total + $(ui_count_lines "${instructions}" "${cols}")))
-  total=$((total + 1))
+  if [ -n "${footer}" ]; then
+    total=$((total + $(ui_count_lines "${footer}" "${cols}")))
+    total=$((total + 1))
+  else
+    total=$((total + 1))
+  fi
   for i in "${!items[@]}"; do
     total=$((total + $(ui_count_lines "   [ ] ${items[$i]}" "${cols}")))
   done
@@ -171,7 +179,7 @@ render_menu_single() {
   local -a items=("$@")
 
   ui_out "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}\n"
-  ui_out "${COLOR_DIM}${instructions}${COLOR_RESET}\n\n"
+  ui_out "${COLOR_DIM}${instructions}${COLOR_RESET}\n"
   local i
   for i in "${!items[@]}"; do
     if [ "${i}" -eq "${cursor}" ]; then
@@ -186,12 +194,18 @@ render_menu_multi() {
   local title="$1"
   local instructions="$2"
   local cursor="$3"
-  shift 3
+  local footer="$4"
+  shift 4
   local -a items=("$@")
   local -a selected=("${SELECTED_FLAGS[@]}")
 
   ui_out "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}\n"
-  ui_out "${COLOR_DIM}${instructions}${COLOR_RESET}\n\n"
+  ui_out "${COLOR_DIM}${instructions}${COLOR_RESET}\n"
+  if [ -n "${footer}" ]; then
+    ui_out "${COLOR_RED}${footer}${COLOR_RESET}\n\n"
+  else
+    ui_out "\n"
+  fi
   local i
   for i in "${!items[@]}"; do
     local marker="[ ]"
@@ -251,7 +265,8 @@ menu_multi() {
   local instructions="$2"
   local default_all="$3"
   local delimiter="$4"
-  shift 4
+  local footer="$5"
+  shift 5
   local -a items=("$@")
   local total="${#items[@]}"
   local cursor=0
@@ -273,8 +288,8 @@ menu_multi() {
   tput civis > "${TTY_DEVICE}" 2>/dev/null || true
 
   local lines
-  lines="$(menu_multi_lines "${title}" "${instructions}" "${items[@]}")"
-  render_menu_multi "${title}" "${instructions}" "${cursor}" "${items[@]}"
+  lines="$(menu_multi_lines "${title}" "${instructions}" "${footer}" "${items[@]}")"
+  render_menu_multi "${title}" "${instructions}" "${cursor}" "${footer}" "${items[@]}"
   while true; do
     key="$(read_key)"
     case "${key}" in
@@ -308,7 +323,7 @@ menu_multi() {
     esac
     ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
     ui_out "$(tput ed 2>/dev/null || true)"
-    render_menu_multi "${title}" "${instructions}" "${cursor}" "${items[@]}"
+    render_menu_multi "${title}" "${instructions}" "${cursor}" "${footer}" "${items[@]}"
   done
 
   ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
@@ -493,9 +508,10 @@ select_editors() {
   fi
 
   local -a editor_items=("Cursor" "Claude Code" "OpenCode" "Codex")
+  local footer=""
   while true; do
     SELECTED_EDITORS=""
-    menu_multi "Select editors" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "|" "${editor_items[@]}"
+    menu_multi "Select editors" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "|" "${footer}" "${editor_items[@]}"
     case "${MENU_RESULT}" in
       *Cursor*) SELECTED_EDITORS="${SELECTED_EDITORS} cursor" ;;
     esac
@@ -512,7 +528,7 @@ select_editors() {
     if [ -n "${SELECTED_EDITORS}" ]; then
       break
     fi
-    log_error "Please select at least one editor."
+    footer="Please select at least one editor."
   done
 }
 
@@ -546,13 +562,14 @@ select_categories() {
   fi
 
   local -a category_items=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps")
+  local footer=""
   while true; do
-    menu_multi "Select categories" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "," "${category_items[@]}"
+    menu_multi "Select categories" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "," "${footer}" "${category_items[@]}"
     SELECTED_CATEGORIES="${MENU_RESULT}"
     if [ -n "${SELECTED_CATEGORIES}" ]; then
       break
     fi
-    log_error "Please select at least one category."
+    footer="Please select at least one category."
   done
 }
 
