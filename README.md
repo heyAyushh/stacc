@@ -17,13 +17,7 @@ curl -fsSL ay.dog | bash
 curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash
 ```
 
-### Alternative: Download and Run
-
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh)
-```
-
-### Manual Install
+./### Local Install
 
 ```bash
 git clone https://github.com/heyAyushh/stacc.git
@@ -35,6 +29,25 @@ The interactive installer will guide you through:
 - **Editor selection**: Cursor, Claude Code, or both
 - **Scope selection**: Global (all projects) or project-specific
 - **Category selection**: commands, rules, agents, skills, stack configs
+
+### Manual Installation
+
+Copy the desired configurations to your project's `.cursor/` or `.claude/` directory:
+
+```bash
+# Example: Copy commands to Cursor
+cp -r configs/commands/ .cursor/commands/
+
+# Example: Copy rules to Claude Code globally
+cp -r configs/rules/ ~/.claude/rules/
+```
+
+### Target Directories
+
+| Scope | Cursor | Claude Code |
+|-------|--------|-------------|
+| Global | `~/.cursor/` | `~/.claude/` |
+| Project | `.cursor/` | `.claude/` |
 
 ## Structure
 
@@ -163,38 +176,3 @@ Individual components retain their original licenses:
 - Dimillian/Skills: Check repository for license
 - Other components: See individual source repositories
 
-## Usage
-
-### Using the Installer
-
-The recommended way to install configurations is via the interactive installer:
-
-```bash
-# Quick install from remote (shortest)
-curl -fsSL ay.dog | bash
-
-# Or using GitHub URL
-curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash
-
-# Or clone and run locally
-git clone https://github.com/heyAyushh/stacc.git && cd stacc && ./install.sh
-```
-
-### Manual Installation
-
-Copy the desired configurations to your project's `.cursor/` or `.claude/` directory:
-
-```bash
-# Example: Copy commands to Cursor
-cp -r configs/commands/ .cursor/commands/
-
-# Example: Copy rules to Claude Code globally
-cp -r configs/rules/ ~/.claude/rules/
-```
-
-### Target Directories
-
-| Scope | Cursor | Claude Code |
-|-------|--------|-------------|
-| Global | `~/.cursor/` | `~/.claude/` |
-| Project | `.cursor/` | `.claude/` |

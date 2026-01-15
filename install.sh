@@ -34,6 +34,15 @@ log_verbose() {
 }
 die() { log_error "error: $*"; exit 1; }
 
+backup_target() {
+  local target="$1"
+  local ts backup
+  ts="$(date +%Y%m%d%H%M%S)"
+  backup="${target}.bak.${ts}"
+  log_verbose "Backing up ${target} -> ${backup}"
+  run_cmd mv "${target}" "${backup}"
+}
+
 COLORS_ENABLED=0
 COLOR_RESET=""
 COLOR_BOLD=""
@@ -801,22 +810,17 @@ select_editors() {
   fi
 
   local -a editor_items=("Cursor" "Claude Code" "OpenCode" "Codex")
+  local -a editor_keys=("cursor" "claude" "opencode" "codex")
   local footer=""
   while true; do
     SELECTED_EDITORS=""
     menu_multi "Select editors" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "|" "${footer}" "${editor_items[@]}"
-    case "${MENU_RESULT}" in
-      *Cursor*) SELECTED_EDITORS="${SELECTED_EDITORS} cursor" ;;
-    esac
-    case "${MENU_RESULT}" in
-      *"Claude Code"*) SELECTED_EDITORS="${SELECTED_EDITORS} claude" ;;
-    esac
-    case "${MENU_RESULT}" in
-      *OpenCode*) SELECTED_EDITORS="${SELECTED_EDITORS} opencode" ;;
-    esac
-    case "${MENU_RESULT}" in
-      *Codex*) SELECTED_EDITORS="${SELECTED_EDITORS} codex" ;;
-    esac
+    local i
+    for i in "${!editor_items[@]}"; do
+      case "${MENU_RESULT}" in
+        *"${editor_items[$i]}"*) SELECTED_EDITORS="${SELECTED_EDITORS} ${editor_keys[$i]}" ;;
+      esac
+    done
     SELECTED_EDITORS="${SELECTED_EDITORS# }"
     if [ -n "${SELECTED_EDITORS}" ]; then
       break
@@ -982,11 +986,7 @@ handle_conflict() {
   fi
 
   if [ "${mode}" = "backup" ]; then
-    local ts
-    ts="$(date +%Y%m%d%H%M%S)"
-    local backup="${target}.bak.${ts}"
-    log_verbose "Backing up ${target} -> ${backup}"
-    run_cmd mv "${target}" "${backup}"
+    backup_target "${target}"
   fi
 
   return 0
@@ -1013,11 +1013,7 @@ handle_dir_conflict() {
   fi
 
   if [ "${mode}" = "backup" ]; then
-    local ts
-    ts="$(date +%Y%m%d%H%M%S)"
-    local backup="${target}.bak.${ts}"
-    log_verbose "Backing up ${target} -> ${backup}"
-    run_cmd mv "${target}" "${backup}"
+    backup_target "${target}"
     return 0
   fi
 
