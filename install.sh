@@ -12,6 +12,7 @@ REPO_URL="https://github.com/heyAyushh/stacc.git"
 
 NON_INTERACTIVE=0
 DRY_RUN=0
+VERBOSE=0
 SELECTED_EDITORS=""
 SELECTED_SCOPE=""
 SELECTED_CATEGORIES=""
@@ -24,8 +25,14 @@ cleanup() {
 }
 trap cleanup EXIT
 
-log() { printf '%s\n' "$*" >&2; }
-die() { log "error: $*"; exit 1; }
+log_info() { printf '%s\n' "$*" >&2; }
+log_error() { printf '%s\n' "$*" >&2; }
+log_verbose() {
+  if [ "${VERBOSE}" -eq 1 ]; then
+    printf '%s\n' "$*" >&2
+  fi
+}
+die() { log_error "error: $*"; exit 1; }
 
 usage() {
   cat <<'EOF'
@@ -48,6 +55,7 @@ Options:
   --conflict MODE      Conflict mode: overwrite, backup, skip, selective
   --yes                Non-interactive with safe defaults
   --dry-run            Print actions without changing files
+  --verbose            Print verbose installation logs
   --help               Show this help
 
 Examples:
@@ -85,7 +93,8 @@ download_repo() {
   command -v git >/dev/null 2>&1 || die "git is required to download stacc"
 
   TMP_ROOT="$(mktemp -d)"
-  log "Cloning stacc repository..."
+  log_verbose "Temp path: ${TMP_ROOT}"
+  log_verbose "Cloning stacc repository..."
   run_cmd git clone --depth 1 --branch main "${REPO_URL}" "${TMP_ROOT}/stacc"
   ROOT_DIR="${TMP_ROOT}/stacc"
 }
@@ -158,6 +167,10 @@ parse_args() {
         DRY_RUN=1
         shift
         ;;
+      --verbose)
+        VERBOSE=1
+        shift
+        ;;
       --help|-h)
         usage
         exit 0
@@ -179,13 +192,13 @@ select_editors() {
     return 0
   fi
 
-  log "Select editor:"
-  log "  1) Cursor"
-  log "  2) Claude Code"
-  log "  3) OpenCode"
-  log "  4) Codex"
-  log "  5) Both (Cursor + Claude Code)"
-  log "  6) All"
+  log_info "Select editor:"
+  log_info "  1) Cursor"
+  log_info "  2) Claude Code"
+  log_info "  3) OpenCode"
+  log_info "  4) Codex"
+  log_info "  5) Both (Cursor + Claude Code)"
+  log_info "  6) All"
   printf "> " > "${TTY_DEVICE}"
   prompt_read choice
   case "${choice}" in
@@ -209,9 +222,9 @@ select_scope() {
     return 0
   fi
 
-  log "Select scope:"
-  log "  1) Global (~/.cursor or ~/.claude)"
-  log "  2) Project (.cursor or .claude in current directory)"
+  log_info "Select scope:"
+  log_info "  1) Global (~/.cursor or ~/.claude)"
+  log_info "  2) Project (.cursor or .claude in current directory)"
   printf "> " > "${TTY_DEVICE}"
   prompt_read choice
   case "${choice}" in
@@ -231,14 +244,14 @@ select_categories() {
     return 0
   fi
 
-  log "Select categories (comma-separated numbers or 'all'):"
-  log "  1) commands"
-  log "  2) rules"
-  log "  3) agents"
-  log "  4) skills"
-  log "  5) stack"
-  log "  6) hooks"
-  log "  7) mcps"
+  log_info "Select categories (comma-separated numbers or 'all'):"
+  log_info "  1) commands"
+  log_info "  2) rules"
+  log_info "  3) agents"
+  log_info "  4) skills"
+  log_info "  5) stack"
+  log_info "  6) hooks"
+  log_info "  7) mcps"
   printf "> " > "${TTY_DEVICE}"
   prompt_read choice
 
@@ -270,12 +283,12 @@ confirm_summary() {
     return 0
   fi
 
-  log ""
-  log "Summary:"
-  log "  Editors: ${SELECTED_EDITORS}"
-  log "  Scope: ${SELECTED_SCOPE}"
-  log "  Categories: ${SELECTED_CATEGORIES}"
-  log ""
+  log_info ""
+  log_info "Summary:"
+  log_info "  Editors: ${SELECTED_EDITORS}"
+  log_info "  Scope: ${SELECTED_SCOPE}"
+  log_info "  Categories: ${SELECTED_CATEGORIES}"
+  log_info ""
   printf "Proceed? [y/N] " > "${TTY_DEVICE}"
   prompt_read confirm
   case "${confirm}" in
@@ -304,13 +317,13 @@ prompt_conflict_mode() {
     return 0
   fi
 
-  log "Conflict detected. Choose action:"
-  log "  1) Overwrite"
-  log "  2) Backup existing"
-  log "  3) Skip"
-  log "  4) Overwrite all"
-  log "  5) Backup all"
-  log "  6) Skip all"
+  log_info "Conflict detected. Choose action:"
+  log_info "  1) Overwrite"
+  log_info "  2) Backup existing"
+  log_info "  3) Skip"
+  log_info "  4) Overwrite all"
+  log_info "  5) Backup all"
+  log_info "  6) Skip all"
   printf "> " > "${TTY_DEVICE}"
   prompt_read choice
   case "${choice}" in
@@ -332,14 +345,14 @@ prompt_dir_conflict_mode() {
     return 0
   fi
 
-  log "Category already exists. Choose action:"
-  log "  1) Overwrite category"
-  log "  2) Backup existing category"
-  log "  3) Skip category"
-  log "  4) Selective (install file-by-file)"
-  log "  5) Overwrite all"
-  log "  6) Backup all"
-  log "  7) Skip all"
+  log_info "Category already exists. Choose action:"
+  log_info "  1) Overwrite category"
+  log_info "  2) Backup existing category"
+  log_info "  3) Skip category"
+  log_info "  4) Selective (install file-by-file)"
+  log_info "  5) Overwrite all"
+  log_info "  6) Backup all"
+  log_info "  7) Skip all"
   printf "> " > "${TTY_DEVICE}"
   prompt_read choice
   case "${choice}" in
@@ -377,7 +390,7 @@ handle_conflict() {
   fi
 
   if [ "${mode}" = "skip" ]; then
-    log "Skipping ${target}"
+    log_verbose "Skipping ${target}"
     return 1
   fi
 
@@ -385,7 +398,7 @@ handle_conflict() {
     local ts
     ts="$(date +%Y%m%d%H%M%S)"
     local backup="${target}.bak.${ts}"
-    log "Backing up ${target} -> ${backup}"
+    log_verbose "Backing up ${target} -> ${backup}"
     run_cmd mv "${target}" "${backup}"
   fi
 
@@ -408,7 +421,7 @@ handle_dir_conflict() {
   fi
 
   if [ "${mode}" = "skip" ]; then
-    log "Skipping ${target}"
+    log_verbose "Skipping ${target}"
     return 1
   fi
 
@@ -416,13 +429,13 @@ handle_dir_conflict() {
     local ts
     ts="$(date +%Y%m%d%H%M%S)"
     local backup="${target}.bak.${ts}"
-    log "Backing up ${target} -> ${backup}"
+    log_verbose "Backing up ${target} -> ${backup}"
     run_cmd mv "${target}" "${backup}"
     return 0
   fi
 
   if [ "${mode}" = "overwrite" ]; then
-    log "Removing existing ${target}"
+    log_verbose "Removing existing ${target}"
     run_cmd rm -rf "${target}"
     return 0
   fi
@@ -442,7 +455,7 @@ copy_file() {
     fi
   fi
 
-  log "Installing ${dest}"
+  log_verbose "Installing ${dest}"
   run_cmd cp "${src}" "${dest}"
 }
 
@@ -495,7 +508,7 @@ merge_mcp() {
     if [ -e "${dest}" ]; then
       handle_conflict "${dest}" || { rm -f "${tmp}"; return 0; }
     fi
-    log "Writing merged MCP config to ${dest}"
+    log_verbose "Writing merged MCP config to ${dest}"
     run_cmd mv "${tmp}" "${dest}"
     return 0
   fi
@@ -612,7 +625,7 @@ main() {
     install_for_target "${editor}" "${SELECTED_SCOPE}"
   done
 
-  log "Done."
+  log_info "Done."
 }
 
 main "$@"
