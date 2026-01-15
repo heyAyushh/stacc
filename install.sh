@@ -61,6 +61,26 @@ print_heading() { printf '\n%b\n' "${COLOR_BOLD}${COLOR_CYAN}$*${COLOR_RESET}" >
 
 ui_out() { printf '%b' "$*" > "${TTY_DEVICE}"; }
 
+show_animals() {
+  # Single static ASCII art
+  local chosen=$'                                      :                                                                       \n                                     :*=:  .=-                                                                \n                                     -**====--:                                                               \n                                    :====++==*=:                                                              \n                                   :==-::----+=:                                                              \n                                  :===----==+%*:                                                              \n                                 :==--=--=====::                                                              \n                                :=-------====-:.                                                              \n                              .:==-----=-===--:-:.                                                            \n                 .::--============-:---=====-:-=======--::.                                                   \n               :-==-----========-=-------===--==========---==:                                                \n             .-=------------------============------------=----                                               \n             :---------------================-----=-===--------:                                              \n            .------------------=============----===--==--------:                                              \n            :--------==-=----------=-----===--===----==---------                                              \n           :=--------===-===-=---=-=------===-=---=====--=-----=.                                             \n          :===-------====---===----------===------=-===--------=:                                             \n          :===----=-=========------------====--========--=----==-                                             \n          :==---==--===--====-------------=============--=----==:                          .=...             \n          :==----====:.:--======--=================--===--=---==.                         .=********-.       \n          :=--------==. .--====---===========-----=-..=====---=-                         .=+*+******#*.      \n          ---==-==---=-. .=------=======--====----=: .-==-------                         :***++==******.     \n         .===----===-==:  .=====-========-====-=-:=. -=---=-==--                        =%#+++====+*****=.   \n          -=-----=--===:   -====-========-====-=-:=::====-=---=-                        .=***+===+**##***+   \n          :=---=-----==:   :====----=====-==--==-==::===--=---=:                          .=====**##*****#*: \n           :---------=:    :===-=----====-=-=---==. .==----=--=:                           ===-=+*++++**###*= \n            :--------==-   :====-==---===========:   -=-------:                           .========++***##***:\n             .:--------==: :=----=--=-==..------=:.-==------::                            :==========+**#**##-\n               :--------==  -----=----=.  :=-----.==-------::                            .==+=======+*****##*-\n                ::-:::-=+=. .=-------:    .=---=: :==--::-::                             :=+======+****#**##*:\n                 .-:-=---.   :=---==.     .==-=-.  :----:-:                               :+==**+++***%%####= \n                   . ..      .----=:      :=---=.   ..:. .                             .:=++==*#*+++**%%###- \n                              :----.      :----.                                      :==:.=+**+===+**#%#=:  \n                               ---:       .--=                                         :=+++**===+****-.     \n                               .--:.       ---:.                                      *+====.     -**:       \n                                                                                       :--.     .:==+.       \n                                                                                                =++=.        \n                                                                                                 .            \n                                                                                                              \n'
+
+  local caption="here bro, hold my collection of AI agent configurations for coding \n"
+
+  if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
+    printf '%b\n\n%b\n' "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}" "${COLOR_DIM}${chosen}${COLOR_RESET}" > "${TTY_DEVICE}"
+  else
+    printf '%b\n\n%b\n' "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}" "${COLOR_DIM}${chosen}${COLOR_RESET}" >&2
+  fi
+}
+
+clear_animals() {
+  if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
+    tput clear > "${TTY_DEVICE}" 2>/dev/null || printf '\033c' > "${TTY_DEVICE}"
+  fi
+}
+
+
 strip_ansi() {
   printf '%s' "$1" | sed 's/\x1b\[[0-9;]*m//g'
 }
@@ -249,7 +269,13 @@ menu_single() {
       *) ;;
     esac
     ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-    ui_out "$(tput ed 2>/dev/null || true)"
+    # Clear only the menu area to avoid wiping earlier art
+    local j
+    for j in $(seq 1 "${lines}"); do
+      ui_out "$(tput el 2>/dev/null || printf '\r')"
+      ui_out "\n"
+    done
+    ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
     render_menu_single "${title}" "${instructions}" "${cursor}" "${items[@]}"
   done
 
@@ -322,7 +348,13 @@ menu_multi() {
       *) ;;
     esac
     ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-    ui_out "$(tput ed 2>/dev/null || true)"
+    # Clear only the menu area to avoid wiping earlier art
+    local j
+    for j in $(seq 1 "${lines}"); do
+      ui_out "$(tput el 2>/dev/null || printf '\r')"
+      ui_out "\n"
+    done
+    ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
     render_menu_multi "${title}" "${instructions}" "${cursor}" "${footer}" "${items[@]}"
   done
 
@@ -908,6 +940,9 @@ main() {
   init_colors
   if [ "${NON_INTERACTIVE}" -eq 0 ] && [ -z "${TTY_DEVICE}" ]; then
     NON_INTERACTIVE=1
+  fi
+  if [ "${NON_INTERACTIVE}" -eq 0 ]; then
+    show_animals
   fi
   ensure_repo_root
 
