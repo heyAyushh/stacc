@@ -78,6 +78,10 @@ read_key() {
     esac
     return 0
   fi
+  if [ -z "${key}" ]; then
+    printf '%s' "enter"
+    return 0
+  fi
   case "${key}" in
     " ") printf '%s' "space" ;;
     $'\n'|$'\r') printf '%s' "enter" ;;
@@ -234,14 +238,18 @@ menu_multi() {
   tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
   stty "${stty_state}" < "${TTY_DEVICE}"
 
-  local -a selected_items=()
+  local -a selected_items
+  selected_items=()
   for i in "${!items[@]}"; do
     if [ "${SELECTED_FLAGS[$i]}" = "1" ]; then
       selected_items+=("${items[$i]}")
     fi
   done
 
-  MENU_RESULT="$(join_by "${delimiter}" "${selected_items[@]}")"
+  MENU_RESULT=""
+  if [ "${#selected_items[@]}" -gt 0 ]; then
+    MENU_RESULT="$(join_by "${delimiter}" "${selected_items[@]}")"
+  fi
 }
 
 usage() {
@@ -407,21 +415,27 @@ select_editors() {
   fi
 
   local -a editor_items=("Cursor" "Claude Code" "OpenCode" "Codex")
-  menu_multi "Select editors" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 1 "|" "${editor_items[@]}"
-  case "${MENU_RESULT}" in
-    *Cursor*) SELECTED_EDITORS="${SELECTED_EDITORS} cursor" ;;
-  esac
-  case "${MENU_RESULT}" in
-    *"Claude Code"*) SELECTED_EDITORS="${SELECTED_EDITORS} claude" ;;
-  esac
-  case "${MENU_RESULT}" in
-    *OpenCode*) SELECTED_EDITORS="${SELECTED_EDITORS} opencode" ;;
-  esac
-  case "${MENU_RESULT}" in
-    *Codex*) SELECTED_EDITORS="${SELECTED_EDITORS} codex" ;;
-  esac
-  SELECTED_EDITORS="${SELECTED_EDITORS# }"
-  [ -n "${SELECTED_EDITORS}" ] || die "no editors selected"
+  while true; do
+    SELECTED_EDITORS=""
+    menu_multi "Select editors" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "|" "${editor_items[@]}"
+    case "${MENU_RESULT}" in
+      *Cursor*) SELECTED_EDITORS="${SELECTED_EDITORS} cursor" ;;
+    esac
+    case "${MENU_RESULT}" in
+      *"Claude Code"*) SELECTED_EDITORS="${SELECTED_EDITORS} claude" ;;
+    esac
+    case "${MENU_RESULT}" in
+      *OpenCode*) SELECTED_EDITORS="${SELECTED_EDITORS} opencode" ;;
+    esac
+    case "${MENU_RESULT}" in
+      *Codex*) SELECTED_EDITORS="${SELECTED_EDITORS} codex" ;;
+    esac
+    SELECTED_EDITORS="${SELECTED_EDITORS# }"
+    if [ -n "${SELECTED_EDITORS}" ]; then
+      break
+    fi
+    log_error "Please select at least one editor."
+  done
 }
 
 select_scope() {
@@ -454,9 +468,14 @@ select_categories() {
   fi
 
   local -a category_items=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps")
-  menu_multi "Select categories" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 1 "," "${category_items[@]}"
-  SELECTED_CATEGORIES="${MENU_RESULT}"
-  [ -n "${SELECTED_CATEGORIES}" ] || die "no categories selected"
+  while true; do
+    menu_multi "Select categories" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "," "${category_items[@]}"
+    SELECTED_CATEGORIES="${MENU_RESULT}"
+    if [ -n "${SELECTED_CATEGORIES}" ]; then
+      break
+    fi
+    log_error "Please select at least one category."
+  done
 }
 
 confirm_summary() {
