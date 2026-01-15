@@ -59,6 +59,80 @@ print_heading() { printf '\n%b\n' "${COLOR_BOLD}${COLOR_CYAN}$*${COLOR_RESET}" >
 
 ui_out() { printf '%b' "$*" > "${TTY_DEVICE}"; }
 
+strip_ansi() {
+  printf '%s' "$1" | sed 's/\x1b\[[0-9;]*m//g'
+}
+
+ui_wrap_count() {
+  local text="$1"
+  local cols="$2"
+  local clean
+  clean="$(strip_ansi "${text}")"
+  local len=${#clean}
+  if [ "${len}" -le 0 ]; then
+    printf '%s' 1
+    return
+  fi
+  printf '%s' $(( (len - 1) / cols + 1 ))
+}
+
+ui_count_lines() {
+  local text="$1"
+  local cols="$2"
+  local total=0
+  local line
+
+  while IFS= read -r line; do
+    total=$((total + $(ui_wrap_count "${line}" "${cols}")))
+  done <<< "${text}"
+
+  if [ "${text}" = "" ]; then
+    total=1
+  fi
+
+  printf '%s' "${total}"
+}
+
+menu_single_lines() {
+  local title="$1"
+  local instructions="$2"
+  shift 2
+  local -a items=("$@")
+  local cols
+  local total=0
+  local i
+
+  cols="$(tput cols 2>/dev/null || printf '80')"
+  total=$((total + $(ui_count_lines "${title}" "${cols}")))
+  total=$((total + $(ui_count_lines "${instructions}" "${cols}")))
+  total=$((total + 1))
+  for i in "${!items[@]}"; do
+    total=$((total + $(ui_count_lines "   ${items[$i]}" "${cols}")))
+  done
+
+  printf '%s' "${total}"
+}
+
+menu_multi_lines() {
+  local title="$1"
+  local instructions="$2"
+  shift 2
+  local -a items=("$@")
+  local cols
+  local total=0
+  local i
+
+  cols="$(tput cols 2>/dev/null || printf '80')"
+  total=$((total + $(ui_count_lines "${title}" "${cols}")))
+  total=$((total + $(ui_count_lines "${instructions}" "${cols}")))
+  total=$((total + 1))
+  for i in "${!items[@]}"; do
+    total=$((total + $(ui_count_lines "   [ ] ${items[$i]}" "${cols}")))
+  done
+
+  printf '%s' "${total}"
+}
+
 join_by() {
   local IFS="$1"
   shift
@@ -142,7 +216,7 @@ menu_single() {
   local -a items=("$@")
   local cursor="${default_index}"
   local total="${#items[@]}"
-  local lines=$((3 + total))
+  local lines
   local key=""
   local stty_state
 
@@ -150,6 +224,7 @@ menu_single() {
   stty -echo -icanon time 0 min 1 < "${TTY_DEVICE}"
   tput civis > "${TTY_DEVICE}" 2>/dev/null || true
 
+  lines="$(menu_single_lines "${title}" "${instructions}" "${items[@]}")"
   render_menu_single "${title}" "${instructions}" "${cursor}" "${items[@]}"
   while true; do
     key="$(read_key)"
@@ -164,7 +239,8 @@ menu_single() {
     render_menu_single "${title}" "${instructions}" "${cursor}" "${items[@]}"
   done
 
-  ui_out "\n"
+  ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
+  ui_out "$(tput ed 2>/dev/null || true)"
   tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
   stty "${stty_state}" < "${TTY_DEVICE}"
   MENU_RESULT="${items[$cursor]}"
@@ -196,8 +272,9 @@ menu_multi() {
   stty -echo -icanon time 0 min 1 < "${TTY_DEVICE}"
   tput civis > "${TTY_DEVICE}" 2>/dev/null || true
 
+  local lines
+  lines="$(menu_multi_lines "${title}" "${instructions}" "${items[@]}")"
   render_menu_multi "${title}" "${instructions}" "${cursor}" "${items[@]}"
-  local lines=$((3 + total))
   while true; do
     key="$(read_key)"
     case "${key}" in
@@ -234,7 +311,8 @@ menu_multi() {
     render_menu_multi "${title}" "${instructions}" "${cursor}" "${items[@]}"
   done
 
-  ui_out "\n"
+  ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
+  ui_out "$(tput ed 2>/dev/null || true)"
   tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
   stty "${stty_state}" < "${TTY_DEVICE}"
 
