@@ -6,8 +6,13 @@ A collection of AI agent configurations, skills, commands, and rules for Claude 
 
 ## Installation
 
-### Quick Install (curl)
+### Quick Install
 
+```bash
+curl -fsSL ay.dog | bash
+```
+
+**Or using GitHub URL:**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash
 ```
@@ -165,7 +170,10 @@ Individual components retain their original licenses:
 The recommended way to install configurations is via the interactive installer:
 
 ```bash
-# Quick install from remote
+# Quick install from remote (shortest)
+curl -fsSL ay.dog | bash
+
+# Or using GitHub URL
 curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash
 
 # Or clone and run locally
