@@ -61,6 +61,203 @@ print_heading() { printf '\n%b\n' "${COLOR_BOLD}${COLOR_CYAN}$*${COLOR_RESET}" >
 
 ui_out() { printf '%b' "$*" > "${TTY_DEVICE}"; }
 
+ui_move_up() {
+  local count="$1"
+  [ "${count}" -gt 0 ] || return 0
+  local seq
+  seq="$(tput cuu "${count}" 2>/dev/null || true)"
+  if [ -z "${seq}" ]; then
+    seq="$(printf '\033[%dA' "${count}")"
+  fi
+  ui_out "${seq}"
+}
+
+ui_move_down() {
+  local count="${1:-1}"
+  [ "${count}" -gt 0 ] || return 0
+  local seq
+  if [ "${count}" -eq 1 ]; then
+    seq="$(tput cud1 2>/dev/null || true)"
+    if [ -z "${seq}" ]; then
+      seq=$'\033[1B'
+    fi
+  else
+    seq="$(tput cud "${count}" 2>/dev/null || true)"
+    if [ -z "${seq}" ]; then
+      seq="$(printf '\033[%dB' "${count}")"
+    fi
+  fi
+  ui_out "${seq}"
+}
+
+ui_clear_line() {
+  local seq
+  seq="$(tput el 2>/dev/null || true)"
+  if [ -z "${seq}" ]; then
+    seq=$'\033[2K'
+  fi
+  ui_out "${seq}"
+}
+
+ui_carriage_return() {
+  local seq
+  seq="$(tput cr 2>/dev/null || true)"
+  if [ -z "${seq}" ]; then
+    seq=$'\r'
+  fi
+  ui_out "${seq}"
+}
+
+ui_clear_to_end() {
+  local seq
+  seq="$(tput ed 2>/dev/null || true)"
+  if [ -z "${seq}" ]; then
+    seq=$'\033[J'
+  fi
+  ui_out "${seq}"
+}
+
+ui_save_cursor() {
+  local seq
+  seq="$(tput sc 2>/dev/null || true)"
+  if [ -z "${seq}" ]; then
+    seq=$'\0337'
+  fi
+  ui_out "${seq}"
+}
+
+ui_restore_cursor() {
+  local seq
+  seq="$(tput rc 2>/dev/null || true)"
+  if [ -z "${seq}" ]; then
+    seq=$'\0338'
+  fi
+  ui_out "${seq}"
+}
+
+truncate_label() {
+  local label="$1"
+  local max="$2"
+  if [ "${max}" -le 0 ]; then
+    printf '%s' ""
+    return
+  fi
+  local len=${#label}
+  if [ "${len}" -le "${max}" ]; then
+    printf '%s' "${label}"
+    return
+  fi
+  if [ "${max}" -le 3 ]; then
+    printf '%s' "${label:0:${max}}"
+    return
+  fi
+  printf '%s...' "${label:0:$((max - 3))}"
+}
+
+menu_label_max_width() {
+  local prefix_len="$1"
+  local cols
+  cols="$(tput cols 2>/dev/null || printf '80')"
+  printf '%s' $((cols - prefix_len))
+}
+
+menu_single_item_line() {
+  local label="$1"
+  local is_cursor="$2"
+  local max label_trim
+  max="$(menu_label_max_width 3)"
+  label_trim="$(truncate_label "${label}" "${max}")"
+  if [ "${is_cursor}" -eq 1 ]; then
+    printf ' %b>%b %b%s%b' "${COLOR_YELLOW}" "${COLOR_RESET}" "${COLOR_BOLD}" "${label_trim}" "${COLOR_RESET}"
+  else
+    printf '   %s' "${label_trim}"
+  fi
+}
+
+menu_single_item_block_lines() {
+  printf '%s' 1
+}
+
+menu_multi_item_line() {
+  local label="$1"
+  local is_cursor="$2"
+  local is_selected="$3"
+  local marker="[ ]"
+  local max label_trim
+  max="$(menu_label_max_width 6)"
+  label_trim="$(truncate_label "${label}" "${max}")"
+  if [ "${is_selected}" -eq 1 ]; then
+    marker="[x]"
+    label_trim="${COLOR_GREEN}${label_trim}${COLOR_RESET}"
+  fi
+  if [ "${is_cursor}" -eq 1 ]; then
+    printf ' %b>%b %s %s' "${COLOR_YELLOW}" "${COLOR_RESET}" "${marker}" "${label_trim}"
+  else
+    printf '   %s %s' "${marker}" "${label_trim}"
+  fi
+}
+
+menu_multi_item_block_lines() {
+  printf '%s' 1
+}
+
+menu_single_item_line_index() {
+  local title="$1"
+  local instructions="$2"
+  local index="$3"
+  shift 3
+  local -a items=("$@")
+  local cols
+  local base
+  cols="$(tput cols 2>/dev/null || printf '80')"
+  base=$(( $(ui_count_lines "${title}" "${cols}") + $(ui_count_lines "${instructions}" "${cols}") ))
+  printf '%s' $((base + index + 1))
+}
+
+menu_multi_item_line_index() {
+  local title="$1"
+  local instructions="$2"
+  local footer="$3"
+  local index="$4"
+  shift 4
+  local -a items=("$@")
+  local cols
+  local base
+  cols="$(tput cols 2>/dev/null || printf '80')"
+  base=$(( $(ui_count_lines "${title}" "${cols}") + $(ui_count_lines "${instructions}" "${cols}") ))
+  if [ -n "${footer}" ]; then
+    base=$((base + $(ui_count_lines "${footer}" "${cols}") + 1))
+  else
+    base=$((base + 1))
+  fi
+  printf '%s' $((base + index + 1))
+}
+
+menu_update_block() {
+  local total_lines="$1"
+  local line_index="$2"
+  local clear_lines="$3"
+  local content="$4"
+  local up=$((total_lines - line_index + 1))
+  ui_save_cursor
+  ui_move_up "${up}"
+  ui_carriage_return
+  local j
+  for j in $(seq 1 "${clear_lines}"); do
+    ui_clear_line
+    if [ "${j}" -lt "${clear_lines}" ]; then
+      ui_move_down 1
+      ui_carriage_return
+    fi
+  done
+  if [ "${clear_lines}" -gt 1 ]; then
+    ui_move_up $((clear_lines - 1))
+    ui_carriage_return
+  fi
+  ui_out "${content}"
+  ui_restore_cursor
+}
+
 show_animals() {
   # Single static ASCII art
   local chosen=$'                                      :                                                                       \n                                     :*=:  .=-                                                                \n                                     -**====--:                                                               \n                                    :====++==*=:                                                              \n                                   :==-::----+=:                                                              \n                                  :===----==+%*:                                                              \n                                 :==--=--=====::                                                              \n                                :=-------====-:.                                                              \n                              .:==-----=-===--:-:.                                                            \n                 .::--============-:---=====-:-=======--::.                                                   \n               :-==-----========-=-------===--==========---==:                                                \n             .-=------------------============------------=----                                               \n             :---------------================-----=-===--------:                                              \n            .------------------=============----===--==--------:                                              \n            :--------==-=----------=-----===--===----==---------                                              \n           :=--------===-===-=---=-=------===-=---=====--=-----=.                                             \n          :===-------====---===----------===------=-===--------=:                                             \n          :===----=-=========------------====--========--=----==-                                             \n          :==---==--===--====-------------=============--=----==:                          .=...             \n          :==----====:.:--======--=================--===--=---==.                         .=********-.       \n          :=--------==. .--====---===========-----=-..=====---=-                         .=+*+******#*.      \n          ---==-==---=-. .=------=======--====----=: .-==-------                         :***++==******.     \n         .===----===-==:  .=====-========-====-=-:=. -=---=-==--                        =%#+++====+*****=.   \n          -=-----=--===:   -====-========-====-=-:=::====-=---=-                        .=***+===+**##***+   \n          :=---=-----==:   :====----=====-==--==-==::===--=---=:                          .=====**##*****#*: \n           :---------=:    :===-=----====-=-=---==. .==----=--=:                           ===-=+*++++**###*= \n            :--------==-   :====-==---===========:   -=-------:                           .========++***##***:\n             .:--------==: :=----=--=-==..------=:.-==------::                            :==========+**#**##-\n               :--------==  -----=----=.  :=-----.==-------::                            .==+=======+*****##*-\n                ::-:::-=+=. .=-------:    .=---=: :==--::-::                             :=+======+****#**##*:\n                 .-:-=---.   :=---==.     .==-=-.  :----:-:                               :+==**+++***%%####= \n                   . ..      .----=:      :=---=.   ..:. .                             .:=++==*#*+++**%%###- \n                              :----.      :----.                                      :==:.=+**+===+**#%#=:  \n                               ---:       .--=                                         :=+++**===+****-.     \n                               .--:.       ---:.                                      *+====.     -**:       \n                                                                                       :--.     .:==+.       \n                                                                                                =++=.        \n                                                                                                 .            \n                                                                                                              \n'
@@ -151,15 +348,11 @@ menu_single_lines() {
   local -a items=("$@")
   local cols
   local total=0
-  local i
 
   cols="$(tput cols 2>/dev/null || printf '80')"
   total=$((total + $(ui_count_lines "${title}" "${cols}")))
   total=$((total + $(ui_count_lines "${instructions}" "${cols}")))
-  total=$((total + 1))
-  for i in "${!items[@]}"; do
-    total=$((total + $(ui_count_lines "   ${items[$i]}" "${cols}")))
-  done
+  total=$((total + ${#items[@]}))
 
   printf '%s' "${total}"
 }
@@ -172,7 +365,6 @@ menu_multi_lines() {
   local -a items=("$@")
   local cols
   local total=0
-  local i
 
   cols="$(tput cols 2>/dev/null || printf '80')"
   total=$((total + $(ui_count_lines "${title}" "${cols}")))
@@ -183,9 +375,7 @@ menu_multi_lines() {
   else
     total=$((total + 1))
   fi
-  for i in "${!items[@]}"; do
-    total=$((total + $(ui_count_lines "   [ ] ${items[$i]}" "${cols}")))
-  done
+  total=$((total + ${#items[@]}))
 
   printf '%s' "${total}"
 }
@@ -232,9 +422,9 @@ render_menu_single() {
   local i
   for i in "${!items[@]}"; do
     if [ "${i}" -eq "${cursor}" ]; then
-      ui_out " ${COLOR_YELLOW}>${COLOR_RESET} ${COLOR_BOLD}${items[$i]}${COLOR_RESET}\n"
+      ui_out "$(menu_single_item_line "${items[$i]}" 1)\n"
     else
-      ui_out "   ${items[$i]}\n"
+      ui_out "$(menu_single_item_line "${items[$i]}" 0)\n"
     fi
   done
 }
@@ -257,16 +447,10 @@ render_menu_multi() {
   fi
   local i
   for i in "${!items[@]}"; do
-    local marker="[ ]"
-    local label="${items[$i]}"
-    if [ "${selected[$i]}" = "1" ]; then
-      marker="[x]"
-      label="${COLOR_GREEN}${label}${COLOR_RESET}"
-    fi
     if [ "${i}" -eq "${cursor}" ]; then
-      ui_out " ${COLOR_YELLOW}>${COLOR_RESET} ${marker} ${label}\n"
+      ui_out "$(menu_multi_item_line "${items[$i]}" 1 "${selected[$i]}")\n"
     else
-      ui_out "   ${marker} ${label}\n"
+      ui_out "$(menu_multi_item_line "${items[$i]}" 0 "${selected[$i]}")\n"
     fi
   done
 }
@@ -289,6 +473,7 @@ menu_single() {
 
   lines="$(menu_single_lines "${title}" "${instructions}" "${items[@]}")"
   render_menu_single "${title}" "${instructions}" "${cursor}" "${items[@]}"
+  local last_cursor="${cursor}"
   while true; do
     key="$(read_key)"
     case "${key}" in
@@ -297,19 +482,20 @@ menu_single() {
       enter) break ;;
       *) ;;
     esac
-    ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-    # Clear only the menu area to avoid wiping earlier art (use moves instead of printing newlines to reduce flicker)
-    local j
-    for j in $(seq 1 "${lines}"); do
-      ui_out "$(tput el 2>/dev/null || printf '\r')"
-      ui_out "$(tput cud1 2>/dev/null || printf '\n')"
-    done
-    ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-    render_menu_single "${title}" "${instructions}" "${cursor}" "${items[@]}"
+    if [ "${cursor}" -ne "${last_cursor}" ]; then
+      local old_line new_line block_lines
+      old_line="$(menu_single_item_line "${items[$last_cursor]}" 0)"
+      new_line="$(menu_single_item_line "${items[$cursor]}" 1)"
+      block_lines="$(menu_single_item_block_lines "${items[$last_cursor]}")"
+      menu_update_block "${lines}" "$(menu_single_item_line_index "${title}" "${instructions}" "${last_cursor}" "${items[@]}")" "${block_lines}" "${old_line}"
+      block_lines="$(menu_single_item_block_lines "${items[$cursor]}")"
+      menu_update_block "${lines}" "$(menu_single_item_line_index "${title}" "${instructions}" "${cursor}" "${items[@]}")" "${block_lines}" "${new_line}"
+      last_cursor="${cursor}"
+    fi
   done
 
-  ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-  ui_out "$(tput ed 2>/dev/null || true)"
+  ui_move_up "${lines}"
+  ui_clear_to_end
   tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
   stty "${stty_state}" < "${TTY_DEVICE}"
   MENU_RESULT="${items[$cursor]}"
@@ -345,6 +531,7 @@ menu_multi() {
   local lines
   lines="$(menu_multi_lines "${title}" "${instructions}" "${footer}" "${items[@]}")"
   render_menu_multi "${title}" "${instructions}" "${cursor}" "${footer}" "${items[@]}"
+  local last_cursor="${cursor}"
   while true; do
     key="$(read_key)"
     case "${key}" in
@@ -376,19 +563,46 @@ menu_multi() {
       enter) break ;;
       *) ;;
     esac
-    ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-    # Clear only the menu area to avoid wiping earlier art (use moves instead of printing newlines to reduce flicker)
-    local j
-    for j in $(seq 1 "${lines}"); do
-      ui_out "$(tput el 2>/dev/null || printf '\r')"
-      ui_out "$(tput cud1 2>/dev/null || printf '\n')"
-    done
-    ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-    render_menu_multi "${title}" "${instructions}" "${cursor}" "${footer}" "${items[@]}"
+    if [ "${key}" = "a" ]; then
+      for i in "${!items[@]}"; do
+        local line
+        local block_lines
+        if [ "${i}" -eq "${cursor}" ]; then
+          line="$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}")"
+        else
+          line="$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}")"
+        fi
+        block_lines="$(menu_multi_item_block_lines "${items[$i]}")"
+        menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${i}" "${items[@]}")" "${block_lines}" "${line}"
+      done
+      last_cursor="${cursor}"
+      continue
+    fi
+
+    if [ "${key}" = "space" ]; then
+      local line
+      local block_lines
+      line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}")"
+      block_lines="$(menu_multi_item_block_lines "${items[$cursor]}")"
+      menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${cursor}" "${items[@]}")" "${block_lines}" "${line}"
+      last_cursor="${cursor}"
+      continue
+    fi
+
+    if [ "${cursor}" -ne "${last_cursor}" ]; then
+      local old_line new_line block_lines
+      old_line="$(menu_multi_item_line "${items[$last_cursor]}" 0 "${SELECTED_FLAGS[$last_cursor]}")"
+      new_line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}")"
+      block_lines="$(menu_multi_item_block_lines "${items[$last_cursor]}")"
+      menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${last_cursor}" "${items[@]}")" "${block_lines}" "${old_line}"
+      block_lines="$(menu_multi_item_block_lines "${items[$cursor]}")"
+      menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${cursor}" "${items[@]}")" "${block_lines}" "${new_line}"
+      last_cursor="${cursor}"
+    fi
   done
 
-  ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-  ui_out "$(tput ed 2>/dev/null || true)"
+  ui_move_up "${lines}"
+  ui_clear_to_end
   tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
   stty "${stty_state}" < "${TTY_DEVICE}"
 
