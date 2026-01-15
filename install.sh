@@ -65,12 +65,27 @@ show_animals() {
   # Single static ASCII art
   local chosen=$'                                      :                                                                       \n                                     :*=:  .=-                                                                \n                                     -**====--:                                                               \n                                    :====++==*=:                                                              \n                                   :==-::----+=:                                                              \n                                  :===----==+%*:                                                              \n                                 :==--=--=====::                                                              \n                                :=-------====-:.                                                              \n                              .:==-----=-===--:-:.                                                            \n                 .::--============-:---=====-:-=======--::.                                                   \n               :-==-----========-=-------===--==========---==:                                                \n             .-=------------------============------------=----                                               \n             :---------------================-----=-===--------:                                              \n            .------------------=============----===--==--------:                                              \n            :--------==-=----------=-----===--===----==---------                                              \n           :=--------===-===-=---=-=------===-=---=====--=-----=.                                             \n          :===-------====---===----------===------=-===--------=:                                             \n          :===----=-=========------------====--========--=----==-                                             \n          :==---==--===--====-------------=============--=----==:                          .=...             \n          :==----====:.:--======--=================--===--=---==.                         .=********-.       \n          :=--------==. .--====---===========-----=-..=====---=-                         .=+*+******#*.      \n          ---==-==---=-. .=------=======--====----=: .-==-------                         :***++==******.     \n         .===----===-==:  .=====-========-====-=-:=. -=---=-==--                        =%#+++====+*****=.   \n          -=-----=--===:   -====-========-====-=-:=::====-=---=-                        .=***+===+**##***+   \n          :=---=-----==:   :====----=====-==--==-==::===--=---=:                          .=====**##*****#*: \n           :---------=:    :===-=----====-=-=---==. .==----=--=:                           ===-=+*++++**###*= \n            :--------==-   :====-==---===========:   -=-------:                           .========++***##***:\n             .:--------==: :=----=--=-==..------=:.-==------::                            :==========+**#**##-\n               :--------==  -----=----=.  :=-----.==-------::                            .==+=======+*****##*-\n                ::-:::-=+=. .=-------:    .=---=: :==--::-::                             :=+======+****#**##*:\n                 .-:-=---.   :=---==.     .==-=-.  :----:-:                               :+==**+++***%%####= \n                   . ..      .----=:      :=---=.   ..:. .                             .:=++==*#*+++**%%###- \n                              :----.      :----.                                      :==:.=+**+===+**#%#=:  \n                               ---:       .--=                                         :=+++**===+****-.     \n                               .--:.       ---:.                                      *+====.     -**:       \n                                                                                       :--.     .:==+.       \n                                                                                                =++=.        \n                                                                                                 .            \n                                                                                                              \n'
 
-  local caption="here bro, hold my collection of AI agent configurations for coding \n"
+  local caption="  here bro, hold my collection of AI agent configurations for coding "
 
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
-    printf '%b\n\n%b\n' "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}" "${COLOR_DIM}${chosen}${COLOR_RESET}" > "${TTY_DEVICE}"
+    local lines cols art_lines pad_lines i
+    cols="$(tput cols 2>/dev/null || printf '0')"
+    lines="$(tput lines 2>/dev/null || printf '0')"
+    art_lines="$(printf '%s\n' "${chosen}" | awk 'END {print NR}')"
+    pad_lines=0
+    if [ "${lines}" -gt 0 ]; then
+      # total lines: caption + spacer + art
+      local total=$(( art_lines + 1 + 1 ))
+      if [ "${lines}" -gt "${total}" ]; then
+        pad_lines=$(( (lines - total) / 2 ))
+      fi
+    fi
+    for i in $(seq 1 "${pad_lines}"); do
+      printf '\n' > "${TTY_DEVICE}"
+    done
+    printf '%b\n\n%b\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")" "${COLOR_DIM}${chosen}${COLOR_RESET}" > "${TTY_DEVICE}"
   else
-    printf '%b\n\n%b\n' "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}" "${COLOR_DIM}${chosen}${COLOR_RESET}" >&2
+    printf '%b\n\n%b\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")" "${COLOR_DIM}${chosen}${COLOR_RESET}" >&2
   fi
 }
 
@@ -83,6 +98,20 @@ clear_animals() {
 
 strip_ansi() {
   printf '%s' "$1" | sed 's/\x1b\[[0-9;]*m//g'
+}
+
+center_line() {
+  local text="$1"
+  local cols clean len pad
+  cols="$(tput cols 2>/dev/null || printf '80')"
+  clean="$(strip_ansi "${text}")"
+  len=${#clean}
+  if [ "${len}" -ge "${cols}" ]; then
+    printf '%s' "${text}"
+    return
+  fi
+  pad=$(( (cols - len) / 2 ))
+  printf '%*s%s' "${pad}" "" "${text}"
 }
 
 ui_wrap_count() {
@@ -198,8 +227,8 @@ render_menu_single() {
   shift 3
   local -a items=("$@")
 
-  ui_out "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}\n"
-  ui_out "${COLOR_DIM}${instructions}${COLOR_RESET}\n"
+  ui_out "$(center_line "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}")\n"
+  ui_out "$(center_line "${COLOR_DIM}${instructions}${COLOR_RESET}")\n"
   local i
   for i in "${!items[@]}"; do
     if [ "${i}" -eq "${cursor}" ]; then
@@ -219,10 +248,10 @@ render_menu_multi() {
   local -a items=("$@")
   local -a selected=("${SELECTED_FLAGS[@]}")
 
-  ui_out "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}\n"
-  ui_out "${COLOR_DIM}${instructions}${COLOR_RESET}\n"
+  ui_out "$(center_line "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}")\n"
+  ui_out "$(center_line "${COLOR_DIM}${instructions}${COLOR_RESET}")\n"
   if [ -n "${footer}" ]; then
-    ui_out "${COLOR_RED}${footer}${COLOR_RESET}\n\n"
+    ui_out "$(center_line "${COLOR_RED}${footer}${COLOR_RESET}")\n\n"
   else
     ui_out "\n"
   fi
@@ -269,11 +298,11 @@ menu_single() {
       *) ;;
     esac
     ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-    # Clear only the menu area to avoid wiping earlier art
+    # Clear only the menu area to avoid wiping earlier art (use moves instead of printing newlines to reduce flicker)
     local j
     for j in $(seq 1 "${lines}"); do
       ui_out "$(tput el 2>/dev/null || printf '\r')"
-      ui_out "\n"
+      ui_out "$(tput cud1 2>/dev/null || printf '\n')"
     done
     ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
     render_menu_single "${title}" "${instructions}" "${cursor}" "${items[@]}"
@@ -348,11 +377,11 @@ menu_multi() {
       *) ;;
     esac
     ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
-    # Clear only the menu area to avoid wiping earlier art
+    # Clear only the menu area to avoid wiping earlier art (use moves instead of printing newlines to reduce flicker)
     local j
     for j in $(seq 1 "${lines}"); do
       ui_out "$(tput el 2>/dev/null || printf '\r')"
-      ui_out "\n"
+      ui_out "$(tput cud1 2>/dev/null || printf '\n')"
     done
     ui_out "$(tput cuu "${lines}" 2>/dev/null || true)"
     render_menu_multi "${title}" "${instructions}" "${cursor}" "${footer}" "${items[@]}"
