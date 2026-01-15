@@ -34,6 +34,24 @@ log_verbose() {
 }
 die() { log_error "error: $*"; exit 1; }
 
+print_divider() { printf '%s\n' "----------------------------------------" >&2; }
+print_heading() { printf '\n%s\n' "$*" >&2; }
+
+prompt_choice() {
+  local var_name="$1"
+  local prompt="$2"
+  local default_value="$3"
+  printf "%s" "${prompt}" > "${TTY_DEVICE}"
+  prompt_read "${var_name}"
+  if [ -z "${!var_name}" ]; then
+    printf -v "${var_name}" '%s' "${default_value}"
+  fi
+}
+
+normalize_choice() {
+  printf '%s' "$1" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]'
+}
+
 usage() {
   cat <<'EOF'
 stacc installer
@@ -94,8 +112,12 @@ download_repo() {
 
   TMP_ROOT="$(mktemp -d)"
   log_verbose "Temp path: ${TMP_ROOT}"
-  log_verbose "Cloning stacc repository..."
-  run_cmd git clone --depth 1 --branch main "${REPO_URL}" "${TMP_ROOT}/stacc"
+  if [ "${VERBOSE}" -eq 1 ]; then
+    log_verbose "Cloning stacc repository..."
+    run_cmd git clone --depth 1 --branch main "${REPO_URL}" "${TMP_ROOT}/stacc"
+  else
+    run_cmd git clone --quiet --depth 1 --branch main "${REPO_URL}" "${TMP_ROOT}/stacc"
+  fi
   ROOT_DIR="${TMP_ROOT}/stacc"
 }
 
@@ -192,22 +214,25 @@ select_editors() {
     return 0
   fi
 
-  log_info "Select editor:"
+  print_heading "Select editor"
+  log_info "Press Enter for default: All"
+  log_info ""
   log_info "  1) Cursor"
   log_info "  2) Claude Code"
   log_info "  3) OpenCode"
   log_info "  4) Codex"
   log_info "  5) Both (Cursor + Claude Code)"
-  log_info "  6) All"
-  printf "> " > "${TTY_DEVICE}"
-  prompt_read choice
+  log_info "  a) All"
+  print_divider
+  prompt_choice choice "> " "a"
+  choice="$(normalize_choice "${choice}")"
   case "${choice}" in
     1) SELECTED_EDITORS="cursor" ;;
     2) SELECTED_EDITORS="claude" ;;
     3) SELECTED_EDITORS="opencode" ;;
     4) SELECTED_EDITORS="codex" ;;
     5) SELECTED_EDITORS="cursor claude" ;;
-    6) SELECTED_EDITORS="cursor claude opencode codex" ;;
+    6|a|all) SELECTED_EDITORS="cursor claude opencode codex" ;;
     *) die "invalid selection" ;;
   esac
 }
@@ -222,11 +247,14 @@ select_scope() {
     return 0
   fi
 
-  log_info "Select scope:"
+  print_heading "Select scope"
+  log_info "Press Enter for default: Global"
+  log_info ""
   log_info "  1) Global (~/.cursor or ~/.claude)"
   log_info "  2) Project (.cursor or .claude in current directory)"
-  printf "> " > "${TTY_DEVICE}"
-  prompt_read choice
+  print_divider
+  prompt_choice choice "> " "1"
+  choice="$(normalize_choice "${choice}")"
   case "${choice}" in
     1) SELECTED_SCOPE="global" ;;
     2) SELECTED_SCOPE="project" ;;
@@ -244,7 +272,10 @@ select_categories() {
     return 0
   fi
 
-  log_info "Select categories (comma-separated numbers or 'all'):"
+  print_heading "Select categories"
+  log_info "Press Enter for default: All"
+  log_info "Use comma-separated numbers (e.g. 1,3,4) or 'a' for all"
+  log_info ""
   log_info "  1) commands"
   log_info "  2) rules"
   log_info "  3) agents"
@@ -252,10 +283,12 @@ select_categories() {
   log_info "  5) stack"
   log_info "  6) hooks"
   log_info "  7) mcps"
-  printf "> " > "${TTY_DEVICE}"
-  prompt_read choice
+  log_info "  a) all"
+  print_divider
+  prompt_choice choice "> " "a"
+  choice="$(normalize_choice "${choice}")"
 
-  if [ "${choice}" = "all" ]; then
+  if [ "${choice}" = "all" ] || [ "${choice}" = "a" ]; then
     SELECTED_CATEGORIES="commands,rules,agents,skills,stack,hooks,mcps"
     return 0
   fi
@@ -283,10 +316,9 @@ confirm_summary() {
     return 0
   fi
 
-  log_info ""
-  log_info "Summary:"
-  log_info "  Editors: ${SELECTED_EDITORS}"
-  log_info "  Scope: ${SELECTED_SCOPE}"
+  print_heading "Summary"
+  log_info "  Editors:    ${SELECTED_EDITORS}"
+  log_info "  Scope:      ${SELECTED_SCOPE}"
   log_info "  Categories: ${SELECTED_CATEGORIES}"
   log_info ""
   printf "Proceed? [y/N] " > "${TTY_DEVICE}"
@@ -595,6 +627,8 @@ install_for_target() {
 
   mkdir -p "${target_root}"
 
+  log_info ""
+  log_info "Installing for ${editor} (${scope})..."
   local category
   IFS=',' read -r -a cats <<< "${SELECTED_CATEGORIES}"
   for category in "${cats[@]}"; do
