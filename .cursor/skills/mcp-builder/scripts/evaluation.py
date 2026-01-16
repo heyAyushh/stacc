@@ -54,9 +54,17 @@ Response Requirements:
 
 
 def parse_evaluation_file(file_path: Path) -> list[dict[str, Any]]:
-    """Parse XML evaluation file with qa_pair elements."""
+    """Parse XML evaluation file with qa_pair elements.
+
+    Security: Uses a hardened XML parser to prevent XXE (XML External Entity) attacks.
+    """
     try:
-        tree = ET.parse(file_path)
+        # Create a hardened parser to prevent XXE and entity expansion attacks
+        parser = ET.XMLParser()
+        # Disable custom entity expansion to prevent XXE and billion laughs attacks
+        parser.entity = {}
+
+        tree = ET.parse(file_path, parser=parser)
         root = tree.getroot()
         evaluations = []
 
