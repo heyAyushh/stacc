@@ -1134,6 +1134,12 @@ merge_mcp() {
   local dest="$2"
 
   if command -v jq >/dev/null 2>&1; then
+    # Handle dry-run early to avoid creating temp files
+    if [ "${DRY_RUN}" -eq 1 ]; then
+      log_verbose "[dry-run] Would merge MCP config ${src} into ${dest}"
+      return 0
+    fi
+
     if [ "${NON_INTERACTIVE}" -eq 0 ]; then
       printf "Merge MCP config into existing %s? [y/N] " "${dest}" > "${TTY_DEVICE}"
       local confirm
@@ -1144,14 +1150,22 @@ merge_mcp() {
       esac
     fi
 
+    # Ensure we have a temp directory for cleanup
+    if [ -z "${TMP_ROOT}" ]; then
+      TMP_ROOT="$(mktemp -d)"
+    fi
+
     local tmp
-    tmp="$(mktemp)"
-    run_cmd jq -s '.[0] * .[1]' "${dest}" "${src}" > "${tmp}"
+    tmp="${TMP_ROOT}/mcp_merge.$$"
+    jq -s '.[0] * .[1]' "${dest}" "${src}" > "${tmp}" || {
+      rm -f "${tmp}"
+      return 1
+    }
     if [ -e "${dest}" ]; then
       handle_conflict "${dest}" || { rm -f "${tmp}"; return 0; }
     fi
     log_verbose "Writing merged MCP config to ${dest}"
-    run_cmd mv "${tmp}" "${dest}"
+    mv "${tmp}" "${dest}"
     return 0
   fi
 
