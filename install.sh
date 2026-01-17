@@ -828,6 +828,8 @@ parse_args() {
       --categories)
         [ $# -ge 2 ] || die "--categories requires a list"
         SELECTED_CATEGORIES="$2"
+        # Strip all whitespace to handle "commands, rules" -> "commands,rules"
+        SELECTED_CATEGORIES="${SELECTED_CATEGORIES// /}"
         shift 2
         ;;
       --conflict)
