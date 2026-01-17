@@ -8,6 +8,7 @@ ROOT_DIR=""
 PROJECT_ROOT="$(pwd)"
 TMP_ROOT=""
 TTY_DEVICE=""
+SAVED_TTY_STATE=""
 REPO_URL="https://github.com/heyAyushh/stacc.git"
 
 NON_INTERACTIVE=0
@@ -19,6 +20,13 @@ SELECTED_CATEGORIES=""
 CONFLICT_MODE=""
 
 cleanup() {
+  # Restore terminal if needed
+  if [ -n "${SAVED_TTY_STATE}" ] && [ -n "${TTY_DEVICE}" ]; then
+    stty "${SAVED_TTY_STATE}" < "${TTY_DEVICE}" 2>/dev/null || true
+    tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
+  fi
+
+  # Clean temporary files
   if [ -n "${TMP_ROOT}" ] && [ -d "${TMP_ROOT}" ]; then
     rm -rf "${TMP_ROOT}"
   fi
@@ -543,9 +551,8 @@ menu_single() {
   local total="${#items[@]}"
   local lines
   local key=""
-  local stty_state
 
-  stty_state="$(stty -g < "${TTY_DEVICE}")"
+  SAVED_TTY_STATE="$(stty -g < "${TTY_DEVICE}")"
   stty -echo -icanon time 0 min 1 < "${TTY_DEVICE}"
   tput civis > "${TTY_DEVICE}" 2>/dev/null || true
 
@@ -575,7 +582,8 @@ menu_single() {
   ui_move_up "${lines}"
   ui_clear_to_end
   tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
-  stty "${stty_state}" < "${TTY_DEVICE}"
+  stty "${SAVED_TTY_STATE}" < "${TTY_DEVICE}"
+  SAVED_TTY_STATE=""
   MENU_RESULT="${items[$cursor]}"
 }
 
@@ -590,7 +598,6 @@ menu_multi() {
   local total="${#items[@]}"
   local cursor=0
   local key=""
-  local stty_state
   local i
 
   SELECTED_FLAGS=()
@@ -602,7 +609,7 @@ menu_multi() {
     fi
   done
 
-  stty_state="$(stty -g < "${TTY_DEVICE}")"
+  SAVED_TTY_STATE="$(stty -g < "${TTY_DEVICE}")"
   stty -echo -icanon time 0 min 1 < "${TTY_DEVICE}"
   tput civis > "${TTY_DEVICE}" 2>/dev/null || true
 
@@ -682,7 +689,8 @@ menu_multi() {
   ui_move_up "${lines}"
   ui_clear_to_end
   tput cnorm > "${TTY_DEVICE}" 2>/dev/null || true
-  stty "${stty_state}" < "${TTY_DEVICE}"
+  stty "${SAVED_TTY_STATE}" < "${TTY_DEVICE}"
+  SAVED_TTY_STATE=""
 
   local -a selected_items
   selected_items=()
