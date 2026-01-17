@@ -1221,6 +1221,14 @@ mcp_path_for() {
   esac
 }
 
+validate_category() {
+  local cat="$1"
+  case "${cat}" in
+    commands|rules|agents|skills|stack|hooks|mcps) return 0 ;;
+    *) die "invalid category: ${cat}" ;;
+  esac
+}
+
 install_for_target() {
   local editor="$1"
   local scope="$2"
@@ -1234,6 +1242,7 @@ install_for_target() {
   local category
   IFS=',' read -r -a cats <<< "${SELECTED_CATEGORIES}"
   for category in "${cats[@]}"; do
+    validate_category "${category}"
     if [ "${category}" = "mcps" ]; then
       install_mcp "${target_root}" "$(mcp_path_for "${editor}" "${target_root}")"
     else
