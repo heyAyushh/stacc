@@ -738,9 +738,9 @@ run_cmd() {
 }
 
 init_tty() {
-  if [ -t 0 ]; then
+  if [ -t 0 ] && [ -w /dev/tty ]; then
     TTY_DEVICE="/dev/tty"
-  elif [ -r /dev/tty ]; then
+  elif [ -r /dev/tty ] && [ -w /dev/tty ]; then
     TTY_DEVICE="/dev/tty"
   fi
 }
