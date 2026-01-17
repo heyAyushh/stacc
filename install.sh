@@ -403,7 +403,7 @@ ui_wrap_count() {
   local clean
   clean="$(strip_ansi "${text}")"
   local len=${#clean}
-  if [ "${len}" -le 0 ]; then
+  if [ "${len}" -le 0 ] || [ "${cols}" -le 0 ]; then
     printf '%s' 1
     return
   fi
