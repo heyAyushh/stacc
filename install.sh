@@ -45,7 +45,7 @@ die() { log_error "error: $*"; exit 1; }
 backup_target() {
   local target="$1"
   local ts backup
-  ts="$(date +%Y%m%d%H%M%S)"
+  ts="$(date +%Y%m%d%H%M%S)" || ts="$$"
   backup="${target}.bak.${ts}"
   log_verbose "Backing up ${target} -> ${backup}"
   run_cmd mv "${target}" "${backup}"
@@ -522,7 +522,6 @@ render_menu_multi() {
   local footer="$4"
   shift 4
   local -a items=("$@")
-  local -a selected=("${SELECTED_FLAGS[@]}")
 
   ui_out "$(center_line "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}")\n"
   ui_out "$(center_line "${COLOR_DIM}${instructions}${COLOR_RESET}")\n"
@@ -767,7 +766,7 @@ download_repo() {
   TMP_ROOT="$(mktemp -d)"
   log_verbose "Temp path: ${TMP_ROOT}"
   if [ "${VERBOSE}" -eq 1 ]; then
-    log_verbose "Cloning stacc /simsitory..."
+    log_verbose "Cloning stacc repository..."
     run_cmd git clone --depth 1 --branch main "${REPO_URL}" "${TMP_ROOT}/stacc"
   else
     run_cmd git clone --quiet --depth 1 --branch main "${REPO_URL}" "${TMP_ROOT}/stacc"
@@ -1110,7 +1109,7 @@ copy_tree() {
   [ -d "${src_dir}" ] || die "missing source directory: ${src_dir}"
 
   while IFS= read -r -d '' file; do
-    local rel="${file#${src_dir}/}"
+    local rel="${file#"${src_dir}/"}"
     local dest="${dest_dir}/${rel}"
     copy_file "${file}" "${dest}"
   done < <(find "${src_dir}" -type f ! -name ".DS_Store" -print0)
@@ -1123,7 +1122,7 @@ install_category() {
   local dest="${target_root}/${category}"
 
   [ -d "${src}" ] || die "source category not found: ${src}"
-  if [ -d "${dest}" ] && find "${dest}" -mindepth 1 -print -quit | grep -q .; then
+  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
     if ! handle_dir_conflict "${dest}"; then
       return 0
     fi
