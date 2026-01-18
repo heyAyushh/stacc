@@ -533,9 +533,9 @@ render_menu_multi() {
   local i
   for i in "${!items[@]}"; do
     if [ "${i}" -eq "${cursor}" ]; then
-      ui_out "$(menu_multi_item_line "${items[$i]}" 1 "${selected[$i]}")\n"
+      ui_out "$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}")\n"
     else
-      ui_out "$(menu_multi_item_line "${items[$i]}" 0 "${selected[$i]}")\n"
+      ui_out "$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}")\n"
     fi
   done
 }
