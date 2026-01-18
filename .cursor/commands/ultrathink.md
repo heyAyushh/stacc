@@ -5,7 +5,7 @@ When invoked, engage maximum cognitive depth for complex problems.
 ## Protocol
 
 ### 1. Clarify First
-Before any implementation, use the **AskUserQuestion** and **grind-mode** subagent to:
+Before any implementation, use the **AskUserQuestion** subagent to:
 - Confirm understanding of the core problem
 - Surface hidden assumptions
 - Identify edge cases and constraints
