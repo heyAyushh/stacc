@@ -1297,9 +1297,13 @@ main() {
   confirm_summary
 
   local editor
+  local saved_ifs="${IFS}"
+  IFS=' '
   for editor in ${SELECTED_EDITORS}; do
+    IFS="${saved_ifs}"
     install_for_target "${editor}" "${SELECTED_SCOPE}"
   done
+  IFS="${saved_ifs}"
 
   log_info "Done."
 }
