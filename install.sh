@@ -189,13 +189,14 @@ menu_label_max_width() {
 menu_single_item_line() {
   local label="$1"
   local is_cursor="$2"
+  local pad="${3:-0}"
   local max label_trim
   max="$(menu_label_max_width 3)"
   label_trim="$(truncate_label "${label}" "${max}")"
   if [ "${is_cursor}" -eq 1 ]; then
-    printf ' %b>%b %b%s%b' "${COLOR_YELLOW}" "${COLOR_RESET}" "${COLOR_BOLD}" "${label_trim}" "${COLOR_RESET}"
+    printf '%*s %b>%b %b%s%b' "${pad}" "" "${COLOR_YELLOW}" "${COLOR_RESET}" "${COLOR_BOLD}" "${label_trim}" "${COLOR_RESET}"
   else
-    printf '   %s' "${label_trim}"
+    printf '%*s   %s' "${pad}" "" "${label_trim}"
   fi
 }
 
@@ -203,10 +204,57 @@ menu_single_item_block_lines() {
   printf '%s' 1
 }
 
+center_menu_items_single() {
+  local -a items=("$@")
+  local max_width=0
+  local i item_width clean
+
+  # Find the widest menu item (accounting for " > " prefix)
+  for i in "${!items[@]}"; do
+    clean="$(strip_ansi "${items[$i]}")"
+    item_width=$((3 + ${#clean}))
+    if [ "${item_width}" -gt "${max_width}" ]; then
+      max_width="${item_width}"
+    fi
+  done
+
+  local cols
+  cols="$(tput cols 2>/dev/null || printf '80')"
+  local pad=$(( (cols - max_width) / 2 ))
+  if [ "${pad}" -lt 0 ]; then
+    pad=0
+  fi
+  printf '%s' "${pad}"
+}
+
+center_menu_items_multi() {
+  local -a items=("$@")
+  local max_width=0
+  local i item_width clean
+
+  # Find the widest menu item (accounting for " > [x] " prefix - 6 chars)
+  for i in "${!items[@]}"; do
+    clean="$(strip_ansi "${items[$i]}")"
+    item_width=$((6 + ${#clean}))
+    if [ "${item_width}" -gt "${max_width}" ]; then
+      max_width="${item_width}"
+    fi
+  done
+
+  local cols
+  cols="$(tput cols 2>/dev/null || printf '80')"
+  local pad=$(( (cols - max_width) / 2 ))
+  if [ "${pad}" -lt 0 ]; then
+    pad=0
+  fi
+  printf '%s' "${pad}"
+}
+
 menu_multi_item_line() {
   local label="$1"
   local is_cursor="$2"
   local is_selected="$3"
+  local pad="${4:-0}"
   local marker="[ ]"
   local max label_trim
   max="$(menu_label_max_width 6)"
@@ -216,9 +264,9 @@ menu_multi_item_line() {
     label_trim="${COLOR_GREEN}${label_trim}${COLOR_RESET}"
   fi
   if [ "${is_cursor}" -eq 1 ]; then
-    printf ' %b>%b %s %s' "${COLOR_YELLOW}" "${COLOR_RESET}" "${marker}" "${label_trim}"
+    printf '%*s %b>%b %s %s' "${pad}" "" "${COLOR_YELLOW}" "${COLOR_RESET}" "${marker}" "${label_trim}"
   else
-    printf '   %s %s' "${marker}" "${label_trim}"
+    printf '%*s   %s %s' "${pad}" "" "${marker}" "${label_trim}"
   fi
 }
 
@@ -513,12 +561,16 @@ render_menu_single() {
 
   ui_out "$(center_line "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}")\n"
   ui_out "$(center_line "${COLOR_DIM}${instructions}${COLOR_RESET}")\n"
+
+  local pad
+  pad="$(center_menu_items_single "${items[@]}")"
+
   local i
   for i in "${!items[@]}"; do
     if [ "${i}" -eq "${cursor}" ]; then
-      ui_out "$(menu_single_item_line "${items[$i]}" 1)\n"
+      ui_out "$(menu_single_item_line "${items[$i]}" 1 "${pad}")\n"
     else
-      ui_out "$(menu_single_item_line "${items[$i]}" 0)\n"
+      ui_out "$(menu_single_item_line "${items[$i]}" 0 "${pad}")\n"
     fi
   done
 }
@@ -538,12 +590,16 @@ render_menu_multi() {
   else
     ui_out "\n"
   fi
+
+  local pad
+  pad="$(center_menu_items_multi "${items[@]}")"
+
   local i
   for i in "${!items[@]}"; do
     if [ "${i}" -eq "${cursor}" ]; then
-      ui_out "$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}")\n"
+      ui_out "$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}" "${pad}")\n"
     else
-      ui_out "$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}")\n"
+      ui_out "$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}" "${pad}")\n"
     fi
   done
 }
@@ -558,11 +614,13 @@ menu_single() {
   local total="${#items[@]}"
   local lines
   local key=""
+  local pad
 
   SAVED_TTY_STATE="$(stty -g < "${TTY_DEVICE}")"
   stty -echo -icanon time 0 min 1 < "${TTY_DEVICE}"
   tput civis > "${TTY_DEVICE}" 2>/dev/null || true
 
+  pad="$(center_menu_items_single "${items[@]}")"
   lines="$(menu_single_lines "${title}" "${instructions}" "${items[@]}")"
   render_menu_single "${title}" "${instructions}" "${cursor}" "${items[@]}"
   local last_cursor="${cursor}"
@@ -576,8 +634,8 @@ menu_single() {
     esac
     if [ "${cursor}" -ne "${last_cursor}" ]; then
       local old_line new_line block_lines
-      old_line="$(menu_single_item_line "${items[$last_cursor]}" 0)"
-      new_line="$(menu_single_item_line "${items[$cursor]}" 1)"
+      old_line="$(menu_single_item_line "${items[$last_cursor]}" 0 "${pad}")"
+      new_line="$(menu_single_item_line "${items[$cursor]}" 1 "${pad}")"
       block_lines="$(menu_single_item_block_lines "${items[$last_cursor]}")"
       menu_update_block "${lines}" "$(menu_single_item_line_index "${title}" "${instructions}" "${last_cursor}" "${items[@]}")" "${block_lines}" "${old_line}"
       block_lines="$(menu_single_item_block_lines "${items[$cursor]}")"
@@ -606,6 +664,7 @@ menu_multi() {
   local cursor=0
   local key=""
   local i
+  local pad
 
   SELECTED_FLAGS=()
   for i in "${!items[@]}"; do
@@ -620,6 +679,7 @@ menu_multi() {
   stty -echo -icanon time 0 min 1 < "${TTY_DEVICE}"
   tput civis > "${TTY_DEVICE}" 2>/dev/null || true
 
+  pad="$(center_menu_items_multi "${items[@]}")"
   local lines
   lines="$(menu_multi_lines "${title}" "${instructions}" "${footer}" "${items[@]}")"
   render_menu_multi "${title}" "${instructions}" "${cursor}" "${footer}" "${items[@]}"
@@ -660,9 +720,9 @@ menu_multi() {
         local line
         local block_lines
         if [ "${i}" -eq "${cursor}" ]; then
-          line="$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}")"
+          line="$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}" "${pad}")"
         else
-          line="$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}")"
+          line="$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}" "${pad}")"
         fi
         block_lines="$(menu_multi_item_block_lines "${items[$i]}")"
         menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${i}" "${items[@]}")" "${block_lines}" "${line}"
@@ -674,7 +734,7 @@ menu_multi() {
     if [ "${key}" = "space" ]; then
       local line
       local block_lines
-      line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}")"
+      line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}" "${pad}")"
       block_lines="$(menu_multi_item_block_lines "${items[$cursor]}")"
       menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${cursor}" "${items[@]}")" "${block_lines}" "${line}"
       last_cursor="${cursor}"
@@ -683,8 +743,8 @@ menu_multi() {
 
     if [ "${cursor}" -ne "${last_cursor}" ]; then
       local old_line new_line block_lines
-      old_line="$(menu_multi_item_line "${items[$last_cursor]}" 0 "${SELECTED_FLAGS[$last_cursor]}")"
-      new_line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}")"
+      old_line="$(menu_multi_item_line "${items[$last_cursor]}" 0 "${SELECTED_FLAGS[$last_cursor]}" "${pad}")"
+      new_line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}" "${pad}")"
       block_lines="$(menu_multi_item_block_lines "${items[$last_cursor]}")"
       menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${last_cursor}" "${items[@]}")" "${block_lines}" "${old_line}"
       block_lines="$(menu_multi_item_block_lines "${items[$cursor]}")"
