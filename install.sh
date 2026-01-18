@@ -44,9 +44,17 @@ die() { log_error "error: $*"; exit 1; }
 
 backup_target() {
   local target="$1"
-  local ts backup
+  local ts backup counter
   ts="$(date +%Y%m%d%H%M%S)" || ts="$$"
   backup="${target}.bak.${ts}"
+
+  # If backup already exists, add counter to prevent overwriting
+  counter=1
+  while [ -e "${backup}" ]; do
+    backup="${target}.bak.${ts}.${counter}"
+    counter=$((counter + 1))
+  done
+
   log_verbose "Backing up ${target} -> ${backup}"
   run_cmd mv "${target}" "${backup}"
 }
