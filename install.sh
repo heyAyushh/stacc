@@ -516,9 +516,9 @@ render_menu_single() {
   local i
   for i in "${!items[@]}"; do
     if [ "${i}" -eq "${cursor}" ]; then
-      ui_out "$(menu_single_item_line "${items[$i]}" 1)\n"
+      ui_out "$(center_line "$(menu_single_item_line "${items[$i]}" 1)")\n"
     else
-      ui_out "$(menu_single_item_line "${items[$i]}" 0)\n"
+      ui_out "$(center_line "$(menu_single_item_line "${items[$i]}" 0)")\n"
     fi
   done
 }
@@ -541,9 +541,9 @@ render_menu_multi() {
   local i
   for i in "${!items[@]}"; do
     if [ "${i}" -eq "${cursor}" ]; then
-      ui_out "$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}")\n"
+      ui_out "$(center_line "$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}")")\n"
     else
-      ui_out "$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}")\n"
+      ui_out "$(center_line "$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}")")\n"
     fi
   done
 }
@@ -576,8 +576,8 @@ menu_single() {
     esac
     if [ "${cursor}" -ne "${last_cursor}" ]; then
       local old_line new_line block_lines
-      old_line="$(menu_single_item_line "${items[$last_cursor]}" 0)"
-      new_line="$(menu_single_item_line "${items[$cursor]}" 1)"
+      old_line="$(center_line "$(menu_single_item_line "${items[$last_cursor]}" 0)")"
+      new_line="$(center_line "$(menu_single_item_line "${items[$cursor]}" 1)")"
       block_lines="$(menu_single_item_block_lines "${items[$last_cursor]}")"
       menu_update_block "${lines}" "$(menu_single_item_line_index "${title}" "${instructions}" "${last_cursor}" "${items[@]}")" "${block_lines}" "${old_line}"
       block_lines="$(menu_single_item_block_lines "${items[$cursor]}")"
@@ -660,9 +660,9 @@ menu_multi() {
         local line
         local block_lines
         if [ "${i}" -eq "${cursor}" ]; then
-          line="$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}")"
+          line="$(center_line "$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}")")"
         else
-          line="$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}")"
+          line="$(center_line "$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}")")"
         fi
         block_lines="$(menu_multi_item_block_lines "${items[$i]}")"
         menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${i}" "${items[@]}")" "${block_lines}" "${line}"
@@ -674,7 +674,7 @@ menu_multi() {
     if [ "${key}" = "space" ]; then
       local line
       local block_lines
-      line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}")"
+      line="$(center_line "$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}")")"
       block_lines="$(menu_multi_item_block_lines "${items[$cursor]}")"
       menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${cursor}" "${items[@]}")" "${block_lines}" "${line}"
       last_cursor="${cursor}"
@@ -683,8 +683,8 @@ menu_multi() {
 
     if [ "${cursor}" -ne "${last_cursor}" ]; then
       local old_line new_line block_lines
-      old_line="$(menu_multi_item_line "${items[$last_cursor]}" 0 "${SELECTED_FLAGS[$last_cursor]}")"
-      new_line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}")"
+      old_line="$(center_line "$(menu_multi_item_line "${items[$last_cursor]}" 0 "${SELECTED_FLAGS[$last_cursor]}")")"
+      new_line="$(center_line "$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}")")"
       block_lines="$(menu_multi_item_block_lines "${items[$last_cursor]}")"
       menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${last_cursor}" "${items[@]}")" "${block_lines}" "${old_line}"
       block_lines="$(menu_multi_item_block_lines "${items[$cursor]}")"
