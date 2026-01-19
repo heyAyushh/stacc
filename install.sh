@@ -307,9 +307,19 @@ show_animals() {
     for i in $(seq 1 "${pad_lines}"); do
       printf '\n' > "${TTY_DEVICE}"
     done
-    printf '%b\n\n%b\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")" "${COLOR_DIM}${chosen}${COLOR_RESET}" > "${TTY_DEVICE}"
+    {
+      printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
+      printf '%s\n' "${chosen}" | while IFS= read -r line; do
+        printf '%b\n' "$(center_line "${COLOR_DIM}${line}${COLOR_RESET}")"
+      done
+    } > "${TTY_DEVICE}"
   else
-    printf '%b\n\n%b\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")" "${COLOR_DIM}${chosen}${COLOR_RESET}" >&2
+    {
+      printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
+      printf '%s\n' "${chosen}" | while IFS= read -r line; do
+        printf '%b\n' "$(center_line "${COLOR_DIM}${line}${COLOR_RESET}")"
+      done
+    } >&2
   fi
 }
 
