@@ -292,10 +292,25 @@ show_animals() {
   local caption="  here bro, hold my collection of AI agent configurations for coding "
 
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
-    local lines cols art_lines pad_lines i
+    local lines cols art_lines pad_lines i min_indent trim_prefix max_width art_pad
     cols="$(tput cols 2>/dev/null || printf '0')"
     lines="$(tput lines 2>/dev/null || printf '0')"
     art_lines="$(printf '%s\n' "${chosen}" | awk 'END {print NR}')"
+    min_indent="$(printf '%s\n' "${chosen}" | awk 'NF { match($0, /^[ ]*/); len=RLENGTH; if (min == "" || len < min) min = len } END { print (min == "" ? 0 : min) }')"
+    trim_prefix="$(printf '%*s' "${min_indent}" "")"
+    max_width="$(printf '%s\n' "${chosen}" | awk -v min="${min_indent}" '{
+      line = $0
+      if (min > 0) {
+        line = substr(line, min + 1)
+      }
+      if (length(line) > max) {
+        max = length(line)
+      }
+    } END { print (max == "" ? 0 : max) }')"
+    art_pad=0
+    if [ "${cols}" -gt 0 ] && [ "${max_width}" -gt 0 ] && [ "${cols}" -gt "${max_width}" ]; then
+      art_pad=$(( (cols - max_width) / 2 ))
+    fi
     pad_lines=0
     if [ "${lines}" -gt 0 ]; then
       # total lines: caption + spacer + art
@@ -307,9 +322,45 @@ show_animals() {
     for i in $(seq 1 "${pad_lines}"); do
       printf '\n' > "${TTY_DEVICE}"
     done
-    printf '%b\n\n%b\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")" "${COLOR_DIM}${chosen}${COLOR_RESET}" > "${TTY_DEVICE}"
+    {
+      printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
+      printf '%s\n' "${chosen}" | while IFS= read -r line; do
+        if [ "${min_indent}" -gt 0 ]; then
+          line="${line#${trim_prefix}}"
+        fi
+        printf '%*s%b\n' "${art_pad}" "" "${COLOR_DIM}${line}${COLOR_RESET}"
+      done
+    } > "${TTY_DEVICE}"
   else
-    printf '%b\n\n%b\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")" "${COLOR_DIM}${chosen}${COLOR_RESET}" >&2
+    local min_indent trim_prefix max_width art_pad
+    min_indent="$(printf '%s\n' "${chosen}" | awk 'NF { match($0, /^[ ]*/); len=RLENGTH; if (min == "" || len < min) min = len } END { print (min == "" ? 0 : min) }')"
+    trim_prefix="$(printf '%*s' "${min_indent}" "")"
+    max_width="$(printf '%s\n' "${chosen}" | awk -v min="${min_indent}" '{
+      line = $0
+      if (min > 0) {
+        line = substr(line, min + 1)
+      }
+      if (length(line) > max) {
+        max = length(line)
+      }
+    } END { print (max == "" ? 0 : max) }')"
+    art_pad=0
+    if [ "${max_width}" -gt 0 ]; then
+      local fallback_cols
+      fallback_cols="$(tput cols 2>/dev/null || printf '0')"
+      if [ "${fallback_cols}" -gt 0 ] && [ "${fallback_cols}" -gt "${max_width}" ]; then
+        art_pad=$(( (fallback_cols - max_width) / 2 ))
+      fi
+    fi
+    {
+      printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
+      printf '%s\n' "${chosen}" | while IFS= read -r line; do
+        if [ "${min_indent}" -gt 0 ]; then
+          line="${line#${trim_prefix}}"
+        fi
+        printf '%*s%b\n' "${art_pad}" "" "${COLOR_DIM}${line}${COLOR_RESET}"
+      done
+    } >&2
   fi
 }
 
