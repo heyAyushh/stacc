@@ -268,7 +268,7 @@ menu_update_block() {
 }
 
 show_caption_only() {
-  local caption="  here bro, hold my collection of AI agent configurations for coding "
+  local caption="  Stacc — curated AI agent configurations for coding "
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
     local i partial rendered
     for i in $(seq 1 "${#caption}"); do
@@ -289,7 +289,7 @@ show_animals() {
   # Single static ASCII art
   local chosen=$'                                      :                                                                       \n                                     :*=:  .=-                                                                \n                                     -**====--:                                                               \n                                    :====++==*=:                                                              \n                                   :==-::----+=:                                                              \n                                  :===----==+%*:                                                              \n                                 :==--=--=====::                                                              \n                                :=-------====-:.                                                              \n                              .:==-----=-===--:-:.                                                            \n                 .::--============-:---=====-:-=======--::.                                                   \n               :-==-----========-=-------===--==========---==:                                                \n             .-=------------------============------------=----                                               \n             :---------------================-----=-===--------:                                              \n            .------------------=============----===--==--------:                                              \n            :--------==-=----------=-----===--===----==---------                                              \n           :=--------===-===-=---=-=------===-=---=====--=-----=.                                             \n          :===-------====---===----------===------=-===--------=:                                             \n          :===----=-=========------------====--========--=----==-                                             \n          :==---==--===--====-------------=============--=----==:                          .=...             \n          :==----====:.:--======--=================--===--=---==.                         .=********-.       \n          :=--------==. .--====---===========-----=-..=====---=-                         .=+*+******#*.      \n          ---==-==---=-. .=------=======--====----=: .-==-------                         :***++==******.     \n         .===----===-==:  .=====-========-====-=-:=. -=---=-==--                        =%#+++====+*****=.   \n          -=-----=--===:   -====-========-====-=-:=::====-=---=-                        .=***+===+**##***+   \n          :=---=-----==:   :====----=====-==--==-==::===--=---=:                          .=====**##*****#*: \n           :---------=:    :===-=----====-=-=---==. .==----=--=:                           ===-=+*++++**###*= \n            :--------==-   :====-==---===========:   -=-------:                           .========++***##***:\n             .:--------==: :=----=--=-==..------=:.-==------::                            :==========+**#**##-\n               :--------==  -----=----=.  :=-----.==-------::                            .==+=======+*****##*-\n                ::-:::-=+=. .=-------:    .=---=: :==--::-::                             :=+======+****#**##*:\n                 .-:-=---.   :=---==.     .==-=-.  :----:-:                               :+==**+++***%%####= \n                   . ..      .----=:      :=---=.   ..:. .                             .:=++==*#*+++**%%###- \n                              :----.      :----.                                      :==:.=+**+===+**#%#=:  \n                               ---:       .--=                                         :=+++**===+****-.     \n                               .--:.       ---:.                                      *+====.     -**:       \n                                                                                       :--.     .:==+.       \n                                                                                                =++=.        \n                                                                                                 .            \n                                                                                                              \n'
 
-  local caption="  here bro, hold my collection of AI agent configurations for coding "
+  local caption="  Stacc — curated AI agent configurations for coding "
 
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
     local lines cols art_lines pad_lines i
@@ -814,7 +814,7 @@ select_editors() {
   local footer=""
   while true; do
     SELECTED_EDITORS=""
-    menu_multi "Select editors" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "|" "${footer}" "${editor_items[@]}"
+    menu_multi "Select editors" "Use ↑/↓ to move, Space to toggle, A to toggle all, Enter to continue." 0 "|" "${footer}" "${editor_items[@]}"
     local i
     for i in "${!editor_items[@]}"; do
       case "${MENU_RESULT}" in
@@ -861,7 +861,7 @@ select_categories() {
   local -a category_items=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps")
   local footer=""
   while true; do
-    menu_multi "Select categories" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "," "${footer}" "${category_items[@]}"
+    menu_multi "Select categories" "Use ↑/↓ to move, Space to toggle, A to toggle all, Enter to continue." 0 "," "${footer}" "${category_items[@]}"
     SELECTED_CATEGORIES="${MENU_RESULT}"
     if [ -n "${SELECTED_CATEGORIES}" ]; then
       break
