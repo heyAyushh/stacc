@@ -292,10 +292,12 @@ show_animals() {
   local caption="  here bro, hold my collection of AI agent configurations for coding "
 
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
-    local lines cols art_lines pad_lines i
+    local lines cols art_lines pad_lines i min_indent trim_prefix
     cols="$(tput cols 2>/dev/null || printf '0')"
     lines="$(tput lines 2>/dev/null || printf '0')"
     art_lines="$(printf '%s\n' "${chosen}" | awk 'END {print NR}')"
+    min_indent="$(printf '%s\n' "${chosen}" | awk 'NF { match($0, /^[ ]*/); len=RLENGTH; if (min == "" || len < min) min = len } END { print (min == "" ? 0 : min) }')"
+    trim_prefix="$(printf '%*s' "${min_indent}" "")"
     pad_lines=0
     if [ "${lines}" -gt 0 ]; then
       # total lines: caption + spacer + art
@@ -310,13 +312,22 @@ show_animals() {
     {
       printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
       printf '%s\n' "${chosen}" | while IFS= read -r line; do
+        if [ "${min_indent}" -gt 0 ]; then
+          line="${line#${trim_prefix}}"
+        fi
         printf '%b\n' "$(center_line "${COLOR_DIM}${line}${COLOR_RESET}")"
       done
     } > "${TTY_DEVICE}"
   else
+    local min_indent trim_prefix
+    min_indent="$(printf '%s\n' "${chosen}" | awk 'NF { match($0, /^[ ]*/); len=RLENGTH; if (min == "" || len < min) min = len } END { print (min == "" ? 0 : min) }')"
+    trim_prefix="$(printf '%*s' "${min_indent}" "")"
     {
       printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
       printf '%s\n' "${chosen}" | while IFS= read -r line; do
+        if [ "${min_indent}" -gt 0 ]; then
+          line="${line#${trim_prefix}}"
+        fi
         printf '%b\n' "$(center_line "${COLOR_DIM}${line}${COLOR_RESET}")"
       done
     } >&2
