@@ -284,7 +284,7 @@ menu_single_item_line_index() {
   local cols
   local base
   cols="$(tput cols 2>/dev/null || printf '80')"
-  base=$(( $(ui_count_lines "${title}" "${cols}") + $(ui_count_lines "${instructions}" "${cols}") ))
+  base=$(( $(ui_count_lines "${title}" "${cols}") + $(ui_count_lines "${instructions}" "${cols}") + 1 ))
   printf '%s' $((base + index + 1))
 }
 
@@ -489,6 +489,28 @@ ui_count_lines() {
   printf '%s' "${total}"
 }
 
+ui_center_block() {
+  local -a lines=("$@")
+  local cols max pad
+  cols="$(tput cols 2>/dev/null || printf '80')"
+  max=0
+  local line
+  for line in "${lines[@]}"; do
+    local clean="${line}"
+    clean="$(strip_ansi "${clean}")"
+    if [ ${#clean} -gt "${max}" ]; then
+      max=${#clean}
+    fi
+  done
+  pad=0
+  if [ "${cols}" -gt "${max}" ]; then
+    pad=$(( (cols - max) / 2 ))
+  fi
+  for line in "${lines[@]}"; do
+    ui_out "$(printf '%*s%s\n' "${pad}" "" "${line}")"
+  done
+}
+
 menu_single_lines() {
   local title="$1"
   local instructions="$2"
@@ -500,6 +522,7 @@ menu_single_lines() {
   cols="$(tput cols 2>/dev/null || printf '80')"
   total=$((total + $(ui_count_lines "${title}" "${cols}")))
   total=$((total + $(ui_count_lines "${instructions}" "${cols}")))
+  total=$((total + 1))
   total=$((total + ${#items[@]}))
 
   printf '%s' "${total}"
@@ -567,6 +590,7 @@ render_menu_single() {
 
   ui_out "$(center_line "${COLOR_BOLD}${COLOR_CYAN}${title}${COLOR_RESET}")\n"
   ui_out "$(center_line "${COLOR_DIM}${instructions}${COLOR_RESET}")\n"
+  ui_out "\n"
 
   local pad
   pad="$(center_menu_items_single "${items[@]}")"
@@ -1009,12 +1033,28 @@ confirm_summary() {
     return 0
   fi
 
-  print_heading "Summary"
-  log_info "  Editors:    ${SELECTED_EDITORS}"
-  log_info "  Scope:      ${SELECTED_SCOPE}"
-  log_info "  Categories: ${SELECTED_CATEGORIES}"
-  log_info ""
-  printf "Proceed? [y/N] " > "${TTY_DEVICE}"
+  if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
+    local line_title line_editors line_scope line_categories line_prompt
+    line_title="${COLOR_BOLD}${COLOR_CYAN}Summary${COLOR_RESET}"
+    line_editors="  Editors:    ${SELECTED_EDITORS}"
+    line_scope="  Scope:      ${SELECTED_SCOPE}"
+    line_categories="  Categories: ${SELECTED_CATEGORIES}"
+    line_prompt="Proceed? [y/N] "
+    ui_carriage_return
+    ui_clear_to_end
+    ui_out "\n"
+    ui_center_block "${line_title}"
+    ui_center_block "${line_editors}" "${line_scope}" "${line_categories}"
+    ui_out "\n"
+    ui_center_block "${line_prompt}"
+  else
+    print_heading "Summary"
+    log_info "  Editors:    ${SELECTED_EDITORS}"
+    log_info "  Scope:      ${SELECTED_SCOPE}"
+    log_info "  Categories: ${SELECTED_CATEGORIES}"
+    log_info ""
+    printf "Proceed? [y/N] " > "${TTY_DEVICE}"
+  fi
   prompt_read confirm
   case "${confirm}" in
     y|Y|yes|YES) ;;
