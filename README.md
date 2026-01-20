@@ -130,13 +130,14 @@ These are adaptations of Claude Code's built-in tool descriptions and agent prom
 
 | File | Description |
 |------|-------------|
-| `configs/commands/clean-code.mdc` | Clean code guidelines |
+| `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |
 
 ### From [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude)
 
 | File | Description |
 |------|-------------|
-| `configs/commands/review-pr.mdc` | Review Pull request from github |
+| `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. |
+| `configs/commands/review-pr.md` | Review Pull request from github |
 
 ### From [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) [License](https://github.com/anthropics/claude-code/blob/main/LICENSE.md)
 
