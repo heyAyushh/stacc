@@ -1002,10 +1002,17 @@ select_categories() {
   fi
 
   local -a category_items=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps")
+  local -a category_display_items=()
+  local item first_char rest_chars
+  for item in "${category_items[@]}"; do
+    first_char="$(printf '%s' "${item}" | cut -c1 | tr '[:lower:]' '[:upper:]')"
+    rest_chars="$(printf '%s' "${item}" | cut -c2-)"
+    category_display_items+=("${first_char}${rest_chars}")
+  done
   local footer=""
   while true; do
-    menu_multi "Select categories" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "," "${footer}" "${category_items[@]}"
-    SELECTED_CATEGORIES="${MENU_RESULT}"
+    menu_multi "Select categories" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "," "${footer}" "${category_display_items[@]}"
+    SELECTED_CATEGORIES="$(printf '%s' "${MENU_RESULT}" | tr '[:upper:]' '[:lower:]')"
     if [ -n "${SELECTED_CATEGORIES}" ]; then
       break
     fi
