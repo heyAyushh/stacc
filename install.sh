@@ -489,26 +489,11 @@ ui_count_lines() {
   printf '%s' "${total}"
 }
 
-ui_center_block() {
-  local -a lines=("$@")
-  local cols max pad
-  cols="$(tput cols 2>/dev/null || printf '80')"
-  max=0
-  local line
-  for line in "${lines[@]}"; do
-    local clean="${line}"
-    clean="$(strip_ansi "${clean}")"
-    if [ ${#clean} -gt "${max}" ]; then
-      max=${#clean}
-    fi
-  done
-  pad=0
-  if [ "${cols}" -gt "${max}" ]; then
-    pad=$(( (cols - max) / 2 ))
-  fi
-  for line in "${lines[@]}"; do
-    ui_out "$(printf '%*s%s\n' "${pad}" "" "${line}")"
-  done
+ui_print_line() {
+  local line="${1-}"
+  ui_carriage_return
+  ui_clear_line
+  ui_out "${line}\n"
 }
 
 menu_single_lines() {
@@ -1035,18 +1020,39 @@ confirm_summary() {
 
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
     local line_title line_editors line_scope line_categories line_prompt
+    local cols max pad
     line_title="${COLOR_BOLD}${COLOR_CYAN}Summary${COLOR_RESET}"
     line_editors="  Editors:    ${SELECTED_EDITORS}"
     line_scope="  Scope:      ${SELECTED_SCOPE}"
     line_categories="  Categories: ${SELECTED_CATEGORIES}"
     line_prompt="Proceed? [y/N] "
+    cols="$(tput cols 2>/dev/null || printf '80')"
+    max=${#line_editors}
+    if [ ${#line_scope} -gt "${max}" ]; then
+      max=${#line_scope}
+    fi
+    if [ ${#line_categories} -gt "${max}" ]; then
+      max=${#line_categories}
+    fi
+    if [ ${#line_prompt} -gt "${max}" ]; then
+      max=${#line_prompt}
+    fi
+    pad=0
+    if [ "${cols}" -gt "${max}" ]; then
+      pad=$(( (cols - max) / 2 ))
+    fi
     ui_carriage_return
     ui_clear_to_end
     ui_out "\n"
-    ui_center_block "${line_title}"
-    ui_center_block "${line_editors}" "${line_scope}" "${line_categories}"
-    ui_out "\n"
-    ui_center_block "${line_prompt}"
+    ui_print_line "$(center_line "${line_title}")"
+    ui_print_line ""
+    ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_editors}")"
+    ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_scope}")"
+    ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_categories}")"
+    ui_print_line ""
+    ui_carriage_return
+    ui_clear_line
+    ui_out "$(printf '%*s%s' "${pad}" "" "${line_prompt}")"
   else
     print_heading "Summary"
     log_info "  Editors:    ${SELECTED_EDITORS}"
