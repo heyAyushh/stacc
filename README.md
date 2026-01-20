@@ -130,6 +130,19 @@ These are adaptations of Claude Code's built-in tool descriptions and agent prom
 
 | File | Description |
 |------|-------------|
+| `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |
+
+### From [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude)
+
+| File | Description |
+|------|-------------|
+| `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. |
+| `configs/commands/review-pr.md` | Review Pull request from github |
+
+### From [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) [License](https://github.com/anthropics/claude-code/blob/main/LICENSE.md)
+
+| File | Description |
+|------|-------------|
 | `configs/commands/visualize.md` | Mermaid diagram generation |
 | `configs/commands/onboard-new-developer.md` | Developer onboarding checklist |
 | `configs/commands/refactor.md` | Code refactoring checklist (refactor-code.md) |
