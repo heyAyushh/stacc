@@ -67,6 +67,7 @@ COLOR_CYAN=""
 COLOR_GREEN=""
 COLOR_YELLOW=""
 COLOR_RED=""
+CAPTION_SHOWN=0
 
 init_colors() {
   if [ -t 2 ] && [ -z "${NO_COLOR-}" ]; then
@@ -347,6 +348,7 @@ show_caption_only() {
   else
     printf '%b\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")" >&2
   fi
+  CAPTION_SHOWN=1
 }
 
 show_animals() {
@@ -376,7 +378,7 @@ show_animals() {
       art_pad=$(( (cols - max_width) / 2 ))
     fi
     pad_lines=0
-    if [ "${lines}" -gt 0 ]; then
+    if [ "${CAPTION_SHOWN}" -eq 0 ] && [ "${lines}" -gt 0 ]; then
       # total lines: caption + spacer + art
       local total=$(( art_lines + 1 + 1 ))
       if [ "${lines}" -gt "${total}" ]; then
@@ -387,7 +389,9 @@ show_animals() {
       printf '\n' > "${TTY_DEVICE}"
     done
     {
-      printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
+      if [ "${CAPTION_SHOWN}" -eq 0 ]; then
+        printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
+      fi
       printf '%s\n' "${chosen}" | while IFS= read -r line; do
         if [ "${min_indent}" -gt 0 ]; then
           line="${line#${trim_prefix}}"
@@ -417,7 +421,9 @@ show_animals() {
       fi
     fi
     {
-      printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
+      if [ "${CAPTION_SHOWN}" -eq 0 ]; then
+        printf '%b\n\n' "$(center_line "${COLOR_BOLD}${COLOR_GREEN}${caption}${COLOR_RESET}")"
+      fi
       printf '%s\n' "${chosen}" | while IFS= read -r line; do
         if [ "${min_indent}" -gt 0 ]; then
           line="${line#${trim_prefix}}"
@@ -1354,7 +1360,6 @@ main() {
   fi
   ensure_repo_root
   if [ "${NON_INTERACTIVE}" -eq 0 ]; then
-    clear_animals
     show_animals
   fi
 
