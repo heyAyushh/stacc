@@ -1,9 +1,10 @@
 # stacc
-
+Curated configs for AI code editors and agents for vibing with aura.  
+  
 ![Cursor](https://img.shields.io/badge/Cursor-black?style=flat&logo=cursor) ![Claude Code](https://img.shields.io/badge/Claude_Code-cc785c?style=flat&logo=anthropic) ![Codex](https://img.shields.io/badge/Codex-10a37f?style=flat&logo=openai&logoColor=white) ![OpenCode](https://img.shields.io/badge/OpenCode-1a1a2e?style=flat&logo=go&logoColor=00ADD8) ![AMP](https://img.shields.io/badge/AMP-ff5543?style=flat&logo=sourcegraph&logoColor=white)
-Curated configs for AI code editors and agents for vibing with aura.
 
 ![stacc banner](stacc.png)
+---
 
 ## Installation
 
