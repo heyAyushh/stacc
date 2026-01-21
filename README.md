@@ -1,6 +1,7 @@
 # stacc
 
-A collection of AI agent configurations, skills, commands, and rules for Claude Code and Cursor IDE.
+![Cursor](https://img.shields.io/badge/Cursor-black?style=flat&logo=cursor) ![Claude Code](https://img.shields.io/badge/Claude_Code-cc785c?style=flat&logo=anthropic) ![Codex](https://img.shields.io/badge/Codex-10a37f?style=flat&logo=openai&logoColor=white) ![OpenCode](https://img.shields.io/badge/OpenCode-1a1a2e?style=flat&logo=go&logoColor=00ADD8) ![AMP](https://img.shields.io/badge/AMP-ff5543?style=flat&logo=sourcegraph&logoColor=white)
+Curated configs for AI code editors and agents for vibing with aura.
 
 ![stacc banner](stacc.png)
 
@@ -29,18 +30,6 @@ The interactive installer will guide you through:
 - **Editor selection**: Cursor, Claude Code, or both
 - **Scope selection**: Global (all projects) or project-specific
 - **Category selection**: commands, rules, agents, skills, stack configs
-
-### Manual Installation
-
-Copy the desired configurations to your project's `.cursor/` or `.claude/` directory:
-
-```bash
-# Example: Copy commands to Cursor
-cp -r configs/commands/ .cursor/commands/
-
-# Example: Copy rules to Claude Code globally
-cp -r configs/rules/ ~/.claude/rules/
-```
 
 ### Target Directories
 
