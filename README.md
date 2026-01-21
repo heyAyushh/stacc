@@ -44,10 +44,48 @@ cp -r configs/rules/ ~/.claude/rules/
 
 ### Target Directories
 
-| Scope | Cursor | Claude Code |
-|-------|--------|-------------|
-| Global | `~/.cursor/` | `~/.claude/` |
-| Project | `.cursor/` | `.claude/` |
+| Scope | Codex | Claude | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |
+|-------|-------|--------|--------|---------------------|----------|----------|------------------|---------|
+| Global | `~/.codex/` | `~/.claude/` | `~/.cursor/` | ❌ | `~/.config/opencode/` | `~/.config/amp/` | ❌ | ❌ |
+| Project | `.codex/` | `.claude/` | `.cursor/` | ❌ | `.opencode/` | `.agents/` | ❌ | ❌ |
+
+#### Configuration File Locations
+
+#### Global Configuration File Locations (macOS/Linux)
+
+| Config Type | Codex | Claude | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |
+|-------------|-------|--------|--------|---------------------|----------|----------|------------------|---------|
+| LSPs | [#8745](https://github.com/openai/codex/issues/8745) | [.lsp.json](https://code.claude.com/docs/en/plugins-reference#lsp-servers) | built-in | ❌ | built-in | built-in | built-in | extensions |
+| Hooks | [#2109](https://github.com/openai/codex/issues/2109) | `~/.claude/hooks/` | `~/.cursor/hooks.json` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Rules | `~/.codex/rules/*.rules`, `~/.codex/AGENTS.md` | `~/.claude/CLAUDE.md` | `~/.cursor/rules/`, `~/.cursor/AGENTS.md` | ❌ | `~/.config/opencode/AGENTS.md` | `~/.config/amp/AGENTS.md` | ❌ | ❌ |
+| Skills | `~/.codex/skills/` | `~/.claude/skills/` | `~/.cursor/skills/` | ❌ | `~/.config/opencode/skills/` | `~/.config/agents/skills/` | ❌ | ❌ |
+| Subagents | [#2604](https://github.com/openai/codex/issues/2604) | ❌ | `~/.cursor/agents/` | ❌ | `~/.config/opencode/agents/` | built-in | ❌ | ❌ |
+| MCPs (Model Context Protocol) | `~/.codex/config.toml` | `~/.claude.json` | `~/.cursor/mcp.json` | cursor global | `~/.config/opencode/opencode.json` | `~/.config/amp/settings.json` | ❌ | ❌ |
+| Commands | built-in | `~/.claude/commands/` | `~/.cursor/commands/` | ❌ | `~/.config/opencode/commands/` | `~/.config/amp/commands/` | ❌ | ❌ |
+
+#### Project-Specific Configuration File Locations (macOS/Linux)
+
+| Config Type | Codex | Claude | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |
+|-------------|-------|--------|--------|---------------------|----------|----------|------------------|---------|
+| LSPs | built-in | [.lsp.json](https://code.claude.com/docs/en/plugins-reference#lsp-servers) | built-in | ❌ | built-in | built-in | ❌ | extensions |
+| Hooks | ❌ | `.claude/hooks/` | `.cursor/hooks.json` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Rules | `AGENTS.md` | `CLAUDE.md` | `.cursor/rules/`, `AGENTS.md` | ❌ | `AGENTS.md` | `AGENTS.md` | `.github/copilot-instructions.md` | `.vscode/settings.json` |
+| Skills | `.codex/skills/` | `.claude/skills/` | `.cursor/skills/` | ❌ | `.opencode/skills/` | `.agents/skills/` | ❌ | ❌ |
+| Subagents | ❌ | ❌ | `.cursor/agents/` | ❌ | `.opencode/agents/` | built-in | `.github/copilot-instructions.md` | ❌ |
+| MCPs | global | `.mcp.json` | `.cursor/mcp.json` | cursor global | `opencode.json` | built-in | ❌ | ❌ |
+| Commands | built-in | `.claude/commands/` | `.cursor/commands/` | ❌ | `.opencode/commands/` | `.agents/commands/` | ❌ | `<project>/.vscode/tasks.json` |
+
+**Notes / Exceptions:**
+* Codex tracking: LSP [#8745](https://github.com/openai/codex/issues/8745), Hooks [#2109](https://github.com/openai/codex/issues/2109), Subagents [#2604](https://github.com/openai/codex/issues/2604)
+* Cursor Cloud Agents: uses Cursor global config only
+* OpenCode MCPs: `~/.config/opencode/opencode.json` → `mcp`
+* AMP MCPs: `~/.config/amp/settings.json` → `amp.mcpServers` (OAuth in `~/.amp/oauth/`)
+* VS Code LSP/config: extensions or settings
+* Copilot: no user-defined MCPs/skills/commands
+* VS Code user settings: macOS `~/Library/Application Support/Code/User/settings.json`, Linux `~/.config/Code/User/settings.json`
+* Project root: `.vscode/`, `.github/`, `.codex/`, `.claude/`, `.cursor/`, `.opencode/`, `.agents/`
+* Cursor rules vs skills: `.cursor/rules/` (apply modes), `.cursor/skills/` (agent-decided)
+    
 
 ## Structure
 
@@ -184,8 +222,9 @@ Also found in:
 
 ## License
 
+MIT. [LICENSE](LICENSE).
+
 Individual components retain their original licenses:
 - Anthropic skills: Apache-2.0 (see `LICENSE.txt` in skill directories)
 - Dimillian/Skills: Check repository for license
 - Other components: See individual source repositories
-
