@@ -55,25 +55,25 @@ cp -r configs/rules/ ~/.claude/rules/
 
 | Config Type | Codex | Claude | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |
 |-------------|-------|--------|--------|---------------------|----------|----------|------------------|---------|
-| LSPs | [#8745](https://github.com/openai/codex/issues/8745) | [.lsp.json](https://code.claude.com/docs/en/plugins-reference#lsp-servers) | built-in | ❌ | built-in | built-in | built-in | extensions |
-| Hooks | [#2109](https://github.com/openai/codex/issues/2109) | `~/.claude/hooks/` | `~/.cursor/hooks.json` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| LSPs | [#8745](https://github.com/openai/codex/issues/8745) ❌ | [plugin](https://code.claude.com/docs/en/plugins-reference#lsp-servers) | built-in ❌ | ❌ | built-in ❌ | built-in ❌ | built-in ❌ | extensions ❌ |
+| Hooks | [#2109](https://github.com/openai/codex/issues/2109) ❌ | `~/.claude/settings.json` | `~/.cursor/hooks.json` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Rules | `~/.codex/rules/*.rules`, `~/.codex/AGENTS.md` | `~/.claude/CLAUDE.md` | `~/.cursor/rules/`, `~/.cursor/AGENTS.md` | ❌ | `~/.config/opencode/AGENTS.md` | `~/.config/amp/AGENTS.md` | ❌ | ❌ |
 | Skills | `~/.codex/skills/` | `~/.claude/skills/` | `~/.cursor/skills/` | ❌ | `~/.config/opencode/skills/` | `~/.config/agents/skills/` | ❌ | ❌ |
-| Subagents | [#2604](https://github.com/openai/codex/issues/2604) | ❌ | `~/.cursor/agents/` | ❌ | `~/.config/opencode/agents/` | built-in | ❌ | ❌ |
-| MCPs (Model Context Protocol) | `~/.codex/config.toml` | `~/.claude.json` | `~/.cursor/mcp.json` | cursor global | `~/.config/opencode/opencode.json` | `~/.config/amp/settings.json` | ❌ | ❌ |
-| Commands | built-in | `~/.claude/commands/` | `~/.cursor/commands/` | ❌ | `~/.config/opencode/commands/` | `~/.config/amp/commands/` | ❌ | ❌ |
+| Subagents | [#2604](https://github.com/openai/codex/issues/2604) ❌ | `~/.claude/agents/` | `~/.cursor/agents/` | ❌ | `~/.config/opencode/agents/` | built-in ❌ | ❌ | ❌ |
+| MCPs (Model Context Protocol) | `~/.codex/config.toml` | `~/.claude.json` | `~/.cursor/mcp.json` | cursor global ❌ | `~/.config/opencode/opencode.json` | `~/.config/amp/settings.json` | ❌ | ❌ |
+| Commands | built-in ❌ | `~/.claude/commands/` | `~/.cursor/commands/` | ❌ | `~/.config/opencode/commands/` | `~/.config/amp/commands/` | ❌ | ❌ |
 
 #### Project-Specific Configuration File Locations (macOS/Linux)
 
 | Config Type | Codex | Claude | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |
 |-------------|-------|--------|--------|---------------------|----------|----------|------------------|---------|
-| LSPs | built-in | [.lsp.json](https://code.claude.com/docs/en/plugins-reference#lsp-servers) | built-in | ❌ | built-in | built-in | ❌ | extensions |
-| Hooks | ❌ | `.claude/hooks/` | `.cursor/hooks.json` | ❌ | ❌ | ❌ | ❌ | ❌ |
+| LSPs | built-in ❌ | [plugin](https://code.claude.com/docs/en/plugins-reference#lsp-servers) | built-in ❌ | ❌ | built-in ❌ | built-in ❌ | ❌ | extensions ❌ |
+| Hooks | ❌ | `.claude/settings.json`, `.claude/settings.local.json` | `.cursor/hooks.json` | ❌ | ❌ | ❌ | ❌ | ❌ |
 | Rules | `AGENTS.md` | `CLAUDE.md` | `.cursor/rules/`, `AGENTS.md` | ❌ | `AGENTS.md` | `AGENTS.md` | `.github/copilot-instructions.md` | `.vscode/settings.json` |
 | Skills | `.codex/skills/` | `.claude/skills/` | `.cursor/skills/` | ❌ | `.opencode/skills/` | `.agents/skills/` | ❌ | ❌ |
-| Subagents | ❌ | ❌ | `.cursor/agents/` | ❌ | `.opencode/agents/` | built-in | `.github/copilot-instructions.md` | ❌ |
-| MCPs | global | `.mcp.json` | `.cursor/mcp.json` | cursor global | `opencode.json` | built-in | ❌ | ❌ |
-| Commands | built-in | `.claude/commands/` | `.cursor/commands/` | ❌ | `.opencode/commands/` | `.agents/commands/` | ❌ | `<project>/.vscode/tasks.json` |
+| Subagents | ❌ | `.claude/agents/` | `.cursor/agents/` | ❌ | `.opencode/agents/` | built-in ❌ | `.github/copilot-instructions.md` | ❌ |
+| MCPs | global ❌ | `.mcp.json` | `.cursor/mcp.json` | cursor global ❌ | `opencode.json` | built-in ❌ | ❌ | ❌ |
+| Commands | built-in ❌ | `.claude/commands/` | `.cursor/commands/` | ❌ | `.opencode/commands/` | `.agents/commands/` | ❌ | `<project>/.vscode/tasks.json` |
 
 **Notes / Exceptions:**
 * Codex tracking: LSP [#8745](https://github.com/openai/codex/issues/8745), Hooks [#2109](https://github.com/openai/codex/issues/2109), Subagents [#2604](https://github.com/openai/codex/issues/2604)
