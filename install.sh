@@ -1336,7 +1336,7 @@ target_root_for() {
       ;;
     opencode)
       if [ "${scope}" = "global" ]; then
-        printf '%s\n' "${HOME}/.opencode"
+        printf '%s\n' "${HOME}/.config/opencode"
       else
         printf '%s\n' "${PROJECT_ROOT}/.opencode"
       fi
