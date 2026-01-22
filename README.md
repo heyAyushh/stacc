@@ -50,7 +50,7 @@ The interactive installer will guide you through:
 | Rules | `~/.codex/rules/*.rules`, `~/.codex/AGENTS.md` | `~/.claude/CLAUDE.md` | `~/.cursor/rules/`, `~/.cursor/AGENTS.md` | ❌ | `~/.config/opencode/AGENTS.md` | `~/.config/amp/AGENTS.md` | ❌ | ❌ |
 | Skills | `~/.codex/skills/` | `~/.claude/skills/` | `~/.cursor/skills/` | ❌ | `~/.config/opencode/skills/` | `~/.config/agents/skills/` | ❌ | ❌ |
 | Subagents | [#2604](https://github.com/openai/codex/issues/2604) ❌ | `~/.claude/agents/` | `~/.cursor/agents/` | ❌ | `~/.config/opencode/agents/` | built-in ❌ | ❌ | ❌ |
-| MCPs (Model Context Protocol) | `~/.codex/config.toml` | `~/.claude.json` | `~/.cursor/mcp.json` | cursor global ❌ | `~/.config/opencode/opencode.json` | `~/.config/amp/settings.json` | ❌ | ❌ |
+| MCPs (Model Context Protocol) | `~/.codex/config.toml` | `~/.claude.json` | `~/.cursor/mcp.json` | cursor global ❌ | `~/.config/opencode/.opencode.json` | `~/.config/amp/settings.json` | ❌ | ❌ |
 | Commands | `~/.codex/skills/commands/` | `~/.claude/commands/` | `~/.cursor/commands/` | ❌ | `~/.config/opencode/commands/` | `~/.config/amp/commands/` | ❌ | ❌ |
 
 #### Project-Specific Configuration File Locations (macOS/Linux)
@@ -62,13 +62,13 @@ The interactive installer will guide you through:
 | Rules | `AGENTS.md` | `CLAUDE.md` | `.cursor/rules/`, `AGENTS.md` | ❌ | `AGENTS.md` | `AGENTS.md` | `.github/copilot-instructions.md` | `.vscode/settings.json` |
 | Skills | `.codex/skills/` | `.claude/skills/` | `.cursor/skills/` | ❌ | `.opencode/skills/` | `.agents/skills/` | ❌ | ❌ |
 | Subagents | ❌ | `.claude/agents/` | `.cursor/agents/` | ❌ | `.opencode/agents/` | built-in ❌ | `.github/copilot-instructions.md` | ❌ |
-| MCPs | global ❌ | `.mcp.json` | `.cursor/mcp.json` | cursor global ❌ | `opencode.json` | built-in ❌ | ❌ | ❌ |
+| MCPs | global ❌ | `.mcp.json` | `.cursor/mcp.json` | cursor global ❌ | `.opencode.json` | built-in ❌ | ❌ | ❌ |
 | Commands | `.codex/skills/commands/` | `.claude/commands/` | `.cursor/commands/` | ❌ | `.opencode/commands/` | `.agents/commands/` | ❌ | `<project>/.vscode/tasks.json` |
 
 **Notes / Exceptions:**
 * Codex tracking: LSP [#8745](https://github.com/openai/codex/issues/8745), Hooks [#2109](https://github.com/openai/codex/issues/2109), Subagents [#2604](https://github.com/openai/codex/issues/2604)
 * Cursor Cloud Agents: uses Cursor global config only
-* OpenCode MCPs: `~/.config/opencode/opencode.json` → `mcp`
+* OpenCode MCPs: `~/.config/opencode/.opencode.json` → `mcpServers`
 * AMP MCPs: `~/.config/amp/settings.json` → `amp.mcpServers` (OAuth in `~/.amp/oauth/`)
 * Codex commands: stored under `skills/commands/` for Codex installations
 * VS Code LSP/config: extensions or settings

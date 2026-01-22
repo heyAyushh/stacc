@@ -17,6 +17,7 @@ VERBOSE=0
 SELECTED_EDITORS=""
 SELECTED_SCOPE=""
 SELECTED_CATEGORIES=""
+SELECTED_MCP_SERVERS=""
 CONFLICT_MODE=""
 DISABLED_FLAGS=()
 
@@ -1166,18 +1167,94 @@ select_categories() {
   done
 }
 
+mcp_category_selected() {
+  case ",${SELECTED_CATEGORIES}," in
+    *,mcps,*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+extract_mcp_keys_fallback() {
+  local src="$1"
+  awk '
+    BEGIN { in=0; depth=0 }
+    /"mcpServers"[[:space:]]*:[[:space:]]*{/ {
+      in=1
+      depth=1
+      next
+    }
+    in {
+      if (depth == 1 && match($0, /"[^"]+"[[:space:]]*:[[:space:]]*{/)) {
+        key=substr($0, RSTART + 1, RLENGTH - 3)
+        print key
+      }
+      depth += gsub(/{/, "{")
+      depth -= gsub(/}/, "}")
+      if (depth <= 0) {
+        exit
+      }
+    }
+  ' "${src}"
+}
+
+get_mcp_server_keys() {
+  local src="${ROOT_DIR}/configs/mcps/mcp.json"
+  [ -f "${src}" ] || return 0
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.mcpServers | keys[]' "${src}"
+    return 0
+  fi
+  extract_mcp_keys_fallback "${src}"
+}
+
+select_mcp_servers() {
+  if ! mcp_category_selected; then
+    return 0
+  fi
+
+  if [ -n "${SELECTED_MCP_SERVERS}" ]; then
+    return 0
+  fi
+
+  if [ "${NON_INTERACTIVE}" -eq 1 ]; then
+    SELECTED_MCP_SERVERS="$(get_mcp_server_keys | paste -sd "," -)"
+    return 0
+  fi
+
+  local -a server_items=()
+  IFS=$'\n' read -r -d '' -a server_items < <(get_mcp_server_keys && printf '\0')
+  if [ "${#server_items[@]}" -eq 0 ]; then
+    return 0
+  fi
+
+  local footer=""
+  while true; do
+    menu_multi "Select MCP servers" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "," "${footer}" "${server_items[@]}"
+    SELECTED_MCP_SERVERS="${MENU_RESULT}"
+    if [ -n "${SELECTED_MCP_SERVERS}" ]; then
+      break
+    fi
+    footer="Please select at least one MCP server."
+  done
+}
+
 confirm_summary() {
   if [ "${NON_INTERACTIVE}" -eq 1 ]; then
     return 0
   fi
 
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
-    local line_title line_editors line_scope line_categories line_prompt
+    local line_title line_editors line_scope line_categories line_mcps line_prompt
     local cols max pad
     line_title="${COLOR_BOLD}${COLOR_CYAN}Summary${COLOR_RESET}"
     line_editors="  Editors:    ${SELECTED_EDITORS}"
     line_scope="  Scope:      ${SELECTED_SCOPE}"
     line_categories="  Categories: ${SELECTED_CATEGORIES}"
+    if mcp_category_selected && [ -n "${SELECTED_MCP_SERVERS}" ]; then
+      line_mcps="  MCPs:       ${SELECTED_MCP_SERVERS}"
+    else
+      line_mcps=""
+    fi
     line_prompt="Proceed? [y/N] "
     cols="$(tput cols 2>/dev/null || printf '80')"
     max=${#line_editors}
@@ -1186,6 +1263,9 @@ confirm_summary() {
     fi
     if [ ${#line_categories} -gt "${max}" ]; then
       max=${#line_categories}
+    fi
+    if [ -n "${line_mcps}" ] && [ ${#line_mcps} -gt "${max}" ]; then
+      max=${#line_mcps}
     fi
     if [ ${#line_prompt} -gt "${max}" ]; then
       max=${#line_prompt}
@@ -1202,6 +1282,9 @@ confirm_summary() {
     ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_editors}")"
     ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_scope}")"
     ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_categories}")"
+    if [ -n "${line_mcps}" ]; then
+      ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_mcps}")"
+    fi
     ui_print_line ""
     ui_carriage_return
     ui_clear_line
@@ -1211,6 +1294,9 @@ confirm_summary() {
     log_info "  Editors:    ${SELECTED_EDITORS}"
     log_info "  Scope:      ${SELECTED_SCOPE}"
     log_info "  Categories: ${SELECTED_CATEGORIES}"
+    if mcp_category_selected && [ -n "${SELECTED_MCP_SERVERS}" ]; then
+      log_info "  MCPs:       ${SELECTED_MCP_SERVERS}"
+    fi
     log_info ""
     printf "Proceed? [y/N] " > "${TTY_DEVICE}"
   fi
@@ -1468,6 +1554,196 @@ install_codex_commands() {
   done < <(find "${src_dir}" -type f -name "*.md" ! -name ".DS_Store" -print0)
 }
 
+write_mcp_subset_fallback() {
+  local src="$1"
+  local dest="$2"
+  local selected="$3"
+  awk -v selected="${selected}" '
+    BEGIN {
+      split(selected, keys, ",")
+      for (i in keys) {
+        if (keys[i] != "") {
+          wanted[keys[i]] = 1
+        }
+      }
+      print "{"
+      print "  \"mcpServers\": {"
+      first=1
+    }
+    /"mcpServers"[[:space:]]*:[[:space:]]*{/ {
+      inside=1
+      depth=1
+      next
+    }
+    inside {
+      if (depth == 1 && match($0, /"[^"]+"[[:space:]]*:[[:space:]]*{/)) {
+        key=substr($0, RSTART + 1, RLENGTH - 3)
+        keep=(key in wanted)
+        if (keep && !first) {
+          print ","
+        }
+        if (keep) {
+          first=0
+          print "    \"" key "\": {"
+        }
+        depth += gsub(/{/, "{")
+        depth -= gsub(/}/, "}")
+        next
+      }
+      if (keep) {
+        line=$0
+        sub(/^[[:space:]]*/, "", line)
+        print "      " line
+      }
+      depth += gsub(/{/, "{")
+      depth -= gsub(/}/, "}")
+      if (depth == 1) {
+        keep=0
+      }
+      if (depth <= 0) {
+        inside=0
+      }
+    }
+    END {
+      print "  }"
+      print "}"
+    }
+  ' "${src}" > "${dest}"
+}
+
+build_selected_mcp_source() {
+  local src="$1"
+  local selected="${SELECTED_MCP_SERVERS}"
+
+  if [ -z "${selected}" ]; then
+    printf '%s' "${src}"
+    return 0
+  fi
+
+  if [ -z "${TMP_ROOT}" ]; then
+    TMP_ROOT="$(mktemp -d)"
+  fi
+
+  local tmp="${TMP_ROOT}/mcp_selected.$$"
+  if command -v jq >/dev/null 2>&1; then
+    local keys_json
+    keys_json="$(printf '%s' "${selected}" | awk -F',' '{
+      printf "["
+      for (i = 1; i <= NF; i++) {
+        if ($i != "") {
+          if (i > 1) printf ","
+          printf "\"" $i "\""
+        }
+      }
+      printf "]"
+    }')"
+    jq --argjson keys "${keys_json}" '{mcpServers: (.mcpServers | with_entries(select(.key as $k | $keys | index($k))))}' "${src}" > "${tmp}"
+  else
+    write_mcp_subset_fallback "${src}" "${tmp}" "${selected}"
+  fi
+
+  printf '%s' "${tmp}"
+}
+
+wrap_amp_mcp_source() {
+  local src="$1"
+  local dest="$2"
+  if command -v jq >/dev/null 2>&1; then
+    jq '{amp: {mcpServers: .mcpServers}}' "${src}" > "${dest}"
+    return 0
+  fi
+
+  {
+    printf '{\n  "amp": {\n'
+    sed '1s/^[[:space:]]*{//; $s/}[[:space:]]*$//' "${src}"
+    printf '\n  }\n}\n'
+  } > "${dest}"
+}
+
+build_codex_mcp_block() {
+  local src="$1"
+  if ! command -v jq >/dev/null 2>&1; then
+    return 1
+  fi
+  printf '[mcpServers]\n'
+  local key
+  while IFS= read -r key; do
+    [ -n "${key}" ] || continue
+    local command args type url
+    command="$(jq -r --arg key "${key}" '.mcpServers[$key].command // empty' "${src}")"
+    args="$(jq -c --arg key "${key}" '.mcpServers[$key].args // empty' "${src}")"
+    type="$(jq -r --arg key "${key}" '.mcpServers[$key].type // empty' "${src}")"
+    url="$(jq -r --arg key "${key}" '.mcpServers[$key].url // empty' "${src}")"
+    local -a parts=()
+    if [ -n "${command}" ]; then
+      parts+=("command = $(printf '%s' "${command}" | jq -R @json)")
+    fi
+    if [ -n "${args}" ] && [ "${args}" != "null" ] && [ "${args}" != "[]" ]; then
+      parts+=("args = ${args}")
+    fi
+    if [ -n "${type}" ]; then
+      parts+=("type = $(printf '%s' "${type}" | jq -R @json)")
+    fi
+    if [ -n "${url}" ]; then
+      parts+=("url = $(printf '%s' "${url}" | jq -R @json)")
+    fi
+    if [ "${#parts[@]}" -gt 0 ]; then
+      local joined
+      joined="$(IFS=', '; printf '%s' "${parts[*]}")"
+      printf '%s\n' "  ${key} = { ${joined} }"
+    fi
+  done < <(jq -r '.mcpServers | keys[]' "${src}")
+}
+
+merge_codex_mcp() {
+  local src="$1"
+  local dest="$2"
+
+  if ! command -v jq >/dev/null 2>&1; then
+    return 1
+  fi
+
+  if [ "${DRY_RUN}" -eq 1 ]; then
+    log_verbose "[dry-run] Would merge MCP config ${src} into ${dest}"
+    return 0
+  fi
+
+  if [ "${NON_INTERACTIVE}" -eq 0 ] && [ -e "${dest}" ]; then
+    printf "Merge MCP config into existing %s? [y/N] " "${dest}" > "${TTY_DEVICE}"
+    local confirm
+    prompt_read confirm
+    case "${confirm}" in
+      y|Y|yes|YES) ;;
+      *) return 1 ;;
+    esac
+  fi
+
+  if [ -z "${TMP_ROOT}" ]; then
+    TMP_ROOT="$(mktemp -d)"
+  fi
+
+  local tmp="${TMP_ROOT}/mcp_codex.$$"
+  if [ -e "${dest}" ]; then
+    awk '
+      BEGIN { inside=0 }
+      /^\[mcpServers\]/ { inside=1; next }
+      inside && /^\[/ { inside=0 }
+      !inside { print }
+    ' "${dest}" > "${tmp}"
+  else
+    : > "${tmp}"
+  fi
+
+  printf '\n' >> "${tmp}"
+  build_codex_mcp_block "${src}" >> "${tmp}"
+  if [ -e "${dest}" ]; then
+    handle_conflict "${dest}" || { rm -f "${tmp}"; return 0; }
+  fi
+  log_verbose "Writing merged Codex MCP config to ${dest}"
+  mv "${tmp}" "${dest}"
+  return 0
+}
+
 merge_mcp() {
   local src="$1"
   local dest="$2"
@@ -1512,18 +1788,50 @@ merge_mcp() {
 }
 
 install_mcp() {
-  local target_root="$1"
-  local dest="$2"
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+  local dest="$4"
   local src="${ROOT_DIR}/configs/mcps/mcp.json"
 
   [ -f "${src}" ] || die "missing MCP config: ${src}"
-  mkdir -p "${target_root}"
 
-  if [ -e "${dest}" ] && merge_mcp "${src}" "${dest}"; then
+  local selected_src
+  selected_src="$(build_selected_mcp_source "${src}")"
+
+  if [ "${editor}" = "ampcode" ]; then
+    if [ -z "${TMP_ROOT}" ]; then
+      TMP_ROOT="$(mktemp -d)"
+    fi
+    local wrapped_src="${TMP_ROOT}/mcp_amp.$$"
+    wrap_amp_mcp_source "${selected_src}" "${wrapped_src}"
+    selected_src="${wrapped_src}"
+  fi
+
+  mkdir -p "$(dirname "${dest}")"
+
+  if [ "${editor}" = "codex" ]; then
+    if [ -e "${dest}" ] && merge_codex_mcp "${selected_src}" "${dest}"; then
+      return 0
+    fi
+    if [ "${DRY_RUN}" -eq 1 ]; then
+      log_verbose "[dry-run] Would write Codex MCP config to ${dest}"
+      return 0
+    fi
+    if [ -e "${dest}" ]; then
+      handle_conflict "${dest}" || return 0
+    fi
+    if ! build_codex_mcp_block "${selected_src}" > "${dest}"; then
+      die "unable to build Codex MCP config; jq is required"
+    fi
     return 0
   fi
 
-  copy_file "${src}" "${dest}"
+  if [ -e "${dest}" ] && merge_mcp "${selected_src}" "${dest}"; then
+    return 0
+  fi
+
+  copy_file "${selected_src}" "${dest}"
 }
 
 target_root_for() {
@@ -1574,14 +1882,29 @@ target_root_for() {
 
 mcp_path_for() {
   local editor="$1"
-  local target_root="$2"
+  local scope="$2"
+  local target_root="$3"
 
   case "${editor}" in
     claude)
-      printf '%s\n' "${target_root}/.mcp.json"
+      if [ "${scope}" = "global" ]; then
+        printf '%s\n' "${HOME}/.claude.json"
+      else
+        printf '%s\n' "${PROJECT_ROOT}/.mcp.json"
+      fi
       ;;
-    cursor|opencode|codex)
+    cursor)
       printf '%s\n' "${target_root}/mcp.json"
+      ;;
+    opencode)
+      if [ "${scope}" = "global" ]; then
+        printf '%s\n' "${target_root}/.opencode.json"
+      else
+        printf '%s\n' "${PROJECT_ROOT}/.opencode.json"
+      fi
+      ;;
+    codex)
+      printf '%s\n' "${target_root}/config.toml"
       ;;
     *)
       die "unknown editor: ${editor}"
@@ -1616,7 +1939,7 @@ install_for_target() {
     fi
     validate_category "${category}"
     if [ "${category}" = "mcps" ]; then
-      install_mcp "${target_root}" "$(mcp_path_for "${editor}" "${target_root}")"
+      install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}" "${target_root}")"
     elif [ "${editor}" = "codex" ] && [ "${category}" = "commands" ]; then
       install_codex_commands "${target_root}"
     else
@@ -1643,6 +1966,7 @@ main() {
   select_editors
   select_scope
   select_categories
+  select_mcp_servers
   set_conflict_mode_default
   confirm_summary
 
