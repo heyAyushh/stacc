@@ -1480,6 +1480,128 @@ copy_tree() {
   done < <(find "${src_dir}" -type f ! -name ".DS_Store" -print0)
 }
 
+rules_summary_path() {
+  printf '%s\n' "${ROOT_DIR}/configs/rules/summary.md"
+}
+
+rules_summary_marker() {
+  printf '%s\n' "<!-- stacc:rules-summary -->"
+}
+
+append_rules_summary() {
+  local target="$1"
+  local summary marker
+  summary="$(rules_summary_path)"
+  marker="$(rules_summary_marker)"
+
+  [ -f "${summary}" ] || die "missing rules summary: ${summary}"
+
+  if [ -f "${target}" ] && rg -q "${marker}" "${target}"; then
+    log_verbose "Rules summary already present in ${target}"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "${target}")"
+
+  if [ "${DRY_RUN}" -eq 1 ]; then
+    log_verbose "[dry-run] Would append rules summary to ${target}"
+    return 0
+  fi
+
+  if [ -f "${target}" ]; then
+    printf '\n\n' >> "${target}"
+    cat "${summary}" >> "${target}"
+  else
+    cat "${summary}" > "${target}"
+  fi
+}
+
+rules_summary_target_for() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+
+  if [ "${editor}" = "claude" ]; then
+    if [ "${scope}" = "project" ]; then
+      local claude_file="${PROJECT_ROOT}/CLAUDE.md"
+      if [ -f "${claude_file}" ]; then
+        local line_count
+        line_count="$(wc -l < "${claude_file}" | tr -d ' ')"
+        if [ "${line_count}" -gt 3 ]; then
+          printf '%s\n' "${claude_file}"
+          return 0
+        fi
+      fi
+      printf '%s\n' "${PROJECT_ROOT}/AGENTS.md"
+      return 0
+    fi
+    printf '%s\n' "${target_root}/CLAUDE.md"
+    return 0
+  fi
+
+  if [ "${scope}" = "project" ]; then
+    printf '%s\n' "${PROJECT_ROOT}/AGENTS.md"
+  else
+    printf '%s\n' "${target_root}/AGENTS.md"
+  fi
+}
+
+install_cursor_rules() {
+  local src="$1"
+  local dest="$2"
+
+  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
+    if ! handle_dir_conflict "${dest}"; then
+      return 0
+    fi
+  fi
+
+  while IFS= read -r -d '' file; do
+    local rel="${file#"${src}/"}"
+    local dest_file="${dest}/${rel}"
+    copy_file "${file}" "${dest_file}"
+  done < <(find "${src}" -type f ! -name ".DS_Store" ! -name "summary.md" -print0)
+}
+
+install_codex_rules() {
+  local src="$1"
+  local dest="$2"
+
+  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
+    if ! handle_dir_conflict "${dest}"; then
+      return 0
+    fi
+  fi
+
+  mkdir -p "${dest}"
+
+  while IFS= read -r -d '' file; do
+    local base
+    base="$(basename "${file}")"
+    base="${base%.*}.rules"
+    copy_file "${file}" "${dest}/${base}"
+  done < <(find "${src}" -type f ! -name ".DS_Store" ! -name "summary.md" -print0)
+}
+
+install_rules() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+  local src="${ROOT_DIR}/configs/rules"
+
+  [ -d "${src}" ] || die "source category not found: ${src}"
+
+  if [ "${editor}" = "cursor" ]; then
+    install_cursor_rules "${src}" "${target_root}/rules"
+  elif [ "${editor}" = "codex" ] && [ "${scope}" = "global" ]; then
+    install_codex_rules "${src}" "${target_root}/rules"
+  fi
+
+  local summary_target
+  summary_target="$(rules_summary_target_for "${editor}" "${scope}" "${target_root}")"
+  append_rules_summary "${summary_target}"
+}
+
 install_category() {
   local category="$1"
   local target_root="$2"
@@ -2114,7 +2236,9 @@ install_for_target() {
     fi
     validate_category "${category}"
     if [ "${category}" = "mcps" ]; then
-      install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}" "${target_root}")"
+      install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}")"
+    elif [ "${category}" = "rules" ]; then
+      install_rules "${editor}" "${scope}" "${target_root}"
     elif [ "${editor}" = "codex" ] && [ "${category}" = "commands" ]; then
       install_codex_commands "${target_root}"
     else
