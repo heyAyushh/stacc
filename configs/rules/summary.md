@@ -1,3 +1,4 @@
+<!-- stacc:rules-summary -->
 # General Rules for this codebase
 
 These rules apply to all code changes and interactions.
