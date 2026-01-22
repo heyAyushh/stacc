@@ -2245,7 +2245,7 @@ install_for_target() {
     fi
     validate_category "${category}"
     if [ "${category}" = "mcps" ]; then
-      install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}")"
+      install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}" "${target_root}")"
     elif [ "${category}" = "rules" ]; then
       install_rules "${editor}" "${scope}" "${target_root}"
     elif [ "${editor}" = "codex" ] && [ "${category}" = "commands" ]; then
