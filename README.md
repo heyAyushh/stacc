@@ -1,5 +1,5 @@
 # stacc
-Curated configs for AI code editors and agents for vibing with aura.  
+Curated configs for an AI coding workflow with muscles.
   
 ![Cursor](https://img.shields.io/badge/Cursor-black?style=flat&logo=cursor) ![Claude Code](https://img.shields.io/badge/Claude_Code-cc785c?style=flat&logo=anthropic) ![Codex](https://img.shields.io/badge/Codex-10a37f?style=flat&logo=openai&logoColor=white) ![OpenCode](https://img.shields.io/badge/OpenCode-1a1a2e?style=flat&logo=go&logoColor=00ADD8) ![AMP](https://img.shields.io/badge/AMP-ff5543?style=flat&logo=sourcegraph&logoColor=white)
 
@@ -34,7 +34,7 @@ The interactive installer will guide you through:
 
 ### Target Directories
 
-| Scope | Codex | Claude | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |
+| Scope | Codex | Claude Code | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |
 |-------|-------|--------|--------|---------------------|----------|----------|------------------|---------|
 | Global | `~/.codex/` | `~/.claude/` | `~/.cursor/` | ❌ | `~/.config/opencode/` | `~/.config/amp/` | ❌ | ❌ |
 | Project | `.codex/` | `.claude/` | `.cursor/` | ❌ | `.opencode/` | `.agents/` | ❌ | ❌ |
@@ -43,7 +43,7 @@ The interactive installer will guide you through:
 
 #### Global Configuration File Locations (macOS/Linux)
 
-| Config Type | Codex | Claude | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |
+| Config Type | Codex | Claude Code | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |
 |-------------|-------|--------|--------|---------------------|----------|----------|------------------|---------|
 | LSPs | [#8745](https://github.com/openai/codex/issues/8745) ❌ | [plugin](https://code.claude.com/docs/en/plugins-reference#lsp-servers) | built-in ❌ | ❌ | built-in ❌ | built-in ❌ | built-in ❌ | extensions ❌ |
 | Hooks | [#2109](https://github.com/openai/codex/issues/2109) ❌ | `~/.claude/settings.json` | `~/.cursor/hooks.json` | ❌ | ❌ | ❌ | ❌ | ❌ |
