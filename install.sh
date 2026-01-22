@@ -18,6 +18,7 @@ SELECTED_EDITORS=""
 SELECTED_SCOPE=""
 SELECTED_CATEGORIES=""
 CONFLICT_MODE=""
+DISABLED_FLAGS=()
 
 cleanup() {
   # Restore terminal if needed
@@ -255,12 +256,16 @@ menu_multi_item_line() {
   local label="$1"
   local is_cursor="$2"
   local is_selected="$3"
-  local pad="${4:-0}"
+  local is_disabled="$4"
+  local pad="${5:-0}"
   local marker="[ ]"
   local max label_trim
   max="$(menu_label_max_width 6)"
   label_trim="$(truncate_label "${label}" "${max}")"
-  if [ "${is_selected}" -eq 1 ]; then
+  if [ "${is_disabled}" -eq 1 ]; then
+    marker="${COLOR_DIM}${marker}${COLOR_RESET}"
+    label_trim="${COLOR_DIM}${label_trim}${COLOR_RESET}"
+  elif [ "${is_selected}" -eq 1 ]; then
     marker="[x]"
     label_trim="${COLOR_GREEN}${label_trim}${COLOR_RESET}"
   fi
@@ -611,10 +616,11 @@ render_menu_multi() {
 
   local i
   for i in "${!items[@]}"; do
+    local disabled="${DISABLED_FLAGS[$i]:-0}"
     if [ "${i}" -eq "${cursor}" ]; then
-      ui_out "$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}" "${pad}")\n"
+      ui_out "$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}" "${disabled}" "${pad}")\n"
     else
-      ui_out "$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}" "${pad}")\n"
+      ui_out "$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}" "${disabled}" "${pad}")\n"
     fi
   done
 }
@@ -681,9 +687,16 @@ menu_multi() {
   local i
   local pad
 
+  if [ "${#DISABLED_FLAGS[@]}" -ne "${#items[@]}" ]; then
+    DISABLED_FLAGS=()
+    for i in "${!items[@]}"; do
+      DISABLED_FLAGS[$i]="0"
+    done
+  fi
+
   SELECTED_FLAGS=()
   for i in "${!items[@]}"; do
-    if [ "${default_all}" -eq 1 ]; then
+    if [ "${default_all}" -eq 1 ] && [ "${DISABLED_FLAGS[$i]}" != "1" ]; then
       SELECTED_FLAGS[$i]="1"
     else
       SELECTED_FLAGS[$i]="0"
@@ -705,21 +718,29 @@ menu_multi() {
       up) cursor=$(( (cursor + total - 1) % total )) ;;
       down) cursor=$(( (cursor + 1) % total )) ;;
       space)
-        if [ "${SELECTED_FLAGS[$cursor]}" = "1" ]; then
-          SELECTED_FLAGS[$cursor]="0"
-        else
-          SELECTED_FLAGS[$cursor]="1"
+        if [ "${DISABLED_FLAGS[$cursor]}" != "1" ]; then
+          if [ "${SELECTED_FLAGS[$cursor]}" = "1" ]; then
+            SELECTED_FLAGS[$cursor]="0"
+          else
+            SELECTED_FLAGS[$cursor]="1"
+          fi
         fi
         ;;
       a)
         local all_selected=1
         for i in "${!items[@]}"; do
+          if [ "${DISABLED_FLAGS[$i]}" = "1" ]; then
+            continue
+          fi
           if [ "${SELECTED_FLAGS[$i]}" != "1" ]; then
             all_selected=0
             break
           fi
         done
         for i in "${!items[@]}"; do
+          if [ "${DISABLED_FLAGS[$i]}" = "1" ]; then
+            continue
+          fi
           if [ "${all_selected}" -eq 1 ]; then
             SELECTED_FLAGS[$i]="0"
           else
@@ -734,10 +755,11 @@ menu_multi() {
       for i in "${!items[@]}"; do
         local line
         local block_lines
+        local disabled="${DISABLED_FLAGS[$i]:-0}"
         if [ "${i}" -eq "${cursor}" ]; then
-          line="$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}" "${pad}")"
+          line="$(menu_multi_item_line "${items[$i]}" 1 "${SELECTED_FLAGS[$i]}" "${disabled}" "${pad}")"
         else
-          line="$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}" "${pad}")"
+          line="$(menu_multi_item_line "${items[$i]}" 0 "${SELECTED_FLAGS[$i]}" "${disabled}" "${pad}")"
         fi
         block_lines="$(menu_multi_item_block_lines "${items[$i]}")"
         menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${i}" "${items[@]}")" "${block_lines}" "${line}"
@@ -749,7 +771,8 @@ menu_multi() {
     if [ "${key}" = "space" ]; then
       local line
       local block_lines
-      line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}" "${pad}")"
+      local disabled="${DISABLED_FLAGS[$cursor]:-0}"
+      line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}" "${disabled}" "${pad}")"
       block_lines="$(menu_multi_item_block_lines "${items[$cursor]}")"
       menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${cursor}" "${items[@]}")" "${block_lines}" "${line}"
       last_cursor="${cursor}"
@@ -758,8 +781,10 @@ menu_multi() {
 
     if [ "${cursor}" -ne "${last_cursor}" ]; then
       local old_line new_line block_lines
-      old_line="$(menu_multi_item_line "${items[$last_cursor]}" 0 "${SELECTED_FLAGS[$last_cursor]}" "${pad}")"
-      new_line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}" "${pad}")"
+      local old_disabled="${DISABLED_FLAGS[$last_cursor]:-0}"
+      local new_disabled="${DISABLED_FLAGS[$cursor]:-0}"
+      old_line="$(menu_multi_item_line "${items[$last_cursor]}" 0 "${SELECTED_FLAGS[$last_cursor]}" "${old_disabled}" "${pad}")"
+      new_line="$(menu_multi_item_line "${items[$cursor]}" 1 "${SELECTED_FLAGS[$cursor]}" "${new_disabled}" "${pad}")"
       block_lines="$(menu_multi_item_block_lines "${items[$last_cursor]}")"
       menu_update_block "${lines}" "$(menu_multi_item_line_index "${title}" "${instructions}" "${footer}" "${last_cursor}" "${items[@]}")" "${block_lines}" "${old_line}"
       block_lines="$(menu_multi_item_block_lines "${items[$cursor]}")"
@@ -801,11 +826,12 @@ Options:
   --claude             Install to Claude Code only
   --opencode           Install to OpenCode only
   --codex              Install to Codex only
+  --ampcode            Install to AMP Code only
   --both               Install to both Cursor and Claude Code
   --all                Install to all supported editors
   --global             Install to global locations
   --project            Install to project locations
-  --categories LIST    Comma-separated categories (commands,rules,agents,skills,stack,hooks,mcps)
+  --categories LIST    Comma-separated categories (commands,rules,agents,skills,hooks,mcps)
   --conflict MODE      Conflict mode: overwrite, backup, skip, selective
   --yes                Non-interactive with safe defaults
   --dry-run            Print actions without changing files
@@ -891,12 +917,16 @@ parse_args() {
         SELECTED_EDITORS="codex"
         shift
         ;;
+      --ampcode)
+        SELECTED_EDITORS="ampcode"
+        shift
+        ;;
       --both)
         SELECTED_EDITORS="cursor claude"
         shift
         ;;
       --all)
-        SELECTED_EDITORS="cursor claude opencode codex"
+        SELECTED_EDITORS="cursor claude opencode codex ampcode"
         shift
         ;;
       --global)
@@ -948,12 +978,12 @@ select_editors() {
   fi
 
   if [ "${NON_INTERACTIVE}" -eq 1 ]; then
-    SELECTED_EDITORS="cursor claude opencode codex"
+    SELECTED_EDITORS="cursor claude opencode codex ampcode"
     return 0
   fi
 
-  local -a editor_items=("Cursor" "Claude Code" "OpenCode" "Codex")
-  local -a editor_keys=("cursor" "claude" "opencode" "codex")
+  local -a editor_items=("Cursor" "Claude Code" "OpenCode" "Codex" "AMP Code")
+  local -a editor_keys=("cursor" "claude" "opencode" "codex" "ampcode")
   local footer=""
   while true; do
     SELECTED_EDITORS=""
@@ -982,7 +1012,7 @@ select_scope() {
     return 0
   fi
 
-  local -a scope_items=("Global (~/.cursor or ~/.claude)" "Project (.cursor or .claude in current directory)")
+  local -a scope_items=("Global (~/.cursor, ~/.claude, etc.)" "Project (.cursor, .claude, etc. in current directory)")
   menu_single "Select scope" "Use ↑/↓ to move, Enter to select." 0 "${scope_items[@]}"
   case "${MENU_RESULT}" in
     "Global"*) SELECTED_SCOPE="global" ;;
@@ -991,17 +1021,133 @@ select_scope() {
   esac
 }
 
+array_contains() {
+  local needle="$1"
+  shift
+  local item
+  for item in "$@"; do
+    if [ "${item}" = "${needle}" ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+get_supported_categories() {
+  local editor="$1"
+  local scope="$2"
+
+  case "${editor}" in
+    cursor|claude)
+      printf '%s' "commands rules agents skills hooks mcps"
+      ;;
+    opencode)
+      printf '%s' "commands rules agents skills mcps"
+      ;;
+    codex)
+      if [ "${scope}" = "global" ]; then
+        printf '%s' "rules skills mcps"
+      else
+        printf '%s' "rules skills"
+      fi
+      ;;
+    ampcode)
+      printf '%s' "commands rules skills"
+      ;;
+    *)
+      printf '%s' ""
+      ;;
+  esac
+}
+
+is_category_supported() {
+  local category="$1"
+  local supported="$2"
+  local item
+  for item in ${supported}; do
+    if [ "${item}" = "${category}" ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+is_category_disabled() {
+  return 1
+}
+
+get_available_categories() {
+  local scope="$1"
+  local -a base=("commands" "rules" "agents" "skills" "hooks" "mcps")
+  local -a available=()
+  local cat editor supported
+
+  for cat in "${base[@]}"; do
+    local ok=1
+    for editor in ${SELECTED_EDITORS}; do
+      supported="$(get_supported_categories "${editor}" "${scope}")"
+      if ! is_category_supported "${cat}" "${supported}"; then
+        ok=0
+        break
+      fi
+    done
+    if [ "${ok}" -eq 1 ]; then
+      available+=("${cat}")
+    fi
+  done
+
+  printf '%s' "${available[*]}"
+}
+
+normalize_selected_categories() {
+  local scope="$1"
+  local -a requested
+  local -a available
+  local -a filtered=()
+  local cat
+
+  IFS=',' read -r -a requested <<< "${SELECTED_CATEGORIES}"
+  IFS=' ' read -r -a available <<< "$(get_available_categories "${scope}")"
+
+  for cat in "${requested[@]}"; do
+    cat="${cat// /}"
+    if [ -z "${cat}" ] || [ "${cat}" = "stack" ]; then
+      continue
+    fi
+    if array_contains "${cat}" "${available[@]}"; then
+      filtered+=("${cat}")
+    else
+      log_verbose "Skipping unsupported category: ${cat}"
+    fi
+  done
+
+  if [ "${#filtered[@]}" -eq 0 ]; then
+    die "no supported categories for selected editors and scope"
+  fi
+
+  SELECTED_CATEGORIES="$(join_by "," "${filtered[@]}")"
+}
+
 select_categories() {
   if [ -n "${SELECTED_CATEGORIES}" ]; then
+    normalize_selected_categories "${SELECTED_SCOPE}"
     return 0
   fi
 
   if [ "${NON_INTERACTIVE}" -eq 1 ]; then
-    SELECTED_CATEGORIES="commands,rules,agents,skills,stack,hooks,mcps"
+    local -a available enabled
+    IFS=' ' read -r -a available <<< "$(get_available_categories "${SELECTED_SCOPE}")"
+    enabled=()
+    local cat
+    for cat in "${available[@]}"; do
+      enabled+=("${cat}")
+    done
+    SELECTED_CATEGORIES="$(join_by "," "${enabled[@]}")"
     return 0
   fi
 
-  local -a category_items=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps")
+  local -a category_items=()
+  IFS=' ' read -r -a category_items <<< "$(get_available_categories "${SELECTED_SCOPE}")"
   local -a category_display_items=()
   local item first_char rest_chars
   for item in "${category_items[@]}"; do
@@ -1348,6 +1494,13 @@ target_root_for() {
         printf '%s\n' "${PROJECT_ROOT}/.codex"
       fi
       ;;
+    ampcode)
+      if [ "${scope}" = "global" ]; then
+        printf '%s\n' "${HOME}/.config/amp"
+      else
+        printf '%s\n' "${PROJECT_ROOT}/.agents"
+      fi
+      ;;
     *)
       die "unknown editor: ${editor}"
       ;;
@@ -1392,6 +1545,10 @@ install_for_target() {
   local category
   IFS=',' read -r -a cats <<< "${SELECTED_CATEGORIES}"
   for category in "${cats[@]}"; do
+    if [ "${category}" = "stack" ]; then
+      log_info "Skipping stack category (temporarily disabled)."
+      continue
+    fi
     validate_category "${category}"
     if [ "${category}" = "mcps" ]; then
       install_mcp "${target_root}" "$(mcp_path_for "${editor}" "${target_root}")"

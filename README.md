@@ -27,9 +27,10 @@ cd stacc
 ```
 
 The interactive installer will guide you through:
-- **Editor selection**: Cursor, Claude Code, or both
+- **Editor selection**: Cursor, Claude Code, OpenCode, Codex, AMP Code
 - **Scope selection**: Global (all projects) or project-specific
-- **Category selection**: commands, rules, agents, skills, stack configs
+- **Category selection**: commands, rules, agents, skills, hooks, mcps
+  - **Stack configs**: temporarily disabled in the installer UI 🤫
 
 ### Target Directories
 
