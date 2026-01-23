@@ -1,3 +1,8 @@
+---
+name: commands
+description: Overview of Cursor slash commands available in this repo and how to find their detailed workflows.
+---
+
 # Commands Skill
 
 ## Overview
