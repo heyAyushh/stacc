@@ -1410,7 +1410,7 @@ category_dest_for() {
 
   case "${editor}:${category}" in
     codex:commands)
-      printf '%s' "rules/commands"
+      printf '%s' "skills/commands"
       ;;
     *)
       printf '%s' "${category}"
