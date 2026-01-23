@@ -1327,27 +1327,27 @@ prompt_conflict_mode() {
     return 0
   fi
 
-  log_info "Conflict detected. Choose action:"
-  log_info "  1) Overwrite"
-  log_info "  2) Backup existing"
-  log_info "  3) Skip"
-  log_info "  4) Overwrite all"
-  log_info "  5) Backup all"
-  log_info "  6) Skip all"
-  printf "> " > "${TTY_DEVICE}"
-  prompt_read choice
-  choice="${choice//[[:space:]]/}"
-  choice="${choice%%)*}"
-  choice="${choice%%.*}"
-  case "${choice}" in
-    1) CONFLICT_MODE="overwrite" ;;
-    2) CONFLICT_MODE="backup" ;;
-    3) CONFLICT_MODE="skip" ;;
-    4) CONFLICT_MODE="overwrite_all" ;;
-    5) CONFLICT_MODE="backup_all" ;;
-    6) CONFLICT_MODE="skip_all" ;;
-    *) die "invalid selection" ;;
-  esac
+  while true; do
+    log_info "Conflict detected. Choose action:"
+    log_info "  1) Overwrite"
+    log_info "  2) Backup existing"
+    log_info "  3) Skip"
+    log_info "  4) Overwrite all"
+    log_info "  5) Backup all"
+    log_info "  6) Skip all"
+    printf "> " > "${TTY_DEVICE}"
+    prompt_read choice
+    case "${choice}" in
+      1) CONFLICT_MODE="overwrite" ;;
+      2) CONFLICT_MODE="backup" ;;
+      3) CONFLICT_MODE="skip" ;;
+      4) CONFLICT_MODE="overwrite_all" ;;
+      5) CONFLICT_MODE="backup_all" ;;
+      6) CONFLICT_MODE="skip_all" ;;
+      *) log_info "Invalid selection. Please enter a number from 1 to 6." ; continue ;;
+    esac
+    break
+  done
 }
 
 prompt_dir_conflict_mode() {
@@ -1358,29 +1358,29 @@ prompt_dir_conflict_mode() {
     return 0
   fi
 
-  log_info "Category already exists. Choose action:"
-  log_info "  1) Overwrite category"
-  log_info "  2) Backup existing category"
-  log_info "  3) Skip category"
-  log_info "  4) Selective (install file-by-file)"
-  log_info "  5) Overwrite all"
-  log_info "  6) Backup all"
-  log_info "  7) Skip all"
-  printf "> " > "${TTY_DEVICE}"
-  prompt_read choice
-  choice="${choice//[[:space:]]/}"
-  choice="${choice%%)*}"
-  choice="${choice%%.*}"
-  case "${choice}" in
-    1) CONFLICT_MODE="overwrite" ;;
-    2) CONFLICT_MODE="backup" ;;
-    3) CONFLICT_MODE="skip" ;;
-    4) CONFLICT_MODE="selective" ;;
-    5) CONFLICT_MODE="overwrite_all" ;;
-    6) CONFLICT_MODE="backup_all" ;;
-    7) CONFLICT_MODE="skip_all" ;;
-    *) die "invalid selection" ;;
-  esac
+  while true; do
+    log_info "Category already exists. Choose action:"
+    log_info "  1) Overwrite category"
+    log_info "  2) Backup existing category"
+    log_info "  3) Skip category"
+    log_info "  4) Selective (install file-by-file)"
+    log_info "  5) Overwrite all"
+    log_info "  6) Backup all"
+    log_info "  7) Skip all"
+    printf "> " > "${TTY_DEVICE}"
+    prompt_read choice
+    case "${choice}" in
+      1) CONFLICT_MODE="overwrite" ;;
+      2) CONFLICT_MODE="backup" ;;
+      3) CONFLICT_MODE="skip" ;;
+      4) CONFLICT_MODE="selective" ;;
+      5) CONFLICT_MODE="overwrite_all" ;;
+      6) CONFLICT_MODE="backup_all" ;;
+      7) CONFLICT_MODE="skip_all" ;;
+      *) log_info "Invalid selection. Please enter a number from 1 to 7." ; continue ;;
+    esac
+    break
+  done
 }
 
 apply_conflict_mode() {
