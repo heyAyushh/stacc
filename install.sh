@@ -1668,37 +1668,47 @@ wrap_amp_mcp_source() {
 
 build_codex_mcp_block() {
   local src="$1"
+  local keys_csv="${2-}"
   if ! command -v jq >/dev/null 2>&1; then
     return 1
   fi
-  printf '[mcpServers]\n'
-  local key
-  while IFS= read -r key; do
-    [ -n "${key}" ] || continue
-    local command args type url
-    command="$(jq -r --arg key "${key}" '.mcpServers[$key].command // empty' "${src}")"
-    args="$(jq -c --arg key "${key}" '.mcpServers[$key].args // empty' "${src}")"
-    type="$(jq -r --arg key "${key}" '.mcpServers[$key].type // empty' "${src}")"
-    url="$(jq -r --arg key "${key}" '.mcpServers[$key].url // empty' "${src}")"
-    local -a parts=()
-    if [ -n "${command}" ]; then
-      parts+=("command = $(printf '%s' "${command}" | jq -R @json)")
-    fi
-    if [ -n "${args}" ] && [ "${args}" != "null" ] && [ "${args}" != "[]" ]; then
-      parts+=("args = ${args}")
-    fi
-    if [ -n "${type}" ]; then
-      parts+=("type = $(printf '%s' "${type}" | jq -R @json)")
-    fi
-    if [ -n "${url}" ]; then
-      parts+=("url = $(printf '%s' "${url}" | jq -R @json)")
-    fi
-    if [ "${#parts[@]}" -gt 0 ]; then
-      local joined
-      joined="$(IFS=', '; printf '%s' "${parts[*]}")"
-      printf '%s\n' "  ${key} = { ${joined} }"
-    fi
-  done < <(jq -r '.mcpServers | keys[]' "${src}")
+  if [ -n "${keys_csv}" ]; then
+    jq -r --argjson keys "$(printf '%s' "${keys_csv}" | awk -F',' '{
+      printf "["
+      for (i = 1; i <= NF; i++) {
+        if ($i != "") {
+          if (i > 1) printf ","
+          printf "\"" $i "\""
+        }
+      }
+      printf "]"
+    }')" '
+      .mcpServers
+      | with_entries(select(.key as $k | $keys | index($k)))
+      | to_entries[]
+      | .key as $name
+      | (["[mcpServers." + $name + "]"]
+         + (if .value.command then ["command = " + (.value.command | @json)] else [] end)
+         + (if .value.args then ["args = [" + (.value.args | map(@json) | join(", ")) + "]"] else [] end)
+         + (if .value.type then ["type = " + (.value.type | @json)] else [] end)
+         + (if .value.url then ["url = " + (.value.url | @json)] else [] end)
+        )
+      | .[]
+    ' "${src}"
+  else
+    jq -r '
+      .mcpServers
+      | to_entries[]
+      | .key as $name
+      | (["[mcpServers." + $name + "]"]
+         + (if .value.command then ["command = " + (.value.command | @json)] else [] end)
+         + (if .value.args then ["args = [" + (.value.args | map(@json) | join(", ")) + "]"] else [] end)
+         + (if .value.type then ["type = " + (.value.type | @json)] else [] end)
+         + (if .value.url then ["url = " + (.value.url | @json)] else [] end)
+        )
+      | .[]
+    ' "${src}"
+  fi
 }
 
 merge_codex_mcp() {
@@ -1714,37 +1724,91 @@ merge_codex_mcp() {
     return 0
   fi
 
-  if [ "${NON_INTERACTIVE}" -eq 0 ] && [ -e "${dest}" ]; then
-    printf "Merge MCP config into existing %s? [y/N] " "${dest}" > "${TTY_DEVICE}"
-    local confirm
-    prompt_read confirm
-    case "${confirm}" in
-      y|Y|yes|YES) ;;
-      *) return 1 ;;
-    esac
-  fi
-
   if [ -z "${TMP_ROOT}" ]; then
     TMP_ROOT="$(mktemp -d)"
   fi
 
   local tmp="${TMP_ROOT}/mcp_codex.$$"
+  local -a selected_keys=()
+  local key
+  while IFS= read -r key; do
+    [ -n "${key}" ] || continue
+    selected_keys+=("${key}")
+  done < <(jq -r '.mcpServers | keys[]' "${src}")
+
+  local existing_keys_csv=""
   if [ -e "${dest}" ]; then
-    awk '
-      BEGIN { inside=0 }
-      /^\[mcpServers\]/ { inside=1; next }
-      inside && /^\[/ { inside=0 }
-      !inside { print }
-    ' "${dest}" > "${tmp}"
+    existing_keys_csv="$(awk '
+      /^\[mcpServers\./ {
+        line=$0
+        sub(/^\[mcpServers\./, "", line)
+        sub(/\]$/, "", line)
+        print line
+      }
+    ' "${dest}" | paste -sd "," -)"
+  fi
+
+  local -a keys_to_add=()
+  local -a keys_to_remove=()
+  for key in "${selected_keys[@]}"; do
+    if [ -n "${existing_keys_csv}" ] && printf '%s\n' "${existing_keys_csv}" | tr ',' '\n' | grep -qx "${key}"; then
+      if [ "${NON_INTERACTIVE}" -eq 1 ]; then
+        log_verbose "Skipping existing Codex MCP server ${key}"
+        continue
+      fi
+      printf "MCP server '%s' already exists in %s. Overwrite? [y/N] " "${key}" "${dest}" > "${TTY_DEVICE}"
+      local confirm
+      prompt_read confirm
+      case "${confirm}" in
+        y|Y|yes|YES) keys_to_remove+=("${key}") ; keys_to_add+=("${key}") ;;
+        *) ;;
+      esac
+    else
+      keys_to_add+=("${key}")
+    fi
+  done
+
+  if [ -e "${dest}" ]; then
+    if [ "${#keys_to_remove[@]}" -gt 0 ]; then
+      local remove_csv
+      remove_csv="$(IFS=','; printf '%s' "${keys_to_remove[*]}")"
+      awk -v remove_csv="${remove_csv}" '
+        BEGIN {
+          split(remove_csv, arr, ",")
+          for (i in arr) {
+            if (arr[i] != "") {
+              remove[arr[i]] = 1
+            }
+          }
+          skip=0
+        }
+        {
+          if (match($0, /^\[mcpServers\.([^]]+)\]/, m)) {
+            key=m[1]
+            if (remove[key]) {
+              skip=1
+              next
+            }
+            skip=0
+          }
+          if (!skip) print
+        }
+      ' "${dest}" > "${tmp}"
+    else
+      cp "${dest}" "${tmp}"
+    fi
   else
     : > "${tmp}"
   fi
 
-  printf '\n' >> "${tmp}"
-  build_codex_mcp_block "${src}" >> "${tmp}"
-  if [ -e "${dest}" ]; then
-    handle_conflict "${dest}" || { rm -f "${tmp}"; return 0; }
+  if [ "${#keys_to_add[@]}" -eq 0 ]; then
+    log_verbose "No new Codex MCP servers to add."
+    rm -f "${tmp}"
+    return 0
   fi
+
+  printf '\n' >> "${tmp}"
+  build_codex_mcp_block "${src}" "$(IFS=','; printf '%s' "${keys_to_add[*]}")" >> "${tmp}"
   log_verbose "Writing merged Codex MCP config to ${dest}"
   mv "${tmp}" "${dest}"
   return 0
