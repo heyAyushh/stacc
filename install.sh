@@ -1336,6 +1336,9 @@ prompt_conflict_mode() {
   log_info "  6) Skip all"
   printf "> " > "${TTY_DEVICE}"
   prompt_read choice
+  choice="${choice//[[:space:]]/}"
+  choice="${choice%%)*}"
+  choice="${choice%%.*}"
   case "${choice}" in
     1) CONFLICT_MODE="overwrite" ;;
     2) CONFLICT_MODE="backup" ;;
@@ -1365,6 +1368,9 @@ prompt_dir_conflict_mode() {
   log_info "  7) Skip all"
   printf "> " > "${TTY_DEVICE}"
   prompt_read choice
+  choice="${choice//[[:space:]]/}"
+  choice="${choice%%)*}"
+  choice="${choice%%.*}"
   case "${choice}" in
     1) CONFLICT_MODE="overwrite" ;;
     2) CONFLICT_MODE="backup" ;;
