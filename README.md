@@ -197,6 +197,13 @@ These are adaptations of Claude Code's built-in tool descriptions and agent prom
 
 | File | Description |
 |------|-------------|
+| `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting |
+| `configs/commands/iterate-browser.md` | Autonomously iterate on UI changes using console.log and browser tools |
+
+### From [@shaoruu](https://shaoruu.io/cursor/council)
+
+| File | Description |
+|------|-------------|
 | `configs/skills/changelog-generator/` | Changelog generation from git commits |
 
 Also found in:
