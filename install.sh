@@ -1046,9 +1046,9 @@ get_supported_categories() {
       ;;
     codex)
       if [ "${scope}" = "global" ]; then
-        printf '%s' "rules skills mcps"
+        printf '%s' "commands rules skills mcps"
       else
-        printf '%s' "rules skills"
+        printf '%s' "commands rules skills"
       fi
       ;;
     ampcode)
@@ -1391,8 +1391,9 @@ copy_tree() {
 install_category() {
   local category="$1"
   local target_root="$2"
+  local dest_subdir="${3:-${category}}"
   local src="${ROOT_DIR}/configs/${category}"
-  local dest="${target_root}/${category}"
+  local dest="${target_root}/${dest_subdir}"
 
   [ -d "${src}" ] || die "source category not found: ${src}"
   if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
@@ -1401,6 +1402,20 @@ install_category() {
     fi
   fi
   copy_tree "${src}" "${dest}"
+}
+
+category_dest_for() {
+  local editor="$1"
+  local category="$2"
+
+  case "${editor}:${category}" in
+    codex:commands)
+      printf '%s' "skills/commands"
+      ;;
+    *)
+      printf '%s' "${category}"
+      ;;
+  esac
 }
 
 merge_mcp() {
@@ -1553,7 +1568,7 @@ install_for_target() {
     if [ "${category}" = "mcps" ]; then
       install_mcp "${target_root}" "$(mcp_path_for "${editor}" "${target_root}")"
     else
-      install_category "${category}" "${target_root}"
+      install_category "${category}" "${target_root}" "$(category_dest_for "${editor}" "${category}")"
     fi
   done
 }
