@@ -1409,13 +1409,63 @@ category_dest_for() {
   local category="$2"
 
   case "${editor}:${category}" in
-    codex:commands)
-      printf '%s' "skills/commands"
-      ;;
     *)
       printf '%s' "${category}"
       ;;
   esac
+}
+
+install_codex_commands() {
+  local target_root="$1"
+  local src_dir="${ROOT_DIR}/configs/commands"
+  local dest_root="${target_root}/skills"
+
+  [ -d "${src_dir}" ] || die "source category not found: ${src_dir}"
+
+  while IFS= read -r -d '' file; do
+    local base
+    local name
+    local dest_dir
+    local dest_file
+    local tmp_file
+    base="$(basename "${file}")"
+    name="${base%.md}"
+    dest_dir="${dest_root}/${name}"
+    dest_file="${dest_dir}/SKILL.md"
+
+    if [ -d "${dest_dir}" ] && [ -n "$(find "${dest_dir}" -mindepth 1 -print -quit)" ]; then
+      if ! handle_dir_conflict "${dest_dir}"; then
+        continue
+      fi
+    fi
+    if [ "${DRY_RUN}" -eq 1 ]; then
+      log_verbose "[dry-run] Would install ${dest_file}"
+      continue
+    fi
+
+    if [ -z "${TMP_ROOT}" ]; then
+      TMP_ROOT="$(mktemp -d)"
+    fi
+    tmp_file="${TMP_ROOT}/codex_skill_${name}.$$"
+    {
+      printf '%s\n' "---"
+      printf 'name: %s\n' "${name}"
+      printf 'description: Command skill for %s.\n' "${name}"
+      printf '%s\n\n' "---"
+      if [ "$(head -n 1 "${file}")" = "---" ]; then
+        awk '
+          BEGIN { front = 0; }
+          NR == 1 && $0 == "---" { front = 1; next }
+          front == 1 && $0 == "---" { front = 0; next }
+          front == 0 { print }
+        ' "${file}"
+      else
+        cat "${file}"
+      fi
+    } > "${tmp_file}"
+    copy_file "${tmp_file}" "${dest_file}"
+    rm -f "${tmp_file}"
+  done < <(find "${src_dir}" -type f -name "*.md" ! -name ".DS_Store" -print0)
 }
 
 merge_mcp() {
@@ -1567,6 +1617,8 @@ install_for_target() {
     validate_category "${category}"
     if [ "${category}" = "mcps" ]; then
       install_mcp "${target_root}" "$(mcp_path_for "${editor}" "${target_root}")"
+    elif [ "${editor}" = "codex" ] && [ "${category}" = "commands" ]; then
+      install_codex_commands "${target_root}"
     else
       install_category "${category}" "${target_root}" "$(category_dest_for "${editor}" "${category}")"
     fi
