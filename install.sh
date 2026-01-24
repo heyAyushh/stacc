@@ -1494,7 +1494,10 @@ append_rules_summary() {
   summary="$(rules_summary_path)"
   marker="$(rules_summary_marker)"
 
-  [ -f "${summary}" ] || die "missing rules summary: ${summary}"
+  if [ ! -f "${summary}" ]; then
+    log_info "Rules summary not found at ${summary}; skipping summary append."
+    return 0
+  fi
 
   if [ -f "${target}" ] && rg -q "${marker}" "${target}"; then
     log_verbose "Rules summary already present in ${target}"
@@ -1588,18 +1591,23 @@ install_rules() {
   local scope="$2"
   local target_root="$3"
   local src="${ROOT_DIR}/configs/rules"
+  local should_append=1
 
   [ -d "${src}" ] || die "source category not found: ${src}"
 
   if [ "${editor}" = "cursor" ]; then
     install_cursor_rules "${src}" "${target_root}/rules"
+    should_append=0
   elif [ "${editor}" = "codex" ] && [ "${scope}" = "global" ]; then
     install_codex_rules "${src}" "${target_root}/rules"
+    should_append=0
   fi
 
   local summary_target
-  summary_target="$(rules_summary_target_for "${editor}" "${scope}" "${target_root}")"
-  append_rules_summary "${summary_target}"
+  if [ "${should_append}" -eq 1 ]; then
+    summary_target="$(rules_summary_target_for "${editor}" "${scope}" "${target_root}")"
+    append_rules_summary "${summary_target}"
+  fi
 }
 
 install_category() {
