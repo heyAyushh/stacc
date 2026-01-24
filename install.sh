@@ -1693,6 +1693,7 @@ build_codex_mcp_block() {
          + (if .value.type then ["type = " + (.value.type | @json)] else [] end)
          + (if .value.url then ["url = " + (.value.url | @json)] else [] end)
         )
+      | . + [""]
       | .[]
     ' "${src}"
   else
@@ -1706,6 +1707,7 @@ build_codex_mcp_block() {
          + (if .value.type then ["type = " + (.value.type | @json)] else [] end)
          + (if .value.url then ["url = " + (.value.url | @json)] else [] end)
         )
+      | . + [""]
       | .[]
     ' "${src}"
   fi
