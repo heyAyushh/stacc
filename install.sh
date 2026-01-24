@@ -1670,7 +1670,8 @@ build_codex_mcp_block() {
   local src="$1"
   local keys_csv="${2-}"
   if ! command -v jq >/dev/null 2>&1; then
-    return 1
+    build_codex_mcp_block_fallback "${src}" "${keys_csv}"
+    return 0
   fi
   if [ -n "${keys_csv}" ]; then
     jq -r --argjson keys "$(printf '%s' "${keys_csv}" | awk -F',' '{
@@ -1954,6 +1955,103 @@ target_root_for() {
   esac
 }
 
+build_codex_mcp_block_fallback() {
+  local src="$1"
+  local keys_csv="${2-}"
+  awk -v keys_csv="${keys_csv}" '
+    BEGIN {
+      have_filter = (keys_csv != "")
+      if (have_filter) {
+        n = split(keys_csv, tmp, ",")
+        for (i = 1; i <= n; i++) {
+          if (tmp[i] != "") {
+            keep[tmp[i]] = 1
+          }
+        }
+      }
+      current = ""
+      skip = 0
+      in_args = 0
+      first_block = 1
+      args_count = 0
+    }
+    function toml_escape(s) {
+      gsub(/\\/, "\\\\", s)
+      gsub(/"/, "\\\"", s)
+      return s
+    }
+    function flush_args() {
+      if (skip || !in_args) return
+      printf "args = ["
+      for (i = 1; i <= args_count; i++) {
+        if (i > 1) printf ", "
+        printf "\"" toml_escape(args[i]) "\""
+      }
+      printf "]\n"
+      in_args = 0
+      args_count = 0
+    }
+    function start_block(name) {
+      if (skip) return
+      if (!first_block) printf "\n"
+      first_block = 0
+      printf "[mcp_servers.%s]\n", name
+    }
+    /^[[:space:]]*"mcpServers"[[:space:]]*:/ {
+      in_servers = 1
+    }
+    in_servers && match($0, /^[[:space:]]*"([^"]+)"[[:space:]]*:[[:space:]]*{/, m) {
+      current = m[1]
+      skip = (have_filter && !keep[current])
+      start_block(current)
+      next
+    }
+    current != "" {
+      if (match($0, /^[[:space:]]*"command"[[:space:]]*:[[:space:]]*"([^"]*)"/, m)) {
+        if (!skip) printf "command = \"%s\"\n", toml_escape(m[1])
+        next
+      }
+      if (match($0, /^[[:space:]]*"type"[[:space:]]*:[[:space:]]*"([^"]*)"/, m)) {
+        if (!skip) printf "type = \"%s\"\n", toml_escape(m[1])
+        next
+      }
+      if (match($0, /^[[:space:]]*"url"[[:space:]]*:[[:space:]]*"([^"]*)"/, m)) {
+        if (!skip) printf "url = \"%s\"\n", toml_escape(m[1])
+        next
+      }
+      if (match($0, /^[[:space:]]*"args"[[:space:]]*:[[:space:]]*\[/)) {
+        in_args = 1
+        args_count = 0
+        if (match($0, /\[[^]]*]/)) {
+          tmp = $0
+          while (match(tmp, /"([^"]*)"/, m)) {
+            args[++args_count] = m[1]
+            tmp = substr(tmp, RSTART + RLENGTH)
+          }
+          flush_args()
+        }
+        next
+      }
+      if (in_args) {
+        tmp = $0
+        while (match(tmp, /"([^"]*)"/, m)) {
+          args[++args_count] = m[1]
+          tmp = substr(tmp, RSTART + RLENGTH)
+        }
+        if (index($0, "]")) {
+          flush_args()
+        }
+        next
+      }
+      if ($0 ~ /^[[:space:]]*}[,]?[[:space:]]*$/) {
+        current = ""
+        skip = 0
+        next
+      }
+    }
+  ' "${src}"
+}
+
 mcp_path_for() {
   local editor="$1"
   local scope="$2"
@@ -1979,6 +2077,9 @@ mcp_path_for() {
       ;;
     codex)
       printf '%s\n' "${target_root}/config.toml"
+      ;;
+    ampcode)
+      printf '%s\n' "${target_root}/settings.json"
       ;;
     *)
       die "unknown editor: ${editor}"
