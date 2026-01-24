@@ -1687,7 +1687,7 @@ build_codex_mcp_block() {
       | with_entries(select(.key as $k | $keys | index($k)))
       | to_entries[]
       | .key as $name
-      | (["[mcpServers." + $name + "]"]
+      | (["[mcp_servers." + $name + "]"]
          + (if .value.command then ["command = " + (.value.command | @json)] else [] end)
          + (if .value.args then ["args = [" + (.value.args | map(@json) | join(", ")) + "]"] else [] end)
          + (if .value.type then ["type = " + (.value.type | @json)] else [] end)
@@ -1700,7 +1700,7 @@ build_codex_mcp_block() {
       .mcpServers
       | to_entries[]
       | .key as $name
-      | (["[mcpServers." + $name + "]"]
+      | (["[mcp_servers." + $name + "]"]
          + (if .value.command then ["command = " + (.value.command | @json)] else [] end)
          + (if .value.args then ["args = [" + (.value.args | map(@json) | join(", ")) + "]"] else [] end)
          + (if .value.type then ["type = " + (.value.type | @json)] else [] end)
@@ -1739,9 +1739,9 @@ merge_codex_mcp() {
   local existing_keys_csv=""
   if [ -e "${dest}" ]; then
     existing_keys_csv="$(awk '
-      /^\[mcpServers\./ {
+      /^\[mcp_servers\./ {
         line=$0
-        sub(/^\[mcpServers\./, "", line)
+        sub(/^\[mcp_servers\./, "", line)
         sub(/\]$/, "", line)
         print line
       }
@@ -1783,7 +1783,7 @@ merge_codex_mcp() {
           skip=0
         }
         {
-          if (match($0, /^\[mcpServers\.([^]]+)\]/, m)) {
+          if (match($0, /^\[mcp_servers\.([^]]+)\]/, m)) {
             key=m[1]
             if (remove[key]) {
               skip=1
