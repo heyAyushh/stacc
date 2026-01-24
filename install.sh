@@ -1816,6 +1816,7 @@ merge_codex_mcp() {
   log_verbose "Writing merged Codex MCP config to ${dest}"
   mv "${tmp}" "${dest}"
   return 0
+}
 
 merge_mcp() {
   local src="$1"
