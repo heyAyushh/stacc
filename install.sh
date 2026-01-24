@@ -1783,8 +1783,10 @@ merge_codex_mcp() {
           skip=0
         }
         {
-          if (match($0, /^\[mcp_servers\.([^]]+)\]/, m)) {
-            key=m[1]
+          if ($0 ~ /^\[mcp_servers\./) {
+            key=$0
+            sub(/^\[mcp_servers\./, "", key)
+            sub(/\]$/, "", key)
             if (remove[key]) {
               skip=1
               next
