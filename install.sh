@@ -1598,8 +1598,10 @@ install_rules() {
   if [ "${editor}" = "cursor" ]; then
     install_cursor_rules "${src}" "${target_root}/rules"
     should_append=0
-  elif [ "${editor}" = "codex" ] && [ "${scope}" = "global" ]; then
-    install_codex_rules "${src}" "${target_root}/rules"
+  elif [ "${editor}" = "codex" ]; then
+    if [ "${scope}" = "global" ]; then
+      install_codex_rules "${src}" "${target_root}/rules"
+    fi
     should_append=0
   fi
 
