@@ -2,8 +2,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-SCRIPT_REF="${BASH_SOURCE[0]-$0}"
-SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_REF}")" && pwd)"
 ROOT_DIR=""
 PROJECT_ROOT="$(pwd)" || { echo "error: failed to determine current directory" >&2; exit 1; }
 TMP_ROOT=""
@@ -61,7 +59,6 @@ backup_target() {
   run_cmd mv "${target}" "${backup}"
 }
 
-COLORS_ENABLED=0
 COLOR_RESET=""
 COLOR_BOLD=""
 COLOR_DIM=""
@@ -73,7 +70,6 @@ CAPTION_SHOWN=0
 
 init_colors() {
   if [ -t 2 ] && [ -z "${NO_COLOR-}" ]; then
-    COLORS_ENABLED=1
     COLOR_RESET=$'\033[0m'
     COLOR_BOLD=$'\033[1m'
     COLOR_DIM=$'\033[2m'
@@ -400,7 +396,7 @@ show_animals() {
       fi
       printf '%s\n' "${chosen}" | while IFS= read -r line; do
         if [ "${min_indent}" -gt 0 ]; then
-          line="${line#${trim_prefix}}"
+          line="${line#"${trim_prefix}"}"
         fi
         printf '%*s%b\n' "${art_pad}" "" "${COLOR_DIM}${line}${COLOR_RESET}"
       done
@@ -432,7 +428,7 @@ show_animals() {
       fi
       printf '%s\n' "${chosen}" | while IFS= read -r line; do
         if [ "${min_indent}" -gt 0 ]; then
-          line="${line#${trim_prefix}}"
+          line="${line#"${trim_prefix}"}"
         fi
         printf '%*s%b\n' "${art_pad}" "" "${COLOR_DIM}${line}${COLOR_RESET}"
       done
@@ -691,16 +687,16 @@ menu_multi() {
   if [ "${#DISABLED_FLAGS[@]}" -ne "${#items[@]}" ]; then
     DISABLED_FLAGS=()
     for i in "${!items[@]}"; do
-      DISABLED_FLAGS[$i]="0"
+      DISABLED_FLAGS[i]="0"
     done
   fi
 
   SELECTED_FLAGS=()
   for i in "${!items[@]}"; do
     if [ "${default_all}" -eq 1 ] && [ "${DISABLED_FLAGS[$i]}" != "1" ]; then
-      SELECTED_FLAGS[$i]="1"
+      SELECTED_FLAGS[i]="1"
     else
-      SELECTED_FLAGS[$i]="0"
+      SELECTED_FLAGS[i]="0"
     fi
   done
 
@@ -721,9 +717,9 @@ menu_multi() {
       space)
         if [ "${DISABLED_FLAGS[$cursor]}" != "1" ]; then
           if [ "${SELECTED_FLAGS[$cursor]}" = "1" ]; then
-            SELECTED_FLAGS[$cursor]="0"
+            SELECTED_FLAGS[cursor]="0"
           else
-            SELECTED_FLAGS[$cursor]="1"
+            SELECTED_FLAGS[cursor]="1"
           fi
         fi
         ;;
@@ -743,9 +739,9 @@ menu_multi() {
             continue
           fi
           if [ "${all_selected}" -eq 1 ]; then
-            SELECTED_FLAGS[$i]="0"
+            SELECTED_FLAGS[i]="0"
           else
-            SELECTED_FLAGS[$i]="1"
+            SELECTED_FLAGS[i]="1"
           fi
         done
         ;;
@@ -867,7 +863,7 @@ prompt_read() {
   if [ -z "${TTY_DEVICE}" ]; then
     die "non-interactive shell; use --yes or pass options"
   fi
-  IFS= read -r "${var_name}" < "${TTY_DEVICE}"
+  IFS= read -r "${var_name?}" < "${TTY_DEVICE}"
 }
 
 download_repo() {
@@ -1320,6 +1316,7 @@ set_conflict_mode_default() {
 }
 
 prompt_conflict_mode() {
+  local choice=""
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     CONFLICT_MODE=""
   fi
@@ -1351,6 +1348,7 @@ prompt_conflict_mode() {
 }
 
 prompt_dir_conflict_mode() {
+  local choice=""
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     return 0
   fi
@@ -1478,6 +1476,138 @@ copy_tree() {
     local dest="${dest_dir}/${rel}"
     copy_file "${file}" "${dest}"
   done < <(find "${src_dir}" -type f ! -name ".DS_Store" -print0)
+}
+
+rules_summary_path() {
+  printf '%s\n' "${ROOT_DIR}/configs/rules/summary.md"
+}
+
+rules_summary_marker() {
+  printf '%s\n' "<!-- stacc:rules-summary -->"
+}
+
+append_rules_summary() {
+  local target="$1"
+  local summary marker
+  summary="$(rules_summary_path)"
+  marker="$(rules_summary_marker)"
+
+  if [ ! -f "${summary}" ]; then
+    log_info "Rules summary not found at ${summary}; skipping summary append."
+    return 0
+  fi
+
+  if [ -f "${target}" ] && rg -q "${marker}" "${target}"; then
+    log_verbose "Rules summary already present in ${target}"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "${target}")"
+
+  if [ "${DRY_RUN}" -eq 1 ]; then
+    log_verbose "[dry-run] Would append rules summary to ${target}"
+    return 0
+  fi
+
+  if [ -f "${target}" ]; then
+    printf '\n\n' >> "${target}"
+    cat "${summary}" >> "${target}"
+  else
+    cat "${summary}" > "${target}"
+  fi
+}
+
+rules_summary_target_for() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+
+  if [ "${editor}" = "claude" ]; then
+    if [ "${scope}" = "project" ]; then
+      local claude_file="${PROJECT_ROOT}/CLAUDE.md"
+      if [ -f "${claude_file}" ]; then
+        local line_count
+        line_count="$(wc -l < "${claude_file}" | tr -d ' ')"
+        if [ "${line_count}" -gt 3 ]; then
+          printf '%s\n' "${claude_file}"
+          return 0
+        fi
+      fi
+      printf '%s\n' "${PROJECT_ROOT}/AGENTS.md"
+      return 0
+    fi
+    printf '%s\n' "${target_root}/CLAUDE.md"
+    return 0
+  fi
+
+  if [ "${scope}" = "project" ]; then
+    printf '%s\n' "${PROJECT_ROOT}/AGENTS.md"
+  else
+    printf '%s\n' "${target_root}/AGENTS.md"
+  fi
+}
+
+install_cursor_rules() {
+  local src="$1"
+  local dest="$2"
+
+  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
+    if ! handle_dir_conflict "${dest}"; then
+      return 0
+    fi
+  fi
+
+  while IFS= read -r -d '' file; do
+    local rel="${file#"${src}/"}"
+    local dest_file="${dest}/${rel}"
+    copy_file "${file}" "${dest_file}"
+  done < <(find "${src}" -type f ! -name ".DS_Store" ! -name "summary.md" -print0)
+}
+
+install_codex_rules() {
+  local src="$1"
+  local dest="$2"
+
+  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
+    if ! handle_dir_conflict "${dest}"; then
+      return 0
+    fi
+  fi
+
+  mkdir -p "${dest}"
+
+  while IFS= read -r -d '' file; do
+    local base
+    base="$(basename "${file}")"
+    base="${base%.*}.rules"
+    copy_file "${file}" "${dest}/${base}"
+  done < <(find "${src}" -type f ! -name ".DS_Store" ! -name "summary.md" -print0)
+}
+
+install_rules() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+  local src="${ROOT_DIR}/configs/rules"
+  local should_append=1
+
+  [ -d "${src}" ] || die "source category not found: ${src}"
+
+  if [ "${editor}" = "cursor" ]; then
+    install_cursor_rules "${src}" "${target_root}/rules"
+    should_append=0
+  elif [ "${editor}" = "codex" ]; then
+    if [ "${scope}" = "global" ]; then
+      install_codex_rules "${src}" "${target_root}/rules"
+    fi
+    should_append=0
+  fi
+
+  local summary_target
+  if [ "${should_append}" -eq 1 ]; then
+    summary_target="$(rules_summary_target_for "${editor}" "${scope}" "${target_root}")"
+    append_rules_summary "${summary_target}"
+  fi
 }
 
 install_category() {
@@ -1818,7 +1948,6 @@ merge_codex_mcp() {
   mv "${tmp}" "${dest}"
   return 0
 }
-
 merge_mcp() {
   local src="$1"
   local dest="$2"
@@ -2115,6 +2244,8 @@ install_for_target() {
     validate_category "${category}"
     if [ "${category}" = "mcps" ]; then
       install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}" "${target_root}")"
+    elif [ "${category}" = "rules" ]; then
+      install_rules "${editor}" "${scope}" "${target_root}"
     elif [ "${editor}" = "codex" ] && [ "${category}" = "commands" ]; then
       install_codex_commands "${target_root}"
     else
