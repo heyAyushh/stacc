@@ -811,6 +811,34 @@ menu_multi() {
   fi
 }
 
+menu_confirm() {
+  local title="$1"
+  local instructions="$2"
+  local default_index="$3"
+  local yes_label="$4"
+  local no_label="$5"
+
+  if [ "${NON_INTERACTIVE}" -eq 1 ]; then
+    return 1
+  fi
+
+  if [ -z "${yes_label}" ]; then
+    yes_label="Yes"
+  fi
+  if [ -z "${no_label}" ]; then
+    no_label="No"
+  fi
+  if [ -z "${default_index}" ]; then
+    default_index=1
+  fi
+
+  menu_single "${title}" "${instructions}" "${default_index}" "${yes_label}" "${no_label}"
+  if [ "${MENU_RESULT}" = "${yes_label}" ]; then
+    return 0
+  fi
+  return 1
+}
+
 usage() {
   cat <<'EOF'
 stacc installer
@@ -1409,7 +1437,6 @@ set_conflict_mode_default() {
 }
 
 prompt_conflict_mode() {
-  local choice=""
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     CONFLICT_MODE=""
   fi
@@ -1417,31 +1444,24 @@ prompt_conflict_mode() {
     return 0
   fi
 
-  while true; do
-    log_info "Conflict detected. Choose action:"
-    log_info "  1) Overwrite"
-    log_info "  2) Backup existing"
-    log_info "  3) Skip"
-    log_info "  4) Overwrite all"
-    log_info "  5) Backup all"
-    log_info "  6) Skip all"
-    printf "> " > "${TTY_DEVICE}"
-    prompt_read choice
-    case "${choice}" in
-      1) CONFLICT_MODE="overwrite" ;;
-      2) CONFLICT_MODE="backup" ;;
-      3) CONFLICT_MODE="skip" ;;
-      4) CONFLICT_MODE="overwrite_all" ;;
-      5) CONFLICT_MODE="backup_all" ;;
-      6) CONFLICT_MODE="skip_all" ;;
-      *) log_info "Invalid selection. Please enter a number from 1 to 6." ; continue ;;
-    esac
-    break
-  done
+  menu_single "Conflict detected" "Use ↑/↓ to move, Enter to select." 0 \
+    "Overwrite" \
+    "Backup existing" \
+    "Skip" \
+    "Overwrite all" \
+    "Backup all" \
+    "Skip all"
+  case "${MENU_RESULT}" in
+    "Overwrite") CONFLICT_MODE="overwrite" ;;
+    "Backup existing") CONFLICT_MODE="backup" ;;
+    "Skip") CONFLICT_MODE="skip" ;;
+    "Overwrite all") CONFLICT_MODE="overwrite_all" ;;
+    "Backup all") CONFLICT_MODE="backup_all" ;;
+    "Skip all") CONFLICT_MODE="skip_all" ;;
+  esac
 }
 
 prompt_dir_conflict_mode() {
-  local choice=""
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     return 0
   fi
@@ -1449,29 +1469,23 @@ prompt_dir_conflict_mode() {
     return 0
   fi
 
-  while true; do
-    log_info "Category already exists. Choose action:"
-    log_info "  1) Overwrite category"
-    log_info "  2) Backup existing category"
-    log_info "  3) Skip category"
-    log_info "  4) Selective (install file-by-file)"
-    log_info "  5) Overwrite all"
-    log_info "  6) Backup all"
-    log_info "  7) Skip all"
-    printf "> " > "${TTY_DEVICE}"
-    prompt_read choice
-    case "${choice}" in
-      1) CONFLICT_MODE="overwrite" ;;
-      2) CONFLICT_MODE="backup" ;;
-      3) CONFLICT_MODE="skip" ;;
-      4) CONFLICT_MODE="selective" ;;
-      5) CONFLICT_MODE="overwrite_all" ;;
-      6) CONFLICT_MODE="backup_all" ;;
-      7) CONFLICT_MODE="skip_all" ;;
-      *) log_info "Invalid selection. Please enter a number from 1 to 7." ; continue ;;
-    esac
-    break
-  done
+  menu_single "Category already exists" "Use ↑/↓ to move, Enter to select." 0 \
+    "Overwrite category" \
+    "Backup existing category" \
+    "Skip category" \
+    "Selective (install file-by-file)" \
+    "Overwrite all" \
+    "Backup all" \
+    "Skip all"
+  case "${MENU_RESULT}" in
+    "Overwrite category") CONFLICT_MODE="overwrite" ;;
+    "Backup existing category") CONFLICT_MODE="backup" ;;
+    "Skip category") CONFLICT_MODE="skip" ;;
+    "Selective (install file-by-file)") CONFLICT_MODE="selective" ;;
+    "Overwrite all") CONFLICT_MODE="overwrite_all" ;;
+    "Backup all") CONFLICT_MODE="backup_all" ;;
+    "Skip all") CONFLICT_MODE="skip_all" ;;
+  esac
 }
 
 apply_conflict_mode() {
@@ -1997,13 +2011,10 @@ merge_codex_mcp() {
         log_verbose "Skipping existing Codex MCP server ${key}"
         continue
       fi
-      printf "MCP server '%s' already exists in %s. Overwrite? [y/N] " "${key}" "${dest}" > "${TTY_DEVICE}"
-      local confirm
-      prompt_read confirm
-      case "${confirm}" in
-        y|Y|yes|YES) keys_to_remove+=("${key}") ; keys_to_add+=("${key}") ;;
-        *) ;;
-      esac
+      if menu_confirm "MCP server '${key}' exists" "Overwrite in ${dest}? Use ↑/↓ to move, Enter to select." 1 "Overwrite" "Skip"; then
+        keys_to_remove+=("${key}")
+        keys_to_add+=("${key}")
+      fi
     else
       keys_to_add+=("${key}")
     fi
@@ -2068,13 +2079,9 @@ merge_mcp() {
     fi
 
     if [ "${NON_INTERACTIVE}" -eq 0 ]; then
-      printf "Merge MCP config into existing %s? [y/N] " "${dest}" > "${TTY_DEVICE}"
-      local confirm
-      prompt_read confirm
-      case "${confirm}" in
-        y|Y|yes|YES) ;;
-        *) return 1 ;;
-      esac
+      if ! menu_confirm "Merge MCP config?" "Target: ${dest}. Use ↑/↓ to move, Enter to select." 1 "Merge" "Skip"; then
+        return 1
+      fi
     fi
 
     # Ensure we have a temp directory for cleanup
