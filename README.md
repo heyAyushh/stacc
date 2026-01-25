@@ -30,11 +30,11 @@ The interactive installer will guide you through:
 - **Editor selection**: Cursor, Claude Code, OpenCode, Codex, AMP Code
 - **Scope selection**: Global (all projects) or project-specific
 - **Category selection**: commands, rules, agents, skills, stack, hooks, mcps
-- **Stack selection**: choose one or more stack skill folders from `configs/stack/`
+- **Stack selection**: choose one or more stack skill folders from `configs/stacks/`
 
 #### Stacks
 
-Stacks are framework/language-specific skill bundles under `configs/stack/`. When you select the `stack` category, the installer prompts you to choose one or more stack folders and installs them into each editor's `skills/` directory.
+Stacks are framework/language-specific skill bundles under `configs/stacks/`. When you select the `stacks` category, the installer prompts you to choose one or more stack folders and installs them into each editor's `skills/` directory.
 
 #### Installer options
 
@@ -127,12 +127,12 @@ This repository contains configurations adapted from open-source projects. Below
 
 | File | Description |
 |------|-------------|
-| `configs/stack/ios-skills/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |
-| `configs/stack/ios-skills/swiftui-view-refactor/` | SwiftUI view refactoring patterns |
-| `configs/stack/ios-skills/swiftui-performance-audit/` | SwiftUI performance auditing and optimization |
-| `configs/stack/ios-skills/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices |
-| `configs/stack/ios-skills/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |
-| `configs/stack/ios-skills/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |
+| `configs/stacks/ios-skills/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |
+| `configs/stacks/ios-skills/swiftui-view-refactor/` | SwiftUI view refactoring patterns |
+| `configs/stacks/ios-skills/swiftui-performance-audit/` | SwiftUI performance auditing and optimization |
+| `configs/stacks/ios-skills/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices |
+| `configs/stacks/ios-skills/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |
+| `configs/stacks/ios-skills/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |
 
 ### From [triggerdotdev/trigger.dev](https://github.com/triggerdotdev/trigger.dev) and community (Apache-2.0)
 
@@ -159,9 +159,9 @@ These are adaptations of Claude Code's built-in tool descriptions and agent prom
 
 | File | Description |
 |------|-------------|
-| `configs/stack/bun.mdc` | Bun.js best practices |
-| `configs/stack/typescript.mdc` | TypeScript conventions |
-| `configs/stack/postgresql.mdc` | PostgreSQL guidelines |
+| `configs/stacks/bun.mdc` | Bun.js best practices |
+| `configs/stacks/typescript.mdc` | TypeScript conventions |
+| `configs/stacks/postgresql.mdc` | PostgreSQL guidelines |
 
 ### From [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) (CC0-1.0)
 
@@ -170,6 +170,13 @@ These are adaptations of Claude Code's built-in tool descriptions and agent prom
 | `configs/rules/clean-code.mdc` | Clean code guidelines |
 
 ### From [hamzafer/cursor-commands](https://github.com/hamzafer/cursor-commands) (MIT)
+
+
+| File | Description |
+|------|-------------|
+| `configs/stacks/solana` | Solana Dev SKills |
+
+### From [solana foundation](https://github.com/solana-foundation/solana-dev-skill) (MIT)
 
 | File | Description |
 |------|-------------|

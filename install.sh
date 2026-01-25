@@ -1243,7 +1243,7 @@ select_mcp_servers() {
 }
 
 get_available_stacks() {
-  local stack_dir="${ROOT_DIR}/configs/stack"
+  local stack_dir="${ROOT_DIR}/configs/stacks"
   [ -d "${stack_dir}" ] || return 0
   find "${stack_dir}" -mindepth 1 -maxdepth 1 -type d -print0 \
     | while IFS= read -r -d '' dir; do basename "${dir}"; done \
@@ -1722,7 +1722,7 @@ install_category() {
 install_stack_skill() {
   local stack="$1"
   local target_root="$2"
-  local src="${ROOT_DIR}/configs/stack/${stack}"
+  local src="${ROOT_DIR}/configs/stacks/${stack}"
   local dest="${target_root}/skills/${stack}"
 
   [ -d "${src}" ] || die "source stack not found: ${src}"
