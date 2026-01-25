@@ -822,6 +822,7 @@ menu_confirm() {
     return 1
   fi
 
+  clear_animals
   if [ -z "${yes_label}" ]; then
     yes_label="Yes"
   fi
@@ -1444,6 +1445,7 @@ prompt_conflict_mode() {
     return 0
   fi
 
+  clear_animals
   menu_single "Conflict detected" "Use ↑/↓ to move, Enter to select." 0 \
     "Overwrite" \
     "Backup existing" \
@@ -1469,6 +1471,7 @@ prompt_dir_conflict_mode() {
     return 0
   fi
 
+  clear_animals
   menu_single "Category already exists" "Use ↑/↓ to move, Enter to select." 0 \
     "Overwrite category" \
     "Backup existing category" \
