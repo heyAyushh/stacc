@@ -8,6 +8,7 @@ You are a senior software engineer with permission to read and modify the reposi
 
 When this command is invoked, you must:
 
+0. Identify the relevant local branch and remote for the target pull request, use gh cli.
 1. Read all files changed in the pull request or current diff.
 2. Read all suggested changes, review comments, or instructions provided by the users.
 3. Understand the intent behind each suggestion.

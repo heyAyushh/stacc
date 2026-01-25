@@ -29,8 +29,22 @@ cd stacc
 The interactive installer will guide you through:
 - **Editor selection**: Cursor, Claude Code, OpenCode, Codex, AMP Code
 - **Scope selection**: Global (all projects) or project-specific
-- **Category selection**: commands, rules, agents, skills, hooks, mcps
-  - **Stack configs**: temporarily disabled in the installer UI 🤫
+- **Category selection**: commands, rules, agents, skills, stack, hooks, mcps
+- **Stack selection**: choose one or more stack skill folders from `configs/stack/`
+
+#### Stacks
+
+Stacks are framework/language-specific skill bundles under `configs/stack/`. When you select the `stack` category, the installer prompts you to choose one or more stack folders and installs them into each editor's `skills/` directory.
+
+#### Installer options
+
+```bash
+./install.sh --categories commands,rules,skills,stack --stacks bun,typescript
+```
+
+```bash
+./install.sh --all --project --categories skills,stack --stacks all
+```
 
 ### Target Directories
 

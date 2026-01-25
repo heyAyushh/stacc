@@ -16,6 +16,7 @@ SELECTED_EDITORS=""
 SELECTED_SCOPE=""
 SELECTED_CATEGORIES=""
 SELECTED_MCP_SERVERS=""
+SELECTED_STACKS=""
 CONFLICT_MODE=""
 DISABLED_FLAGS=()
 
@@ -828,7 +829,8 @@ Options:
   --all                Install to all supported editors
   --global             Install to global locations
   --project            Install to project locations
-  --categories LIST    Comma-separated categories (commands,rules,agents,skills,hooks,mcps)
+  --categories LIST    Comma-separated categories (commands,rules,agents,skills,stack,hooks,mcps)
+  --stacks LIST        Comma-separated stack skills from configs/stack (or "all")
   --conflict MODE      Conflict mode: overwrite, backup, skip, selective
   --yes                Non-interactive with safe defaults
   --dry-run            Print actions without changing files
@@ -941,6 +943,12 @@ parse_args() {
         SELECTED_CATEGORIES="${SELECTED_CATEGORIES// /}"
         shift 2
         ;;
+      --stacks)
+        [ $# -ge 2 ] || die "--stacks requires a list"
+        SELECTED_STACKS="$2"
+        SELECTED_STACKS="${SELECTED_STACKS// /}"
+        shift 2
+        ;;
       --conflict)
         [ $# -ge 2 ] || die "--conflict requires a mode"
         CONFLICT_MODE="$2"
@@ -1036,20 +1044,20 @@ get_supported_categories() {
 
   case "${editor}" in
     cursor|claude)
-      printf '%s' "commands rules agents skills hooks mcps"
+      printf '%s' "commands rules agents skills stack hooks mcps"
       ;;
     opencode)
-      printf '%s' "commands rules agents skills mcps"
+      printf '%s' "commands rules agents skills stack mcps"
       ;;
     codex)
       if [ "${scope}" = "global" ]; then
-        printf '%s' "commands rules skills mcps"
+        printf '%s' "commands rules skills stack mcps"
       else
-        printf '%s' "commands rules skills"
+        printf '%s' "commands rules skills stack"
       fi
       ;;
     ampcode)
-      printf '%s' "commands rules skills"
+      printf '%s' "commands rules skills stack"
       ;;
     *)
       printf '%s' ""
@@ -1075,7 +1083,7 @@ is_category_disabled() {
 
 get_available_categories() {
   local scope="$1"
-  local -a base=("commands" "rules" "agents" "skills" "hooks" "mcps")
+  local -a base=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps")
   local -a available=()
   local cat editor supported
 
@@ -1108,7 +1116,7 @@ normalize_selected_categories() {
 
   for cat in "${requested[@]}"; do
     cat="${cat// /}"
-    if [ -z "${cat}" ] || [ "${cat}" = "stack" ]; then
+    if [ -z "${cat}" ]; then
       continue
     fi
     if array_contains "${cat}" "${available[@]}"; then
@@ -1234,13 +1242,84 @@ select_mcp_servers() {
   done
 }
 
+get_available_stacks() {
+  local stack_dir="${ROOT_DIR}/configs/stack"
+  [ -d "${stack_dir}" ] || return 0
+  find "${stack_dir}" -mindepth 1 -maxdepth 1 -type d -print0 \
+    | while IFS= read -r -d '' dir; do basename "${dir}"; done \
+    | sort || true
+}
+
+normalize_selected_stacks() {
+  local -a requested
+  local -a available
+  local -a filtered=()
+  local stack
+
+  IFS=',' read -r -a requested <<< "${SELECTED_STACKS}"
+  IFS=$'\n' read -r -d '' -a available < <(get_available_stacks && printf '\0')
+
+  for stack in "${requested[@]}"; do
+    stack="${stack// /}"
+    if [ -z "${stack}" ]; then
+      continue
+    fi
+    if [ "${stack}" = "all" ]; then
+      filtered=("${available[@]}")
+      break
+    fi
+    if array_contains "${stack}" "${available[@]}"; then
+      filtered+=("${stack}")
+    else
+      log_verbose "Skipping unknown stack: ${stack}"
+    fi
+  done
+
+  if [ "${#filtered[@]}" -eq 0 ]; then
+    SELECTED_STACKS=""
+    return 0
+  fi
+
+  SELECTED_STACKS="$(join_by "," "${filtered[@]}")"
+}
+
+select_stacks() {
+  case ",${SELECTED_CATEGORIES}," in
+    *,stack,*) ;;
+    *) SELECTED_STACKS=""; return 0 ;;
+  esac
+
+  if [ -n "${SELECTED_STACKS}" ]; then
+    normalize_selected_stacks
+    return 0
+  fi
+
+  if [ "${NON_INTERACTIVE}" -eq 1 ]; then
+    if [ -n "${SELECTED_STACKS}" ]; then
+      normalize_selected_stacks
+    else
+      SELECTED_STACKS=""
+    fi
+    return 0
+  fi
+
+  local -a stack_items=()
+  IFS=$'\n' read -r -d '' -a stack_items < <(get_available_stacks && printf '\0')
+  if [ "${#stack_items[@]}" -eq 0 ]; then
+    return 0
+  fi
+
+  menu_multi "Select stacks" "Use ↑/↓ to move, Space to toggle, A for all, Enter to continue." 0 "," "" "${stack_items[@]}"
+  SELECTED_STACKS="${MENU_RESULT}"
+}
+
 confirm_summary() {
   if [ "${NON_INTERACTIVE}" -eq 1 ]; then
     return 0
   fi
 
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
-    local line_title line_editors line_scope line_categories line_mcps line_prompt
+    local line_title line_editors line_scope line_categories line_mcps line_stacks line_prompt
     local cols max pad
     line_title="${COLOR_BOLD}${COLOR_CYAN}Summary${COLOR_RESET}"
     line_editors="  Editors:    ${SELECTED_EDITORS}"
@@ -1250,6 +1329,11 @@ confirm_summary() {
       line_mcps="  MCPs:       ${SELECTED_MCP_SERVERS}"
     else
       line_mcps=""
+    fi
+    if [ -n "${SELECTED_STACKS}" ]; then
+      line_stacks="  Stacks:     ${SELECTED_STACKS}"
+    else
+      line_stacks=""
     fi
     line_prompt="Proceed? [y/N] "
     cols="$(tput cols 2>/dev/null || printf '80')"
@@ -1262,6 +1346,9 @@ confirm_summary() {
     fi
     if [ -n "${line_mcps}" ] && [ ${#line_mcps} -gt "${max}" ]; then
       max=${#line_mcps}
+    fi
+    if [ -n "${line_stacks}" ] && [ ${#line_stacks} -gt "${max}" ]; then
+      max=${#line_stacks}
     fi
     if [ ${#line_prompt} -gt "${max}" ]; then
       max=${#line_prompt}
@@ -1281,6 +1368,9 @@ confirm_summary() {
     if [ -n "${line_mcps}" ]; then
       ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_mcps}")"
     fi
+    if [ -n "${line_stacks}" ]; then
+      ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_stacks}")"
+    fi
     ui_print_line ""
     ui_carriage_return
     ui_clear_line
@@ -1292,6 +1382,9 @@ confirm_summary() {
     log_info "  Categories: ${SELECTED_CATEGORIES}"
     if mcp_category_selected && [ -n "${SELECTED_MCP_SERVERS}" ]; then
       log_info "  MCPs:       ${SELECTED_MCP_SERVERS}"
+    fi
+    if [ -n "${SELECTED_STACKS}" ]; then
+      log_info "  Stacks:     ${SELECTED_STACKS}"
     fi
     log_info ""
     printf "Proceed? [y/N] " > "${TTY_DEVICE}"
@@ -1618,6 +1711,21 @@ install_category() {
   local dest="${target_root}/${dest_subdir}"
 
   [ -d "${src}" ] || die "source category not found: ${src}"
+  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
+    if ! handle_dir_conflict "${dest}"; then
+      return 0
+    fi
+  fi
+  copy_tree "${src}" "${dest}"
+}
+
+install_stack_skill() {
+  local stack="$1"
+  local target_root="$2"
+  local src="${ROOT_DIR}/configs/stack/${stack}"
+  local dest="${target_root}/skills/${stack}"
+
+  [ -d "${src}" ] || die "source stack not found: ${src}"
   if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
     if ! handle_dir_conflict "${dest}"; then
       return 0
@@ -2237,15 +2345,20 @@ install_for_target() {
   local category
   IFS=',' read -r -a cats <<< "${SELECTED_CATEGORIES}"
   for category in "${cats[@]}"; do
-    if [ "${category}" = "stack" ]; then
-      log_info "Skipping stack category (temporarily disabled)."
-      continue
-    fi
     validate_category "${category}"
     if [ "${category}" = "mcps" ]; then
       install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}" "${target_root}")"
     elif [ "${category}" = "rules" ]; then
       install_rules "${editor}" "${scope}" "${target_root}"
+    elif [ "${category}" = "stack" ]; then
+      if [ -n "${SELECTED_STACKS}" ]; then
+        local stack
+        IFS=',' read -r -a stacks <<< "${SELECTED_STACKS}"
+        for stack in "${stacks[@]}"; do
+          [ -n "${stack}" ] || continue
+          install_stack_skill "${stack}" "${target_root}"
+        done
+      fi
     elif [ "${editor}" = "codex" ] && [ "${category}" = "commands" ]; then
       install_codex_commands "${target_root}"
     else
@@ -2273,6 +2386,7 @@ main() {
   select_scope
   select_categories
   select_mcp_servers
+  select_stacks
   set_conflict_mode_default
   confirm_summary
 
