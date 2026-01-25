@@ -2,8 +2,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-SCRIPT_REF="${BASH_SOURCE[0]-$0}"
-SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_REF}")" && pwd)"
 ROOT_DIR=""
 PROJECT_ROOT="$(pwd)" || { echo "error: failed to determine current directory" >&2; exit 1; }
 TMP_ROOT=""
@@ -61,7 +59,6 @@ backup_target() {
   run_cmd mv "${target}" "${backup}"
 }
 
-COLORS_ENABLED=0
 COLOR_RESET=""
 COLOR_BOLD=""
 COLOR_DIM=""
@@ -73,7 +70,6 @@ CAPTION_SHOWN=0
 
 init_colors() {
   if [ -t 2 ] && [ -z "${NO_COLOR-}" ]; then
-    COLORS_ENABLED=1
     COLOR_RESET=$'\033[0m'
     COLOR_BOLD=$'\033[1m'
     COLOR_DIM=$'\033[2m'
@@ -400,7 +396,7 @@ show_animals() {
       fi
       printf '%s\n' "${chosen}" | while IFS= read -r line; do
         if [ "${min_indent}" -gt 0 ]; then
-          line="${line#${trim_prefix}}"
+          line="${line#"${trim_prefix}"}"
         fi
         printf '%*s%b\n' "${art_pad}" "" "${COLOR_DIM}${line}${COLOR_RESET}"
       done
@@ -432,7 +428,7 @@ show_animals() {
       fi
       printf '%s\n' "${chosen}" | while IFS= read -r line; do
         if [ "${min_indent}" -gt 0 ]; then
-          line="${line#${trim_prefix}}"
+          line="${line#"${trim_prefix}"}"
         fi
         printf '%*s%b\n' "${art_pad}" "" "${COLOR_DIM}${line}${COLOR_RESET}"
       done
@@ -691,16 +687,16 @@ menu_multi() {
   if [ "${#DISABLED_FLAGS[@]}" -ne "${#items[@]}" ]; then
     DISABLED_FLAGS=()
     for i in "${!items[@]}"; do
-      DISABLED_FLAGS[$i]="0"
+      DISABLED_FLAGS[i]="0"
     done
   fi
 
   SELECTED_FLAGS=()
   for i in "${!items[@]}"; do
     if [ "${default_all}" -eq 1 ] && [ "${DISABLED_FLAGS[$i]}" != "1" ]; then
-      SELECTED_FLAGS[$i]="1"
+      SELECTED_FLAGS[i]="1"
     else
-      SELECTED_FLAGS[$i]="0"
+      SELECTED_FLAGS[i]="0"
     fi
   done
 
@@ -721,9 +717,9 @@ menu_multi() {
       space)
         if [ "${DISABLED_FLAGS[$cursor]}" != "1" ]; then
           if [ "${SELECTED_FLAGS[$cursor]}" = "1" ]; then
-            SELECTED_FLAGS[$cursor]="0"
+            SELECTED_FLAGS[cursor]="0"
           else
-            SELECTED_FLAGS[$cursor]="1"
+            SELECTED_FLAGS[cursor]="1"
           fi
         fi
         ;;
@@ -743,9 +739,9 @@ menu_multi() {
             continue
           fi
           if [ "${all_selected}" -eq 1 ]; then
-            SELECTED_FLAGS[$i]="0"
+            SELECTED_FLAGS[i]="0"
           else
-            SELECTED_FLAGS[$i]="1"
+            SELECTED_FLAGS[i]="1"
           fi
         done
         ;;
@@ -867,7 +863,7 @@ prompt_read() {
   if [ -z "${TTY_DEVICE}" ]; then
     die "non-interactive shell; use --yes or pass options"
   fi
-  IFS= read -r "${var_name}" < "${TTY_DEVICE}"
+  IFS= read -r "${var_name?}" < "${TTY_DEVICE}"
 }
 
 download_repo() {
@@ -1320,6 +1316,7 @@ set_conflict_mode_default() {
 }
 
 prompt_conflict_mode() {
+  local choice=""
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     CONFLICT_MODE=""
   fi
@@ -1351,6 +1348,7 @@ prompt_conflict_mode() {
 }
 
 prompt_dir_conflict_mode() {
+  local choice=""
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     return 0
   fi
