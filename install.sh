@@ -1247,7 +1247,7 @@ get_available_stacks() {
   [ -d "${stack_dir}" ] || return 0
   find "${stack_dir}" -mindepth 1 -maxdepth 1 -type d -print0 \
     | while IFS= read -r -d '' dir; do basename "${dir}"; done \
-    | sort
+    | sort || true
 }
 
 normalize_selected_stacks() {
