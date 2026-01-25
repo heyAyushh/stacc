@@ -1044,10 +1044,10 @@ get_supported_categories() {
 
   case "${editor}" in
     cursor|claude)
-      printf '%s' "commands rules agents skills hooks mcps"
+      printf '%s' "commands rules agents skills stack hooks mcps"
       ;;
     opencode)
-      printf '%s' "commands rules agents skills mcps"
+      printf '%s' "commands rules agents skills stack mcps"
       ;;
     codex)
       if [ "${scope}" = "global" ]; then
@@ -1057,7 +1057,7 @@ get_supported_categories() {
       fi
       ;;
     ampcode)
-      printf '%s' "commands rules skills"
+      printf '%s' "commands rules skills stack"
       ;;
     *)
       printf '%s' ""
@@ -1284,25 +1284,10 @@ normalize_selected_stacks() {
 }
 
 select_stacks() {
-  local editor
-  local has_codex=0
-
   case ",${SELECTED_CATEGORIES}," in
     *,stack,*) ;;
     *) SELECTED_STACKS=""; return 0 ;;
   esac
-
-  for editor in ${SELECTED_EDITORS}; do
-    if [ "${editor}" = "codex" ]; then
-      has_codex=1
-      break
-    fi
-  done
-
-  if [ "${has_codex}" -eq 0 ]; then
-    SELECTED_STACKS=""
-    return 0
-  fi
 
   if [ -n "${SELECTED_STACKS}" ]; then
     normalize_selected_stacks
@@ -2366,10 +2351,6 @@ install_for_target() {
     elif [ "${category}" = "rules" ]; then
       install_rules "${editor}" "${scope}" "${target_root}"
     elif [ "${category}" = "stack" ]; then
-      if [ "${editor}" != "codex" ]; then
-        log_info "Skipping stacks for ${editor}; stack installs target Codex skills."
-        continue
-      fi
       if [ -n "${SELECTED_STACKS}" ]; then
         local stack
         IFS=',' read -r -a stacks <<< "${SELECTED_STACKS}"
