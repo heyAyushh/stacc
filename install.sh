@@ -829,7 +829,7 @@ Options:
   --all                Install to all supported editors
   --global             Install to global locations
   --project            Install to project locations
-  --categories LIST    Comma-separated categories (commands,rules,agents,skills,hooks,mcps)
+  --categories LIST    Comma-separated categories (commands,rules,agents,skills,stack,hooks,mcps)
   --stacks LIST        Comma-separated stack skills from configs/stack (or "all")
   --conflict MODE      Conflict mode: overwrite, backup, skip, selective
   --yes                Non-interactive with safe defaults
@@ -1051,9 +1051,9 @@ get_supported_categories() {
       ;;
     codex)
       if [ "${scope}" = "global" ]; then
-        printf '%s' "commands rules skills mcps"
+        printf '%s' "commands rules skills stack mcps"
       else
-        printf '%s' "commands rules skills"
+        printf '%s' "commands rules skills stack"
       fi
       ;;
     ampcode)
@@ -1083,7 +1083,7 @@ is_category_disabled() {
 
 get_available_categories() {
   local scope="$1"
-  local -a base=("commands" "rules" "agents" "skills" "hooks" "mcps")
+  local -a base=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps")
   local -a available=()
   local cat editor supported
 
@@ -1116,7 +1116,7 @@ normalize_selected_categories() {
 
   for cat in "${requested[@]}"; do
     cat="${cat// /}"
-    if [ -z "${cat}" ] || [ "${cat}" = "stack" ]; then
+    if [ -z "${cat}" ]; then
       continue
     fi
     if array_contains "${cat}" "${available[@]}"; then
@@ -1287,6 +1287,11 @@ select_stacks() {
   local editor
   local has_codex=0
 
+  case ",${SELECTED_CATEGORIES}," in
+    *,stack,*) ;;
+    *) SELECTED_STACKS=""; return 0 ;;
+  esac
+
   for editor in ${SELECTED_EDITORS}; do
     if [ "${editor}" = "codex" ]; then
       has_codex=1
@@ -1305,7 +1310,11 @@ select_stacks() {
   fi
 
   if [ "${NON_INTERACTIVE}" -eq 1 ]; then
-    SELECTED_STACKS=""
+    if [ -n "${SELECTED_STACKS}" ]; then
+      normalize_selected_stacks
+    else
+      SELECTED_STACKS=""
+    fi
     return 0
   fi
 
@@ -2351,30 +2360,30 @@ install_for_target() {
   local category
   IFS=',' read -r -a cats <<< "${SELECTED_CATEGORIES}"
   for category in "${cats[@]}"; do
-    if [ "${category}" = "stack" ]; then
-      log_info "Skipping stack category (temporarily disabled)."
-      continue
-    fi
     validate_category "${category}"
     if [ "${category}" = "mcps" ]; then
       install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}" "${target_root}")"
     elif [ "${category}" = "rules" ]; then
       install_rules "${editor}" "${scope}" "${target_root}"
+    elif [ "${category}" = "stack" ]; then
+      if [ "${editor}" != "codex" ]; then
+        log_info "Skipping stacks for ${editor}; stack installs target Codex skills."
+        continue
+      fi
+      if [ -n "${SELECTED_STACKS}" ]; then
+        local stack
+        IFS=',' read -r -a stacks <<< "${SELECTED_STACKS}"
+        for stack in "${stacks[@]}"; do
+          [ -n "${stack}" ] || continue
+          install_stack_skill "${stack}" "${target_root}"
+        done
+      fi
     elif [ "${editor}" = "codex" ] && [ "${category}" = "commands" ]; then
       install_codex_commands "${target_root}"
     else
       install_category "${category}" "${target_root}" "$(category_dest_for "${editor}" "${category}")"
     fi
   done
-
-  if [ "${editor}" = "codex" ] && [ -n "${SELECTED_STACKS}" ]; then
-    local stack
-    IFS=',' read -r -a stacks <<< "${SELECTED_STACKS}"
-    for stack in "${stacks[@]}"; do
-      [ -n "${stack}" ] || continue
-      install_stack_skill "${stack}" "${target_root}"
-    done
-  fi
 }
 
 main() {
