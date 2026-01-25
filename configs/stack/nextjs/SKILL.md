@@ -24,6 +24,32 @@ When working in this stack, also consult:
 - `configs/stack/nextjs/rules/next-js.mdc` and `configs/stack/nextjs/rules/typescript.mdc` for always-applied stack rules.
 - `configs/rules/` for repo-wide rules that apply across stacks.
 
+### Workflow (use this order)
+
+1. Classify the task: routing/data, UI, performance, or infra.
+2. Decide server vs client components; minimize `use client`.
+3. Choose data strategy (RSC fetch, route handlers, server actions).
+4. Implement UI with accessibility and responsive constraints.
+5. Validate loading/error states and edge cases.
+6. Add tests or checks appropriate to the change.
+
+### Review Checklist
+
+- RSC/Client boundaries are explicit and minimal.
+- Data fetching uses the right layer and cache strategy.
+- UI meets accessibility and responsive expectations.
+- Loading/error/empty states are covered.
+- Build and runtime constraints respected (edge/runtime).
+
+### Local Resources in This Folder
+
+Use these bundled resources when they match the task:
+- `react-best-practices/README.md`, `react-best-practices/metadata.json`, and `react-best-practices/AGENTS.md` for scope, triggers, and agent guidance.
+- `react-best-practices/rules/*.md` for detailed React performance, rendering, and data patterns referenced by that skill.
+- `web-interface-guidelines/command.md` and `web-interface-guidelines/AGENTS.md` for UI/UX command usage and agent context.
+- `agentation/SKILL.md` for integrating Agentation UI feedback.
+- `rules/next-js.mdc` and `rules/typescript.mdc` for always-applied Next.js + TypeScript rules.
+
 ## Design Thinking
 
 Before coding, understand the context and commit to a BOLD aesthetic direction:

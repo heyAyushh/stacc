@@ -16,6 +16,30 @@ Apply these rules by default when touching TypeScript/JavaScript:
 5. Prefer string literal unions over numeric enums
 6. Use named exports, avoid default exports
 
+## Workflow (use this order)
+
+1. Clarify scope: new code, refactor, or review.
+2. Enforce strictness in `tsconfig.json` (or confirm it is already strict).
+3. Define explicit type contracts for inputs/outputs (interfaces/type aliases).
+4. Replace `any` with `unknown` + narrowing/guards.
+5. Add runtime validation for external data boundaries.
+6. Normalize exports/imports and tighten API surfaces.
+7. Add or update tests for changed behavior.
+
+## Review Checklist
+
+- Strict mode enabled and no `any` leaks.
+- Public types are explicit and documented.
+- Runtime validation exists for untrusted inputs.
+- Literal unions used instead of numeric enums.
+- Named exports only; imports are organized.
+- Tests cover edge cases and error paths.
+
+## Local Resources
+
+Use the always-applied rule file in this folder:
+- `typescript.mdc` (authoritative TypeScript/JSX guidance; read when you need the full rule text)
+
 ## Configuration
 
 **Essential `tsconfig.json` settings:**

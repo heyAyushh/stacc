@@ -15,6 +15,29 @@ Apply these rules by default when touching Rust:
 4. Document every `unsafe` block with a `// SAFETY:` rationale
 5. Default to `Vec`/`HashMap`; pre-allocate when size is known
 
+## Workflow (use this order)
+
+1. Clarify scope: new module, refactor, or review.
+2. Organize by feature/module; keep type + impls together.
+3. Ensure error handling uses `Result` (avoid `panic!` except invariants).
+4. Document `unsafe` blocks with `// SAFETY:` and minimal scope.
+5. Choose data structures intentionally and pre-allocate when size is known.
+6. Add or update tests (unit tests + rustdoc examples for public APIs).
+
+## Review Checklist
+
+- Module layout is feature-driven and cohesive.
+- `Result` used for recoverable errors; `panic!` justified.
+- All `unsafe` blocks have explicit `// SAFETY:` rationale.
+- No oversized structs; data is composed cleanly.
+- Collections pre-allocated when size is known.
+- Tests and doc examples cover edge cases.
+
+## Local Resources
+
+Use the always-applied rule file in this folder:
+- `rust.mdc` (authoritative Rust guidance; read and apply the full rule text)
+
 ## Code Organization
 
 - **Feature-driven modules**: Keep a struct, its enums, and `impl` blocks together
