@@ -1469,7 +1469,7 @@ prompt_conflict_mode() {
   fi
 
   ui_clear_to_end
-  menu_single "Conflict detected" "Use ↑/↓ to move, Enter to select." 0 \
+  menu_single "Conflict detected" "Use ↑/↓ to move, Enter to select." 1 \
     "Overwrite" \
     "Backup existing" \
     "Skip" \
@@ -1495,7 +1495,7 @@ prompt_dir_conflict_mode() {
   fi
 
   ui_clear_to_end
-  menu_single "Category already exists" "Use ↑/↓ to move, Enter to select." 0 \
+  menu_single "Category already exists" "Use ↑/↓ to move, Enter to select." 1 \
     "Overwrite category" \
     "Backup existing category" \
     "Skip category" \
