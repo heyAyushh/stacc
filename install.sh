@@ -499,6 +499,16 @@ ui_print_line() {
   ui_out "${line}\n"
 }
 
+LAST_UI_BLOCK_LINES=0
+
+clear_last_ui_block() {
+  if [ "${LAST_UI_BLOCK_LINES}" -gt 0 ]; then
+    ui_move_up "${LAST_UI_BLOCK_LINES}"
+    ui_clear_to_end
+    LAST_UI_BLOCK_LINES=0
+  fi
+}
+
 menu_single_lines() {
   local title="$1"
   local instructions="$2"
@@ -809,6 +819,35 @@ menu_multi() {
   if [ "${#selected_items[@]}" -gt 0 ]; then
     MENU_RESULT="$(join_by "${delimiter}" "${selected_items[@]}")"
   fi
+}
+
+menu_confirm() {
+  local title="$1"
+  local instructions="$2"
+  local default_index="$3"
+  local yes_label="$4"
+  local no_label="$5"
+
+  if [ "${NON_INTERACTIVE}" -eq 1 ]; then
+    return 1
+  fi
+
+  ui_clear_to_end
+  if [ -z "${yes_label}" ]; then
+    yes_label="Yes"
+  fi
+  if [ -z "${no_label}" ]; then
+    no_label="No"
+  fi
+  if [ -z "${default_index}" ]; then
+    default_index=1
+  fi
+
+  menu_single "${title}" "${instructions}" "${default_index}" "${yes_label}" "${no_label}"
+  if [ "${MENU_RESULT}" = "${yes_label}" ]; then
+    return 0
+  fi
+  return 1
 }
 
 usage() {
@@ -1320,6 +1359,7 @@ confirm_summary() {
 
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
     local line_title line_editors line_scope line_categories line_mcps line_stacks line_prompt
+    local summary_lines
     local cols max pad
     line_title="${COLOR_BOLD}${COLOR_CYAN}Summary${COLOR_RESET}"
     line_editors="  Editors:    ${SELECTED_EDITORS}"
@@ -1360,21 +1400,32 @@ confirm_summary() {
     ui_carriage_return
     ui_clear_to_end
     ui_out "\n"
+    summary_lines=1
     ui_print_line "$(center_line "${line_title}")"
+    summary_lines=$((summary_lines + 1))
     ui_print_line ""
+    summary_lines=$((summary_lines + 1))
     ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_editors}")"
+    summary_lines=$((summary_lines + 1))
     ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_scope}")"
+    summary_lines=$((summary_lines + 1))
     ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_categories}")"
+    summary_lines=$((summary_lines + 1))
     if [ -n "${line_mcps}" ]; then
       ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_mcps}")"
+      summary_lines=$((summary_lines + 1))
     fi
     if [ -n "${line_stacks}" ]; then
       ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_stacks}")"
+      summary_lines=$((summary_lines + 1))
     fi
+    summary_lines=$((summary_lines + 1))
     ui_print_line ""
     ui_carriage_return
     ui_clear_line
     ui_out "$(printf '%*s%s' "${pad}" "" "${line_prompt}")"
+    summary_lines=$((summary_lines + 1))
+    LAST_UI_BLOCK_LINES="${summary_lines}"
   else
     print_heading "Summary"
     log_info "  Editors:    ${SELECTED_EDITORS}"
@@ -1390,6 +1441,7 @@ confirm_summary() {
     printf "Proceed? [y/N] " > "${TTY_DEVICE}"
   fi
   prompt_read confirm
+  clear_last_ui_block
   case "${confirm}" in
     y|Y|yes|YES) ;;
     *) die "aborted" ;;
@@ -1409,7 +1461,6 @@ set_conflict_mode_default() {
 }
 
 prompt_conflict_mode() {
-  local choice=""
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     CONFLICT_MODE=""
   fi
@@ -1417,31 +1468,25 @@ prompt_conflict_mode() {
     return 0
   fi
 
-  while true; do
-    log_info "Conflict detected. Choose action:"
-    log_info "  1) Overwrite"
-    log_info "  2) Backup existing"
-    log_info "  3) Skip"
-    log_info "  4) Overwrite all"
-    log_info "  5) Backup all"
-    log_info "  6) Skip all"
-    printf "> " > "${TTY_DEVICE}"
-    prompt_read choice
-    case "${choice}" in
-      1) CONFLICT_MODE="overwrite" ;;
-      2) CONFLICT_MODE="backup" ;;
-      3) CONFLICT_MODE="skip" ;;
-      4) CONFLICT_MODE="overwrite_all" ;;
-      5) CONFLICT_MODE="backup_all" ;;
-      6) CONFLICT_MODE="skip_all" ;;
-      *) log_info "Invalid selection. Please enter a number from 1 to 6." ; continue ;;
-    esac
-    break
-  done
+  ui_clear_to_end
+  menu_single "Conflict detected" "Use ↑/↓ to move, Enter to select." 1 \
+    "Overwrite" \
+    "Backup existing" \
+    "Skip" \
+    "Overwrite all" \
+    "Backup all" \
+    "Skip all"
+  case "${MENU_RESULT}" in
+    "Overwrite") CONFLICT_MODE="overwrite" ;;
+    "Backup existing") CONFLICT_MODE="backup" ;;
+    "Skip") CONFLICT_MODE="skip" ;;
+    "Overwrite all") CONFLICT_MODE="overwrite_all" ;;
+    "Backup all") CONFLICT_MODE="backup_all" ;;
+    "Skip all") CONFLICT_MODE="skip_all" ;;
+  esac
 }
 
 prompt_dir_conflict_mode() {
-  local choice=""
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     return 0
   fi
@@ -1449,29 +1494,24 @@ prompt_dir_conflict_mode() {
     return 0
   fi
 
-  while true; do
-    log_info "Category already exists. Choose action:"
-    log_info "  1) Overwrite category"
-    log_info "  2) Backup existing category"
-    log_info "  3) Skip category"
-    log_info "  4) Selective (install file-by-file)"
-    log_info "  5) Overwrite all"
-    log_info "  6) Backup all"
-    log_info "  7) Skip all"
-    printf "> " > "${TTY_DEVICE}"
-    prompt_read choice
-    case "${choice}" in
-      1) CONFLICT_MODE="overwrite" ;;
-      2) CONFLICT_MODE="backup" ;;
-      3) CONFLICT_MODE="skip" ;;
-      4) CONFLICT_MODE="selective" ;;
-      5) CONFLICT_MODE="overwrite_all" ;;
-      6) CONFLICT_MODE="backup_all" ;;
-      7) CONFLICT_MODE="skip_all" ;;
-      *) log_info "Invalid selection. Please enter a number from 1 to 7." ; continue ;;
-    esac
-    break
-  done
+  ui_clear_to_end
+  menu_single "Category already exists" "Use ↑/↓ to move, Enter to select." 1 \
+    "Overwrite category" \
+    "Backup existing category" \
+    "Skip category" \
+    "Selective (install file-by-file)" \
+    "Overwrite all" \
+    "Backup all" \
+    "Skip all"
+  case "${MENU_RESULT}" in
+    "Overwrite category") CONFLICT_MODE="overwrite" ;;
+    "Backup existing category") CONFLICT_MODE="backup" ;;
+    "Skip category") CONFLICT_MODE="skip" ;;
+    "Selective (install file-by-file)") CONFLICT_MODE="selective" ;;
+    "Overwrite all") CONFLICT_MODE="overwrite_all" ;;
+    "Backup all") CONFLICT_MODE="backup_all" ;;
+    "Skip all") CONFLICT_MODE="skip_all" ;;
+  esac
 }
 
 apply_conflict_mode() {
@@ -1997,13 +2037,10 @@ merge_codex_mcp() {
         log_verbose "Skipping existing Codex MCP server ${key}"
         continue
       fi
-      printf "MCP server '%s' already exists in %s. Overwrite? [y/N] " "${key}" "${dest}" > "${TTY_DEVICE}"
-      local confirm
-      prompt_read confirm
-      case "${confirm}" in
-        y|Y|yes|YES) keys_to_remove+=("${key}") ; keys_to_add+=("${key}") ;;
-        *) ;;
-      esac
+      if menu_confirm "MCP server '${key}' exists" "Overwrite in ${dest}? Use ↑/↓ to move, Enter to select." 1 "Overwrite" "Skip"; then
+        keys_to_remove+=("${key}")
+        keys_to_add+=("${key}")
+      fi
     else
       keys_to_add+=("${key}")
     fi
@@ -2068,13 +2105,9 @@ merge_mcp() {
     fi
 
     if [ "${NON_INTERACTIVE}" -eq 0 ]; then
-      printf "Merge MCP config into existing %s? [y/N] " "${dest}" > "${TTY_DEVICE}"
-      local confirm
-      prompt_read confirm
-      case "${confirm}" in
-        y|Y|yes|YES) ;;
-        *) return 1 ;;
-      esac
+      if ! menu_confirm "Merge MCP config?" "Target: ${dest}. Use ↑/↓ to move, Enter to select." 1 "Merge" "Skip"; then
+        return 1
+      fi
     fi
 
     # Ensure we have a temp directory for cleanup
