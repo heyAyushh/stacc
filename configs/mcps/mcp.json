@@ -18,6 +18,7 @@
       "url": "https://api.githubcopilot.com/mcp/"
     },
     "grep": {
+      "type": "http",
       "url": "https://mcp.grep.app"
     }
   }
