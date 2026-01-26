@@ -499,6 +499,16 @@ ui_print_line() {
   ui_out "${line}\n"
 }
 
+LAST_UI_BLOCK_LINES=0
+
+clear_last_ui_block() {
+  if [ "${LAST_UI_BLOCK_LINES}" -gt 0 ]; then
+    ui_move_up "${LAST_UI_BLOCK_LINES}"
+    ui_clear_to_end
+    LAST_UI_BLOCK_LINES=0
+  fi
+}
+
 menu_single_lines() {
   local title="$1"
   local instructions="$2"
@@ -1349,6 +1359,7 @@ confirm_summary() {
 
   if [ -n "${TTY_DEVICE}" ] && [ -w "${TTY_DEVICE}" ] && [ -t 0 ]; then
     local line_title line_editors line_scope line_categories line_mcps line_stacks line_prompt
+    local summary_lines
     local cols max pad
     line_title="${COLOR_BOLD}${COLOR_CYAN}Summary${COLOR_RESET}"
     line_editors="  Editors:    ${SELECTED_EDITORS}"
@@ -1389,21 +1400,32 @@ confirm_summary() {
     ui_carriage_return
     ui_clear_to_end
     ui_out "\n"
+    summary_lines=1
     ui_print_line "$(center_line "${line_title}")"
+    summary_lines=$((summary_lines + 1))
     ui_print_line ""
+    summary_lines=$((summary_lines + 1))
     ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_editors}")"
+    summary_lines=$((summary_lines + 1))
     ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_scope}")"
+    summary_lines=$((summary_lines + 1))
     ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_categories}")"
+    summary_lines=$((summary_lines + 1))
     if [ -n "${line_mcps}" ]; then
       ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_mcps}")"
+      summary_lines=$((summary_lines + 1))
     fi
     if [ -n "${line_stacks}" ]; then
       ui_print_line "$(printf '%*s%s' "${pad}" "" "${line_stacks}")"
+      summary_lines=$((summary_lines + 1))
     fi
+    summary_lines=$((summary_lines + 1))
     ui_print_line ""
     ui_carriage_return
     ui_clear_line
     ui_out "$(printf '%*s%s' "${pad}" "" "${line_prompt}")"
+    summary_lines=$((summary_lines + 1))
+    LAST_UI_BLOCK_LINES="${summary_lines}"
   else
     print_heading "Summary"
     log_info "  Editors:    ${SELECTED_EDITORS}"
@@ -1419,6 +1441,7 @@ confirm_summary() {
     printf "Proceed? [y/N] " > "${TTY_DEVICE}"
   fi
   prompt_read confirm
+  clear_last_ui_block
   case "${confirm}" in
     y|Y|yes|YES) ;;
     *) die "aborted" ;;
