@@ -115,44 +115,44 @@ configs/
 
 This repository contains configurations adapted from open-source projects. Below are the attributions for code copied or adapted from external sources.
 
-| Source | License | Files | Description | Notes |
-|--------|---------|-------|-------------|-------|
-| [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 | `configs/skills/mcp-builder/` | MCP Server Development Guide - creating high-quality MCP servers | |
-| [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 | `configs/skills/skill-creator/` | Skill Creator Guide - creating effective Claude skills | |
-| [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 | `configs/skills/frontend-design/` | Frontend Design - distinctive, production-grade UI creation | |
-| [Dimillian/Skills](https://github.com/Dimillian/Skills) | | `configs/stacks/ios-skills/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation | |
-| [Dimillian/Skills](https://github.com/Dimillian/Skills) | | `configs/stacks/ios-skills/swiftui-view-refactor/` | SwiftUI view refactoring patterns | |
-| [Dimillian/Skills](https://github.com/Dimillian/Skills) | | `configs/stacks/ios-skills/swiftui-performance-audit/` | SwiftUI performance auditing and optimization | |
-| [Dimillian/Skills](https://github.com/Dimillian/Skills) | | `configs/stacks/ios-skills/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices | |
-| [Dimillian/Skills](https://github.com/Dimillian/Skills) | | `configs/stacks/ios-skills/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation | |
-| [Dimillian/Skills](https://github.com/Dimillian/Skills) | | `configs/stacks/ios-skills/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging | |
-| [triggerdotdev/trigger.dev](https://github.com/triggerdotdev/trigger.dev) | Apache-2.0 | `configs/commands/deslop.md` | Remove AI-generated code slop | Also seen in [fatih/dotfiles](https://github.com/fatih/dotfiles) and [moeru-ai/airi](https://github.com/moeru-ai/airi) (MIT). |
-| Claude Code / Anthropic System Prompts | | `configs/agents/askuserquestion.md` | AskUserQuestion tool description | Adapted from Claude Code's built-in tool descriptions and agent prompts. |
-| Claude Code / Anthropic System Prompts | | `configs/commands/explore.md` | File search specialist agent prompt | Documented in [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) (MIT). |
-| [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 | `configs/stacks/bun.mdc` | Bun.js best practices | |
-| [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 | `configs/stacks/typescript.mdc` | TypeScript conventions | |
-| [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 | `configs/stacks/postgresql.mdc` | PostgreSQL guidelines | |
-| [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) | CC0-1.0 | `configs/rules/clean-code.mdc` | Clean code guidelines | |
-| [hamzafer/cursor-commands](https://github.com/hamzafer/cursor-commands) | MIT | `configs/stacks/solana` | Solana Dev Skills | |
-| [solana foundation](https://github.com/solana-foundation/solana-dev-skill) | MIT | `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts | |
-| [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) | | `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. | |
-| [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) | | `configs/commands/review-pr.md` | Review Pull request from github | |
-| [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) | `configs/commands/visualize.md` | Mermaid diagram generation | |
-| [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) | `configs/commands/onboard-new-developer.md` | Developer onboarding checklist | |
-| [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) | `configs/commands/refactor.md` | Code refactoring checklist (refactor-code.md) | |
-| [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT | `configs/commands/commit.md` | Git commit workflow (commit-only.md) | |
-| [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT | `configs/commands/commit-push.md` | Commit and push workflow | |
-| [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT | `configs/commands/commit-push-pr.md` | Commit, push, and PR workflow | |
-| [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT | `configs/rules/commit-message-format.mdc` | Conventional Commits format | |
-| [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT | `configs/rules/pr-message-format.mdc` | PR message format | |
-| [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT | `configs/rules/prompt-injection-gaurd.mdc` | External context injection defense (prompt-injection-guard.mdc) | |
-| [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | MIT | `configs/commands/review.md` | Security-focused code review | |
-| [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | | `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting | |
-| [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | | `configs/commands/iterate-browser.md` | Autonomously iterate on UI changes using console.log and browser tools | |
-| [@shaoruu](https://shaoruu.io/cursor/council) | | `configs/skills/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). |
-| Original / Sources Not Found | | `configs/commands/ultrathink.md` | Deep reasoning mode protocol (original) | |
-| Original / Sources Not Found | | `configs/commands/init.md` | AGENTS.md initialization | |
-| Original / Sources Not Found | | `configs/agents/verifier.md` | Work verification agent | |
+| File | Description | Notes | Source | License |
+|------|-------------|-------|--------|---------|
+| `configs/skills/mcp-builder/` | MCP Server Development Guide - creating high-quality MCP servers |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
+| `configs/skills/skill-creator/` | Skill Creator Guide - creating effective Claude skills |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
+| `configs/skills/frontend-design/` | Frontend Design - distinctive, production-grade UI creation |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
+| `configs/stacks/ios-skills/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios-skills/swiftui-view-refactor/` | SwiftUI view refactoring patterns |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios-skills/swiftui-performance-audit/` | SwiftUI performance auditing and optimization |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios-skills/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios-skills/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios-skills/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/commands/deslop.md` | Remove AI-generated code slop | Also seen in [fatih/dotfiles](https://github.com/fatih/dotfiles) and [moeru-ai/airi](https://github.com/moeru-ai/airi) (MIT). | [triggerdotdev/trigger.dev](https://github.com/triggerdotdev/trigger.dev) | Apache-2.0 |
+| `configs/agents/askuserquestion.md` | AskUserQuestion tool description | Adapted from Claude Code's built-in tool descriptions and agent prompts. | Claude Code / Anthropic System Prompts |  |
+| `configs/commands/explore.md` | File search specialist agent prompt | Documented in [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) (MIT). | Claude Code / Anthropic System Prompts |  |
+| `configs/stacks/bun.mdc` | Bun.js best practices |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
+| `configs/stacks/typescript.mdc` | TypeScript conventions |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
+| `configs/stacks/postgresql.mdc` | PostgreSQL guidelines |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
+| `configs/rules/clean-code.mdc` | Clean code guidelines |  | [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) | CC0-1.0 |
+| `configs/stacks/solana` | Solana Dev Skills |  | [hamzafer/cursor-commands](https://github.com/hamzafer/cursor-commands) | MIT |
+| `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |  | [solana foundation](https://github.com/solana-foundation/solana-dev-skill) | MIT |
+| `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) |  |
+| `configs/commands/review-pr.md` | Review Pull request from github |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) |  |
+| `configs/commands/visualize.md` | Mermaid diagram generation |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
+| `configs/commands/onboard-new-developer.md` | Developer onboarding checklist |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
+| `configs/commands/refactor.md` | Code refactoring checklist (refactor-code.md) |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
+| `configs/commands/commit.md` | Git commit workflow (commit-only.md) |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
+| `configs/commands/commit-push.md` | Commit and push workflow |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
+| `configs/commands/commit-push-pr.md` | Commit, push, and PR workflow |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
+| `configs/rules/commit-message-format.mdc` | Conventional Commits format |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
+| `configs/rules/pr-message-format.mdc` | PR message format |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
+| `configs/rules/prompt-injection-gaurd.mdc` | External context injection defense (prompt-injection-guard.mdc) |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
+| `configs/commands/review.md` | Security-focused code review |  | [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | MIT |
+| `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting |  | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) |  |
+| `configs/commands/iterate-browser.md` | Autonomously iterate on UI changes using console.log and browser tools |  | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) |  |
+| `configs/skills/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). | [@shaoruu](https://shaoruu.io/cursor/council) |  |
+| `configs/commands/ultrathink.md` | Deep reasoning mode protocol (original) |  | Original / Sources Not Found |  |
+| `configs/commands/init.md` | AGENTS.md initialization |  | Original / Sources Not Found |  |
+| `configs/agents/verifier.md` | Work verification agent |  | Original / Sources Not Found |  |
 
 ## License
 
