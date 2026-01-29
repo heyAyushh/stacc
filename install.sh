@@ -1733,7 +1733,11 @@ starlark_bool() {
 }
 
 build_starlark_globs() {
-  local -a globs=("$@")
+  local -a globs
+  globs=()
+  if [ "$#" -gt 0 ]; then
+    globs=("$@")
+  fi
   local output="["
   local first=1
   local item escaped
