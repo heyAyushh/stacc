@@ -1759,7 +1759,8 @@ convert_markdown_rule_to_starlark() {
   local frontmatter body
   local description=""
   local always_apply=""
-  local -a globs=()
+  local -a globs
+  globs=()
   local in_globs=0
 
   frontmatter="$(markdown_rule_frontmatter "${src}")"
@@ -1827,7 +1828,11 @@ convert_markdown_rule_to_starlark() {
   name="${base%.*}"
   escaped_name="$(escape_starlark_string "${name}")"
   escaped_desc="$(escape_starlark_string "${description}")"
-  globs_literal="$(build_starlark_globs "${globs[@]}")"
+  if [ "${#globs[@]}" -gt 0 ]; then
+    globs_literal="$(build_starlark_globs "${globs[@]}")"
+  else
+    globs_literal="$(build_starlark_globs)"
+  fi
   bool_literal="$(starlark_bool "${always_apply}")"
   escaped_body="$(escape_starlark_block "${body}")"
 
