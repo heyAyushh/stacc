@@ -1799,8 +1799,13 @@ install_skills() {
 
   [ -d "${src}" ] || die "source category not found: ${src}"
   if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
-    if ! handle_dir_conflict "${dest}"; then
-      return 0
+    # Commands and stacks share the skills root for some editors; avoid wiping the whole dir.
+    if [ "${editor}" != "claude" ] && [ "${editor}" != "codex" ] && [ "${editor}" != "ampcode" ]; then
+      if ! handle_dir_conflict "${dest}"; then
+        return 0
+      fi
+    else
+      log_verbose "Shared skills root detected; resolving conflicts per-file."
     fi
   fi
   copy_tree "${src}" "${dest}"
@@ -1826,8 +1831,13 @@ install_commands() {
 
   [ -d "${src}" ] || die "source category not found: ${src}"
   if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
-    if ! handle_dir_conflict "${dest}"; then
-      return 0
+    # For claude/codex/ampcode, commands live inside the shared skills root.
+    if [ "${editor}" != "claude" ] && [ "${editor}" != "codex" ] && [ "${editor}" != "ampcode" ]; then
+      if ! handle_dir_conflict "${dest}"; then
+        return 0
+      fi
+    else
+      log_verbose "Shared skills root detected; resolving conflicts per-file."
     fi
   fi
   copy_tree "${src}" "${dest}"
