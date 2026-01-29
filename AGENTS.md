@@ -55,10 +55,48 @@ The installer provides several conflict resolution strategies:
 - **Skip**: Leave existing files unchanged
 - **Selective**: Per-file decision during installation
 
+## Available skills
+Skills in `configs/skills/` provide specialized capabilities:
+- **bash-expert**: Bash/shell scripting help and debugging
+- **changelog-generator**: Generate changelogs from git history
+- **find-skills**: Discover and install agent skills
+- **frontend-design**: Production-grade UI/frontend development
+- **mcp-builder**: Guide for creating MCP servers
+- **skill-creator**: Guide for creating new skills
+
+## Available stacks
+Stacks in `configs/stacks/` are framework/language-specific skill bundles:
+- **bun**: Bun.js runtime and tooling
+- **databases**: Database patterns (PostgreSQL, etc.)
+- **ios**: SwiftUI, Swift concurrency, performance auditing, Liquid Glass
+- **nextjs**: Next.js and React patterns
+- **react-native**: React Native mobile development
+- **rust**: Rust development patterns
+- **solana**: Solana blockchain development
+- **turborepo**: Monorepo tooling with Turborepo
+- **typescript**: TypeScript conventions
+
 ## Development workflow
 When adding or modifying configurations:
 1. Edit files in `configs/` directory structure
-2. Test locally with `./install.sh` (dry-run available with flags)
-3. Ensure Bash 3.2 compatibility (avoid associative arrays, use indexed arrays)
-4. For MCP changes: verify JSON validity and test merge behavior
-5. Update README.md attributions if adapting from external sources
+2. Test locally with `./install.sh`
+3. Validate with `bash -n install.sh` and lint with `shellcheck -x install.sh`
+4. Ensure Bash 3.2 compatibility (avoid associative arrays, use indexed arrays)
+5. For MCP changes: verify JSON validity and test merge behavior
+6. Update README.md attributions if adapting from external sources
+
+## Adding new configurations
+
+### New skill
+1. Create `configs/skills/<skill-name>/SKILL.md` with frontmatter (name, description)
+2. Add optional `references/` for context docs and `scripts/` for tooling
+3. Update README.md attributions table if adapted from external source
+
+### New stack
+1. Create `configs/stacks/<stack-name>/` directory
+2. Add `.mdc` rule files or skill folders with `SKILL.md`
+3. Update README.md attributions table
+
+### New rule
+1. Add `.mdc` file to `configs/rules/` (always-applied) or `configs/stacks/<stack>/` (stack-specific)
+2. Use Cursor MDC format with frontmatter if needed

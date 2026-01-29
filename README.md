@@ -18,7 +18,7 @@ curl -fsSL ay.dog | bash
 curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash
 ```
 
-./### Local Install
+### Local Install
 
 ```bash
 git clone https://github.com/heyAyushh/stacc.git
@@ -102,13 +102,22 @@ configs/
 ├── mcps/            # MCP server configurations
 ├── rules/           # Always-applied rules (clean-code, commit format, etc.)
 ├── skills/          # Modular skills for specific tasks
+│   ├── bash-expert/
 │   ├── changelog-generator/
+│   ├── find-skills/
 │   ├── frontend-design/
 │   ├── mcp-builder/
 │   └── skill-creator/
-└── stack/           # Language/framework-specific configurations
-    ├── ios-skills/  # SwiftUI and iOS development skills
-    └── *.mdc        # Stack-specific rules (bun, typescript, etc.)
+└── stacks/          # Language/framework-specific skill bundles
+    ├── bun/
+    ├── databases/
+    ├── ios/         # SwiftUI, Swift concurrency, performance, Liquid Glass
+    ├── nextjs/
+    ├── react-native/
+    ├── rust/
+    ├── solana/
+    ├── turborepo/
+    └── typescript/
 ```
 
 ## Attributions
@@ -120,20 +129,20 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/skills/mcp-builder/` | MCP Server Development Guide - creating high-quality MCP servers |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
 | `configs/skills/skill-creator/` | Skill Creator Guide - creating effective Claude skills |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
 | `configs/skills/frontend-design/` | Frontend Design - distinctive, production-grade UI creation |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
-| `configs/stacks/ios-skills/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios-skills/swiftui-view-refactor/` | SwiftUI view refactoring patterns |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios-skills/swiftui-performance-audit/` | SwiftUI performance auditing and optimization |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios-skills/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios-skills/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios-skills/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios/swiftui-view-refactor/` | SwiftUI view refactoring patterns |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios/swiftui-performance-audit/` | SwiftUI performance auditing and optimization |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
 | `configs/commands/deslop.md` | Remove AI-generated code slop | Also seen in [fatih/dotfiles](https://github.com/fatih/dotfiles) and [moeru-ai/airi](https://github.com/moeru-ai/airi) (MIT). | [triggerdotdev/trigger.dev](https://github.com/triggerdotdev/trigger.dev) | Apache-2.0 |
 | `configs/agents/askuserquestion.md` | AskUserQuestion tool description | Adapted from Claude Code's built-in tool descriptions and agent prompts. | Claude Code / Anthropic System Prompts |  |
 | `configs/commands/explore.md` | File search specialist agent prompt | Documented in [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) (MIT). | Claude Code / Anthropic System Prompts |  |
-| `configs/stacks/bun.mdc` | Bun.js best practices |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
-| `configs/stacks/typescript.mdc` | TypeScript conventions |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
-| `configs/stacks/postgresql.mdc` | PostgreSQL guidelines |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
+| `configs/stacks/bun/bun.mdc` | Bun.js best practices |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
+| `configs/stacks/typescript/` | TypeScript conventions |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
+| `configs/stacks/bun/postgresql.mdc` | PostgreSQL guidelines |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
 | `configs/rules/clean-code.mdc` | Clean code guidelines |  | [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) | CC0-1.0 |
-| `configs/stacks/solana` | Solana Dev Skills |  | [hamzafer/cursor-commands](https://github.com/hamzafer/cursor-commands) | MIT |
+| `configs/stacks/solana/` | Solana Dev Skills |  | [hamzafer/cursor-commands](https://github.com/hamzafer/cursor-commands) | MIT |
 | `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |  | [solana foundation](https://github.com/solana-foundation/solana-dev-skill) | MIT |
 | `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) |  |
 | `configs/commands/review-pr.md` | Review Pull request from github |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) |  |
