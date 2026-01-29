@@ -1753,26 +1753,6 @@ install_cursor_rules() {
   done < <(find "${src}" -type f ! -name ".DS_Store" ! -name "summary.md" -print0)
 }
 
-install_codex_rules() {
-  local src="$1"
-  local dest="$2"
-
-  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
-    if ! handle_dir_conflict "${dest}"; then
-      return 0
-    fi
-  fi
-
-  mkdir -p "${dest}"
-
-  while IFS= read -r -d '' file; do
-    local base
-    base="$(basename "${file}")"
-    base="${base%.*}.rules"
-    copy_file "${file}" "${dest}/${base}"
-  done < <(find "${src}" -type f ! -name ".DS_Store" ! -name "summary.md" -print0)
-}
-
 install_rules() {
   local editor="$1"
   local scope="$2"
@@ -1784,11 +1764,6 @@ install_rules() {
 
   if [ "${editor}" = "cursor" ]; then
     install_cursor_rules "${src}" "${target_root}/rules"
-    should_append=0
-  elif [ "${editor}" = "codex" ]; then
-    if [ "${scope}" = "global" ]; then
-      install_codex_rules "${src}" "${target_root}/rules"
-    fi
     should_append=0
   fi
 

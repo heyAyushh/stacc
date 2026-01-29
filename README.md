@@ -61,7 +61,7 @@ Stacks are framework/language-specific skill bundles under `configs/stacks/`. Wh
 |-------------|-------|--------|--------|---------------------|----------|----------|------------------|---------|
 | LSPs | [#8745](https://github.com/openai/codex/issues/8745) ❌ | [plugin](https://code.claude.com/docs/en/plugins-reference#lsp-servers) | built-in ❌ | ❌ | built-in ❌ | built-in ❌ | built-in ❌ | extensions ❌ |
 | Hooks | [#2109](https://github.com/openai/codex/issues/2109) ❌ | `~/.claude/settings.json` | `~/.cursor/hooks.json` | ❌ | ❌ | ❌ | ❌ | ❌ |
-| Rules | `~/.codex/rules/*.rules`, `~/.codex/AGENTS.md` | `~/.claude/CLAUDE.md` | `~/.cursor/rules/`, `~/.cursor/AGENTS.md` | ❌ | `~/.config/opencode/AGENTS.md` | `~/.config/amp/AGENTS.md` | ❌ | ❌ |
+| Rules | `~/.codex/AGENTS.md` | `~/.claude/CLAUDE.md` | `~/.cursor/rules/`, `~/.cursor/AGENTS.md` | ❌ | `~/.config/opencode/AGENTS.md` | `~/.config/amp/AGENTS.md` | ❌ | ❌ |
 | Skills | `~/.codex/skills/` | `~/.claude/skills/` | `~/.cursor/skills/` | ❌ | `~/.config/opencode/skills/` | `~/.config/agents/skills/` | ❌ | ❌ |
 | Subagents | [#2604](https://github.com/openai/codex/issues/2604) ❌ | `~/.claude/agents/` | `~/.cursor/agents/` | ❌ | `~/.config/opencode/agents/` | built-in ❌ | ❌ | ❌ |
 | MCPs (Model Context Protocol) | `~/.codex/config.toml` | `~/.claude.json` | `~/.cursor/mcp.json` | cursor global ❌ | `~/.config/opencode/.opencode.json` | `~/.config/amp/settings.json` | ❌ | ❌ |
@@ -142,10 +142,10 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/stacks/typescript/` | TypeScript conventions |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
 | `configs/stacks/bun/postgresql.mdc` | PostgreSQL guidelines |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
 | `configs/rules/clean-code.mdc` | Clean code guidelines |  | [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) | CC0-1.0 |
-| `configs/stacks/solana/` | Solana Dev Skills |  | [hamzafer/cursor-commands](https://github.com/hamzafer/cursor-commands) | MIT |
-| `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |  | [solana foundation](https://github.com/solana-foundation/solana-dev-skill) | MIT |
+| `configs/stacks/solana/` | Solana Dev Skills |  | [Solana Foundation](https://github.com/solana-foundation/solana-dev-skill) | MIT |
+| `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) | |
 | `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) |  |
-| `configs/commands/review-pr.md` | Review Pull request from github |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) |  |
+| `configs/commands/review-pr.md` | Review Pull request from github |  |  |  |
 | `configs/commands/visualize.md` | Mermaid diagram generation |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
 | `configs/commands/onboard-new-developer.md` | Developer onboarding checklist |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
 | `configs/commands/refactor.md` | Code refactoring checklist (refactor-code.md) |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
