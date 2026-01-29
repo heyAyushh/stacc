@@ -2,6 +2,8 @@
 
 Check the diff against main, and remove all AI generated slop introduced in this branch.
 
+If the diff is empty and you're on main or master, scan the entire codebase and remove any AI slop.
+
 This includes:
 
 - Extra comments that a human wouldn't add or is inconsistent with the rest of the file

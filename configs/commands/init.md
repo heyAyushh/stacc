@@ -30,7 +30,7 @@ Usage notes:
 This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE (https://cursor.com) when working with code in this repository.
 \`\`\`
 
-- Also create a file called CLAUDE.md with test: 
+- Also create a file called CLAUDE.md with: 
 \`\`\`
 @AGENTS.md
 \`\`\`
