@@ -65,7 +65,7 @@ Stacks are framework/language-specific skill bundles under `configs/stacks/`. Wh
 | Skills | `~/.codex/skills/` | `~/.claude/skills/` | `~/.cursor/skills/` | ❌ | `~/.config/opencode/skills/` | `~/.config/agents/skills/` | ❌ | ❌ |
 | Subagents | [#2604](https://github.com/openai/codex/issues/2604) ❌ | `~/.claude/agents/` | `~/.cursor/agents/` | ❌ | `~/.config/opencode/agents/` | built-in ❌ | ❌ | ❌ |
 | MCPs (Model Context Protocol) | `~/.codex/config.toml` | `~/.claude.json` | `~/.cursor/mcp.json` | cursor global ❌ | `~/.config/opencode/.opencode.json` | `~/.config/amp/settings.json` | ❌ | ❌ |
-| Commands | `~/.codex/skills/commands/` | `~/.claude/commands/` | `~/.cursor/commands/` | ❌ | `~/.config/opencode/commands/` | `~/.config/amp/commands/` | ❌ | ❌ |
+| Commands | Migrated to skills `~/.codex/skills/` | Migrated to skills `~/.claude/skills/` | `~/.cursor/commands/` | ❌ | `~/.config/opencode/commands/` | Migrated to skills `~/.config/agents/skills/` | ❌ | ❌ |
 
 #### Project-Specific Configuration File Locations (macOS/Linux)
 
@@ -77,14 +77,14 @@ Stacks are framework/language-specific skill bundles under `configs/stacks/`. Wh
 | Skills | `.codex/skills/` | `.claude/skills/` | `.cursor/skills/` | ❌ | `.opencode/skills/` | `.agents/skills/` | ❌ | ❌ |
 | Subagents | ❌ | `.claude/agents/` | `.cursor/agents/` | ❌ | `.opencode/agents/` | built-in ❌ | `.github/copilot-instructions.md` | ❌ |
 | MCPs | global ❌ | `.mcp.json` | `.cursor/mcp.json` | cursor global ❌ | `.opencode.json` | built-in ❌ | ❌ | ❌ |
-| Commands | `.codex/skills/commands/` | `.claude/commands/` | `.cursor/commands/` | ❌ | `.opencode/commands/` | `.agents/commands/` | ❌ | `<project>/.vscode/tasks.json` |
+| Commands | `.codex/skills/` | `.claude/skills/` | `.cursor/commands/` | ❌ | `.opencode/commands/` | `.agents/skills/` | ❌ | `<project>/.vscode/tasks.json` |
 
 **Notes / Exceptions:**
 * Codex tracking: LSP [#8745](https://github.com/openai/codex/issues/8745), Hooks [#2109](https://github.com/openai/codex/issues/2109), Subagents [#2604](https://github.com/openai/codex/issues/2604)
 * Cursor Cloud Agents: uses Cursor global config only
 * OpenCode MCPs: `~/.config/opencode/.opencode.json` → `mcpServers`
 * AMP MCPs: `~/.config/amp/settings.json` → `amp.mcpServers` (OAuth in `~/.amp/oauth/`)
-* Codex commands: stored under `skills/commands/` for Codex installations
+* Codex/Claude/AMP commands: stored under `skills/` for migrated installations
 * VS Code LSP/config: extensions or settings
 * Copilot: no user-defined MCPs/skills/commands
 * VS Code user settings: macOS `~/Library/Application Support/Code/User/settings.json`, Linux `~/.config/Code/User/settings.json`
@@ -147,9 +147,9 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/rules/pr-message-format.mdc` | PR message format |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
 | `configs/rules/prompt-injection-gaurd.mdc` | External context injection defense (prompt-injection-guard.mdc) |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
 | `configs/commands/review.md` | Security-focused code review |  | [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | MIT |
-| `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting |  | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) |  |
+| `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting |  | [@shaoruu](https://shaoruu.io/cursor/council)|  |
 | `configs/commands/iterate-browser.md` | Autonomously iterate on UI changes using console.log and browser tools |  | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) |  |
-| `configs/skills/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). | [@shaoruu](https://shaoruu.io/cursor/council) |  |
+| `configs/skills/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills)  |  |
 | `configs/commands/ultrathink.md` | Deep reasoning mode protocol (original) |  | Original / Sources Not Found |  |
 | `configs/commands/init.md` | AGENTS.md initialization |  | Original / Sources Not Found |  |
 | `configs/agents/verifier.md` | Work verification agent |  | Original / Sources Not Found |  |

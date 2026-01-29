@@ -1759,21 +1759,6 @@ install_category() {
   copy_tree "${src}" "${dest}"
 }
 
-install_stack_skill() {
-  local stack="$1"
-  local target_root="$2"
-  local src="${ROOT_DIR}/configs/stacks/${stack}"
-  local dest="${target_root}/skills/${stack}"
-
-  [ -d "${src}" ] || die "source stack not found: ${src}"
-  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
-    if ! handle_dir_conflict "${dest}"; then
-      return 0
-    fi
-  fi
-  copy_tree "${src}" "${dest}"
-}
-
 category_dest_for() {
   local editor="$1"
   local category="$2"
@@ -1785,57 +1770,88 @@ category_dest_for() {
   esac
 }
 
-install_codex_commands() {
-  local target_root="$1"
-  local src_dir="${ROOT_DIR}/configs/commands"
-  local dest_root="${target_root}/skills"
+skills_root_for() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
 
-  [ -d "${src_dir}" ] || die "source category not found: ${src_dir}"
-
-  while IFS= read -r -d '' file; do
-    local base
-    local name
-    local dest_dir
-    local dest_file
-    local tmp_file
-    base="$(basename "${file}")"
-    name="${base%.md}"
-    dest_dir="${dest_root}/${name}"
-    dest_file="${dest_dir}/SKILL.md"
-
-    if [ -d "${dest_dir}" ] && [ -n "$(find "${dest_dir}" -mindepth 1 -print -quit)" ]; then
-      if ! handle_dir_conflict "${dest_dir}"; then
-        continue
-      fi
-    fi
-    if [ "${DRY_RUN}" -eq 1 ]; then
-      log_verbose "[dry-run] Would install ${dest_file}"
-      continue
-    fi
-
-    if [ -z "${TMP_ROOT}" ]; then
-      TMP_ROOT="$(mktemp -d)"
-    fi
-    tmp_file="${TMP_ROOT}/codex_skill_${name}.$$"
-    {
-      printf '%s\n' "---"
-      printf 'name: %s\n' "${name}"
-      printf 'description: Command skill for %s.\n' "${name}"
-      printf '%s\n\n' "---"
-      if [ "$(head -n 1 "${file}")" = "---" ]; then
-        awk '
-          BEGIN { front = 0; }
-          NR == 1 && $0 == "---" { front = 1; next }
-          front == 1 && $0 == "---" { front = 0; next }
-          front == 0 { print }
-        ' "${file}"
+  case "${editor}" in
+    ampcode)
+      if [ "${scope}" = "global" ]; then
+        printf '%s\n' "${HOME}/.config/agents/skills"
       else
-        cat "${file}"
+        printf '%s\n' "${target_root}/skills"
       fi
-    } > "${tmp_file}"
-    copy_file "${tmp_file}" "${dest_file}"
-    rm -f "${tmp_file}"
-  done < <(find "${src_dir}" -type f -name "*.md" ! -name ".DS_Store" -print0)
+      ;;
+    *)
+      printf '%s\n' "${target_root}/skills"
+      ;;
+  esac
+}
+
+install_skills() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+  local src="${ROOT_DIR}/configs/skills"
+  local dest
+  dest="$(skills_root_for "${editor}" "${scope}" "${target_root}")"
+
+  [ -d "${src}" ] || die "source category not found: ${src}"
+  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
+    if ! handle_dir_conflict "${dest}"; then
+      return 0
+    fi
+  fi
+  copy_tree "${src}" "${dest}"
+}
+
+install_commands() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+  local src
+  local dest
+
+  case "${editor}" in
+    codex|claude|ampcode)
+      src="${ROOT_DIR}/configs/commands/skills"
+      dest="$(skills_root_for "${editor}" "${scope}" "${target_root}")"
+      ;;
+    *)
+      src="${ROOT_DIR}/configs/commands"
+      dest="${target_root}/commands"
+      ;;
+  esac
+
+  [ -d "${src}" ] || die "source category not found: ${src}"
+  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
+    if ! handle_dir_conflict "${dest}"; then
+      return 0
+    fi
+  fi
+  copy_tree "${src}" "${dest}"
+}
+
+install_stack_skill() {
+  local stack="$1"
+  local editor="$2"
+  local scope="$3"
+  local target_root="$4"
+  local src="${ROOT_DIR}/configs/stacks/${stack}"
+  local dest_root
+  local dest
+
+  dest_root="$(skills_root_for "${editor}" "${scope}" "${target_root}")"
+  dest="${dest_root}/${stack}"
+
+  [ -d "${src}" ] || die "source stack not found: ${src}"
+  if [ -d "${dest}" ] && [ -n "$(find "${dest}" -mindepth 1 -print -quit)" ]; then
+    if ! handle_dir_conflict "${dest}"; then
+      return 0
+    fi
+  fi
+  copy_tree "${src}" "${dest}"
 }
 
 write_mcp_subset_fallback() {
@@ -2383,17 +2399,19 @@ install_for_target() {
       install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}" "${target_root}")"
     elif [ "${category}" = "rules" ]; then
       install_rules "${editor}" "${scope}" "${target_root}"
+    elif [ "${category}" = "skills" ]; then
+      install_skills "${editor}" "${scope}" "${target_root}"
+    elif [ "${category}" = "commands" ]; then
+      install_commands "${editor}" "${scope}" "${target_root}"
     elif [ "${category}" = "stack" ]; then
       if [ -n "${SELECTED_STACKS}" ]; then
         local stack
         IFS=',' read -r -a stacks <<< "${SELECTED_STACKS}"
         for stack in "${stacks[@]}"; do
           [ -n "${stack}" ] || continue
-          install_stack_skill "${stack}" "${target_root}"
+          install_stack_skill "${stack}" "${editor}" "${scope}" "${target_root}"
         done
       fi
-    elif [ "${editor}" = "codex" ] && [ "${category}" = "commands" ]; then
-      install_codex_commands "${target_root}"
     else
       install_category "${category}" "${target_root}" "$(category_dest_for "${editor}" "${category}")"
     fi
