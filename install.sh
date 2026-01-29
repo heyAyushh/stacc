@@ -1856,17 +1856,17 @@ convert_markdown_rule_to_starlark() {
   {
     printf '# Generated from %s\n' "${base}"
     printf 'rules = [\n'
-    printf '  rule(\n'
-    printf '    name = "%s",\n' "${escaped_name}"
+    printf '  {\n'
+    printf '    "name": "%s",\n' "${escaped_name}"
     if [ -n "${description}" ]; then
-      printf '    description = "%s",\n' "${escaped_desc}"
+      printf '    "description": "%s",\n' "${escaped_desc}"
     fi
-    printf '    globs = %s,\n' "${globs_literal}"
-    printf '    alwaysApply = %s,\n' "${bool_literal}"
-    printf '    prompt = """\n'
+    printf '    "globs": %s,\n' "${globs_literal}"
+    printf '    "alwaysApply": %s,\n' "${bool_literal}"
+    printf '    "prompt": """\n'
     printf '%s' "${escaped_body}"
     printf '\n""",\n'
-    printf '  ),\n'
+    printf '  },\n'
     printf ']\n'
   } > "${dest}"
 }
