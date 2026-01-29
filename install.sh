@@ -1650,6 +1650,23 @@ copy_tree() {
   done < <(find "${src_dir}" -type f ! -name ".DS_Store" -print0)
 }
 
+copy_tree_excluding_prefix() {
+  local src_dir="$1"
+  local dest_dir="$2"
+  local exclude_prefix="$3"
+
+  [ -d "${src_dir}" ] || die "missing source directory: ${src_dir}"
+
+  while IFS= read -r -d '' file; do
+    if [ -n "${exclude_prefix}" ] && [[ "${file}" == "${exclude_prefix}"* ]]; then
+      continue
+    fi
+    local rel="${file#"${src_dir}/"}"
+    local dest="${dest_dir}/${rel}"
+    copy_file "${file}" "${dest}"
+  done < <(find "${src_dir}" -type f ! -name ".DS_Store" -print0)
+}
+
 rules_summary_path() {
   printf '%s\n' "${ROOT_DIR}/configs/rules/summary.md"
 }
@@ -1879,7 +1896,11 @@ install_commands() {
       log_verbose "Shared skills root detected; resolving conflicts per-file."
     fi
   fi
-  copy_tree "${src}" "${dest}"
+  if [ "${editor}" != "claude" ] && [ "${editor}" != "codex" ] && [ "${editor}" != "ampcode" ]; then
+    copy_tree_excluding_prefix "${src}" "${dest}" "${src}/skills/"
+  else
+    copy_tree "${src}" "${dest}"
+  fi
 }
 
 install_stack_skill() {
