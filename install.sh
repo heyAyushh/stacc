@@ -1675,6 +1675,199 @@ rules_summary_marker() {
   printf '%s\n' "<!-- stacc:rules-summary -->"
 }
 
+trim_whitespace() {
+  local value="$1"
+  value="${value#"${value%%[![:space:]]*}"}"
+  value="${value%"${value##*[![:space:]]}"}"
+  printf '%s' "${value}"
+}
+
+strip_wrapping_quotes() {
+  local value="$1"
+  local first last length
+  length="${#value}"
+  if [ "${length}" -ge 2 ]; then
+    first="${value:0:1}"
+    last="${value:$((length - 1)):1}"
+    if [ "${first}" = "\"" ] && [ "${last}" = "\"" ]; then
+      value="${value:1:$((length - 2))}"
+    elif [ "${first}" = "'" ] && [ "${last}" = "'" ]; then
+      value="${value:1:$((length - 2))}"
+    fi
+  fi
+  printf '%s' "${value}"
+}
+
+escape_starlark_string() {
+  printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
+}
+
+escape_starlark_block() {
+  printf '%s' "$1" | sed 's/"""/\\"""/g'
+}
+
+markdown_rule_body() {
+  awk '
+    NR==1 && $0=="---" { front=1; next }
+    front==1 && $0=="---" { front=2; next }
+    front!=1 { print }
+  ' "$1"
+}
+
+markdown_rule_frontmatter() {
+  awk '
+    NR==1 && $0=="---" { front=1; next }
+    front==1 && $0=="---" { exit }
+    front==1 { print }
+  ' "$1"
+}
+
+starlark_bool() {
+  local value
+  value="$(trim_whitespace "$1")"
+  case "${value}" in
+    true|True|TRUE|yes|YES|1) printf '%s' "True" ;;
+    false|False|FALSE|no|NO|0) printf '%s' "False" ;;
+    *) printf '%s' "False" ;;
+  esac
+}
+
+build_starlark_globs() {
+  local -a globs=("$@")
+  local output="["
+  local first=1
+  local item escaped
+
+  for item in "${globs[@]}"; do
+    [ -n "${item}" ] || continue
+    escaped="$(escape_starlark_string "${item}")"
+    if [ "${first}" -eq 1 ]; then
+      output="${output} \"${escaped}\""
+      first=0
+    else
+      output="${output}, \"${escaped}\""
+    fi
+  done
+
+  output="${output} ]"
+  printf '%s' "${output}"
+}
+
+convert_markdown_rule_to_starlark() {
+  local src="$1"
+  local dest="$2"
+  local frontmatter body
+  local description=""
+  local always_apply=""
+  local -a globs=()
+  local in_globs=0
+
+  frontmatter="$(markdown_rule_frontmatter "${src}")"
+  body="$(markdown_rule_body "${src}")"
+
+  if [ -n "${frontmatter}" ]; then
+    while IFS= read -r line; do
+      local trimmed key value remainder
+      trimmed="$(trim_whitespace "${line}")"
+      [ -n "${trimmed}" ] || continue
+
+      case "${trimmed}" in
+        description:*)
+          in_globs=0
+          value="${trimmed#description:}"
+          value="$(trim_whitespace "${value}")"
+          value="$(strip_wrapping_quotes "${value}")"
+          description="${value}"
+          ;;
+        alwaysApply:*)
+          in_globs=0
+          value="${trimmed#alwaysApply:}"
+          value="$(trim_whitespace "${value}")"
+          always_apply="${value}"
+          ;;
+        globs:*)
+          value="${trimmed#globs:}"
+          value="$(trim_whitespace "${value}")"
+          globs=()
+          if [ -n "${value}" ]; then
+            if [[ "${value}" == \[*\] ]]; then
+              remainder="${value#[}"
+              remainder="${remainder%]}"
+              IFS=',' read -r -a globs <<< "${remainder}"
+              for key in "${!globs[@]}"; do
+                globs[$key]="$(trim_whitespace "${globs[$key]}")"
+                globs[$key]="$(strip_wrapping_quotes "${globs[$key]}")"
+              done
+            else
+              value="$(strip_wrapping_quotes "${value}")"
+              globs=("${value}")
+            fi
+            in_globs=0
+          else
+            in_globs=1
+          fi
+          ;;
+        -*)
+          if [ "${in_globs}" -eq 1 ]; then
+            value="${trimmed#-}"
+            value="$(trim_whitespace "${value}")"
+            value="$(strip_wrapping_quotes "${value}")"
+            [ -n "${value}" ] && globs+=("${value}")
+          fi
+          ;;
+        *)
+          in_globs=0
+          ;;
+      esac
+    done <<< "${frontmatter}"
+  fi
+
+  local name base escaped_name escaped_desc globs_literal bool_literal escaped_body
+  base="$(basename "${src}")"
+  name="${base%.*}"
+  escaped_name="$(escape_starlark_string "${name}")"
+  escaped_desc="$(escape_starlark_string "${description}")"
+  globs_literal="$(build_starlark_globs "${globs[@]}")"
+  bool_literal="$(starlark_bool "${always_apply}")"
+  escaped_body="$(escape_starlark_block "${body}")"
+
+  if [ -e "${dest}" ]; then
+    if ! handle_conflict "${dest}"; then
+      return 0
+    fi
+  fi
+
+  if [ "${DRY_RUN}" -eq 1 ]; then
+    log_verbose "[dry-run] Would generate ${dest} from ${src}"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "${dest}")"
+  {
+    printf '# Generated from %s\n' "${base}"
+    printf 'rules = [\n'
+    printf '  rule(\n'
+    printf '    name = "%s",\n' "${escaped_name}"
+    if [ -n "${description}" ]; then
+      printf '    description = "%s",\n' "${escaped_desc}"
+    fi
+    printf '    globs = %s,\n' "${globs_literal}"
+    printf '    alwaysApply = %s,\n' "${bool_literal}"
+    printf '    prompt = """\n'
+    printf '%s' "${escaped_body}"
+    printf '\n""",\n'
+    printf '  ),\n'
+    printf ']\n'
+  } > "${dest}"
+}
+
+is_markdown_rule() {
+  case "$1" in
+    *.md|*.mdc) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 append_rules_summary() {
   local target="$1"
   local summary marker
@@ -1769,7 +1962,11 @@ install_codex_rules() {
     local base
     base="$(basename "${file}")"
     base="${base%.*}.rules"
-    copy_file "${file}" "${dest}/${base}"
+    if is_markdown_rule "${file}"; then
+      convert_markdown_rule_to_starlark "${file}" "${dest}/${base}"
+    else
+      copy_file "${file}" "${dest}/${base}"
+    fi
   done < <(find "${src}" -type f ! -name ".DS_Store" ! -name "summary.md" -print0)
 }
 
