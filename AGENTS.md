@@ -57,6 +57,7 @@ The installer provides several conflict resolution strategies:
 
 ## Available skills
 Skills in `configs/skills/` provide specialized capabilities:
+- **karpathy-guidelines**: Behavioral guidelines to reduce common LLM coding mistakes.
 - **bash-expert**: Bash/shell scripting help and debugging
 - **changelog-generator**: Generate changelogs from git history
 - **find-skills**: Discover and install agent skills

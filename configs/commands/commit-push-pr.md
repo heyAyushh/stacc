@@ -163,12 +163,12 @@ git log origin/main..HEAD --oneline
 
 ## PR title and message rules
 
-- Detailed PR title and body format should follow `.cursor/rules/pr-message-format.mdc`.
+- Detailed PR title and body format should follow `.agents/rules/pr-message-format.mdc`.
 - This command assumes you write PR messages using the structured format defined in that rule (e.g. Overview / Changes / Tests).
 
 ## Notes
 
-- Commit message formatting and generation principles should follow `.cursor/rules/commit-message-format.mdc`.
+- Commit message formatting and generation principles should follow `.agents/rules/commit-message-format.mdc`.
 - Always review diffs with `git status` and `git diff` before running this command.
 
 ## Troubleshooting
