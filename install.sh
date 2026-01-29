@@ -1461,6 +1461,7 @@ set_conflict_mode_default() {
 }
 
 prompt_conflict_mode() {
+  local target="${1:-}"
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     CONFLICT_MODE=""
   fi
@@ -1469,7 +1470,13 @@ prompt_conflict_mode() {
   fi
 
   ui_clear_to_end
-  menu_single "Conflict detected" "Use ↑/↓ to move, Enter to select." 1 \
+  local title="Conflict detected"
+  local instructions="Use ↑/↓ to move, Enter to select."
+  if [ -n "${target}" ]; then
+    title="Conflict detected: ${target}"
+    instructions="Use ↑/↓ to move, Enter to select."
+  fi
+  menu_single "${title}" "${instructions}" 1 \
     "Overwrite" \
     "Backup existing" \
     "Skip" \
@@ -1487,6 +1494,7 @@ prompt_conflict_mode() {
 }
 
 prompt_dir_conflict_mode() {
+  local target="${1:-}"
   if [ "${CONFLICT_MODE}" = "selective" ]; then
     return 0
   fi
@@ -1495,7 +1503,13 @@ prompt_dir_conflict_mode() {
   fi
 
   ui_clear_to_end
-  menu_single "Category already exists" "Use ↑/↓ to move, Enter to select." 1 \
+  local title="Category already exists"
+  local instructions="Use ↑/↓ to move, Enter to select."
+  if [ -n "${target}" ]; then
+    title="Category already exists: ${target}"
+    instructions="Use ↑/↓ to move, Enter to select."
+  fi
+  menu_single "${title}" "${instructions}" 1 \
     "Overwrite category" \
     "Backup existing category" \
     "Skip category" \
@@ -1528,9 +1542,34 @@ apply_conflict_mode() {
 
 handle_conflict() {
   local target="$1"
-  prompt_conflict_mode
-  local mode
-  mode="$(apply_conflict_mode "${CONFLICT_MODE}")"
+  local mode=""
+
+  if [ "${CONFLICT_MODE}" = "selective" ]; then
+    ui_clear_to_end
+    local title="File conflict"
+    local instructions="Use ↑/↓ to move, Enter to select."
+    if [ -n "${target}" ]; then
+      instructions="Target: ${target}. Use ↑/↓ to move, Enter to select."
+    fi
+    menu_single "${title}" "${instructions}" 1 \
+      "Overwrite" \
+      "Backup existing" \
+      "Skip" \
+      "Overwrite all" \
+      "Backup all" \
+      "Skip all"
+    case "${MENU_RESULT}" in
+      "Overwrite") mode="overwrite" ;;
+      "Backup existing") mode="backup" ;;
+      "Skip") mode="skip" ;;
+      "Overwrite all") CONFLICT_MODE="overwrite_all"; mode="overwrite" ;;
+      "Backup all") CONFLICT_MODE="backup_all"; mode="backup" ;;
+      "Skip all") CONFLICT_MODE="skip_all"; mode="skip" ;;
+    esac
+  else
+    prompt_conflict_mode "${target}"
+    mode="$(apply_conflict_mode "${CONFLICT_MODE}")"
+  fi
 
   if [ -z "${mode}" ]; then
     die "conflict mode not set for ${target}"
@@ -1552,7 +1591,7 @@ handle_dir_conflict() {
   local target="$1"
   local mode
 
-  prompt_dir_conflict_mode
+  prompt_dir_conflict_mode "${target}"
   mode="$(apply_conflict_mode "${CONFLICT_MODE}")"
 
   if [ -z "${mode}" ]; then
