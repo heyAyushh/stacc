@@ -1440,6 +1440,7 @@ confirm_summary() {
     log_info ""
     printf "Proceed? [y/N] " > "${TTY_DEVICE}"
   fi
+  local confirm=""
   prompt_read confirm
   clear_last_ui_block
   case "${confirm}" in
@@ -1742,7 +1743,7 @@ build_starlark_globs() {
   local first=1
   local item escaped
 
-  for item in "${globs[@]}"; do
+  for item in "${globs[@]-}"; do
     [ -n "${item}" ] || continue
     escaped="$(escape_starlark_string "${item}")"
     if [ "${first}" -eq 1 ]; then
@@ -1800,8 +1801,8 @@ convert_markdown_rule_to_starlark() {
               remainder="${remainder%]}"
               IFS=',' read -r -a globs <<< "${remainder}"
               for key in "${!globs[@]}"; do
-                globs[$key]="$(trim_whitespace "${globs[$key]}")"
-                globs[$key]="$(strip_wrapping_quotes "${globs[$key]}")"
+                globs[key]="$(trim_whitespace "${globs[key]}")"
+                globs[key]="$(strip_wrapping_quotes "${globs[key]}")"
               done
             else
               value="$(strip_wrapping_quotes "${value}")"
