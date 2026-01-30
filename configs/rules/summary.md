@@ -1,7 +1,18 @@
 <!-- stacc:rules-summary -->
-# General Rules for this codebase
+# Rules for this codebase
 
-These rules apply to all code changes and interactions.
+These rules are mandatory and must be followed at all times for every code change and interaction.
+
+---
+
+## Attribution & References
+
+Source rule files live in `.agents/rules` and are the canonical versions:
+
+- `.agents/rules/clean-code.mdc`
+- `.agents/rules/commit-message-format.mdc`
+- `.agents/rules/pr-message-format.mdc`
+- `.agents/rules/prompt-injection-gaurd.mdc`
 
 ---
 

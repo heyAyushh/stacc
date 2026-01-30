@@ -1736,7 +1736,24 @@ rules_summary_target_for() {
   fi
 }
 
-install_cursor_rules() {
+rules_root_for() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+
+  if [ "${editor}" = "cursor" ]; then
+    printf '%s\n' "${target_root}/rules"
+    return 0
+  fi
+
+  if [ "${scope}" = "global" ]; then
+    printf '%s\n' "${HOME}/.agents/rules"
+  else
+    printf '%s\n' "${PROJECT_ROOT}/.agents/rules"
+  fi
+}
+
+install_rules_tree() {
   local src="$1"
   local dest="$2"
 
@@ -1746,11 +1763,7 @@ install_cursor_rules() {
     fi
   fi
 
-  while IFS= read -r -d '' file; do
-    local rel="${file#"${src}/"}"
-    local dest_file="${dest}/${rel}"
-    copy_file "${file}" "${dest_file}"
-  done < <(find "${src}" -type f ! -name ".DS_Store" ! -name "summary.md" -print0)
+  copy_tree_excluding_prefix "${src}" "${dest}" "${src}/summary.md"
 }
 
 install_rules() {
@@ -1762,8 +1775,10 @@ install_rules() {
 
   [ -d "${src}" ] || die "source category not found: ${src}"
 
+  local rules_root
+  rules_root="$(rules_root_for "${editor}" "${scope}" "${target_root}")"
+  install_rules_tree "${src}" "${rules_root}"
   if [ "${editor}" = "cursor" ]; then
-    install_cursor_rules "${src}" "${target_root}/rules"
     should_append=0
   fi
 
@@ -2431,6 +2446,8 @@ install_for_target() {
   local scope="$2"
   local target_root
   target_root="$(target_root_for "${editor}" "${scope}")"
+  local selected_skills=0
+  local selected_rules=0
 
   mkdir -p "${target_root}"
 
@@ -2443,8 +2460,10 @@ install_for_target() {
     if [ "${category}" = "mcps" ]; then
       install_mcp "${editor}" "${scope}" "${target_root}" "$(mcp_path_for "${editor}" "${scope}" "${target_root}")"
     elif [ "${category}" = "rules" ]; then
+      selected_rules=1
       install_rules "${editor}" "${scope}" "${target_root}"
     elif [ "${category}" = "skills" ]; then
+      selected_skills=1
       install_skills "${editor}" "${scope}" "${target_root}"
     elif [ "${category}" = "commands" ]; then
       install_commands "${editor}" "${scope}" "${target_root}"
@@ -2461,6 +2480,10 @@ install_for_target() {
       install_category "${category}" "${target_root}" "$(category_dest_for "${editor}" "${category}")"
     fi
   done
+
+  if [ "${selected_skills}" -eq 1 ] && [ "${selected_rules}" -eq 0 ]; then
+    install_rules "${editor}" "${scope}" "${target_root}"
+  fi
 }
 
 main() {
