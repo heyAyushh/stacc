@@ -1994,7 +1994,8 @@ build_selected_mcp_source() {
     TMP_ROOT="$(mktemp -d)"
   fi
 
-  local tmp="${TMP_ROOT}/mcp_selected.$$"
+  local tmp
+  tmp="$(mktemp "${TMP_ROOT}/mcp_selected.XXXXXX")"
   if command -v jq >/dev/null 2>&1; then
     local keys_json
     keys_json="$(printf '%s' "${selected}" | awk -F',' '{
@@ -2095,7 +2096,8 @@ merge_codex_mcp() {
     TMP_ROOT="$(mktemp -d)"
   fi
 
-  local tmp="${TMP_ROOT}/mcp_codex.$$"
+  local tmp
+  tmp="$(mktemp "${TMP_ROOT}/mcp_codex.XXXXXX")"
   local -a selected_keys=()
   local key
   while IFS= read -r key; do
@@ -2202,7 +2204,7 @@ merge_mcp() {
     fi
 
     local tmp
-    tmp="${TMP_ROOT}/mcp_merge.$$"
+    tmp="$(mktemp "${TMP_ROOT}/mcp_merge.XXXXXX")"
     jq -s '.[0] * .[1]' "${dest}" "${src}" > "${tmp}" || {
       rm -f "${tmp}"
       return 1
@@ -2318,10 +2320,10 @@ build_codex_mcp_block_fallback() {
     BEGIN {
       have_filter = (keys_csv != "")
       if (have_filter) {
-        n = split(keys_csv, tmp, ",")
+        n = split(keys_csv, split_parts, ",")
         for (i = 1; i <= n; i++) {
-          if (tmp[i] != "") {
-            keep[tmp[i]] = 1
+          if (split_parts[i] != "") {
+            keep[split_parts[i]] = 1
           }
         }
       }
@@ -2335,6 +2337,15 @@ build_codex_mcp_block_fallback() {
       gsub(/\\/, "\\\\", s)
       gsub(/"/, "\\\"", s)
       return s
+    }
+    function extract_json_val(line) {
+      sub(/^[^:]*:[[:space:]]*"/, "", line)
+      sub(/"[[:space:]]*,?[[:space:]]*$/, "", line)
+      return line
+    }
+    function extract_quoted(line) {
+      if (!match(line, /"[^"]*"/)) return ""
+      return substr(line, RSTART + 1, RLENGTH - 2)
     }
     function flush_args() {
       if (skip || !in_args) return
@@ -2355,33 +2366,34 @@ build_codex_mcp_block_fallback() {
     }
     /^[[:space:]]*"mcpServers"[[:space:]]*:/ {
       in_servers = 1
+      next
     }
-    in_servers && match($0, /^[[:space:]]*"([^"]+)"[[:space:]]*:[[:space:]]*{/, m) {
-      current = m[1]
+    in_servers && /^[[:space:]]*"[^"]+"[[:space:]]*:[[:space:]]*{/ {
+      current = extract_quoted($0)
       skip = (have_filter && !keep[current])
       start_block(current)
       next
     }
     current != "" {
-      if (match($0, /^[[:space:]]*"command"[[:space:]]*:[[:space:]]*"([^"]*)"/, m)) {
-        if (!skip) printf "command = \"%s\"\n", toml_escape(m[1])
+      if (/^[[:space:]]*"command"[[:space:]]*:[[:space:]]*"/) {
+        if (!skip) printf "command = \"%s\"\n", toml_escape(extract_json_val($0))
         next
       }
-      if (match($0, /^[[:space:]]*"type"[[:space:]]*:[[:space:]]*"([^"]*)"/, m)) {
-        if (!skip) printf "type = \"%s\"\n", toml_escape(m[1])
+      if (/^[[:space:]]*"type"[[:space:]]*:[[:space:]]*"/) {
+        if (!skip) printf "type = \"%s\"\n", toml_escape(extract_json_val($0))
         next
       }
-      if (match($0, /^[[:space:]]*"url"[[:space:]]*:[[:space:]]*"([^"]*)"/, m)) {
-        if (!skip) printf "url = \"%s\"\n", toml_escape(m[1])
+      if (/^[[:space:]]*"url"[[:space:]]*:[[:space:]]*"/) {
+        if (!skip) printf "url = \"%s\"\n", toml_escape(extract_json_val($0))
         next
       }
-      if (match($0, /^[[:space:]]*"args"[[:space:]]*:[[:space:]]*\[/)) {
+      if (/^[[:space:]]*"args"[[:space:]]*:[[:space:]]*\[/) {
         in_args = 1
         args_count = 0
         if (match($0, /\[[^]]*]/)) {
-          tmp = $0
-          while (match(tmp, /"([^"]*)"/, m)) {
-            args[++args_count] = m[1]
+          tmp = substr($0, RSTART, RLENGTH)
+          while (match(tmp, /"[^"]*"/)) {
+            args[++args_count] = substr(tmp, RSTART + 1, RLENGTH - 2)
             tmp = substr(tmp, RSTART + RLENGTH)
           }
           flush_args()
@@ -2390,8 +2402,8 @@ build_codex_mcp_block_fallback() {
       }
       if (in_args) {
         tmp = $0
-        while (match(tmp, /"([^"]*)"/, m)) {
-          args[++args_count] = m[1]
+        while (match(tmp, /"[^"]*"/)) {
+          args[++args_count] = substr(tmp, RSTART + 1, RLENGTH - 2)
           tmp = substr(tmp, RSTART + RLENGTH)
         }
         if (index($0, "]")) {
