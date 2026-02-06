@@ -1108,11 +1108,15 @@ is_category_supported() {
   local category="$1"
   local supported="$2"
   local item
+  local saved_ifs="${IFS}"
+  IFS=' '
   for item in ${supported}; do
     if [ "${item}" = "${category}" ]; then
+      IFS="${saved_ifs}"
       return 0
     fi
   done
+  IFS="${saved_ifs}"
   return 1
 }
 
@@ -1126,21 +1130,27 @@ get_available_categories() {
   local -a available=()
   local cat editor supported
 
+  local saved_ifs="${IFS}"
   for cat in "${base[@]}"; do
     local ok=1
+    IFS=' '
     for editor in ${SELECTED_EDITORS}; do
+      IFS="${saved_ifs}"
       supported="$(get_supported_categories "${editor}" "${scope}")"
       if ! is_category_supported "${cat}" "${supported}"; then
         ok=0
         break
       fi
     done
+    IFS="${saved_ifs}"
     if [ "${ok}" -eq 1 ]; then
       available+=("${cat}")
     fi
   done
 
+  IFS=' '
   printf '%s' "${available[*]}"
+  IFS="${saved_ifs}"
 }
 
 normalize_selected_categories() {
