@@ -1230,15 +1230,15 @@ mcp_category_selected() {
 extract_mcp_keys_fallback() {
   local src="$1"
   awk '
-    BEGIN { in=0; depth=0 }
+    BEGIN { inside=0; depth=0 }
     /"mcpServers"[[:space:]]*:[[:space:]]*{/ {
-      in=1
+      inside=1
       depth=1
       next
     }
-    in {
-      if (depth == 1 && match($0, /"[^"]+"[[:space:]]*:[[:space:]]*{/)) {
-        key=substr($0, RSTART + 1, RLENGTH - 3)
+    inside {
+      if (depth == 1 && match($0, /"[^"]+"/)) {
+        key=substr($0, RSTART + 1, RLENGTH - 2)
         print key
       }
       depth += gsub(/{/, "{")
