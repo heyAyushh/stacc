@@ -163,6 +163,7 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/commands/ultrathink.md` | Deep reasoning mode protocol (original) |  | Original / Sources Not Found |  |
 | `configs/commands/init.md` | AGENTS.md initialization |  | Original / Sources Not Found |  |
 | `configs/agents/verifier.md` | Work verification agent |  | Original / Sources Not Found |  |
+| `configs/stacks/rust/ownership/`, `error-handling/`, `concurrency/`, `zero-cost-abstractions/`, `type-driven-design/`, `performance/`, `anti-patterns/`, `coding-guidelines/` | Rust skill system — layered guidance for ownership, errors, concurrency, types, and performance | Adapted from the layered skill system structure | [actionbook/rust-skills](https://github.com/actionbook/rust-skills) |  |
 
 ## License
 
