@@ -1,0 +1,9 @@
+{
+  "default_editors": ["cursor", "claude", "codex"],
+  "default_scope": "project",
+  "default_categories": ["rules", "skills", "stack", "mcps"],
+  "default_stacks": [],
+  "default_mcp_servers": [],
+  "conflict_mode": "backup",
+  "dry_run": true
+}

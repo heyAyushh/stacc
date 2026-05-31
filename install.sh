@@ -868,8 +868,9 @@ Options:
   --all                Install to all supported editors
   --global             Install to global locations
   --project            Install to project locations
-  --categories LIST    Comma-separated categories (commands,rules,agents,skills,stack,hooks,mcps)
+  --categories LIST    Comma-separated categories (commands,rules,agents,skills,stack,hooks,mcps,cursor-plugins,codex-skills)
   --stacks LIST        Comma-separated stack skills from configs/stack (or "all")
+  --mcp-servers LIST   Comma-separated MCP server keys from configs/mcps/mcp.json
   --conflict MODE      Conflict mode: overwrite, backup, skip, selective
   --yes                Non-interactive with safe defaults
   --dry-run            Print actions without changing files
@@ -988,6 +989,12 @@ parse_args() {
         SELECTED_STACKS="${SELECTED_STACKS// /}"
         shift 2
         ;;
+      --mcp-servers)
+        [ $# -ge 2 ] || die "--mcp-servers requires a list"
+        SELECTED_MCP_SERVERS="$2"
+        SELECTED_MCP_SERVERS="${SELECTED_MCP_SERVERS// /}"
+        shift 2
+        ;;
       --conflict)
         [ $# -ge 2 ] || die "--conflict requires a mode"
         CONFLICT_MODE="$2"
@@ -1080,19 +1087,27 @@ array_contains() {
 get_supported_categories() {
   local editor="$1"
   local scope="$2"
+  local hooks_category=""
+
+  if [ -d "${ROOT_DIR}/configs/hooks" ]; then
+    hooks_category=" hooks"
+  fi
 
   case "${editor}" in
-    cursor|claude)
-      printf '%s' "commands rules agents skills stack hooks mcps"
+    cursor)
+      printf '%s' "commands rules agents skills stack${hooks_category} mcps cursor-plugins"
+      ;;
+    claude)
+      printf '%s' "commands rules agents skills stack${hooks_category} mcps"
       ;;
     opencode)
       printf '%s' "commands rules agents skills stack mcps"
       ;;
     codex)
       if [ "${scope}" = "global" ]; then
-        printf '%s' "commands rules skills stack mcps"
+        printf '%s' "commands rules skills stack mcps codex-skills"
       else
-        printf '%s' "commands rules skills stack"
+        printf '%s' "commands rules skills stack codex-skills"
       fi
       ;;
     ampcode)
@@ -1122,7 +1137,7 @@ is_category_disabled() {
 
 get_available_categories() {
   local scope="$1"
-  local -a base=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps")
+  local -a base=("commands" "rules" "agents" "skills" "stack" "hooks" "mcps" "cursor-plugins" "codex-skills")
   local -a available=()
   local cat editor supported
 
@@ -1440,6 +1455,7 @@ confirm_summary() {
     log_info ""
     printf "Proceed? [y/N] " > "${TTY_DEVICE}"
   fi
+  local confirm=""
   prompt_read confirm
   clear_last_ui_block
   case "${confirm}" in
@@ -1855,6 +1871,42 @@ install_skills() {
     fi
   fi
   copy_tree "${src}" "${dest}"
+}
+
+install_cursor_plugins() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+  local src="${ROOT_DIR}/configs/cursor-plugins"
+
+  [ "${editor}" = "cursor" ] || die "cursor-plugins category is only supported for Cursor"
+  [ -d "${src}" ] || die "source category not found: ${src}"
+
+  if [ -d "${src}/skills" ]; then
+    copy_tree "${src}/skills" "$(skills_root_for "${editor}" "${scope}" "${target_root}")"
+  fi
+
+  if [ -d "${src}/agents" ]; then
+    copy_tree "${src}/agents" "${target_root}/agents"
+  fi
+
+  if [ -d "${src}/hooks" ]; then
+    copy_tree "${src}/hooks" "${target_root}/hooks"
+  fi
+}
+
+install_codex_skills() {
+  local editor="$1"
+  local scope="$2"
+  local target_root="$3"
+  local src="${ROOT_DIR}/configs/codex-skills"
+
+  [ "${editor}" = "codex" ] || die "codex-skills category is only supported for Codex"
+  [ -d "${src}" ] || die "source category not found: ${src}"
+
+  if [ -d "${src}/skills" ]; then
+    copy_tree "${src}/skills" "$(skills_root_for "${editor}" "${scope}" "${target_root}")"
+  fi
 }
 
 install_commands() {
@@ -2436,7 +2488,7 @@ mcp_path_for() {
 validate_category() {
   local cat="$1"
   case "${cat}" in
-    commands|rules|agents|skills|stack|hooks|mcps) return 0 ;;
+    commands|rules|agents|skills|stack|hooks|mcps|cursor-plugins|codex-skills) return 0 ;;
     *) die "invalid category: ${cat}" ;;
   esac
 }
@@ -2465,6 +2517,12 @@ install_for_target() {
     elif [ "${category}" = "skills" ]; then
       selected_skills=1
       install_skills "${editor}" "${scope}" "${target_root}"
+    elif [ "${category}" = "cursor-plugins" ]; then
+      selected_skills=1
+      install_cursor_plugins "${editor}" "${scope}" "${target_root}"
+    elif [ "${category}" = "codex-skills" ]; then
+      selected_skills=1
+      install_codex_skills "${editor}" "${scope}" "${target_root}"
     elif [ "${category}" = "commands" ]; then
       install_commands "${editor}" "${scope}" "${target_root}"
     elif [ "${category}" = "stack" ]; then
