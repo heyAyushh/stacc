@@ -33,16 +33,6 @@ impl Editor {
         Editor::Ampcode,
     ];
 
-    pub fn install_flag(self) -> &'static str {
-        match self {
-            Editor::Cursor => "--cursor",
-            Editor::Claude => "--claude",
-            Editor::Opencode => "--opencode",
-            Editor::Codex => "--codex",
-            Editor::Ampcode => "--ampcode",
-        }
-    }
-
     pub fn label(self) -> &'static str {
         match self {
             Editor::Cursor => "Cursor",
@@ -71,15 +61,6 @@ impl fmt::Display for Editor {
 pub enum Scope {
     Global,
     Project,
-}
-
-impl Scope {
-    pub fn install_flag(self) -> &'static str {
-        match self {
-            Scope::Global => "--global",
-            Scope::Project => "--project",
-        }
-    }
 }
 
 impl fmt::Display for Scope {
@@ -315,7 +296,9 @@ pub fn repo_root_from_option(root: Option<PathBuf>) -> Result<PathBuf> {
     if !configs.is_dir() {
         anyhow::bail!("{} does not contain configs/", candidate.display());
     }
-    Ok(candidate)
+    candidate
+        .canonicalize()
+        .with_context(|| format!("failed to canonicalize {}", candidate.display()))
 }
 
 fn discover_child_dirs(parent: &Path) -> Result<Vec<String>> {

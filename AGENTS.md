@@ -3,11 +3,14 @@
 This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE (https://cursor.com) when working with code in this repository.
 
 ## What this repo is
-- `stacc` is a set of **agent configuration files** (rules/commands/skills/agents/hooks) plus an **interactive installer** (`install.sh`) that copies them into tool-specific global or project folders.
+- `stacc` is a set of **agent configuration files** (rules/commands/skills/agents/hooks) plus a Rust CLI/TUI (`stacc`) that copies them into tool-specific global or project folders.
+- `install.sh` is a bootstrap and legacy-flag adapter. It installs or runs the Rust binary, then forwards installation work to `stacc install`.
 
 ## Common commands
-- **Run installer (local checkout)**: `./install.sh`
+- **Run installer (local checkout)**: `cargo run`
+- **Run legacy bootstrap (local checkout)**: `./install.sh`
 - **Run installer (remote / curl)**: `curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash`
+- **Run full Rust check gate**: `cargo run -- check`
 - **Validate installer syntax**: `bash -n install.sh`
 - **Lint installer (recommended)**: `shellcheck -x install.sh`
 
@@ -20,12 +23,13 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE (http
   - `hooks/`: hook prompts/docs.
   - `mcps/`: MCP server configuration (`mcp.json`) and notes.
 - `.cursor/`: repo-local Cursor setup used for developing on this repo itself (commands/skills, etc.).
-- `install.sh`: the “product” — interactive TUI installer with conflict handling (force/backup/skip/selective) and MCP config install/merge logic.
+- `src/`: Rust CLI/TUI product. `src/install.rs` owns install planning/execution, conflict handling, rules summaries, and MCP config install/merge logic.
+- `install.sh`: shell bootstrap and legacy-flag adapter for curl/local convenience.
 
 ## Installer behavior notes (important for edits)
 - **macOS compatibility**: prefer Bash 3.2-safe patterns (no associative arrays).
-- **MCP config**: `configs/mcps/mcp.json` is copied (or optionally merged when `jq` is available) into the target tool’s expected MCP file location.
-- **Conflict resolution**: the installer supports overwrite, backup (timestamped), skip, and per-file selective decisions when targets already exist.
+- **MCP config**: `configs/mcps/mcp.json` is installed by Rust. JSON targets use recursive `serde_json` merge; Codex TOML targets use `toml_edit`; AMP settings are wrapped under `amp.mcpServers`.
+- **Conflict resolution**: the Rust installer supports overwrite, backup (timestamped), skip, and selective per-file handling when targets already exist.
 
 ## Supported tools and target directories
 The installer supports multiple AI coding tools with different target directory structures:
@@ -43,17 +47,18 @@ MCP configuration file locations vary by tool:
 
 ## MCP configuration merging
 When installing MCP configs, the installer:
-1. Checks if `jq` is available for JSON merging
-2. If target exists and `jq` is present: prompts to merge (interactive) or merges automatically (non-interactive)
-3. Merging uses `jq -s '.[0] * .[1]'` to deep-merge JSON objects (destination first, then source)
-4. If `jq` is unavailable or merge declined: overwrites the target file (subject to conflict resolution)
+1. Reads `configs/mcps/mcp.json`
+2. Filters selected MCP server keys when `--mcp-server` is provided
+3. Recursively merges JSON object targets with destination first, then source
+4. Renders Codex MCP servers into `[mcp_servers.<name>]` TOML tables with `toml_edit`
+5. Applies the selected conflict mode before writing changed config files
 
 ## Conflict resolution modes
 The installer provides several conflict resolution strategies:
 - **Overwrite**: Replace existing files
-- **Backup**: Create timestamped backups (`.bak.YYYYMMDDHHMMSS`)
+- **Backup**: Create timestamped backups (`.bak.<timestamp>`)
 - **Skip**: Leave existing files unchanged
-- **Selective**: Per-file decision during installation
+- **Selective**: Resolve conflicts per file instead of replacing a whole directory
 
 ## Available skills
 Skills in `configs/skills/` provide specialized capabilities:
@@ -80,11 +85,12 @@ Stacks in `configs/stacks/` are framework/language-specific skill bundles:
 ## Development workflow
 When adding or modifying configurations:
 1. Edit files in `configs/` directory structure
-2. Test locally with `./install.sh`
-3. Validate with `bash -n install.sh` and lint with `shellcheck -x install.sh`
-4. Ensure Bash 3.2 compatibility (avoid associative arrays, use indexed arrays)
-5. For MCP changes: verify JSON validity and test merge behavior
-6. Update README.md attributions if adapting from external sources
+2. Test locally with `cargo run -- install --dry-run --print-plan ...`
+3. Validate with `cargo run -- check`
+4. Validate bootstrap syntax with `bash -n install.sh` and lint with `shellcheck -x install.sh` when available
+5. Ensure Bash 3.2 compatibility in `install.sh` (avoid associative arrays and Bash 4-only features)
+6. For MCP changes: verify JSON validity and test merge behavior
+7. Update README.md attributions if adapting from external sources
 
 ## Adding new configurations
 

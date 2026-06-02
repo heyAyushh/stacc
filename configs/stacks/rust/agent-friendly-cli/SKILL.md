@@ -102,7 +102,7 @@ Examples:
 
 ## Installability Contract
 
-Cargo-installed binaries must work outside the checkout. For stacc, the binary bundles its installer and configs, then materializes them at runtime.
+Cargo-installed binaries must work outside the checkout. For stacc, the binary owns the install engine, bundles the bootstrap script and configs, then materializes them at runtime.
 
 ```bash
 cargo install --git https://github.com/heyAyushh/stacc --locked --force
@@ -127,7 +127,7 @@ It runs:
 - `bash -n install.sh`
 - `shellcheck -x install.sh` when `shellcheck` is installed
 - Rust JSON validation for MCP, panel, and skill metadata files
-- `cargo install --path` plus installed-binary smoke checks
+- `cargo install --path` plus installed-binary smoke checks against native Rust install planning
 
 Use this stricter CI shape when shell lint is required:
 

@@ -26,7 +26,7 @@ cd stacc
 ./install.sh
 ```
 
-The interactive installer will guide you through:
+The Rust control panel will guide you through:
 - **Editor selection**: Cursor, Claude Code, OpenCode, Codex, AMP Code
 - **Scope selection**: Global (all projects) or project-specific
 - **Category selection**: commands, rules, agents, skills, stack, hooks, mcps, cursor-plugins, codex-skills
@@ -37,6 +37,8 @@ The interactive installer will guide you through:
 Stacks are framework/language-specific skill bundles under `configs/stacks/`. When you select the `stacks` category, the installer prompts you to choose one or more stack folders and installs them into each editor's `skills/` directory.
 
 #### Installer options
+
+`install.sh` is now a bootstrap and legacy-flag adapter. These commands install or run `stacc`, then forward to the Rust install engine:
 
 ```bash
 ./install.sh --categories commands,rules,skills,stack --stacks bun,typescript
@@ -105,7 +107,7 @@ stacc check
 ```
 
 - Panel segments: Install, Customise, Version, Skills, Hooks/MCP
-- Install execution delegates to `install.sh` with typed Rust planning and explicit dry-run/yes gates
+- Install execution is native Rust: file copying, conflict handling, rules summaries, MCP JSON/TOML merge, and installed-binary smoke checks use typed Rust planning with explicit dry-run/yes gates
 - Metadata sync writes `configs/metadata/skills.lock.json` with each skill's local path, license, version, source URL, declared origin commit, and current origin HEAD commit when GitHub lookup is enabled
 - Custom defaults live in `configs/stacc-panel.json`
 
