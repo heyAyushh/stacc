@@ -92,6 +92,7 @@ Useful non-interactive commands:
 cargo run -- status
 cargo run -- install --editor cursor --editor codex --scope project --category rules --category skills --dry-run --print-plan
 cargo run -- sync-metadata --refresh-origin
+cargo run -- check
 ```
 
 After `cargo install`, drop `cargo run --`:
@@ -100,6 +101,7 @@ After `cargo install`, drop `cargo run --`:
 stacc
 stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --dry-run
 stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --yes
+stacc check
 ```
 
 - Panel segments: Install, Customise, Version, Skills, Hooks/MCP
@@ -112,10 +114,10 @@ stacc install --editor codex --scope global --category rules --category skills -
 Run the full local gate before pushing installer or control-panel changes:
 
 ```bash
-./scripts/check.sh
+stacc check
 ```
 
-The gate runs Rust format checks, tests, clippy, installer syntax checks, MCP/panel/skill metadata JSON validation, `cargo install --path`, and smoke checks against the installed `stacc` binary. It also runs `shellcheck -x install.sh` when `shellcheck` is installed.
+The gate runs Rust format checks, tests, clippy, installer syntax checks, MCP/panel/skill metadata JSON validation, `cargo install --path`, and smoke checks against the installed `stacc` binary. It also runs `shellcheck -x install.sh` when `shellcheck` is installed. Use `stacc check --require-shellcheck` when CI must fail if `shellcheck` is missing.
 
 ### Target Directories
 

@@ -1,5 +1,6 @@
 mod bundle;
 mod catalog;
+mod check;
 mod config;
 mod git_utils;
 mod install;
@@ -13,6 +14,7 @@ use clap::{Args, Parser, Subcommand};
 
 use bundle::resolve_runtime_root;
 use catalog::{discover_catalog, Category, ConflictMode, Editor, Scope};
+use check::{run_checks, CheckOptions};
 use config::load_panel_config;
 use install::{build_install_plan, execute_install_request, print_plan, InstallRequest};
 use metadata::{default_sync_options, sync_metadata};
@@ -52,6 +54,8 @@ enum Command {
     Install(InstallArgs),
     /// Sync generated skill license/version/origin metadata.
     SyncMetadata(SyncMetadataArgs),
+    /// Run repository checks and installed-binary smoke tests.
+    Check(CheckArgs),
 }
 
 #[derive(Debug, Args)]
@@ -102,12 +106,20 @@ struct SyncMetadataArgs {
     json: bool,
 }
 
+#[derive(Debug, Args)]
+#[command(after_long_help = CHECK_EXAMPLES)]
+struct CheckArgs {
+    #[arg(long, help = "Fail when shellcheck is not installed")]
+    require_shellcheck: bool,
+}
+
 const TOP_LEVEL_EXAMPLES: &str = "\
 Examples:
   stacc
   stacc --panel
   stacc status
   stacc install --editor codex --scope global --category rules --category skills --dry-run
+  stacc check
 ";
 
 const STATUS_EXAMPLES: &str = "\
@@ -129,6 +141,12 @@ Examples:
   stacc sync-metadata --refresh-origin
 ";
 
+const CHECK_EXAMPLES: &str = "\
+Examples:
+  stacc check
+  stacc check --require-shellcheck
+";
+
 fn main() -> Result<()> {
     let cli = Cli::parse();
     let root = resolve_runtime_root(cli.root)?;
@@ -142,6 +160,7 @@ fn main() -> Result<()> {
         Some(Command::Status(args)) => run_status_command(root, args),
         Some(Command::Install(args)) => run_install_command(root, args),
         Some(Command::SyncMetadata(args)) => run_sync_metadata_command(root, args),
+        Some(Command::Check(args)) => run_check_command(root, args),
     }
 }
 
@@ -233,4 +252,11 @@ fn run_sync_metadata_command(root: PathBuf, args: SyncMetadataArgs) -> Result<()
         println!("output: {}", report.output.display());
     }
     Ok(())
+}
+
+fn run_check_command(root: PathBuf, args: CheckArgs) -> Result<()> {
+    run_checks(&CheckOptions {
+        root,
+        require_shellcheck: args.require_shellcheck,
+    })
 }

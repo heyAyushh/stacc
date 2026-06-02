@@ -82,6 +82,7 @@ Examples:
   stacc install --editor codex --scope global --category rules --category skills --dry-run
   stacc install --editor codex --scope global --category rules --category skills --yes
   stacc sync-metadata --refresh-origin
+  stacc check
 
 Output:
   Exit 0 when the command succeeds.
@@ -116,7 +117,7 @@ Use `STACC_BUNDLE_ROOT=/path/to/cache` when an agent needs deterministic bundle 
 For this repo, use the single check entrypoint:
 
 ```bash
-./scripts/check.sh
+stacc check
 ```
 
 It runs:
@@ -125,8 +126,14 @@ It runs:
 - `cargo clippy --workspace --all-targets --all-features -- -D warnings`
 - `bash -n install.sh`
 - `shellcheck -x install.sh` when `shellcheck` is installed
-- JSON validation for MCP, panel, and skill metadata files
+- Rust JSON validation for MCP, panel, and skill metadata files
 - `cargo install --path` plus installed-binary smoke checks
+
+Use this stricter CI shape when shell lint is required:
+
+```bash
+stacc check --require-shellcheck
+```
 
 ## Quick Review Checklist
 
