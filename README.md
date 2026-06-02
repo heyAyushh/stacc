@@ -107,6 +107,16 @@ stacc install --editor codex --scope global --category rules --category skills -
 - Metadata sync writes `configs/metadata/skills.lock.json` with each skill's local path, license, version, source URL, declared origin commit, and current origin HEAD commit when GitHub lookup is enabled
 - Custom defaults live in `configs/stacc-panel.json`
 
+### Checks
+
+Run the full local gate before pushing installer or control-panel changes:
+
+```bash
+./scripts/check.sh
+```
+
+The gate runs Rust format checks, tests, clippy, installer syntax checks, MCP/panel/skill metadata JSON validation, `cargo install --path`, and smoke checks against the installed `stacc` binary. It also runs `shellcheck -x install.sh` when `shellcheck` is installed.
+
 ### Target Directories
 
 | Scope | Codex | Claude Code | Cursor | Cursor Cloud Agents | OpenCode | AMP Code | GitHub (Copilot) | VS Code |

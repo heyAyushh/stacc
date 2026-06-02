@@ -77,25 +77,56 @@ Document any project-specific differences near the CLI help and tests.
 
 ```text
 Examples:
-  tool check src/lib.rs
-  tool check --stdin --stdin-path src/lib.rs < src/lib.rs
-  tool check --json src/lib.rs
+  stacc
+  stacc status --json
+  stacc install --editor codex --scope global --category rules --category skills --dry-run
+  stacc install --editor codex --scope global --category rules --category skills --yes
+  stacc sync-metadata --refresh-origin
 
 Output:
-  Exit 0 when no issues are found.
-  Exit 1 when issues are found.
+  Exit 0 when the command succeeds.
+  Exit 1 when the command cannot complete.
   Exit 2 for invalid command usage.
 ```
 
 ## Error Message Shape
 
 ```text
-Error: check requires a Rust file path or --stdin.
+Error: install requires at least one --editor and one --category.
 
 Examples:
-  tool check src/lib.rs
-  tool check --stdin --stdin-path src/lib.rs < src/lib.rs
+  stacc install --editor codex --scope global --category rules --category skills --dry-run
+  stacc install --editor codex --scope global --category rules --category skills --yes
 ```
+
+## Installability Contract
+
+Cargo-installed binaries must work outside the checkout. For stacc, the binary bundles its installer and configs, then materializes them at runtime.
+
+```bash
+cargo install --git https://github.com/heyAyushh/stacc --locked --force
+stacc
+stacc status --json
+```
+
+Use `STACC_BUNDLE_ROOT=/path/to/cache` when an agent needs deterministic bundle output.
+
+## Project Checks
+
+For this repo, use the single check entrypoint:
+
+```bash
+./scripts/check.sh
+```
+
+It runs:
+- `cargo fmt --all -- --check`
+- `cargo test`
+- `cargo clippy --workspace --all-targets --all-features -- -D warnings`
+- `bash -n install.sh`
+- `shellcheck -x install.sh` when `shellcheck` is installed
+- JSON validation for MCP, panel, and skill metadata files
+- `cargo install --path` plus installed-binary smoke checks
 
 ## Quick Review Checklist
 
