@@ -1019,7 +1019,7 @@ fn effective_conflict_mode(request: &InstallRequest) -> ConflictMode {
 
 fn plan_backup_timestamp(request: &InstallRequest) -> String {
     if request.dry_run {
-        "YYYYMMDDHHMMSS".to_string()
+        "timestamp".to_string()
     } else {
         backup_timestamp()
     }
