@@ -440,15 +440,13 @@ fn install_commands(request: &InstallRequest, plan: &mut InstallPlan) -> Result<
 }
 
 fn install_stacks(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()> {
-    if request.stacks.is_empty() {
+    let selected_stacks = selected_stack_names(request)?;
+    if selected_stacks.is_empty() {
         return Ok(());
     }
 
     let destination_root = skills_root_for(plan.editor, plan.scope, &plan.target_root)?;
-    for stack in selected_stack_names(request)? {
-        if stack.is_empty() {
-            continue;
-        }
+    for stack in selected_stacks {
         let source = request.root.join(STACKS_DIR).join(&stack);
         let destination = destination_root.join(&stack);
         copy_tree(
@@ -464,11 +462,29 @@ fn install_stacks(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()
 }
 
 fn selected_stack_names(request: &InstallRequest) -> Result<Vec<String>> {
-    if request.stacks.iter().any(|stack| stack == "all") {
-        return available_stack_names(&request.root);
+    let selected = normalized_selected_names(&request.stacks);
+    if selected.is_empty() {
+        return Ok(selected);
     }
 
-    Ok(request.stacks.clone())
+    let available = available_stack_names(&request.root)?;
+    if selected.iter().any(|stack| stack == "all") {
+        if selected.len() > 1 {
+            anyhow::bail!("--stack all cannot be combined with specific stack names");
+        }
+        return Ok(available);
+    }
+
+    let unknown = unknown_names(&selected, &available);
+    if !unknown.is_empty() {
+        anyhow::bail!(
+            "unknown stack(s): {}. Available: {}",
+            unknown.join(","),
+            available.join(",")
+        );
+    }
+
+    Ok(selected)
 }
 
 fn available_stack_names(root: &Path) -> Result<Vec<String>> {
@@ -511,8 +527,7 @@ fn install_mcp(
         }
     };
 
-    plan_write_file(request, plan, destination, contents);
-    Ok(())
+    plan_write_file(request, plan, destination, contents)
 }
 
 fn selected_mcp_config(request: &InstallRequest) -> Result<Value> {
@@ -521,7 +536,8 @@ fn selected_mcp_config(request: &InstallRequest) -> Result<Value> {
         fs::read_to_string(&path).with_context(|| format!("failed to read {}", path.display()))?;
     let source: Value = serde_json::from_str(&contents)
         .with_context(|| format!("invalid MCP JSON {}", path.display()))?;
-    if request.mcp_servers.is_empty() {
+    let selected_servers = normalized_selected_names(&request.mcp_servers);
+    if selected_servers.is_empty() {
         return Ok(source);
     }
 
@@ -529,16 +545,57 @@ fn selected_mcp_config(request: &InstallRequest) -> Result<Value> {
         .get(MCP_SERVERS_KEY)
         .and_then(Value::as_object)
         .context("MCP config missing mcpServers object")?;
+    let available = available_mcp_server_names(servers);
+    let unknown = unknown_names(&selected_servers, &available);
+    if !unknown.is_empty() {
+        anyhow::bail!(
+            "unknown MCP server(s): {}. Available: {}",
+            unknown.join(","),
+            available.join(",")
+        );
+    }
+
     let mut selected = Map::new();
-    for key in &request.mcp_servers {
-        if let Some(server) = servers.get(key) {
-            selected.insert(key.clone(), server.clone());
-        }
+    for key in selected_servers {
+        let server = servers
+            .get(&key)
+            .with_context(|| format!("MCP server disappeared while selecting {key}"))?;
+        selected.insert(key, server.clone());
     }
 
     let mut root = Map::new();
     root.insert(MCP_SERVERS_KEY.to_string(), Value::Object(selected));
     Ok(Value::Object(root))
+}
+
+fn normalized_selected_names(values: &[String]) -> Vec<String> {
+    let mut names = Vec::new();
+    for value in values {
+        let name = value.trim();
+        if name.is_empty() || names.iter().any(|existing| existing == name) {
+            continue;
+        }
+        names.push(name.to_string());
+    }
+    names
+}
+
+fn unknown_names(selected: &[String], available: &[String]) -> Vec<String> {
+    selected
+        .iter()
+        .filter(|name| {
+            !available
+                .iter()
+                .any(|available_name| available_name == *name)
+        })
+        .cloned()
+        .collect()
+}
+
+fn available_mcp_server_names(servers: &Map<String, Value>) -> Vec<String> {
+    let mut names = servers.keys().cloned().collect::<Vec<_>>();
+    names.sort();
+    names
 }
 
 fn merged_json_target(source: &Value, destination: &Path) -> Result<Value> {
@@ -657,14 +714,23 @@ fn copy_tree(
         anyhow::bail!("missing source directory: {}", source.display());
     }
 
-    if directory_conflict_mode == DirectoryConflictMode::WholeDirectory
+    let source_files = collect_source_files(source, exclude_prefix)?;
+    let destination_will_be_replaced = if directory_conflict_mode
+        == DirectoryConflictMode::WholeDirectory
         && is_nonempty_directory(destination)?
-        && !plan_directory_conflict(request, plan, destination)
     {
-        return Ok(());
-    }
+        if source_tree_matches_destination(source, destination, &source_files)? {
+            return Ok(());
+        }
+        if !plan_directory_conflict(request, plan, destination) {
+            return Ok(());
+        }
+        true
+    } else {
+        false
+    };
 
-    for source_file in collect_source_files(source, exclude_prefix)? {
+    for source_file in source_files {
         let relative_path = source_file.strip_prefix(source).with_context(|| {
             format!(
                 "failed to derive relative path for {}",
@@ -672,10 +738,47 @@ fn copy_tree(
             )
         })?;
         let destination_file = destination.join(relative_path);
-        plan_copy_file(request, plan, source_file, destination_file);
+        plan_copy_file_with_state(
+            request,
+            plan,
+            source_file,
+            destination_file,
+            destination_will_be_replaced,
+        )?;
     }
 
     Ok(())
+}
+
+fn source_tree_matches_destination(
+    source: &Path,
+    destination: &Path,
+    source_files: &[PathBuf],
+) -> Result<bool> {
+    if !destination.is_dir() {
+        return Ok(false);
+    }
+
+    let destination_files = collect_source_files(destination, None)?;
+    if source_files.len() != destination_files.len() {
+        return Ok(false);
+    }
+
+    for source_file in source_files {
+        let relative_path = source_file.strip_prefix(source).with_context(|| {
+            format!(
+                "failed to derive relative path for {}",
+                source_file.display()
+            )
+        })?;
+        let destination_file = destination.join(relative_path);
+        if !destination_file.is_file() || !files_have_same_contents(source_file, &destination_file)?
+        {
+            return Ok(false);
+        }
+    }
+
+    Ok(true)
 }
 
 fn collect_source_files(source: &Path, exclude_prefix: Option<&Path>) -> Result<Vec<PathBuf>> {
@@ -711,19 +814,30 @@ fn collect_source_files_inner(
     Ok(())
 }
 
-fn plan_copy_file(
+fn plan_copy_file_with_state(
     request: &InstallRequest,
     plan: &mut InstallPlan,
     source: PathBuf,
     destination: PathBuf,
-) {
-    if destination.exists() && !plan_file_conflict(request, plan, &destination) {
-        return;
+    destination_will_be_replaced: bool,
+) -> Result<()> {
+    if !destination_will_be_replaced
+        && destination.is_file()
+        && files_have_same_contents(&source, &destination)?
+    {
+        return Ok(());
+    }
+    if !destination_will_be_replaced
+        && destination.exists()
+        && !plan_file_conflict(request, plan, &destination)
+    {
+        return Ok(());
     }
     plan.operations.push(InstallOperation::CopyFile {
         source,
         destination,
     });
+    Ok(())
 }
 
 fn plan_write_file(
@@ -731,14 +845,18 @@ fn plan_write_file(
     plan: &mut InstallPlan,
     destination: PathBuf,
     contents: String,
-) {
+) -> Result<()> {
+    if destination.is_file() && file_has_contents(&destination, contents.as_bytes())? {
+        return Ok(());
+    }
     if destination.exists() && !plan_file_conflict(request, plan, &destination) {
-        return;
+        return Ok(());
     }
     plan.operations.push(InstallOperation::WriteFile {
         destination,
         contents,
     });
+    Ok(())
 }
 
 fn append_rules_summary(
@@ -836,7 +954,14 @@ fn plan_file_conflict(
             });
             true
         }
-        ConflictMode::Overwrite => true,
+        ConflictMode::Overwrite => {
+            if destination.is_dir() {
+                plan.operations.push(InstallOperation::RemovePath {
+                    path: destination.to_path_buf(),
+                });
+            }
+            true
+        }
     }
 }
 
@@ -905,6 +1030,32 @@ fn ensure_parent(path: &Path) -> Result<()> {
             .with_context(|| format!("failed to create {}", parent.display()))?;
     }
     Ok(())
+}
+
+fn files_have_same_contents(left: &Path, right: &Path) -> Result<bool> {
+    let left_metadata =
+        fs::metadata(left).with_context(|| format!("failed to inspect {}", left.display()))?;
+    let right_metadata =
+        fs::metadata(right).with_context(|| format!("failed to inspect {}", right.display()))?;
+    if left_metadata.len() != right_metadata.len() {
+        return Ok(false);
+    }
+    let left_contents =
+        fs::read(left).with_context(|| format!("failed to read {}", left.display()))?;
+    let right_contents =
+        fs::read(right).with_context(|| format!("failed to read {}", right.display()))?;
+    Ok(left_contents == right_contents)
+}
+
+fn file_has_contents(path: &Path, expected_contents: &[u8]) -> Result<bool> {
+    let metadata =
+        fs::metadata(path).with_context(|| format!("failed to inspect {}", path.display()))?;
+    if metadata.len() != expected_contents.len() as u64 {
+        return Ok(false);
+    }
+    let actual_contents =
+        fs::read(path).with_context(|| format!("failed to read {}", path.display()))?;
+    Ok(actual_contents == expected_contents)
 }
 
 fn is_nonempty_directory(path: &Path) -> Result<bool> {
@@ -1049,9 +1200,38 @@ fn home_dir() -> Result<PathBuf> {
 mod tests {
     use super::*;
 
-    fn dry_run_request(categories: Vec<Category>) -> InstallRequest {
+    struct TestDir {
+        path: PathBuf,
+    }
+
+    impl TestDir {
+        fn new(name: &str) -> Self {
+            let unique = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .expect("test clock should be valid")
+                .as_nanos();
+            let path = env::temp_dir().join(format!("stacc-{name}-{unique}"));
+            fs::create_dir_all(&path).expect("test dir should be created");
+            Self { path }
+        }
+    }
+
+    impl Drop for TestDir {
+        fn drop(&mut self) {
+            let _ = fs::remove_dir_all(&self.path);
+        }
+    }
+
+    fn write_test_file(path: &Path, contents: &str) {
+        if let Some(parent) = path.parent() {
+            fs::create_dir_all(parent).expect("test parent should be created");
+        }
+        fs::write(path, contents).expect("test file should be written");
+    }
+
+    fn dry_run_request_with_root(root: PathBuf, categories: Vec<Category>) -> InstallRequest {
         InstallRequest {
-            root: PathBuf::from("."),
+            root,
             editors: vec![Editor::Codex],
             scope: Scope::Project,
             categories,
@@ -1060,6 +1240,19 @@ mod tests {
             conflict_mode: ConflictMode::Backup,
             yes: true,
             dry_run: true,
+        }
+    }
+
+    fn dry_run_request(categories: Vec<Category>) -> InstallRequest {
+        dry_run_request_with_root(PathBuf::from("."), categories)
+    }
+
+    fn test_plan(target_root: PathBuf) -> InstallPlan {
+        InstallPlan {
+            editor: Editor::Codex,
+            scope: Scope::Project,
+            target_root,
+            operations: Vec::new(),
         }
     }
 
@@ -1124,5 +1317,156 @@ mod tests {
             .operations
             .iter()
             .any(|operation| matches!(operation, InstallOperation::CopyFile { .. })));
+    }
+
+    #[test]
+    fn selected_stack_names_reject_unknown_values() {
+        let root = TestDir::new("unknown-stack");
+        fs::create_dir_all(root.path.join(STACKS_DIR).join("rust"))
+            .expect("stack dir should be created");
+        let mut request = dry_run_request_with_root(root.path.clone(), vec![Category::Stack]);
+        request.stacks = vec!["../rust".to_string(), "missing".to_string()];
+
+        let error = selected_stack_names(&request).expect_err("unknown stacks should fail");
+
+        let message = error.to_string();
+        assert!(message.contains("unknown stack(s): ../rust,missing"));
+        assert!(message.contains("Available: rust"));
+    }
+
+    #[test]
+    fn selected_stack_names_requires_all_to_stand_alone() {
+        let root = TestDir::new("all-stack");
+        fs::create_dir_all(root.path.join(STACKS_DIR).join("rust"))
+            .expect("stack dir should be created");
+        let mut request = dry_run_request_with_root(root.path.clone(), vec![Category::Stack]);
+        request.stacks = vec!["all".to_string(), "rust".to_string()];
+
+        let error = selected_stack_names(&request).expect_err("mixed all should fail");
+
+        assert!(error
+            .to_string()
+            .contains("--stack all cannot be combined with specific stack names"));
+    }
+
+    #[test]
+    fn selected_mcp_config_rejects_partial_unknown_servers() {
+        let root = TestDir::new("unknown-mcp");
+        write_test_file(
+            &root.path.join(CONFIGS_DIR).join("mcps").join("mcp.json"),
+            r#"{"mcpServers":{"github":{"type":"http","url":"https://example.test"}}}"#,
+        );
+        let mut request = dry_run_request_with_root(root.path.clone(), vec![Category::Mcps]);
+        request.mcp_servers = vec!["github".to_string(), "missing".to_string()];
+
+        let error = selected_mcp_config(&request).expect_err("unknown MCP server should fail");
+
+        let message = error.to_string();
+        assert!(message.contains("unknown MCP server(s): missing"));
+        assert!(message.contains("Available: github"));
+    }
+
+    #[test]
+    fn identical_copy_file_is_noop() {
+        let root = TestDir::new("copy-noop");
+        let source = root.path.join("source.txt");
+        let destination = root.path.join("destination.txt");
+        write_test_file(&source, "same");
+        write_test_file(&destination, "same");
+        let request = dry_run_request(vec![Category::Rules]);
+        let mut plan = test_plan(root.path.clone());
+
+        plan_copy_file_with_state(&request, &mut plan, source, destination, false)
+            .expect("copy planning should succeed");
+
+        assert!(plan.operations.is_empty());
+    }
+
+    #[test]
+    fn identical_write_file_is_noop() {
+        let root = TestDir::new("write-noop");
+        let destination = root.path.join("mcp.json");
+        write_test_file(&destination, "{}\n");
+        let request = dry_run_request(vec![Category::Mcps]);
+        let mut plan = test_plan(root.path.clone());
+
+        plan_write_file(&request, &mut plan, destination, "{}\n".to_string())
+            .expect("write planning should succeed");
+
+        assert!(plan.operations.is_empty());
+    }
+
+    #[test]
+    fn whole_directory_backup_does_not_plan_child_backups() {
+        let root = TestDir::new("whole-dir-backup");
+        let source = root.path.join("source");
+        let destination = root.path.join("destination");
+        write_test_file(&source.join("file.txt"), "new");
+        write_test_file(&destination.join("file.txt"), "old");
+        let request = dry_run_request(vec![Category::Rules]);
+        let mut plan = test_plan(destination.clone());
+
+        copy_tree(
+            &source,
+            &destination,
+            None,
+            DirectoryConflictMode::WholeDirectory,
+            &request,
+            &mut plan,
+        )
+        .expect("copy tree planning should succeed");
+
+        assert_eq!(
+            plan.operations
+                .iter()
+                .filter(|operation| matches!(operation, InstallOperation::BackupPath { .. }))
+                .count(),
+            1
+        );
+        assert!(plan.operations.iter().any(|operation| {
+            matches!(
+                operation,
+                InstallOperation::BackupPath { path, .. } if path == &destination
+            )
+        }));
+        assert!(plan.operations.iter().all(|operation| {
+            !matches!(
+                operation,
+                InstallOperation::BackupPath { path, .. } if path == &destination.join("file.txt")
+            )
+        }));
+        assert!(plan.operations.iter().any(|operation| {
+            matches!(
+                operation,
+                InstallOperation::CopyFile { destination: file_destination, .. }
+                    if file_destination == &destination.join("file.txt")
+            )
+        }));
+    }
+
+    #[test]
+    fn overwrite_file_target_removes_existing_directory() {
+        let root = TestDir::new("overwrite-directory");
+        let source = root.path.join("source.txt");
+        let destination = root.path.join("destination.txt");
+        write_test_file(&source, "new");
+        fs::create_dir_all(&destination).expect("directory target should be created");
+        let mut request = dry_run_request(vec![Category::Rules]);
+        request.conflict_mode = ConflictMode::Overwrite;
+        let mut plan = test_plan(root.path.clone());
+
+        plan_copy_file_with_state(&request, &mut plan, source, destination.clone(), false)
+            .expect("copy planning should succeed");
+
+        assert_eq!(plan.operations.len(), 2);
+        assert!(matches!(
+            &plan.operations[0],
+            InstallOperation::RemovePath { path } if path == &destination
+        ));
+        assert!(matches!(
+            &plan.operations[1],
+            InstallOperation::CopyFile { destination: file_destination, .. }
+                if file_destination == &destination
+        ));
     }
 }

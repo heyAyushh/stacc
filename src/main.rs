@@ -7,6 +7,7 @@ mod install;
 mod metadata;
 mod panel;
 
+use std::io::{self, IsTerminal};
 use std::path::PathBuf;
 
 use anyhow::Result;
@@ -165,6 +166,12 @@ fn main() -> Result<()> {
 }
 
 fn run_panel_command(root: PathBuf, config_path: Option<PathBuf>) -> Result<()> {
+    if !io::stdin().is_terminal() || !io::stdout().is_terminal() {
+        anyhow::bail!(
+            "no interactive terminal available; use `stacc install ... --dry-run` for automation or `stacc status --json` for machine output"
+        );
+    }
+
     let catalog = discover_catalog(&root)?;
     let config = load_panel_config(&root, config_path)?;
     match run_panel(root, catalog, config)? {

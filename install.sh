@@ -85,6 +85,26 @@ args_include_dry_run() {
   return 1
 }
 
+capture_root_arg() {
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --root)
+        [ $# -ge 2 ] || die "--root requires a path"
+        ROOT_DIR="$2"
+        return 0
+        ;;
+      --root=*)
+        ROOT_DIR="${1#--root=}"
+        [ -n "${ROOT_DIR}" ] || die "--root requires a path"
+        return 0
+        ;;
+      *)
+        shift
+        ;;
+    esac
+  done
+}
+
 local_stacc_root() {
   local candidate="${1:-}"
   if [ -n "${candidate}" ] && [ -f "${candidate}/Cargo.toml" ] && [ -d "${candidate}/configs" ]; then
@@ -108,6 +128,38 @@ installed_stacc_bin() {
   printf '%s\n' "${cargo_home}/bin/stacc"
 }
 
+has_interactive_terminal() {
+  if [ -t 0 ] && [ -t 1 ]; then
+    return 0
+  fi
+  [ -r /dev/tty ] && [ -t 1 ]
+}
+
+require_interactive_panel() {
+  has_interactive_terminal && return 0
+  die "no interactive terminal available; pass stacc args, e.g. ./install.sh install --editor codex --scope global --category rules --dry-run"
+}
+
+run_no_arg_local_stacc() {
+  local root="$1"
+  require_interactive_panel
+  if [ ! -t 0 ] && [ -r /dev/tty ]; then
+    exec cargo run --manifest-path "${root}/Cargo.toml" -- < /dev/tty
+  fi
+  exec cargo run --manifest-path "${root}/Cargo.toml" --
+}
+
+run_no_arg_binary_stacc() {
+  local binary="$1"
+  require_interactive_panel
+  if [ ! -t 0 ] && [ -r /dev/tty ]; then
+    "${binary}" < /dev/tty
+    exit $?
+  fi
+  "${binary}"
+  exit $?
+}
+
 run_stacc() {
   local dry_run="$1"
   shift
@@ -120,25 +172,26 @@ run_stacc() {
     if [ "${#stacc_args[@]}" -gt 0 ]; then
       exec cargo run --manifest-path "${root}/Cargo.toml" -- "${stacc_args[@]}"
     fi
-    exec cargo run --manifest-path "${root}/Cargo.toml" --
+    run_no_arg_local_stacc "${root}"
   fi
 
   if [ "${dry_run}" -eq 1 ]; then
     TMP_ROOT="$(mktemp -d)"
     cargo install --git "${REPO_URL}" --root "${TMP_ROOT}/cargo" --locked --force
     if [ "${#stacc_args[@]}" -gt 0 ]; then
-      "${TMP_ROOT}/cargo/bin/stacc" "${stacc_args[@]}"
+      STACC_BUNDLE_ROOT="${TMP_ROOT}/bundle" "${TMP_ROOT}/cargo/bin/stacc" "${stacc_args[@]}"
       exit $?
     fi
-    "${TMP_ROOT}/cargo/bin/stacc"
-    exit $?
+    STACC_BUNDLE_ROOT="${TMP_ROOT}/bundle"
+    export STACC_BUNDLE_ROOT
+    run_no_arg_binary_stacc "${TMP_ROOT}/cargo/bin/stacc"
   fi
 
   cargo install --git "${REPO_URL}" --locked --force
   if [ "${#stacc_args[@]}" -gt 0 ]; then
     exec "$(installed_stacc_bin)" "${stacc_args[@]}"
   fi
-  exec "$(installed_stacc_bin)"
+  run_no_arg_binary_stacc "$(installed_stacc_bin)"
 }
 
 is_direct_stacc_invocation() {
@@ -146,9 +199,12 @@ is_direct_stacc_invocation() {
   if [ "$1" = "--root" ]; then
     [ $# -ge 3 ] || return 0
     shift 2
+  elif [ "${1#--root=}" != "$1" ]; then
+    [ $# -ge 2 ] || return 0
+    shift
   fi
   case "$1" in
-    status|install|sync-metadata|check|--panel|--config|--version|-V)
+    status|install|sync-metadata|check|--panel|--config|--help|-h|--version|-V)
       return 0
       ;;
     *)
@@ -282,6 +338,25 @@ translate_legacy_args() {
   if [ "${#editors[@]}" -eq 0 ]; then
     editors=("cursor" "claude" "opencode" "codex" "ampcode")
   fi
+  local -a unique_editors=()
+  local existing
+  local duplicate
+  local editor
+  for editor in "${editors[@]}"; do
+    duplicate=0
+    if [ "${#unique_editors[@]}" -gt 0 ]; then
+      for existing in "${unique_editors[@]}"; do
+        if [ "${existing}" = "${editor}" ]; then
+          duplicate=1
+          break
+        fi
+      done
+    fi
+    if [ "${duplicate}" -eq 0 ]; then
+      unique_editors+=("${editor}")
+    fi
+  done
+  editors=("${unique_editors[@]}")
   scope="${scope:-${DEFAULT_SCOPE}}"
   categories="${categories:-${DEFAULT_CATEGORIES}}"
 
@@ -289,7 +364,6 @@ translate_legacy_args() {
     TRANSLATED_ARGS+=("--root" "${ROOT_DIR}")
   fi
   TRANSLATED_ARGS+=("install")
-  local editor
   for editor in "${editors[@]}"; do
     TRANSLATED_ARGS+=("--editor" "${editor}")
   done
@@ -324,6 +398,8 @@ main() {
     usage
     exit 0
   fi
+
+  capture_root_arg "$@"
 
   if is_direct_stacc_invocation "$@"; then
     if args_include_dry_run "$@"; then
