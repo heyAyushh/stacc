@@ -1,6 +1,7 @@
 ---
 name: ios
 description: iOS and Swift/SwiftUI development guidance, including UI patterns, Liquid Glass styling, performance audits, view refactors, Swift concurrency, and iOS debugging. Use when building or reviewing iOS apps, SwiftUI views, or troubleshooting iOS issues.
+license: MIT
 ---
 
 # iOS Stack Skill

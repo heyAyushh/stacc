@@ -1,6 +1,8 @@
 ---
 name: rust-error-handling
 description: Guides Rust error handling strategy. Use when choosing between Result/Option/panic, using anyhow vs thiserror, propagating errors with ?, or designing custom error types.
+license: MIT
+origin_url: https://github.com/actionbook/rust-skills
 ---
 
 # Error Handling

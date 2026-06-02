@@ -1,6 +1,8 @@
 ---
 name: swiftui-view-refactor
 description: Refactor and review SwiftUI view files for consistent structure, dependency injection, and Observation usage. Use when asked to clean up a SwiftUI view’s layout/ordering, handle view models safely (non-optional when possible), or standardize how dependencies and @Observable state are initialized and passed.
+license: MIT
+origin_url: https://github.com/Dimillian/Skills
 ---
 
 # SwiftUI View Refactor

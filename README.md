@@ -34,7 +34,7 @@ The Rust control panel will guide you through:
 
 #### Stacks
 
-Stacks are framework/language-specific skill bundles under `configs/stacks/`. When you select the `stacks` category, the installer prompts you to choose one or more stack folders and installs them into each editor's `skills/` directory.
+Stacks are framework/language-specific skill bundles under `configs/stacks/`. When you select the `stack` category, the installer prompts you to choose one or more stack folders and installs them into each editor's `skills/` directory.
 
 #### Installer options
 
@@ -234,8 +234,8 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/skills/mcp-builder/` | MCP Server Development Guide - creating high-quality MCP servers |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
 | `configs/skills/skill-creator/` | Skill Creator Guide - creating effective Claude skills |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
 | `configs/skills/frontend-design/` | Frontend Design - distinctive, production-grade UI creation |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
-| `configs/skills/karpathy-guidelines` | Behavioral guidelines to reduce common LLM coding mistakes. |  | [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) |  |
-| `configs/skills/emil-design-eng/` | Emil Kowalski design engineering philosophy for UI polish, component design, and animation decisions | Copied from `skills/emil-design-eng` at `ecf66bb`; no license file found in source | [emilkowalski/skill](https://github.com/emilkowalski/skill) |  |
+| `configs/skills/karpathy-guidelines` | Behavioral guidelines to reduce common LLM coding mistakes. |  | [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) | MIT |
+| `configs/skills/emil-design-eng/` | Emil Kowalski design engineering philosophy for UI polish, component design, animation decisions | Copied from `skills/emil-design-eng` at `ecf66bb`; no license file found in source | [emilkowalski/skill](https://github.com/emilkowalski/skill) | NOASSERTION |
 | `configs/skills/audio-math-haptics/` | First-principles audio-coupled haptic and kinetic UI feedback | Copied from `skill/audio-math-haptics` at `dc2ba99` | [heyAyushh/audio-math-haptics](https://github.com/heyAyushh/audio-math-haptics) | MIT |
 | `configs/skills/hallmark/` | Anti-AI-slop design skill for greenfield pages, audits, redesigns, and design extraction | Copied package payload (`SKILL.md` + `references/`) at `9aba10e`; frontmatter adapted for stacc validator | [nutlope/hallmark](https://github.com/nutlope/hallmark) | MIT |
 | `configs/skills/add-app-clip/`, `configs/skills/building-native-ui/`, `configs/skills/eas-update-insights/`, `configs/skills/expo-*/`, `configs/skills/native-data-fetching/`, `configs/skills/upgrading-expo/`, `configs/skills/use-dom/` | Official Expo skills for App Clips, native UI, EAS, deployment, SDK upgrades, modules, data fetching, and DOM components | Copied from `plugins/expo/skills` at `956a92b`; frontmatter adapted for stacc validator | [expo/skills](https://github.com/expo/skills/tree/main/plugins/expo/skills) | MIT |
@@ -256,23 +256,23 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/skills/grill-me/` | Interview the user until a plan or design is fully resolved | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `configs/skills/handoff/` | Compact the current conversation into a handoff document | Promoted plugin skill; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `configs/skills/write-a-skill/` | Create new agent skills with proper structure and resources | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
-| `configs/stacks/ios/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/swiftui-view-refactor/` | SwiftUI view refactoring patterns |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/swiftui-performance-audit/` | SwiftUI performance auditing and optimization |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/stacks/ios/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/swiftui-view-refactor/` | SwiftUI view refactoring patterns |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/swiftui-performance-audit/` | SwiftUI performance auditing and optimization |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
 | `configs/commands/deslop.md` | Remove AI-generated code slop | Also seen in [fatih/dotfiles](https://github.com/fatih/dotfiles) and [moeru-ai/airi](https://github.com/moeru-ai/airi) (MIT). | [triggerdotdev/trigger.dev](https://github.com/triggerdotdev/trigger.dev) | Apache-2.0 |
-| `configs/agents/askuserquestion.md` | AskUserQuestion tool description | Adapted from Claude Code's built-in tool descriptions and agent prompts. | Claude Code / Anthropic System Prompts |  |
-| `configs/commands/explore.md` | File search specialist agent prompt | Documented in [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) (MIT). | Claude Code / Anthropic System Prompts |  |
+| `configs/agents/askuserquestion.md` | AskUserQuestion tool description | Adapted from Claude Code's built-in tool descriptions and agent prompts. | Claude Code / Anthropic System Prompts | NOASSERTION |
+| `configs/commands/explore.md` | File search specialist agent prompt | Documented in [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) (MIT). | Claude Code / Anthropic System Prompts | NOASSERTION |
 | `configs/stacks/bun/bun.mdc` | Bun.js best practices |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
 | `configs/stacks/typescript/` | TypeScript conventions |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
 | `configs/stacks/bun/postgresql.mdc` | PostgreSQL guidelines |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
 | `configs/rules/clean-code.mdc` | Clean code guidelines |  | [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) | CC0-1.0 |
 | `configs/stacks/solana/` | Solana Dev Skills |  | [Solana Foundation](https://github.com/solana-foundation/solana-dev-skill) | MIT |
-| `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) | |
-| `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) |  |
-| `configs/commands/review-pr.md` | Review Pull request from github |  |  |  |
+| `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) | NOASSERTION |
+| `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) | NOASSERTION |
+| `configs/commands/review-pr.md` | Review Pull request from GitHub | Local stacc command | Original / stacc | MIT |
 | `configs/commands/visualize.md` | Mermaid diagram generation |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
 | `configs/commands/onboard-new-developer.md` | Developer onboarding checklist |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
 | `configs/commands/refactor.md` | Code refactoring checklist (refactor-code.md) |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
@@ -283,13 +283,13 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/rules/pr-message-format.mdc` | PR message format |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
 | `configs/rules/prompt-injection-gaurd.mdc` | External context injection defense (prompt-injection-guard.mdc) |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
 | `configs/commands/review.md` | Security-focused code review |  | [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | MIT |
-| `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting |  | [@shaoruu](https://shaoruu.io/cursor/council)|  |
-| `configs/commands/iterate-browser.md` | Autonomously iterate on UI changes using console.log and browser tools |  | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) |  |
-| `configs/skills/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills)  |  |
-| `configs/commands/ultrathink.md` | Deep reasoning mode protocol (original) |  | Original / Sources Not Found |  |
-| `configs/commands/init.md` | AGENTS.md initialization |  | Original / Sources Not Found |  |
-| `configs/agents/verifier.md` | Work verification agent |  | Original / Sources Not Found |  |
-| `configs/stacks/rust/ownership/`, `error-handling/`, `concurrency/`, `zero-cost-abstractions/`, `type-driven-design/`, `performance/`, `agent-friendly-cli/`, `anti-patterns/`, `coding-guidelines/` | Rust skill system — layered guidance for ownership, errors, concurrency, types, performance, and agent-friendly CLI design | Adapted from the layered skill system structure; `agent-friendly-cli/` adapts the local Cursor plugin CLI-for-agents guidance for Rust binaries | [actionbook/rust-skills](https://github.com/actionbook/rust-skills) |  |
+| `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting |  | [@shaoruu](https://shaoruu.io/cursor/council) | NOASSERTION |
+| `configs/commands/iterate-browser.md` | Autonomously iterate on UI changes using console.log and browser tools |  | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | Apache-2.0 |
+| `configs/skills/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | Apache-2.0 |
+| `configs/commands/ultrathink.md` | Deep reasoning mode protocol | Local stacc command | Original / stacc | MIT |
+| `configs/commands/init.md` | AGENTS.md initialization | Local stacc command | Original / stacc | MIT |
+| `configs/agents/verifier.md` | Work verification agent | Local stacc agent | Original / stacc | MIT |
+| `configs/stacks/rust/ownership/`, `error-handling/`, `concurrency/`, `zero-cost-abstractions/`, `type-driven-design/`, `performance/`, `agent-friendly-cli/`, `anti-patterns/`, `coding-guidelines/` | Rust skill system — layered guidance for ownership, errors, concurrency, types, performance, and agent-friendly CLI design | Adapted from the layered skill system structure; `agent-friendly-cli/` adapts the local Cursor plugin CLI-for-agents guidance for Rust binaries | [actionbook/rust-skills](https://github.com/actionbook/rust-skills) | MIT |
 
 ## License
 
@@ -303,5 +303,7 @@ Individual components retain their original licenses:
 - Taste Skill skills: MIT (see `LICENSE.txt` in skill directories)
 - Cursor plugin imports: MIT (see `LICENSE.txt` in cursor-plugin skill and hook directories)
 - Codex skill imports: Apache-2.0 (see `LICENSE.txt` in codex-skill directories)
-- Dimillian/Skills: Check repository for license
+- ComposioHQ imports: Apache-2.0
+- Dimillian/Skills: MIT
+- actionbook/rust-skills: MIT
 - Other components: See individual source repositories

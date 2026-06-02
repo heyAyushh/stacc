@@ -1,6 +1,8 @@
 ---
 name: rust-concurrency
 description: Guides concurrency and async decisions in Rust. Use when encountering Send/Sync errors (E0277), choosing between threads vs async, designing shared state, or debugging deadlocks.
+license: MIT
+origin_url: https://github.com/actionbook/rust-skills
 ---
 
 # Concurrency

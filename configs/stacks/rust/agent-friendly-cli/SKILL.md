@@ -1,6 +1,8 @@
 ---
 name: rust-agent-friendly-cli
 description: Designs Rust command-line interfaces that are reliable for agents, scripts, and humans. Use when building or reviewing Rust binaries, clap command trees, diagnostics commands, codegen tools, or automation-facing workflows.
+license: MIT
+origin_url: https://github.com/actionbook/rust-skills
 ---
 
 # Agent-Friendly CLI

@@ -1,6 +1,7 @@
 ---
 name: bun
 description: Bun runtime and modern JavaScript backend practices, including Bun-native tooling (bun run/test/build) and PostgreSQL usage guidance. Use when building or reviewing Bun-based services, APIs, scripts, or when Bun-specific workflow questions arise.
+license: MIT AND CC0-1.0
 ---
 
 # Bun Stack Skill

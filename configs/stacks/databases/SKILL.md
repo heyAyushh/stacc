@@ -1,6 +1,7 @@
 ---
 name: db
 description: Database (PostgreSQL) SQL best practices for clean, performant, and maintainable queries. Use when writing or reviewing SQL, schema changes, or database-related guidance.
+license: MIT AND CC0-1.0
 ---
 
 # Database Stack Skill
