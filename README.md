@@ -84,45 +84,83 @@ cargo install --path . --locked --force
 
 The installed binary bundles `install.sh`, `configs/`, and README metadata, so agents do not need to pass `--root` after `cargo install`. It materializes the bundle into a versioned cache path on first run. Set `STACC_BUNDLE_ROOT=/path/to/cache` when an agent needs a deterministic bundle directory.
 
-```bash
-cargo run
-```
-
-Explicit flag form also works:
-
-```bash
-cargo run -- --panel
-```
-
-Useful non-interactive commands:
-
-```bash
-cargo run -- status
-cargo run -- install --editor cursor --editor codex --scope project --category rules --category skills --dry-run --print-plan
-cargo run -- install --editor cursor --scope project --category hooks --hook continual-learning --dry-run --print-plan
-cargo run -- sync-metadata --refresh-origin
-cargo run -- bootstrap --dry-run
-cargo run -- check
-```
-
-After `cargo install`, drop `cargo run --`:
+Human default:
 
 ```bash
 stacc
-stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --dry-run
+```
+
+Local checkout equivalent:
+
+```bash
+cargo run
+cargo run -- --panel
+```
+
+Agent/non-interactive commands:
+
+```bash
+stacc status --json
+stacc install --editor cursor --editor codex --scope project --category rules --category skills --dry-run --print-plan
+stacc install --editor cursor --scope project --category hooks --hook continual-learning --dry-run --print-plan
 stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --yes
-stacc install --editor cursor --scope project --category hooks --hook continual-learning --dry-run
+stacc sync-metadata --refresh-origin
 stacc bootstrap --dry-run
 stacc check
 ```
 
-- Panel segments: Install, Customise, Version, Skills, Hooks/MCP
-- Panel actions return to the TUI with a result message after install dry-runs, installs, metadata sync, checks, and bootstrap dry-runs
-- Install execution is native Rust: file copying, conflict handling, rules summaries, hook package filtering, MCP JSON/TOML merge, and installed-binary smoke checks use typed Rust planning with explicit dry-run/yes gates
-- `selective` conflict mode shows prompt operations in dry-run plans and prompts per conflicting file in an interactive terminal; non-interactive agents should use `backup`, `overwrite`, `skip`, or `--dry-run`
-- Metadata sync writes `configs/metadata/skills.lock.json` with each skill's local path, license, version, source URL, declared origin commit, and current origin HEAD commit when GitHub lookup is enabled
-- `stacc bootstrap` matches the shell bootstrap path by running `cargo install --git https://github.com/heyAyushh/stacc.git --locked --force`; `--dry-run` prints the command without network access
-- Custom defaults live in `configs/stacc-panel.json`
+Local checkout form prefixes the same commands with `cargo run --`:
+
+```bash
+cargo run -- install --editor cursor --scope project --category hooks --hook continual-learning --dry-run --print-plan
+```
+
+#### TUI parity
+
+| Feature | TUI | CLI |
+|---------|-----|-----|
+| Editor/scope/conflict/dry-run selection | Install segment | `stacc install --editor ... --scope ... --conflict ... --dry-run` |
+| Category and stack selection | Customise segment | `--category ... --stack ...` |
+| Hook package selection | Hooks/MCP segment | `--category hooks --hook ...` |
+| MCP server selection | Hooks/MCP segment | `--category mcps --mcp-server ...` |
+| Git/status metadata | Version and Skills segments | `stacc status`, `stacc sync-metadata` |
+| Checks | Version segment | `stacc check` |
+| Self install/upgrade | Version segment | `stacc bootstrap` |
+
+Panel actions return to the TUI with a result message after install dry-runs, installs, metadata sync, checks, and bootstrap dry-runs.
+
+#### Conflict modes
+
+| Mode | Behavior |
+|------|----------|
+| `backup` | Move conflicting targets to `.bak.<timestamp>` before writing |
+| `overwrite` | Replace conflicting targets |
+| `skip` | Leave conflicting targets unchanged |
+| `selective` | Show prompt operations in dry-run plans and prompt per conflicting file in an interactive terminal |
+
+Use `backup`, `overwrite`, `skip`, or `--dry-run` for non-interactive agents.
+
+#### Metadata and defaults
+
+- Install execution is native Rust: file copying, conflict handling, rules summaries, hook package filtering, MCP JSON/TOML merge, and installed-binary smoke checks use typed Rust planning with explicit dry-run/yes gates.
+- Metadata sync writes `configs/metadata/skills.lock.json` with each skill's local path, license, version, source URL, declared origin commit, and current origin HEAD commit when GitHub lookup is enabled.
+- Custom panel defaults live in `configs/stacc-panel.json`.
+- `stacc bootstrap` matches the shell bootstrap path by running `cargo install --git https://github.com/heyAyushh/stacc.git --locked --force`; `--dry-run` prints the command without network access.
+
+#### Rust module layout
+
+| Module | Responsibility |
+|--------|----------------|
+| `src/main.rs` | CLI parsing and command dispatch |
+| `src/panel.rs` | Ratatui control panel state and screens |
+| `src/install.rs` | Typed install planning and operation execution |
+| `src/hook_selection.rs` | Hook package discovery and filtering |
+| `src/selective.rs` | Interactive selective conflict prompts |
+| `src/bootstrap.rs` | `cargo install --git` bootstrap command |
+| `src/metadata.rs` | Skill license/version/origin lockfile sync |
+| `src/check.rs` | Format, test, lint, shell, JSON, install, and smoke checks |
+| `src/bundle.rs` | Embedded runtime bundle materialization |
+| `src/catalog.rs` | Config catalog discovery and install compatibility |
 
 ### Checks
 
