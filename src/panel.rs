@@ -7,6 +7,7 @@ use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::prelude::{Color, Frame, Line, Modifier, Span, Style};
 use ratatui::widgets::{Block, Borders, List, ListItem, ListState, Paragraph, Tabs, Wrap};
 
+use crate::bootstrap::{default_bootstrap_options, BootstrapOptions};
 use crate::catalog::{default_metadata_path, Catalog, Category, ConflictMode, Editor, Scope};
 use crate::config::PanelConfig;
 use crate::git_utils::{repository_status, RepositoryStatus};
@@ -23,6 +24,8 @@ pub enum PanelOutcome {
     Quit,
     RunInstall(InstallRequest),
     SyncMetadata(SyncOptions),
+    RunChecks,
+    Bootstrap(BootstrapOptions),
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -80,8 +83,11 @@ enum PanelItemAction {
     ToggleCategory(Category),
     ToggleStack(String),
     ToggleMcpServer(String),
+    ToggleHookPackage(String),
     RefreshStatus,
     SyncMetadata,
+    RunChecks,
+    Bootstrap,
     Noop,
 }
 
@@ -102,13 +108,19 @@ struct PanelState {
     categories: Vec<Category>,
     stacks: Vec<String>,
     mcp_servers: Vec<String>,
+    hook_packages: Vec<String>,
     conflict_mode: ConflictMode,
     dry_run: bool,
     status: RepositoryStatus,
     message: String,
 }
 
-pub fn run_panel(root: PathBuf, catalog: Catalog, config: PanelConfig) -> Result<PanelOutcome> {
+pub fn run_panel(
+    root: PathBuf,
+    catalog: Catalog,
+    config: PanelConfig,
+    initial_message: Option<String>,
+) -> Result<PanelOutcome> {
     let metadata_path = default_metadata_path(&root);
     let status = repository_status(&root, &metadata_path)?;
     let mut terminal = ratatui::init();
@@ -123,10 +135,11 @@ pub fn run_panel(root: PathBuf, catalog: Catalog, config: PanelConfig) -> Result
             categories: config.default_categories,
             stacks: config.default_stacks,
             mcp_servers: config.default_mcp_servers,
+            hook_packages: config.default_hook_packages,
             conflict_mode: config.conflict_mode,
             dry_run: config.dry_run,
             status,
-            message: "ready".to_string(),
+            message: initial_message.unwrap_or_else(|| "ready".to_string()),
         },
         &mut terminal,
     );
@@ -320,16 +333,6 @@ impl PanelState {
                 action: PanelItemAction::ToggleStack(stack.clone()),
             });
         }
-        for server in &self.catalog.mcp_servers {
-            items.push(PanelItem {
-                label: format!(
-                    "{} mcp: {}",
-                    marker(self.mcp_servers.contains(server)),
-                    server
-                ),
-                action: PanelItemAction::ToggleMcpServer(server.clone()),
-            });
-        }
         items
     }
 
@@ -342,6 +345,14 @@ impl PanelState {
             PanelItem {
                 label: "Sync skills metadata".to_string(),
                 action: PanelItemAction::SyncMetadata,
+            },
+            PanelItem {
+                label: "Run repository checks".to_string(),
+                action: PanelItemAction::RunChecks,
+            },
+            PanelItem {
+                label: "Install/upgrade stacc binary".to_string(),
+                action: PanelItemAction::Bootstrap,
             },
         ]
     }
@@ -363,19 +374,25 @@ impl PanelState {
     }
 
     fn hook_mcp_items(&self) -> Vec<PanelItem> {
-        let mut items = self
-            .catalog
-            .hook_packages
-            .iter()
-            .map(|hook| PanelItem {
-                label: format!("hook: {}", hook.name),
-                action: PanelItemAction::Noop,
-            })
-            .collect::<Vec<_>>();
+        let mut items = Vec::new();
+        for hook in &self.catalog.hook_packages {
+            items.push(PanelItem {
+                label: format!(
+                    "{} hook: {}",
+                    marker(self.hook_packages.contains(&hook.name)),
+                    hook.name
+                ),
+                action: PanelItemAction::ToggleHookPackage(hook.name.clone()),
+            });
+        }
         for server in &self.catalog.mcp_servers {
             items.push(PanelItem {
-                label: format!("mcp: {}", server),
-                action: PanelItemAction::Noop,
+                label: format!(
+                    "{} mcp: {}",
+                    marker(self.mcp_servers.contains(server)),
+                    server
+                ),
+                action: PanelItemAction::ToggleMcpServer(server.clone()),
             });
         }
         if items.is_empty() {
@@ -397,6 +414,7 @@ impl PanelState {
             format!("categories: {}", join_display(&self.categories)),
             format!("stacks: {}", join_strings(&self.stacks)),
             format!("mcp: {}", join_strings(&self.mcp_servers)),
+            format!("hooks: {}", join_strings(&self.hook_packages)),
             format!("conflict: {}", self.conflict_mode),
             format!("dry-run: {}", self.dry_run),
         ]
@@ -417,6 +435,7 @@ fn handle_enter(state: &mut PanelState) -> Result<Option<PanelOutcome>> {
                 categories: state.categories.clone(),
                 stacks: state.stacks.clone(),
                 mcp_servers: state.mcp_servers.clone(),
+                hook_packages: state.hook_packages.clone(),
                 conflict_mode: state.conflict_mode,
                 yes: true,
                 dry_run: state.dry_run,
@@ -426,6 +445,12 @@ fn handle_enter(state: &mut PanelState) -> Result<Option<PanelOutcome>> {
             let mut options = default_sync_options(state.root.clone());
             options.refresh_origin = true;
             return Ok(Some(PanelOutcome::SyncMetadata(options)));
+        }
+        PanelItemAction::RunChecks => return Ok(Some(PanelOutcome::RunChecks)),
+        PanelItemAction::Bootstrap => {
+            let mut options = default_bootstrap_options();
+            options.dry_run = state.dry_run;
+            return Ok(Some(PanelOutcome::Bootstrap(options)));
         }
         PanelItemAction::RefreshStatus => refresh_status(state)?,
         _ => handle_item_action(state, &item.action),
@@ -458,10 +483,13 @@ fn handle_item_action(state: &mut PanelState, action: &PanelItemAction) {
         }
         PanelItemAction::ToggleStack(stack) => toggle_string(&mut state.stacks, stack),
         PanelItemAction::ToggleMcpServer(server) => toggle_string(&mut state.mcp_servers, server),
+        PanelItemAction::ToggleHookPackage(hook) => toggle_string(&mut state.hook_packages, hook),
         PanelItemAction::Noop
         | PanelItemAction::RunInstall
         | PanelItemAction::RefreshStatus
-        | PanelItemAction::SyncMetadata => {}
+        | PanelItemAction::SyncMetadata
+        | PanelItemAction::RunChecks
+        | PanelItemAction::Bootstrap => {}
     }
 }
 

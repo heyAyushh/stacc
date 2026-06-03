@@ -12,6 +12,7 @@ APPEND_CSV_COUNT=0
 TRANSLATED_ARGS=()
 TRANSLATED_DRY_RUN=0
 
+# shellcheck disable=SC2329 # Invoked indirectly by trap on EXIT.
 cleanup() {
   if [ -n "${TMP_ROOT}" ] && [ -d "${TMP_ROOT}" ]; then
     rm -rf "${TMP_ROOT}"
@@ -35,6 +36,7 @@ Usage:
 Direct stacc examples:
   ./install.sh
   ./install.sh check
+  ./install.sh bootstrap --dry-run
   ./install.sh install --editor codex --scope global --category rules --dry-run
 
 Legacy install options translated to `stacc install`:
@@ -43,6 +45,7 @@ Legacy install options translated to `stacc install`:
   --global | --project
   --categories LIST
   --stacks LIST
+  --hooks LIST
   --mcp-servers LIST
   --conflict MODE
   --yes
@@ -51,6 +54,7 @@ Legacy install options translated to `stacc install`:
 Examples:
   ./install.sh --yes
   ./install.sh --codex --global --categories rules,skills,mcps --mcp-servers github --yes
+  ./install.sh --cursor --project --categories hooks --hooks continual-learning --dry-run
   curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash
 EOF
 }
@@ -204,7 +208,7 @@ is_direct_stacc_invocation() {
     shift
   fi
   case "$1" in
-    status|install|sync-metadata|check|--panel|--config|--help|-h|--version|-V)
+    status|install|sync-metadata|bootstrap|check|--panel|--config|--help|-h|--version|-V)
       return 0
       ;;
     *)
@@ -217,6 +221,7 @@ translate_legacy_args() {
   local -a editors=()
   local categories=""
   local conflict=""
+  local hooks=""
   local mcp_servers=""
   local scope=""
   local stacks=""
@@ -288,6 +293,12 @@ translate_legacy_args() {
       --stacks)
         [ $# -ge 2 ] || die "--stacks requires a list"
         stacks="$2"
+        legacy_mode=1
+        shift 2
+        ;;
+      --hooks)
+        [ $# -ge 2 ] || die "--hooks requires a list"
+        hooks="$2"
         legacy_mode=1
         shift 2
         ;;
@@ -373,6 +384,10 @@ translate_legacy_args() {
     TRANSLATED_ARGS+=("${APPEND_CSV_RESULT[@]}")
   fi
   append_csv_flags "--stack" "${stacks}"
+  if [ "${APPEND_CSV_COUNT}" -gt 0 ]; then
+    TRANSLATED_ARGS+=("${APPEND_CSV_RESULT[@]}")
+  fi
+  append_csv_flags "--hook" "${hooks}"
   if [ "${APPEND_CSV_COUNT}" -gt 0 ]; then
     TRANSLATED_ARGS+=("${APPEND_CSV_RESULT[@]}")
   fi

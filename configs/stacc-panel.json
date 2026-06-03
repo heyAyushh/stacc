@@ -4,6 +4,7 @@
   "default_categories": ["rules", "skills", "stack", "mcps"],
   "default_stacks": [],
   "default_mcp_servers": [],
+  "default_hook_packages": [],
   "conflict_mode": "backup",
   "dry_run": true
 }

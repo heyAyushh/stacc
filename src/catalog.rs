@@ -131,6 +131,13 @@ impl Category {
         if !self.source_exists(root) {
             return false;
         }
+        if self == Category::Hooks {
+            return match editor {
+                Editor::Cursor => hooks_source_exists(root),
+                Editor::Claude => root.join(CONFIGS_DIR).join("hooks").is_dir(),
+                Editor::Opencode | Editor::Codex | Editor::Ampcode => false,
+            };
+        }
 
         match editor {
             Editor::Cursor => matches!(
@@ -192,6 +199,7 @@ impl Category {
     pub fn source_exists(self, root: &Path) -> bool {
         match self {
             Category::Stack => root.join(CONFIGS_DIR).join("stacks").is_dir(),
+            Category::Hooks => hooks_source_exists(root),
             Category::CursorPlugins => root.join(CONFIGS_DIR).join("cursor-plugins").is_dir(),
             Category::CodexSkills => root.join(CONFIGS_DIR).join("codex-skills").is_dir(),
             _ => root.join(CONFIGS_DIR).join(self.install_value()).is_dir(),
@@ -346,6 +354,15 @@ fn discover_hook_packages(root: &Path) -> Result<Vec<HookPackage>> {
     Ok(packages)
 }
 
+fn hooks_source_exists(root: &Path) -> bool {
+    root.join(CONFIGS_DIR).join("hooks").is_dir()
+        || root
+            .join(CONFIGS_DIR)
+            .join("cursor-plugins")
+            .join("hooks")
+            .is_dir()
+}
+
 fn append_hook_packages(
     packages: &mut Vec<HookPackage>,
     parent: &Path,
@@ -418,5 +435,25 @@ mod tests {
     fn category_labels_match_install_values() {
         assert_eq!(Category::CursorPlugins.install_value(), "cursor-plugins");
         assert_eq!(Category::CodexSkills.install_value(), "codex-skills");
+    }
+
+    #[test]
+    fn cursor_plugin_hooks_enable_cursor_hooks_only() {
+        let unique = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .expect("test clock should be valid")
+            .as_nanos();
+        let root = std::env::temp_dir().join(format!("stacc-catalog-hooks-{unique}"));
+        let hook_dir = root
+            .join(CONFIGS_DIR)
+            .join("cursor-plugins")
+            .join("hooks")
+            .join("continual-learning");
+        fs::create_dir_all(&hook_dir).expect("hook dir should be created");
+
+        assert!(Category::Hooks.is_supported_for(Editor::Cursor, Scope::Project, &root));
+        assert!(!Category::Hooks.is_supported_for(Editor::Claude, Scope::Project, &root));
+
+        let _ = fs::remove_dir_all(root);
     }
 }

@@ -11,6 +11,8 @@ use serde_json::{Map, Value};
 use toml_edit::{value as toml_value, DocumentMut, Item as TomlItem, Table as TomlTable};
 
 use crate::catalog::{Category, ConflictMode, Editor, Scope};
+use crate::hook_selection;
+use crate::selective::{prepare_existing_target_for_append, prepare_existing_target_for_write};
 
 const AGENTS_FILE: &str = "AGENTS.md";
 const BACKUP_EXTENSION_PREFIX: &str = "bak";
@@ -35,6 +37,7 @@ const GLOBAL_CLAUDE_MCP_FILE: &str = ".claude.json";
 const GLOBAL_CODEX_DIR: &str = ".codex";
 const GLOBAL_CURSOR_DIR: &str = ".cursor";
 const GLOBAL_OPENCODE_DIR: &str = ".config/opencode";
+const HOOKS_DIR: &str = "hooks";
 const MCP_SERVERS_KEY: &str = "mcpServers";
 const MCP_SERVERS_TOML_KEY: &str = "mcp_servers";
 const METADATA_FILE_NAME: &str = ".DS_Store";
@@ -51,6 +54,7 @@ pub struct InstallRequest {
     pub categories: Vec<Category>,
     pub stacks: Vec<String>,
     pub mcp_servers: Vec<String>,
+    pub hook_packages: Vec<String>,
     pub conflict_mode: ConflictMode,
     pub yes: bool,
     pub dry_run: bool,
@@ -85,6 +89,10 @@ pub enum InstallOperation {
     AppendFile {
         destination: PathBuf,
         contents: String,
+    },
+    PromptConflict {
+        target: PathBuf,
+        choices: String,
     },
     Skip {
         target: PathBuf,
@@ -164,7 +172,7 @@ pub fn execute_install_request(request: &InstallRequest) -> Result<Vec<InstallRu
 
     for plan in &plans {
         for operation in &plan.operations {
-            execute_operation(operation)?;
+            execute_operation(operation, request)?;
         }
         results.push(InstallRunResult {
             editor: plan.editor,
@@ -224,6 +232,9 @@ impl InstallOperation {
             InstallOperation::AppendFile { destination, .. } => {
                 format!("append {}", destination.display())
             }
+            InstallOperation::PromptConflict { target, choices } => {
+                format!("prompt {} ({choices})", target.display())
+            }
             InstallOperation::Skip { target, reason } => {
                 format!("skip {} ({reason})", target.display())
             }
@@ -261,7 +272,8 @@ fn install_for_target(
             }
             Category::Commands => install_commands(request, plan)?,
             Category::Stack => install_stacks(request, plan)?,
-            Category::Agents | Category::Hooks => {
+            Category::Hooks => install_hooks(request, plan)?,
+            Category::Agents => {
                 install_category(request, plan, *category, category.install_value())?;
             }
         }
@@ -454,6 +466,27 @@ fn install_stacks(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()
             &destination,
             None,
             DirectoryConflictMode::WholeDirectory,
+            request,
+            plan,
+        )?;
+    }
+    Ok(())
+}
+
+fn install_hooks(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()> {
+    let selected_hooks =
+        hook_selection::selected_hook_packages(&request.root, plan.editor, &request.hook_packages)?;
+    if selected_hooks.is_empty() {
+        return Ok(());
+    }
+
+    let destination_root = plan.target_root.join(HOOKS_DIR);
+    for (name, source) in selected_hooks {
+        copy_tree(
+            &source,
+            &destination_root.join(name),
+            None,
+            DirectoryConflictMode::PerFile,
             request,
             plan,
         )?;
@@ -722,10 +755,13 @@ fn copy_tree(
         if source_tree_matches_destination(source, destination, &source_files)? {
             return Ok(());
         }
-        if !plan_directory_conflict(request, plan, destination) {
+        if effective_conflict_mode(request) == ConflictMode::Selective {
+            false
+        } else if !plan_directory_conflict(request, plan, destination) {
             return Ok(());
+        } else {
+            true
         }
-        true
     } else {
         false
     };
@@ -893,12 +929,23 @@ fn append_rules_summary(
             contents,
         }
     };
-    if destination.exists() && request.conflict_mode == ConflictMode::Skip {
-        plan.operations.push(InstallOperation::Skip {
-            target: destination.to_path_buf(),
-            reason: "conflict mode is skip".to_string(),
-        });
-        return Ok(());
+    if destination.exists() {
+        match request.conflict_mode {
+            ConflictMode::Skip => {
+                plan.operations.push(InstallOperation::Skip {
+                    target: destination.to_path_buf(),
+                    reason: "conflict mode is skip".to_string(),
+                });
+                return Ok(());
+            }
+            ConflictMode::Selective => {
+                plan.operations.push(InstallOperation::PromptConflict {
+                    target: destination.to_path_buf(),
+                    choices: "append or skip".to_string(),
+                });
+            }
+            ConflictMode::Overwrite | ConflictMode::Backup => {}
+        }
     }
     plan.operations.push(operation);
     Ok(())
@@ -947,10 +994,17 @@ fn plan_file_conflict(
             });
             false
         }
-        ConflictMode::Backup | ConflictMode::Selective => {
+        ConflictMode::Backup => {
             plan.operations.push(InstallOperation::BackupPath {
                 path: destination.to_path_buf(),
                 backup: backup_path(destination, &plan_backup_timestamp(request)),
+            });
+            true
+        }
+        ConflictMode::Selective => {
+            plan.operations.push(InstallOperation::PromptConflict {
+                target: destination.to_path_buf(),
+                choices: "backup, overwrite, or skip".to_string(),
             });
             true
         }
@@ -965,12 +1019,16 @@ fn plan_file_conflict(
     }
 }
 
-fn execute_operation(operation: &InstallOperation) -> Result<()> {
+fn execute_operation(operation: &InstallOperation, request: &InstallRequest) -> Result<()> {
     match operation {
         InstallOperation::CopyFile {
             source,
             destination,
         } => {
+            let backup = backup_path(destination, &plan_backup_timestamp(request));
+            if !prepare_existing_target_for_write(destination, request.conflict_mode, &backup)? {
+                return Ok(());
+            }
             ensure_parent(destination)?;
             fs::copy(source, destination).with_context(|| {
                 format!(
@@ -1002,6 +1060,10 @@ fn execute_operation(operation: &InstallOperation) -> Result<()> {
             destination,
             contents,
         } => {
+            let backup = backup_path(destination, &plan_backup_timestamp(request));
+            if !prepare_existing_target_for_write(destination, request.conflict_mode, &backup)? {
+                return Ok(());
+            }
             ensure_parent(destination)?;
             fs::write(destination, contents)
                 .with_context(|| format!("failed to write {}", destination.display()))?;
@@ -1010,6 +1072,9 @@ fn execute_operation(operation: &InstallOperation) -> Result<()> {
             destination,
             contents,
         } => {
+            if !prepare_existing_target_for_append(destination, request.conflict_mode)? {
+                return Ok(());
+            }
             ensure_parent(destination)?;
             let mut file = OpenOptions::new()
                 .create(true)
@@ -1019,6 +1084,7 @@ fn execute_operation(operation: &InstallOperation) -> Result<()> {
             file.write_all(contents.as_bytes())
                 .with_context(|| format!("failed to append {}", destination.display()))?;
         }
+        InstallOperation::PromptConflict { .. } => {}
         InstallOperation::Skip { .. } => {}
     }
     Ok(())
@@ -1162,9 +1228,6 @@ fn mcp_path_for(
 }
 
 fn effective_conflict_mode(request: &InstallRequest) -> ConflictMode {
-    if request.yes && !request.dry_run && request.conflict_mode == ConflictMode::Selective {
-        return ConflictMode::Backup;
-    }
     request.conflict_mode
 }
 
@@ -1237,6 +1300,7 @@ mod tests {
             categories,
             stacks: Vec::new(),
             mcp_servers: Vec::new(),
+            hook_packages: Vec::new(),
             conflict_mode: ConflictMode::Backup,
             yes: true,
             dry_run: true,
@@ -1433,6 +1497,46 @@ mod tests {
             !matches!(
                 operation,
                 InstallOperation::BackupPath { path, .. } if path == &destination.join("file.txt")
+            )
+        }));
+        assert!(plan.operations.iter().any(|operation| {
+            matches!(
+                operation,
+                InstallOperation::CopyFile { destination: file_destination, .. }
+                    if file_destination == &destination.join("file.txt")
+            )
+        }));
+    }
+
+    #[test]
+    fn selective_directory_conflict_plans_file_conflicts() {
+        let root = TestDir::new("selective-dir");
+        let source = root.path.join("source");
+        let destination = root.path.join("destination");
+        write_test_file(&source.join("file.txt"), "new");
+        write_test_file(&destination.join("file.txt"), "old");
+        let mut request = dry_run_request(vec![Category::Rules]);
+        request.conflict_mode = ConflictMode::Selective;
+        let mut plan = test_plan(destination.clone());
+
+        copy_tree(
+            &source,
+            &destination,
+            None,
+            DirectoryConflictMode::WholeDirectory,
+            &request,
+            &mut plan,
+        )
+        .expect("copy tree planning should succeed");
+
+        assert!(plan.operations.iter().all(|operation| {
+            !matches!(operation, InstallOperation::BackupPath { path, .. } if path == &destination)
+        }));
+        assert!(plan.operations.iter().any(|operation| {
+            matches!(
+                operation,
+                InstallOperation::PromptConflict { target, .. }
+                    if target == &destination.join("file.txt")
             )
         }));
         assert!(plan.operations.iter().any(|operation| {

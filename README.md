@@ -31,6 +31,8 @@ The Rust control panel will guide you through:
 - **Scope selection**: Global (all projects) or project-specific
 - **Category selection**: commands, rules, agents, skills, stack, hooks, mcps, cursor-plugins, codex-skills
 - **Stack selection**: choose one or more stack skill folders from `configs/stacks/`
+- **Hook and MCP selection**: choose hook packages and MCP servers from the Hooks/MCP segment
+- **Version actions**: refresh git status, sync skill metadata, run checks, or bootstrap/upgrade the binary
 
 #### Stacks
 
@@ -50,6 +52,10 @@ Stacks are framework/language-specific skill bundles under `configs/stacks/`. Wh
 
 ```bash
 ./install.sh --cursor --global --categories mcps --mcp-servers github,grep
+```
+
+```bash
+./install.sh --cursor --project --categories hooks --hooks continual-learning
 ```
 
 ```bash
@@ -93,7 +99,9 @@ Useful non-interactive commands:
 ```bash
 cargo run -- status
 cargo run -- install --editor cursor --editor codex --scope project --category rules --category skills --dry-run --print-plan
+cargo run -- install --editor cursor --scope project --category hooks --hook continual-learning --dry-run --print-plan
 cargo run -- sync-metadata --refresh-origin
+cargo run -- bootstrap --dry-run
 cargo run -- check
 ```
 
@@ -103,12 +111,17 @@ After `cargo install`, drop `cargo run --`:
 stacc
 stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --dry-run
 stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --yes
+stacc install --editor cursor --scope project --category hooks --hook continual-learning --dry-run
+stacc bootstrap --dry-run
 stacc check
 ```
 
 - Panel segments: Install, Customise, Version, Skills, Hooks/MCP
-- Install execution is native Rust: file copying, conflict handling, rules summaries, MCP JSON/TOML merge, and installed-binary smoke checks use typed Rust planning with explicit dry-run/yes gates
+- Panel actions return to the TUI with a result message after install dry-runs, installs, metadata sync, checks, and bootstrap dry-runs
+- Install execution is native Rust: file copying, conflict handling, rules summaries, hook package filtering, MCP JSON/TOML merge, and installed-binary smoke checks use typed Rust planning with explicit dry-run/yes gates
+- `selective` conflict mode shows prompt operations in dry-run plans and prompts per conflicting file in an interactive terminal; non-interactive agents should use `backup`, `overwrite`, `skip`, or `--dry-run`
 - Metadata sync writes `configs/metadata/skills.lock.json` with each skill's local path, license, version, source URL, declared origin commit, and current origin HEAD commit when GitHub lookup is enabled
+- `stacc bootstrap` matches the shell bootstrap path by running `cargo install --git https://github.com/heyAyushh/stacc.git --locked --force`; `--dry-run` prints the command without network access
 - Custom defaults live in `configs/stacc-panel.json`
 
 ### Checks
@@ -188,7 +201,7 @@ configs/
 │       ├── run-learning-retrospective/
 │       ├── thermo-nuclear-code-quality-review/
 │       └── what-did-i-get-done/
-├── hooks/           # Git hooks
+├── hooks/           # Optional generic hook packages
 ├── mcps/            # MCP server configurations
 ├── rules/           # Always-applied rules (clean-code, commit format, etc.)
 ├── skills/          # Modular skills for specific tasks

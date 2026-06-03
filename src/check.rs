@@ -10,6 +10,7 @@ const BINARY_NAME: &str = "stacc";
 const BUNDLE_DIR_NAME: &str = "bundle";
 const CARGO_ROOT_DIR_NAME: &str = "cargo-root";
 const CARGO_MANIFEST_FILE: &str = "Cargo.toml";
+const CARGO_OFFLINE_FLAG: &str = "--offline";
 const CHECK_ROOT: &str = "target/stacc-check";
 const INSTALL_SCRIPT: &str = "install.sh";
 const SHELLCHECK_COMMAND: &str = "shellcheck";
@@ -120,6 +121,7 @@ fn run_installed_binary_checks(root: &Path) -> Result<()> {
             cargo_root.as_os_str().to_os_string(),
             OsString::from("--locked"),
             OsString::from("--force"),
+            OsString::from(CARGO_OFFLINE_FLAG),
         ],
     )?;
 
@@ -152,6 +154,32 @@ fn run_installed_binary_checks(root: &Path) -> Result<()> {
             "--dry-run",
             "--print-plan",
         ]),
+        &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
+        OutputMode::Quiet,
+    )?;
+    run_command_with_env(
+        &check_root,
+        binary.as_os_str(),
+        string_args(&[
+            "install",
+            "--editor",
+            "cursor",
+            "--scope",
+            "project",
+            "--category",
+            "hooks",
+            "--hook",
+            "continual-learning",
+            "--dry-run",
+            "--print-plan",
+        ]),
+        &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
+        OutputMode::Quiet,
+    )?;
+    run_command_with_env(
+        &check_root,
+        binary.as_os_str(),
+        string_args(&["bootstrap", "--dry-run"]),
         &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
         OutputMode::Quiet,
     )

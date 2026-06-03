@@ -1,11 +1,14 @@
+mod bootstrap;
 mod bundle;
 mod catalog;
 mod check;
 mod config;
 mod git_utils;
+mod hook_selection;
 mod install;
 mod metadata;
 mod panel;
+mod selective;
 
 use std::io::{self, IsTerminal};
 use std::path::PathBuf;
@@ -13,10 +16,11 @@ use std::path::PathBuf;
 use anyhow::Result;
 use clap::{Args, Parser, Subcommand};
 
+use bootstrap::{default_bootstrap_options, run_bootstrap};
 use bundle::resolve_runtime_root;
 use catalog::{discover_catalog, Category, ConflictMode, Editor, Scope};
 use check::{run_checks, CheckOptions};
-use config::load_panel_config;
+use config::{load_panel_config, PanelConfig};
 use install::{build_install_plan, execute_install_request, print_plan, InstallRequest};
 use metadata::{default_sync_options, sync_metadata};
 use panel::{run_panel, PanelOutcome};
@@ -55,6 +59,8 @@ enum Command {
     Install(InstallArgs),
     /// Sync generated skill license/version/origin metadata.
     SyncMetadata(SyncMetadataArgs),
+    /// Install or upgrade the stacc binary from GitHub.
+    Bootstrap(BootstrapArgs),
     /// Run repository checks and installed-binary smoke tests.
     Check(CheckArgs),
 }
@@ -84,6 +90,8 @@ struct InstallArgs {
     stacks: Vec<String>,
     #[arg(long = "mcp-server", help = "MCP server key to install")]
     mcp_servers: Vec<String>,
+    #[arg(long = "hook", help = "Hook package to install")]
+    hook_packages: Vec<String>,
     #[arg(long, value_enum, default_value_t = ConflictMode::Backup, help = "Conflict strategy")]
     conflict: ConflictMode,
     #[arg(long, help = "Allow writes without interactive confirmation")]
@@ -108,6 +116,15 @@ struct SyncMetadataArgs {
 }
 
 #[derive(Debug, Args)]
+#[command(after_long_help = BOOTSTRAP_EXAMPLES)]
+struct BootstrapArgs {
+    #[arg(long, value_name = "URL", help = "GitHub repo URL to install from")]
+    repo_url: Option<String>,
+    #[arg(long, help = "Print the cargo install command without running it")]
+    dry_run: bool,
+}
+
+#[derive(Debug, Args)]
 #[command(after_long_help = CHECK_EXAMPLES)]
 struct CheckArgs {
     #[arg(long, help = "Fail when shellcheck is not installed")]
@@ -120,6 +137,7 @@ Examples:
   stacc --panel
   stacc status
   stacc install --editor codex --scope global --category rules --category skills --dry-run
+  stacc bootstrap --dry-run
   stacc check
 ";
 
@@ -133,6 +151,7 @@ const INSTALL_EXAMPLES: &str = "\
 Examples:
   stacc install --editor cursor --scope project --category rules --category skills --dry-run
   stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --yes
+  stacc install --editor cursor --scope project --category hooks --hook continual-learning --dry-run
   stacc install --editor cursor --scope project --category cursor-plugins --yes
 ";
 
@@ -140,6 +159,12 @@ const SYNC_METADATA_EXAMPLES: &str = "\
 Examples:
   stacc sync-metadata --dry-run --json
   stacc sync-metadata --refresh-origin
+";
+
+const BOOTSTRAP_EXAMPLES: &str = "\
+Examples:
+  stacc bootstrap --dry-run
+  stacc bootstrap
 ";
 
 const CHECK_EXAMPLES: &str = "\
@@ -161,6 +186,7 @@ fn main() -> Result<()> {
         Some(Command::Status(args)) => run_status_command(root, args),
         Some(Command::Install(args)) => run_install_command(root, args),
         Some(Command::SyncMetadata(args)) => run_sync_metadata_command(root, args),
+        Some(Command::Bootstrap(args)) => run_bootstrap_command(args),
         Some(Command::Check(args)) => run_check_command(root, args),
     }
 }
@@ -172,27 +198,56 @@ fn run_panel_command(root: PathBuf, config_path: Option<PathBuf>) -> Result<()> 
         );
     }
 
-    let catalog = discover_catalog(&root)?;
-    let config = load_panel_config(&root, config_path)?;
-    match run_panel(root, catalog, config)? {
-        PanelOutcome::Quit => {}
-        PanelOutcome::RunInstall(request) => {
-            let plan = build_install_plan(&request)?;
-            print_plan(&plan);
-            if !request.dry_run {
-                execute_install_request(&request)?;
+    let mut config = load_panel_config(&root, config_path)?;
+    let mut message = None;
+    loop {
+        let catalog = discover_catalog(&root)?;
+        match run_panel(root.clone(), catalog, config.clone(), message.take())? {
+            PanelOutcome::Quit => break,
+            PanelOutcome::RunInstall(request) => {
+                config = PanelConfig::from_install_request(&request);
+                let plan = build_install_plan(&request)?;
+                print_plan(&plan);
+                if request.dry_run {
+                    message = Some("install dry-run complete".to_string());
+                    continue;
+                }
+                let results = execute_install_request(&request)?;
+                let operations = results
+                    .iter()
+                    .map(|result| result.operation_count)
+                    .sum::<usize>();
+                message = Some(format!(
+                    "install complete: {} target(s), {} operation(s)",
+                    results.len(),
+                    operations
+                ));
             }
-        }
-        PanelOutcome::SyncMetadata(options) => {
-            let report = sync_metadata(&options)?;
-            println!(
-                "metadata synced: {} skills, {} missing license, {} missing version, {} origin errors -> {}",
-                report.skill_count,
-                report.missing_license_count,
-                report.missing_version_count,
-                report.origin_error_count,
-                report.output.display()
-            );
+            PanelOutcome::SyncMetadata(options) => {
+                let report = sync_metadata(&options)?;
+                message = Some(format!(
+                    "metadata synced: {} skills, {} missing license, {} missing version, {} origin errors",
+                    report.skill_count,
+                    report.missing_license_count,
+                    report.missing_version_count,
+                    report.origin_error_count
+                ));
+            }
+            PanelOutcome::RunChecks => {
+                run_checks(&CheckOptions {
+                    root: root.clone(),
+                    require_shellcheck: false,
+                })?;
+                message = Some("checks passed".to_string());
+            }
+            PanelOutcome::Bootstrap(options) => {
+                run_bootstrap(&options)?;
+                message = Some(if options.dry_run {
+                    "bootstrap dry-run complete".to_string()
+                } else {
+                    "bootstrap complete".to_string()
+                });
+            }
         }
     }
     Ok(())
@@ -226,6 +281,7 @@ fn run_install_command(root: PathBuf, args: InstallArgs) -> Result<()> {
         categories: args.categories,
         stacks: args.stacks,
         mcp_servers: args.mcp_servers,
+        hook_packages: args.hook_packages,
         conflict_mode: args.conflict,
         yes: args.yes,
         dry_run: args.dry_run,
@@ -259,6 +315,15 @@ fn run_sync_metadata_command(root: PathBuf, args: SyncMetadataArgs) -> Result<()
         println!("output: {}", report.output.display());
     }
     Ok(())
+}
+
+fn run_bootstrap_command(args: BootstrapArgs) -> Result<()> {
+    let mut options = default_bootstrap_options();
+    if let Some(repo_url) = args.repo_url {
+        options.repo_url = repo_url;
+    }
+    options.dry_run = args.dry_run;
+    run_bootstrap(&options)
 }
 
 fn run_check_command(root: PathBuf, args: CheckArgs) -> Result<()> {
