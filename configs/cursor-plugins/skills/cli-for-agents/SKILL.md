@@ -25,6 +25,7 @@ Human-oriented CLIs often block agents: interactive prompts, huge upfront docs, 
 
 - Agents discover subcommands incrementally: `mycli`, then `mycli deploy --help`. Do not print the entire manual on every run.
 - Let each subcommand own its documentation so unused commands stay out of context.
+- If the CLI needs extensive agent guidance, keep the default skill/help thin and point to versioned, CLI-served instructions. See `references/agent-browser-runtime-skills.md`.
 
 ## `--help` that works
 
