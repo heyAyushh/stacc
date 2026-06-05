@@ -92,6 +92,13 @@ When adding or modifying configurations:
 6. For MCP changes: verify JSON validity and test merge behavior
 7. Update README.md attributions if adapting from external sources
 
+## Documentation-derived scripts
+- Scripts that refresh, validate, summarize, or otherwise depend on external documentation are recurring maintenance workflows, not one-off scratch files.
+- Put those scripts in the relevant tracked package, skill, stack, or config folder under `configs/` so every worktree gets the same workflow.
+- Document the cadence, source URLs, expected outputs, and verification command next to the script.
+- Keep generated outputs deterministic and commit any required lockfile/metadata updates with the script change.
+- Do not leave documentation-derived scripts only in a local checkout, ignored folder, shell history, or untracked worktree.
+
 ## Adding new configurations
 
 ### New skill
