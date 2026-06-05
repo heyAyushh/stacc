@@ -1328,6 +1328,34 @@ mod tests {
     }
 
     #[test]
+    fn builds_ampcode_global_mcp_settings_plan() {
+        let root = TestDir::new("amp-mcp");
+        write_test_file(
+            &root.path.join(CONFIGS_DIR).join("mcps").join("mcp.json"),
+            r#"{"mcpServers":{"github":{"type":"http","url":"https://example.test"}}}"#,
+        );
+        let mut request = dry_run_request_with_root(root.path.clone(), vec![Category::Mcps]);
+        request.editors = vec![Editor::Ampcode];
+        request.scope = Scope::Global;
+
+        let plans = build_install_plan(&request).expect("AMP MCP plan should build");
+
+        assert_eq!(plans.len(), 1);
+        assert_eq!(plans[0].editor, Editor::Ampcode);
+        assert_eq!(plans[0].scope, Scope::Global);
+        assert!(plans[0].operations.iter().any(|operation| matches!(
+            operation,
+            InstallOperation::WriteFile {
+                destination,
+                contents
+            } if destination.ends_with(".config/amp/settings.json")
+                && contents.contains("\"amp\"")
+                && contents.contains("\"mcpServers\"")
+                && contents.contains("\"github\"")
+        )));
+    }
+
+    #[test]
     fn deep_merges_json_objects() {
         let mut destination = serde_json::json!({
             "mcpServers": {

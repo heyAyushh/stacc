@@ -189,10 +189,20 @@ impl Category {
                         | Category::CodexSkills
                 ),
             },
-            Editor::Ampcode => matches!(
-                self,
-                Category::Commands | Category::Rules | Category::Skills | Category::Stack
-            ),
+            Editor::Ampcode => match scope {
+                Scope::Global => matches!(
+                    self,
+                    Category::Commands
+                        | Category::Rules
+                        | Category::Skills
+                        | Category::Stack
+                        | Category::Mcps
+                ),
+                Scope::Project => matches!(
+                    self,
+                    Category::Commands | Category::Rules | Category::Skills | Category::Stack
+                ),
+            },
         }
     }
 

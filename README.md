@@ -40,7 +40,7 @@ Stacks are framework/language-specific skill bundles under `configs/stacks/`. Wh
 
 #### Installer options
 
-`install.sh` is now a bootstrap and legacy-flag adapter. These commands install or run `stacc`, then forward to the Rust install engine:
+`install.sh` is now a bootstrap and legacy-flag adapter. It prefers a prebuilt GitHub release binary for the current platform, then falls back to Cargo only when no matching binary is available. These commands install or run `stacc`, then forward to the Rust install engine:
 
 ```bash
 ./install.sh --categories commands,rules,skills,stack --stacks bun,typescript
@@ -75,6 +75,15 @@ Install the binary directly:
 ```bash
 cargo install --git https://github.com/heyAyushh/stacc --locked --force
 ```
+
+`install.sh` expects release archives named `stacc-<target>.tar.gz`, containing `stacc` or `stacc.exe`. Supported targets are:
+
+- `x86_64-apple-darwin`
+- `aarch64-apple-darwin`
+- `x86_64-unknown-linux-gnu`
+- `x86_64-pc-windows-msvc`
+
+Override the release source with `STACC_RELEASE_REPO=owner/repo` or pin a version with `STACC_RELEASE_TAG=vX.Y.Z`.
 
 For a local checkout:
 
