@@ -1,6 +1,8 @@
 ---
 name: rust-ownership
 description: Guides ownership, borrowing, and lifetime decisions in Rust. Use when encountering E0382, E0597, E0506, E0507, move errors, or when designing data ownership.
+license: MIT
+origin_url: https://github.com/actionbook/rust-skills
 ---
 
 # Ownership & Lifetimes

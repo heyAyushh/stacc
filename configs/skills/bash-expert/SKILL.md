@@ -1,6 +1,7 @@
 ---
 name: bash-expert
 description: Expert Bash help for writing, debugging, and optimizing safe, portable shell one-liners and scripts on macOS/Linux. Use when users ask for Bash or POSIX sh commands, script reviews, ShellCheck fixes, quoting/pipeline issues, process/file automation, or converting requirements into shell scripts.
+license: MIT
 ---
 
 # Bash Expert

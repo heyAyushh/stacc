@@ -228,3 +228,79 @@ pub fn add(a: i32, b: i32) -> i32 {
     a + b
 }
 ```
+
+## 6. Agent-Friendly CLI Design
+
+Rust binaries should be usable by agents and scripts without interactive
+clarification. Treat the command-line interface as a stable API.
+
+### 6.1 Expose Every Decision as a Flag or Stdin
+Prefer `clap::Parser` or an equivalent parser with explicit flags for every
+required input. Accept stdin when callers may pipe generated code or file
+contents.
+
+BAD:
+```rust
+let mut path = String::new();
+std::io::stdin().read_line(&mut path).unwrap();
+```
+
+GOOD:
+```rust
+#[derive(clap::Parser)]
+struct CheckCommand {
+    path: Option<std::path::PathBuf>,
+    #[arg(long)]
+    stdin: bool,
+    #[arg(long, value_name = "PATH")]
+    stdin_path: Option<std::path::PathBuf>,
+    #[arg(long)]
+    json: bool,
+}
+```
+
+### 6.2 Put Real Examples in Help
+Top-level and subcommand help should include exact commands that work in the
+current project. Do not rely on README-only examples for automation-critical
+flows.
+
+```rust
+const CHECK_EXAMPLES: &str = "\
+Examples:
+  tool check src/lib.rs
+  tool check --stdin --stdin-path src/lib.rs < src/lib.rs
+  tool check --json src/lib.rs";
+```
+
+### 6.3 Return Actionable Usage Errors
+Validate command shape before expensive work. Usage errors should explain the
+expected shape and include a retry command. Keep exit codes stable and document
+project-specific meanings.
+
+```rust
+fn validate(command: &CheckCommand) -> Result<(), CliUsageError> {
+    if command.path.is_none() && !command.stdin {
+        return Err(CliUsageError::new(
+            "check requires a Rust file path or --stdin.",
+            CHECK_EXAMPLES,
+        ));
+    }
+
+    Ok(())
+}
+```
+
+### 6.4 Make Output Machine-Readable
+If another tool consumes the output, provide `--json` or another stable format
+using `serde` types. Human output may be friendly, but automation output should
+have predictable fields.
+
+### 6.5 Protect Destructive Commands
+Any command that writes, deletes, overwrites, or transmits data should support
+`--dry-run` and require explicit confirmation such as `--yes` or `--force`.
+Dry-run output should name the targets and summarize the impact.
+
+### 6.6 Test the CLI Contract
+Cover help text, usage errors, exit codes, stdin handling, and structured output
+with parser tests, `assert_cmd`, or snapshots. CLI tests are part of the public
+API for binaries.

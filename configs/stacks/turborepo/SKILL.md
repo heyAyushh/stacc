@@ -10,6 +10,7 @@ description: |
   or has apps/packages directories.
 metadata:
   version: 2.8.1-canary.0
+license: MIT
 ---
 
 # Turborepo Skill

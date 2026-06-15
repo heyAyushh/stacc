@@ -1,6 +1,8 @@
 ---
 name: rust-coding-guidelines
 description: 50 core Rust coding conventions covering naming, data types, strings, error handling, memory, concurrency, async, and modern crate recommendations. Use when reviewing code style or setting up project conventions.
+license: MIT
+origin_url: https://github.com/actionbook/rust-skills
 ---
 
 # Rust Coding Guidelines

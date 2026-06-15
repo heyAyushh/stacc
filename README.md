@@ -26,17 +26,21 @@ cd stacc
 ./install.sh
 ```
 
-The interactive installer will guide you through:
+The Rust control panel will guide you through:
 - **Editor selection**: Cursor, Claude Code, OpenCode, Codex, AMP Code
 - **Scope selection**: Global (all projects) or project-specific
-- **Category selection**: commands, rules, agents, skills, stack, hooks, mcps
+- **Category selection**: commands, rules, agents, skills, stack, hooks, mcps, cursor-plugins, codex-skills
 - **Stack selection**: choose one or more stack skill folders from `configs/stacks/`
+- **Hook and MCP selection**: choose hook packages and MCP servers from the Hooks/MCP segment
+- **Version actions**: refresh git status, sync skill metadata, run checks, or bootstrap/upgrade the binary
 
 #### Stacks
 
-Stacks are framework/language-specific skill bundles under `configs/stacks/`. When you select the `stacks` category, the installer prompts you to choose one or more stack folders and installs them into each editor's `skills/` directory.
+Stacks are framework/language-specific skill bundles under `configs/stacks/`. When you select the `stack` category, the installer prompts you to choose one or more stack folders and installs them into each editor's `skills/` directory.
 
 #### Installer options
+
+`install.sh` is now a bootstrap and legacy-flag adapter. It prefers a prebuilt GitHub release binary for the current platform, then falls back to Cargo only when no matching binary is available. These commands install or run `stacc`, then forward to the Rust install engine:
 
 ```bash
 ./install.sh --categories commands,rules,skills,stack --stacks bun,typescript
@@ -45,6 +49,137 @@ Stacks are framework/language-specific skill bundles under `configs/stacks/`. Wh
 ```bash
 ./install.sh --all --project --categories skills,stack --stacks all
 ```
+
+```bash
+./install.sh --cursor --global --categories mcps --mcp-servers github,grep
+```
+
+```bash
+./install.sh --cursor --project --categories hooks --hooks continual-learning
+```
+
+```bash
+./install.sh --cursor --project --categories cursor-plugins
+```
+
+```bash
+./install.sh --codex --project --categories codex-skills
+```
+
+### Rust Control Panel
+
+The Rust TUI gives stacc a thin control panel for installation, customization, version metadata, hooks, and MCP selection.
+
+Install the binary directly:
+
+```bash
+cargo install --git https://github.com/heyAyushh/stacc --locked --force
+```
+
+`install.sh` expects release archives named `stacc-<target>.tar.gz`, containing `stacc` or `stacc.exe`. Supported targets are:
+
+- `x86_64-apple-darwin`
+- `aarch64-apple-darwin`
+- `x86_64-unknown-linux-gnu`
+- `x86_64-pc-windows-msvc`
+
+Override the release source with `STACC_RELEASE_REPO=owner/repo` or pin a version with `STACC_RELEASE_TAG=vX.Y.Z`.
+
+For a local checkout:
+
+```bash
+cargo install --path . --locked --force
+```
+
+The installed binary bundles `install.sh`, `configs/`, and README metadata, so agents do not need to pass `--root` after `cargo install`. It materializes the bundle into a versioned cache path on first run. Set `STACC_BUNDLE_ROOT=/path/to/cache` when an agent needs a deterministic bundle directory.
+
+Human default:
+
+```bash
+stacc
+```
+
+Local checkout equivalent:
+
+```bash
+cargo run
+cargo run -- --panel
+```
+
+Agent/non-interactive commands:
+
+```bash
+stacc status --json
+stacc install --editor cursor --editor codex --scope project --category rules --category skills --dry-run --print-plan
+stacc install --editor cursor --scope project --category hooks --hook continual-learning --dry-run --print-plan
+stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --yes
+stacc sync-metadata --refresh-origin
+stacc bootstrap --dry-run
+stacc check
+```
+
+Local checkout form prefixes the same commands with `cargo run --`:
+
+```bash
+cargo run -- install --editor cursor --scope project --category hooks --hook continual-learning --dry-run --print-plan
+```
+
+#### TUI parity
+
+| Feature | TUI | CLI |
+|---------|-----|-----|
+| Editor/scope/conflict/dry-run selection | Install segment | `stacc install --editor ... --scope ... --conflict ... --dry-run` |
+| Category and stack selection | Customise segment | `--category ... --stack ...` |
+| Hook package selection | Hooks/MCP segment | `--category hooks --hook ...` |
+| MCP server selection | Hooks/MCP segment | `--category mcps --mcp-server ...` |
+| Git/status metadata | Version and Skills segments | `stacc status`, `stacc sync-metadata` |
+| Checks | Version segment | `stacc check` |
+| Self install/upgrade | Version segment | `stacc bootstrap` |
+
+Panel actions return to the TUI with a result message after install dry-runs, installs, metadata sync, checks, and bootstrap dry-runs.
+
+#### Conflict modes
+
+| Mode | Behavior |
+|------|----------|
+| `backup` | Move conflicting targets to `.bak.<timestamp>` before writing |
+| `overwrite` | Replace conflicting targets |
+| `skip` | Leave conflicting targets unchanged |
+| `selective` | Show prompt operations in dry-run plans and prompt per conflicting file in an interactive terminal |
+
+Use `backup`, `overwrite`, `skip`, or `--dry-run` for non-interactive agents.
+
+#### Metadata and defaults
+
+- Install execution is native Rust: file copying, conflict handling, rules summaries, hook package filtering, MCP JSON/TOML merge, and installed-binary smoke checks use typed Rust planning with explicit dry-run/yes gates.
+- Metadata sync writes `configs/metadata/skills.lock.json` with each skill's local path, license, version, source URL, declared origin commit, and current origin HEAD commit when GitHub lookup is enabled.
+- Custom panel defaults live in `configs/stacc-panel.json`.
+- `stacc bootstrap` matches the shell bootstrap path by running `cargo install --git https://github.com/heyAyushh/stacc.git --locked --force`; `--dry-run` prints the command without network access.
+
+#### Rust module layout
+
+| Module | Responsibility |
+|--------|----------------|
+| `src/main.rs` | CLI parsing and command dispatch |
+| `src/panel.rs` | Ratatui control panel state and screens |
+| `src/install.rs` | Typed install planning and operation execution |
+| `src/hook_selection.rs` | Hook package discovery and filtering |
+| `src/selective.rs` | Interactive selective conflict prompts |
+| `src/bootstrap.rs` | `cargo install --git` bootstrap command |
+| `src/metadata.rs` | Skill license/version/origin lockfile sync |
+| `src/check.rs` | Format, test, lint, shell, JSON, install, and smoke checks |
+| `src/bundle.rs` | Embedded runtime bundle materialization |
+| `src/catalog.rs` | Config catalog discovery and install compatibility |
+
+### Checks
+
+Run the full local gate before pushing installer or control-panel changes:
+
+```bash
+stacc check
+```
+
+The gate runs Rust format checks, tests, clippy, installer syntax checks, MCP/panel/skill metadata JSON validation, `cargo install --path`, and smoke checks against the installed `stacc` binary. It also runs `shellcheck -x install.sh` when `shellcheck` is installed. Use `stacc check --require-shellcheck` when CI must fail if `shellcheck` is missing.
 
 ### Target Directories
 
@@ -97,17 +232,47 @@ Stacks are framework/language-specific skill bundles under `configs/stacks/`. Wh
 ```
 configs/
 ├── agents/          # Agent definitions (verifier, askuserquestion)
+├── codex-skills/    # Codex-specific skill imports kept as a separate install category
+│   └── skills/
+│       └── babysit-pr/
 ├── commands/        # Slash commands (commit, deslop, ultrathink, etc.)
-├── hooks/           # Git hooks
+├── cursor-plugins/  # Cursor plugin imports kept as a separate install category
+│   ├── agents/
+│   ├── hooks/
+│   └── skills/
+│       ├── cli-for-agents/
+│       ├── continual-learning/
+│       ├── create-learning-path/
+│       ├── deslop/
+│       ├── orchestrate/
+│       ├── run-learning-retrospective/
+│       ├── thermo-nuclear-code-quality-review/
+│       └── what-did-i-get-done/
+├── hooks/           # Optional generic hook packages
 ├── mcps/            # MCP server configurations
 ├── rules/           # Always-applied rules (clean-code, commit format, etc.)
 ├── skills/          # Modular skills for specific tasks
 │   ├── bash-expert/
 │   ├── changelog-generator/
+│   ├── add-app-clip/
+│   ├── audio-math-haptics/
+│   ├── brandkit/
+│   ├── building-native-ui/
+│   ├── eas-update-insights/
+│   ├── emil-design-eng/
+│   ├── expo-api-routes/
+│   ├── expo-*/
 │   ├── find-skills/
 │   ├── frontend-design/
+│   ├── hallmark/
+│   ├── diagnose/
+│   ├── grill-with-docs/
+│   ├── imagegen-frontend-web/
+│   ├── taste-skill/
+│   ├── tdd/
 │   ├── mcp-builder/
-│   └── skill-creator/
+│   ├── skill-creator/
+│   └── ...
 └── stacks/          # Language/framework-specific skill bundles
     ├── bun/
     ├── databases/
@@ -129,24 +294,47 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/skills/mcp-builder/` | MCP Server Development Guide - creating high-quality MCP servers |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
 | `configs/skills/skill-creator/` | Skill Creator Guide - creating effective Claude skills |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
 | `configs/skills/frontend-design/` | Frontend Design - distinctive, production-grade UI creation |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
-| `configs/skills/karpathy-guidelines` | Behavioral guidelines to reduce common LLM coding mistakes. |  | [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) |  |
-| `configs/stacks/ios/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/swiftui-view-refactor/` | SwiftUI view refactoring patterns |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/swiftui-performance-audit/` | SwiftUI performance auditing and optimization |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
-| `configs/stacks/ios/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) |  |
+| `configs/skills/karpathy-guidelines` | Behavioral guidelines to reduce common LLM coding mistakes. |  | [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) | MIT |
+| `configs/skills/emil-design-eng/` | Emil Kowalski design engineering philosophy for UI polish, component design, animation decisions | Copied from `skills/emil-design-eng` at `ecf66bb`; no license file found in source | [emilkowalski/skill](https://github.com/emilkowalski/skill) | NOASSERTION |
+| `configs/skills/audio-math-haptics/` | First-principles audio-coupled haptic and kinetic UI feedback | Copied from `skill/audio-math-haptics` at `dc2ba99` | [heyAyushh/audio-math-haptics](https://github.com/heyAyushh/audio-math-haptics) | MIT |
+| `configs/skills/hallmark/` | Anti-AI-slop design skill for greenfield pages, audits, redesigns, and design extraction | Copied package payload (`SKILL.md` + `references/`) at `9aba10e`; frontmatter adapted for stacc validator | [nutlope/hallmark](https://github.com/nutlope/hallmark) | MIT |
+| `configs/skills/add-app-clip/`, `configs/skills/building-native-ui/`, `configs/skills/eas-update-insights/`, `configs/skills/expo-*/`, `configs/skills/native-data-fetching/`, `configs/skills/upgrading-expo/`, `configs/skills/use-dom/` | Official Expo skills for App Clips, native UI, EAS, deployment, SDK upgrades, modules, data fetching, and DOM components | Copied from `plugins/expo/skills` at `956a92b`; frontmatter adapted for stacc validator | [expo/skills](https://github.com/expo/skills/tree/main/plugins/expo/skills) | MIT |
+| `configs/cursor-plugins/skills/cli-for-agents/references/agent-browser-runtime-skills.md` | Reference pattern for versioned, CLI-served agent instructions | Summarizes the current agent-browser discovery-skill/runtime-skill architecture | [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) | Apache-2.0 |
+| `configs/skills/ultragoal/` | Durable Codex goal design and activation workflow | Copied from `agents/skills/ultragoal`; no license file found in source | [jxnl/dots](https://github.com/jxnl/dots/tree/master/agents/skills/ultragoal) | NOASSERTION |
+| `configs/skills/brandkit/`, `configs/skills/brutalist-skill/`, `configs/skills/gpt-tasteskill/`, `configs/skills/image-to-code-skill/`, `configs/skills/imagegen-frontend-*/`, `configs/skills/minimalist-skill/`, `configs/skills/output-skill/`, `configs/skills/redesign-skill/`, `configs/skills/soft-skill/`, `configs/skills/stitch-skill/`, `configs/skills/taste-skill*/` | Anti-slop frontend, image-generation, brand-kit, redesign, and output-completion skills | Copied from `skills/` at `339afcb`; frontmatter adapted for stacc validator | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | MIT |
+| `configs/cursor-plugins/skills/continual-learning/`, `configs/cursor-plugins/skills/cli-for-agents/`, `configs/cursor-plugins/skills/create-learning-path/`, `configs/cursor-plugins/skills/run-learning-retrospective/`, `configs/cursor-plugins/skills/orchestrate/`, `configs/cursor-plugins/skills/thermo-nuclear-code-quality-review/`, `configs/cursor-plugins/skills/what-did-i-get-done/`, `configs/cursor-plugins/skills/deslop/`, `configs/cursor-plugins/agents/agents-memory-updater.md`, `configs/cursor-plugins/hooks/continual-learning/` | Cursor plugin skills plus the continual-learning agent and hook package | Copied from selected `cursor/plugins` paths at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins) | MIT |
+| `configs/codex-skills/skills/babysit-pr/` | Codex PR babysitter skill for monitoring GitHub PR review feedback, CI, and mergeability | Copied from `.codex/skills/babysit-pr` at `c4e53d1`; frontmatter adapted for stacc validator | [openai/codex](https://github.com/openai/codex/tree/main/.codex/skills/babysit-pr) | Apache-2.0 |
+| `configs/skills/diagnose/` | Disciplined diagnosis loop for hard bugs and performance regressions | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/grill-with-docs/` | Grilling session that challenges plans against the existing domain model and docs | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/triage/` | Issue triage through a role/state workflow | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/improve-codebase-architecture/` | Find codebase architecture deepening opportunities | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/setup-matt-pocock-skills/` | Scaffold per-repo agent-skill configuration | Promoted plugin skill; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/tdd/` | Test-driven development with a red-green-refactor loop | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/to-issues/` | Break plans into independently-grabbable issues | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/to-prd/` | Turn conversation context into a PRD for the project issue tracker | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/zoom-out/` | Ask for a higher-level map of unfamiliar code | Promoted plugin skill; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/prototype/` | Build throwaway prototypes for logic or UI design questions | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/caveman/` | Ultra-compressed communication mode | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/grill-me/` | Interview the user until a plan or design is fully resolved | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/handoff/` | Compact the current conversation into a handoff document | Promoted plugin skill; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/skills/write-a-skill/` | Create new agent skills with proper structure and resources | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
+| `configs/stacks/ios/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/swiftui-view-refactor/` | SwiftUI view refactoring patterns |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/swiftui-performance-audit/` | SwiftUI performance auditing and optimization |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/swiftui-ui-patterns/` | SwiftUI UI patterns and best practices |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/swiftui-liquid-glass/` | iOS 26+ Liquid Glass API implementation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
+| `configs/stacks/ios/ios-debugger-agent/` | XcodeBuildMCP-based iOS debugging |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
 | `configs/commands/deslop.md` | Remove AI-generated code slop | Also seen in [fatih/dotfiles](https://github.com/fatih/dotfiles) and [moeru-ai/airi](https://github.com/moeru-ai/airi) (MIT). | [triggerdotdev/trigger.dev](https://github.com/triggerdotdev/trigger.dev) | Apache-2.0 |
-| `configs/agents/askuserquestion.md` | AskUserQuestion tool description | Adapted from Claude Code's built-in tool descriptions and agent prompts. | Claude Code / Anthropic System Prompts |  |
-| `configs/commands/explore.md` | File search specialist agent prompt | Documented in [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) (MIT). | Claude Code / Anthropic System Prompts |  |
+| `configs/agents/askuserquestion.md` | AskUserQuestion tool description | Adapted from Claude Code's built-in tool descriptions and agent prompts. | Claude Code / Anthropic System Prompts | NOASSERTION |
+| `configs/commands/explore.md` | File search specialist agent prompt | Documented in [Piebald-AI/claude-code-system-prompts](https://github.com/Piebald-AI/claude-code-system-prompts) (MIT). | Claude Code / Anthropic System Prompts | NOASSERTION |
 | `configs/stacks/bun/bun.mdc` | Bun.js best practices |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
 | `configs/stacks/typescript/` | TypeScript conventions |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
 | `configs/stacks/bun/postgresql.mdc` | PostgreSQL guidelines |  | [sanjeed5/awesome-cursor-rules-mdc](https://github.com/sanjeed5/awesome-cursor-rules-mdc) | CC0-1.0 |
 | `configs/rules/clean-code.mdc` | Clean code guidelines |  | [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) | CC0-1.0 |
 | `configs/stacks/solana/` | Solana Dev Skills |  | [Solana Foundation](https://github.com/solana-foundation/solana-dev-skill) | MIT |
-| `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) | |
-| `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) |  |
-| `configs/commands/review-pr.md` | Review Pull request from github |  |  |  |
+| `configs/commands/rebase.md` | Rebase the current branch to resolve/maybe Merge Conflicts |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) | NOASSERTION |
+| `configs/commands/clean-gone.md` | Cleans up all git branches marked as [gone] (branches that have been deleted on the remote but still exist locally), including removing associated worktrees. |  | [Raine Virta - blog](https://raine.dev/blog/resolve-conflicts-with-claude) | NOASSERTION |
+| `configs/commands/review-pr.md` | Review Pull request from GitHub | Local stacc command | Original / stacc | MIT |
 | `configs/commands/visualize.md` | Mermaid diagram generation |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
 | `configs/commands/onboard-new-developer.md` | Developer onboarding checklist |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
 | `configs/commands/refactor.md` | Code refactoring checklist (refactor-code.md) |  | [anthropics/claude-code](https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md) | [LICENSE](https://github.com/anthropics/claude-code/blob/main/LICENSE.md) |
@@ -157,13 +345,13 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/rules/pr-message-format.mdc` | PR message format |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
 | `configs/rules/prompt-injection-gaurd.mdc` | External context injection defense (prompt-injection-guard.mdc) |  | [kinopeee/cursorrules](https://github.com/kinopeee/cursorrules) | MIT |
 | `configs/commands/review.md` | Security-focused code review |  | [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | MIT |
-| `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting |  | [@shaoruu](https://shaoruu.io/cursor/council)|  |
-| `configs/commands/iterate-browser.md` | Autonomously iterate on UI changes using console.log and browser tools |  | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) |  |
-| `configs/skills/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills)  |  |
-| `configs/commands/ultrathink.md` | Deep reasoning mode protocol (original) |  | Original / Sources Not Found |  |
-| `configs/commands/init.md` | AGENTS.md initialization |  | Original / Sources Not Found |  |
-| `configs/agents/verifier.md` | Work verification agent |  | Original / Sources Not Found |  |
-| `configs/stacks/rust/ownership/`, `error-handling/`, `concurrency/`, `zero-cost-abstractions/`, `type-driven-design/`, `performance/`, `anti-patterns/`, `coding-guidelines/` | Rust skill system — layered guidance for ownership, errors, concurrency, types, and performance | Adapted from the layered skill system structure | [actionbook/rust-skills](https://github.com/actionbook/rust-skills) |  |
+| `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting |  | [@shaoruu](https://shaoruu.io/cursor/council) | NOASSERTION |
+| `configs/commands/iterate-browser.md` | Autonomously iterate on UI changes using console.log and browser tools |  | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | Apache-2.0 |
+| `configs/skills/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | Apache-2.0 |
+| `configs/commands/ultrathink.md` | Deep reasoning mode protocol | Local stacc command | Original / stacc | MIT |
+| `configs/commands/init.md` | AGENTS.md initialization | Local stacc command | Original / stacc | MIT |
+| `configs/agents/verifier.md` | Work verification agent | Local stacc agent | Original / stacc | MIT |
+| `configs/stacks/rust/ownership/`, `error-handling/`, `concurrency/`, `zero-cost-abstractions/`, `type-driven-design/`, `performance/`, `agent-friendly-cli/`, `anti-patterns/`, `coding-guidelines/` | Rust skill system — layered guidance for ownership, errors, concurrency, types, performance, and agent-friendly CLI design | Adapted from the layered skill system structure; `agent-friendly-cli/` adapts the local Cursor plugin CLI-for-agents guidance for Rust binaries | [actionbook/rust-skills](https://github.com/actionbook/rust-skills) | MIT |
 
 ## License
 
@@ -171,5 +359,13 @@ MIT. [LICENSE](LICENSE).
 
 Individual components retain their original licenses:
 - Anthropic skills: Apache-2.0 (see `LICENSE.txt` in skill directories)
-- Dimillian/Skills: Check repository for license
+- Matt Pocock skills: MIT (see `LICENSE.txt` in skill directories)
+- Audio Math Haptics and Hallmark: MIT (see `LICENSE.txt` in skill directories)
+- Expo skills: MIT (see `LICENSE.txt` in skill directories)
+- Taste Skill skills: MIT (see `LICENSE.txt` in skill directories)
+- Cursor plugin imports: MIT (see `LICENSE.txt` in cursor-plugin skill and hook directories)
+- Codex skill imports: Apache-2.0 (see `LICENSE.txt` in codex-skill directories)
+- ComposioHQ imports: Apache-2.0
+- Dimillian/Skills: MIT
+- actionbook/rust-skills: MIT
 - Other components: See individual source repositories
