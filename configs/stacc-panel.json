@@ -5,6 +5,7 @@
   "default_stacks": [],
   "default_mcp_servers": [],
   "default_hook_packages": [],
+  "default_codex_plugins": [],
   "conflict_mode": "backup",
   "dry_run": true
 }

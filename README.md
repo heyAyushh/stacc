@@ -29,9 +29,10 @@ cd stacc
 The Rust control panel will guide you through:
 - **Editor selection**: Cursor, Claude Code, OpenCode, Codex, AMP Code
 - **Scope selection**: Global (all projects) or project-specific
-- **Category selection**: commands, rules, agents, skills, stack, hooks, mcps, cursor-plugins, codex-skills
+- **Category selection**: commands, rules, agents, skills, stack, hooks, mcps, cursor-plugins, codex-skills, codex-plugins
 - **Stack selection**: choose one or more stack skill folders from `configs/stacks/`
 - **Hook and MCP selection**: choose hook packages and MCP servers from the Hooks/MCP segment
+- **Managed updates**: update or uninstall skills, stacks, and Codex plugins previously installed by stacc
 - **Version actions**: refresh git status, sync skill metadata, run checks, or bootstrap/upgrade the binary
 
 #### Stacks
@@ -64,6 +65,22 @@ Stacks are framework/language-specific skill bundles under `configs/stacks/`. Wh
 
 ```bash
 ./install.sh --codex --project --categories codex-skills
+```
+
+```bash
+./install.sh install --editor codex --codex-plugin lazycodex --dry-run --print-plan
+```
+
+```bash
+./install.sh sync --editor codex --scope project --dry-run --print-plan
+```
+
+```bash
+./install.sh update --editor codex --skill ultragoal --dry-run --print-plan
+```
+
+```bash
+./install.sh uninstall --editor codex --codex-plugin lazycodex --dry-run --print-plan
 ```
 
 ### Rust Control Panel
@@ -113,6 +130,14 @@ stacc status --json
 stacc install --editor cursor --editor codex --scope project --category rules --category skills --dry-run --print-plan
 stacc install --editor cursor --scope project --category hooks --hook continual-learning --dry-run --print-plan
 stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --yes
+stacc install --editor codex --codex-plugin lazycodex --dry-run --print-plan
+stacc sync --editor codex --scope project --dry-run --print-plan
+stacc sync --editor codex --scope project --skill ultragoal --dry-run --print-plan
+stacc sync --editor codex --codex-plugin lazycodex --dry-run --print-plan
+stacc update --editor codex --skill ultragoal --dry-run --print-plan
+stacc update --editor codex --codex-plugin lazycodex --dry-run --print-plan
+stacc uninstall --editor codex --skill ultragoal --dry-run --print-plan
+stacc uninstall --editor codex --codex-plugin lazycodex --dry-run --print-plan
 stacc sync-metadata --refresh-origin
 stacc bootstrap --dry-run
 stacc check
@@ -132,6 +157,8 @@ cargo run -- install --editor cursor --scope project --category hooks --hook con
 | Category and stack selection | Customise segment | `--category ... --stack ...` |
 | Hook package selection | Hooks/MCP segment | `--category hooks --hook ...` |
 | MCP server selection | Hooks/MCP segment | `--category mcps --mcp-server ...` |
+| Codex plugin selection | Hooks/MCP segment | `--codex-plugin ...` |
+| Managed skill/plugin ownership | CLI only | `stacc sync ...`, `stacc update ...`, `stacc uninstall ...` |
 | Git/status metadata | Version and Skills segments | `stacc status`, `stacc sync-metadata` |
 | Checks | Version segment | `stacc check` |
 | Self install/upgrade | Version segment | `stacc bootstrap` |
@@ -152,6 +179,9 @@ Use `backup`, `overwrite`, `skip`, or `--dry-run` for non-interactive agents.
 #### Metadata and defaults
 
 - Install execution is native Rust: file copying, conflict handling, rules summaries, hook package filtering, MCP JSON/TOML merge, and installed-binary smoke checks use typed Rust planning with explicit dry-run/yes gates.
+- Installs write a stacc ownership manifest at `<target-root>/.stacc/manifest.json`. `stacc update` and `stacc uninstall` only operate on skill, stack, and Codex plugin entries recorded there by stacc; they do not infer ownership from arbitrary files already present in an editor directory.
+- Use `stacc sync --editor ... --scope ... --dry-run --print-plan` to backfill the ownership manifest for stacc skill folders that are already installed. With no `--skill`, it scans all stacc skill sources that install into an editor `skills/` directory, including `configs/skills`, stack folders, Codex/Cursor-specific skill imports, and command skills for editors that store commands as skills. Codex plugin backfill is explicit with `--codex-plugin` because Codex owns the plugin installation state.
+- Optional Codex plugins live in `configs/codex-plugins/plugins.json`. Explicit `--codex-plugin` keys imply the internal `codex-plugins` category and a global Codex target, so `--scope global` is not required. The installer plans fixed `codex plugin marketplace add ...` and `codex plugin add ...` commands, then runs them only with `--yes`. Managed updates use `codex plugin marketplace upgrade ...` plus `codex plugin add ...`; managed uninstalls use `codex plugin remove ...` and remove the marketplace when no other stacc-managed plugin entry uses it.
 - Metadata sync writes `configs/metadata/skills.lock.json` with each skill's local path, license, version, source URL, declared origin commit, and current origin HEAD commit when GitHub lookup is enabled.
 - Custom panel defaults live in `configs/stacc-panel.json`.
 - `stacc bootstrap` matches the shell bootstrap path by running `cargo install --git https://github.com/heyAyushh/stacc.git --locked --force`; `--dry-run` prints the command without network access.
@@ -179,7 +209,7 @@ Run the full local gate before pushing installer or control-panel changes:
 stacc check
 ```
 
-The gate runs Rust format checks, tests, clippy, installer syntax checks, MCP/panel/skill metadata JSON validation, `cargo install --path`, and smoke checks against the installed `stacc` binary. It also runs `shellcheck -x install.sh` when `shellcheck` is installed. Use `stacc check --require-shellcheck` when CI must fail if `shellcheck` is missing.
+The gate runs Rust format checks, tests, clippy, installer syntax checks, MCP/panel/skill metadata JSON validation, `cargo install --path`, and smoke checks against the installed `stacc` binary. The smoke checks include managed skill install, manifest backfill, update dry-run, and uninstall dry-run in `target/stacc-check`. It also runs `shellcheck -x install.sh` when `shellcheck` is installed. Use `stacc check --require-shellcheck` when CI must fail if `shellcheck` is missing.
 
 ### Target Directories
 
@@ -235,6 +265,8 @@ configs/
 ├── codex-skills/    # Codex-specific skill imports kept as a separate install category
 │   └── skills/
 │       └── babysit-pr/
+├── codex-plugins/   # Optional Codex marketplace plugin catalog
+│   └── plugins.json
 ├── commands/        # Slash commands (commit, deslop, ultrathink, etc.)
 ├── cursor-plugins/  # Cursor plugin imports kept as a separate install category
 │   ├── agents/
@@ -304,6 +336,7 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/skills/brandkit/`, `configs/skills/brutalist-skill/`, `configs/skills/gpt-tasteskill/`, `configs/skills/image-to-code-skill/`, `configs/skills/imagegen-frontend-*/`, `configs/skills/minimalist-skill/`, `configs/skills/output-skill/`, `configs/skills/redesign-skill/`, `configs/skills/soft-skill/`, `configs/skills/stitch-skill/`, `configs/skills/taste-skill*/` | Anti-slop frontend, image-generation, brand-kit, redesign, and output-completion skills | Copied from `skills/` at `339afcb`; frontmatter adapted for stacc validator | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | MIT |
 | `configs/cursor-plugins/skills/continual-learning/`, `configs/cursor-plugins/skills/cli-for-agents/`, `configs/cursor-plugins/skills/create-learning-path/`, `configs/cursor-plugins/skills/run-learning-retrospective/`, `configs/cursor-plugins/skills/orchestrate/`, `configs/cursor-plugins/skills/thermo-nuclear-code-quality-review/`, `configs/cursor-plugins/skills/what-did-i-get-done/`, `configs/cursor-plugins/skills/deslop/`, `configs/cursor-plugins/agents/agents-memory-updater.md`, `configs/cursor-plugins/hooks/continual-learning/` | Cursor plugin skills plus the continual-learning agent and hook package | Copied from selected `cursor/plugins` paths at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins) | MIT |
 | `configs/codex-skills/skills/babysit-pr/` | Codex PR babysitter skill for monitoring GitHub PR review feedback, CI, and mergeability | Copied from `.codex/skills/babysit-pr` at `c4e53d1`; frontmatter adapted for stacc validator | [openai/codex](https://github.com/openai/codex/tree/main/.codex/skills/babysit-pr) | Apache-2.0 |
+| `configs/codex-plugins/plugins.json` | Optional LazyCodex Codex plugin marketplace entry | References `code-yeongyu/lazycodex` as an opt-in Codex marketplace source; no LazyCodex payload is vendored | [code-yeongyu/lazycodex](https://github.com/code-yeongyu/lazycodex) | MIT |
 | `configs/skills/diagnose/` | Disciplined diagnosis loop for hard bugs and performance regressions | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `configs/skills/grill-with-docs/` | Grilling session that challenges plans against the existing domain model and docs | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `configs/skills/triage/` | Issue triage through a role/state workflow | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
@@ -365,6 +398,7 @@ Individual components retain their original licenses:
 - Taste Skill skills: MIT (see `LICENSE.txt` in skill directories)
 - Cursor plugin imports: MIT (see `LICENSE.txt` in cursor-plugin skill and hook directories)
 - Codex skill imports: Apache-2.0 (see `LICENSE.txt` in codex-skill directories)
+- LazyCodex optional marketplace reference: MIT
 - ComposioHQ imports: Apache-2.0
 - Dimillian/Skills: MIT
 - actionbook/rust-skills: MIT

@@ -21,7 +21,11 @@ use bundle::resolve_runtime_root;
 use catalog::{discover_catalog, Category, ConflictMode, Editor, Scope};
 use check::{run_checks, CheckOptions};
 use config::{load_panel_config, PanelConfig};
-use install::{build_install_plan, execute_install_request, print_plan, InstallRequest};
+use install::{
+    build_install_plan, build_manage_plan, build_sync_manifest_plan, execute_install_request,
+    execute_manage_request, execute_sync_manifest_request, print_plan, InstallRequest,
+    ManageAction, ManageRequest, SyncManifestRequest,
+};
 use metadata::{default_sync_options, sync_metadata};
 use panel::{run_panel, PanelOutcome};
 
@@ -57,6 +61,12 @@ enum Command {
     Status(StatusArgs),
     /// Run the installer through the typed Rust control layer.
     Install(InstallArgs),
+    #[command(about = "Update stacc-managed skills or Codex plugins")]
+    Update(ManageArgs),
+    #[command(about = "Uninstall stacc-managed skills or Codex plugins")]
+    Uninstall(ManageArgs),
+    #[command(about = "Sync stacc ownership for already-installed skills or plugins")]
+    Sync(SyncArgs),
     /// Sync generated skill license/version/origin metadata.
     SyncMetadata(SyncMetadataArgs),
     /// Install or upgrade the stacc binary from GitHub.
@@ -82,8 +92,7 @@ struct InstallArgs {
     #[arg(
         long = "category",
         value_enum,
-        required = true,
-        help = "Config category to install"
+        help = "Config category to install; optional when --codex-plugin is set"
     )]
     categories: Vec<Category>,
     #[arg(long = "stack", help = "Stack skill folder to install")]
@@ -92,13 +101,70 @@ struct InstallArgs {
     mcp_servers: Vec<String>,
     #[arg(long = "hook", help = "Hook package to install")]
     hook_packages: Vec<String>,
+    #[arg(
+        long = "codex-plugin",
+        help = "Repeatable Codex marketplace plugin key"
+    )]
+    codex_plugins: Vec<String>,
     #[arg(long, value_enum, default_value_t = ConflictMode::Backup, help = "Conflict strategy")]
     conflict: ConflictMode,
     #[arg(long, help = "Allow writes without interactive confirmation")]
     yes: bool,
     #[arg(long, help = "Print planned operations without writing")]
     dry_run: bool,
-    #[arg(long, help = "Print delegated install.sh command plan")]
+    #[arg(long, help = "Print planned install operations")]
+    print_plan: bool,
+}
+
+#[derive(Debug, Args)]
+#[command(after_long_help = MANAGE_EXAMPLES)]
+struct ManageArgs {
+    #[arg(long = "editor", value_enum, required = true, help = "Target editor")]
+    editors: Vec<Editor>,
+    #[arg(long, value_enum, default_value_t = Scope::Project, help = "Managed entry scope")]
+    scope: Scope,
+    #[arg(
+        long = "skill",
+        help = "Repeatable stacc-managed skill or stack folder name"
+    )]
+    skills: Vec<String>,
+    #[arg(
+        long = "codex-plugin",
+        help = "Repeatable stacc-managed Codex plugin key"
+    )]
+    codex_plugins: Vec<String>,
+    #[arg(long, value_enum, default_value_t = ConflictMode::Backup, help = "Conflict strategy")]
+    conflict: ConflictMode,
+    #[arg(long, help = "Allow writes without interactive confirmation")]
+    yes: bool,
+    #[arg(long, help = "Print planned operations without writing")]
+    dry_run: bool,
+    #[arg(long, help = "Print planned managed operations")]
+    print_plan: bool,
+}
+
+#[derive(Debug, Args)]
+#[command(after_long_help = SYNC_EXAMPLES)]
+struct SyncArgs {
+    #[arg(long = "editor", value_enum, required = true, help = "Target editor")]
+    editors: Vec<Editor>,
+    #[arg(long, value_enum, default_value_t = Scope::Project, help = "Managed entry scope")]
+    scope: Scope,
+    #[arg(
+        long = "skill",
+        help = "Repeatable installed stacc skill or stack folder name"
+    )]
+    skills: Vec<String>,
+    #[arg(
+        long = "codex-plugin",
+        help = "Repeatable stacc Codex plugin key to mark as managed"
+    )]
+    codex_plugins: Vec<String>,
+    #[arg(long, help = "Allow manifest writes")]
+    yes: bool,
+    #[arg(long, help = "Print planned manifest updates without writing")]
+    dry_run: bool,
+    #[arg(long, help = "Print planned manifest sync operations")]
     print_plan: bool,
 }
 
@@ -137,6 +203,9 @@ Examples:
   stacc --panel
   stacc status
   stacc install --editor codex --scope global --category rules --category skills --dry-run
+  stacc sync --editor codex --scope project --dry-run --print-plan
+  stacc update --editor codex --skill ultragoal --dry-run --print-plan
+  stacc uninstall --editor codex --codex-plugin lazycodex --dry-run --print-plan
   stacc bootstrap --dry-run
   stacc check
 ";
@@ -153,6 +222,22 @@ Examples:
   stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --yes
   stacc install --editor cursor --scope project --category hooks --hook continual-learning --dry-run
   stacc install --editor cursor --scope project --category cursor-plugins --yes
+  stacc install --editor codex --codex-plugin lazycodex --dry-run --print-plan
+";
+
+const MANAGE_EXAMPLES: &str = "\
+Examples:
+  stacc update --editor codex --skill ultragoal --dry-run --print-plan
+  stacc update --editor codex --codex-plugin lazycodex --dry-run --print-plan
+  stacc uninstall --editor codex --skill ultragoal --dry-run --print-plan
+  stacc uninstall --editor codex --codex-plugin lazycodex --dry-run --print-plan
+";
+
+const SYNC_EXAMPLES: &str = "\
+Examples:
+  stacc sync --editor codex --scope project --dry-run --print-plan
+  stacc sync --editor codex --scope project --skill ultragoal --dry-run --print-plan
+  stacc sync --editor codex --codex-plugin lazycodex --dry-run --print-plan
 ";
 
 const SYNC_METADATA_EXAMPLES: &str = "\
@@ -185,6 +270,9 @@ fn main() -> Result<()> {
         None => run_panel_command(root, cli.config),
         Some(Command::Status(args)) => run_status_command(root, args),
         Some(Command::Install(args)) => run_install_command(root, args),
+        Some(Command::Update(args)) => run_manage_command(root, args, ManageAction::Update),
+        Some(Command::Uninstall(args)) => run_manage_command(root, args, ManageAction::Uninstall),
+        Some(Command::Sync(args)) => run_sync_command(root, args),
         Some(Command::SyncMetadata(args)) => run_sync_metadata_command(root, args),
         Some(Command::Bootstrap(args)) => run_bootstrap_command(args),
         Some(Command::Check(args)) => run_check_command(root, args),
@@ -265,6 +353,7 @@ fn run_status_command(root: PathBuf, args: StatusArgs) -> Result<()> {
         println!("stacks: {}", catalog.stacks.len());
         println!("mcp servers: {}", catalog.mcp_servers.join(","));
         println!("hooks: {}", catalog.hook_packages.len());
+        println!("codex plugins: {}", catalog.codex_plugins.join(","));
         println!(
             "metadata lock: {}",
             catalog::default_metadata_path(&root).display()
@@ -282,6 +371,7 @@ fn run_install_command(root: PathBuf, args: InstallArgs) -> Result<()> {
         stacks: args.stacks,
         mcp_servers: args.mcp_servers,
         hook_packages: args.hook_packages,
+        codex_plugins: args.codex_plugins,
         conflict_mode: args.conflict,
         yes: args.yes,
         dry_run: args.dry_run,
@@ -292,6 +382,47 @@ fn run_install_command(root: PathBuf, args: InstallArgs) -> Result<()> {
     }
     if !request.dry_run {
         execute_install_request(&request)?;
+    }
+    Ok(())
+}
+
+fn run_manage_command(root: PathBuf, args: ManageArgs, action: ManageAction) -> Result<()> {
+    let request = ManageRequest {
+        root,
+        editors: args.editors,
+        scope: args.scope,
+        skills: args.skills,
+        codex_plugins: args.codex_plugins,
+        conflict_mode: args.conflict,
+        yes: args.yes,
+        dry_run: args.dry_run,
+    };
+    let plan = build_manage_plan(&request, action)?;
+    if args.print_plan || request.dry_run {
+        print_plan(&plan);
+    }
+    if !request.dry_run {
+        execute_manage_request(&request, action)?;
+    }
+    Ok(())
+}
+
+fn run_sync_command(root: PathBuf, args: SyncArgs) -> Result<()> {
+    let request = SyncManifestRequest {
+        root,
+        editors: args.editors,
+        scope: args.scope,
+        skills: args.skills,
+        codex_plugins: args.codex_plugins,
+        yes: args.yes,
+        dry_run: args.dry_run,
+    };
+    let plan = build_sync_manifest_plan(&request)?;
+    if args.print_plan || request.dry_run {
+        print_plan(&plan);
+    }
+    if !request.dry_run {
+        execute_sync_manifest_request(&request)?;
     }
     Ok(())
 }

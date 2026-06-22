@@ -84,6 +84,7 @@ enum PanelItemAction {
     ToggleStack(String),
     ToggleMcpServer(String),
     ToggleHookPackage(String),
+    ToggleCodexPlugin(String),
     RefreshStatus,
     SyncMetadata,
     RunChecks,
@@ -109,6 +110,7 @@ struct PanelState {
     stacks: Vec<String>,
     mcp_servers: Vec<String>,
     hook_packages: Vec<String>,
+    codex_plugins: Vec<String>,
     conflict_mode: ConflictMode,
     dry_run: bool,
     status: RepositoryStatus,
@@ -136,6 +138,7 @@ pub fn run_panel(
             stacks: config.default_stacks,
             mcp_servers: config.default_mcp_servers,
             hook_packages: config.default_hook_packages,
+            codex_plugins: config.default_codex_plugins,
             conflict_mode: config.conflict_mode,
             dry_run: config.dry_run,
             status,
@@ -395,9 +398,19 @@ impl PanelState {
                 action: PanelItemAction::ToggleMcpServer(server.clone()),
             });
         }
+        for plugin in &self.catalog.codex_plugins {
+            items.push(PanelItem {
+                label: format!(
+                    "{} codex plugin: {}",
+                    marker(self.codex_plugins.contains(plugin)),
+                    plugin
+                ),
+                action: PanelItemAction::ToggleCodexPlugin(plugin.clone()),
+            });
+        }
         if items.is_empty() {
             items.push(PanelItem {
-                label: "no hooks or MCP servers found".to_string(),
+                label: "no hooks, MCP servers, or Codex plugins found".to_string(),
                 action: PanelItemAction::Noop,
             });
         }
@@ -415,6 +428,7 @@ impl PanelState {
             format!("stacks: {}", join_strings(&self.stacks)),
             format!("mcp: {}", join_strings(&self.mcp_servers)),
             format!("hooks: {}", join_strings(&self.hook_packages)),
+            format!("codex plugins: {}", join_strings(&self.codex_plugins)),
             format!("conflict: {}", self.conflict_mode),
             format!("dry-run: {}", self.dry_run),
         ]
@@ -436,6 +450,7 @@ fn handle_enter(state: &mut PanelState) -> Result<Option<PanelOutcome>> {
                 stacks: state.stacks.clone(),
                 mcp_servers: state.mcp_servers.clone(),
                 hook_packages: state.hook_packages.clone(),
+                codex_plugins: state.codex_plugins.clone(),
                 conflict_mode: state.conflict_mode,
                 yes: true,
                 dry_run: state.dry_run,
@@ -484,6 +499,9 @@ fn handle_item_action(state: &mut PanelState, action: &PanelItemAction) {
         PanelItemAction::ToggleStack(stack) => toggle_string(&mut state.stacks, stack),
         PanelItemAction::ToggleMcpServer(server) => toggle_string(&mut state.mcp_servers, server),
         PanelItemAction::ToggleHookPackage(hook) => toggle_string(&mut state.hook_packages, hook),
+        PanelItemAction::ToggleCodexPlugin(plugin) => {
+            toggle_string(&mut state.codex_plugins, plugin)
+        }
         PanelItemAction::Noop
         | PanelItemAction::RunInstall
         | PanelItemAction::RefreshStatus

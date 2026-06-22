@@ -16,6 +16,7 @@ pub struct PanelConfig {
     pub default_stacks: Vec<String>,
     pub default_mcp_servers: Vec<String>,
     pub default_hook_packages: Vec<String>,
+    pub default_codex_plugins: Vec<String>,
     pub conflict_mode: ConflictMode,
     pub dry_run: bool,
 }
@@ -34,6 +35,7 @@ impl Default for PanelConfig {
             default_stacks: Vec::new(),
             default_mcp_servers: Vec::new(),
             default_hook_packages: Vec::new(),
+            default_codex_plugins: Vec::new(),
             conflict_mode: ConflictMode::Backup,
             dry_run: true,
         }
@@ -49,6 +51,7 @@ impl PanelConfig {
             default_stacks: request.stacks.clone(),
             default_mcp_servers: request.mcp_servers.clone(),
             default_hook_packages: request.hook_packages.clone(),
+            default_codex_plugins: request.codex_plugins.clone(),
             conflict_mode: request.conflict_mode,
             dry_run: request.dry_run,
         }

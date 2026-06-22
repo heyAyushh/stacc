@@ -4,11 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE (http
 
 ## What this repo is
 - `stacc` is a set of **agent configuration files** (rules/commands/skills/agents/hooks) plus a Rust CLI/TUI (`stacc`) that copies them into tool-specific global or project folders.
-- `install.sh` is a bootstrap and legacy-flag adapter. It installs or runs the Rust binary, then forwards installation work to `stacc install`.
+- `install.sh` is a bootstrap and legacy-flag adapter. It installs or runs the Rust binary, then forwards installation work to `stacc install`, `stacc sync`, `stacc update`, or `stacc uninstall`.
 
 ## Common commands
 - **Run installer (local checkout)**: `cargo run`
 - **Run legacy bootstrap (local checkout)**: `./install.sh`
+- **Dry-run manifest sync**: `cargo run -- sync --editor codex --scope project --dry-run --print-plan`
+- **Dry-run managed update**: `cargo run -- update --editor codex --skill ultragoal --dry-run --print-plan`
+- **Dry-run managed uninstall**: `cargo run -- uninstall --editor codex --skill ultragoal --dry-run --print-plan`
 - **Run installer (remote / curl)**: `curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash`
 - **Run full Rust check gate**: `cargo run -- check`
 - **Validate installer syntax**: `bash -n install.sh`
@@ -22,6 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE (http
   - `agents/`: agent prompts used by some workflows.
   - `hooks/`: hook prompts/docs.
   - `mcps/`: MCP server configuration (`mcp.json`) and notes.
+  - `codex-plugins/`: optional Codex plugin marketplace catalog (`plugins.json`).
 - `.cursor/`: repo-local Cursor setup used for developing on this repo itself (commands/skills, etc.).
 - `src/`: Rust CLI/TUI product. `src/install.rs` owns install planning/execution, conflict handling, rules summaries, and MCP config install/merge logic.
 - `install.sh`: shell bootstrap and legacy-flag adapter for curl/local convenience.
@@ -29,6 +33,8 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE (http
 ## Installer behavior notes (important for edits)
 - **macOS compatibility**: prefer Bash 3.2-safe patterns (no associative arrays).
 - **MCP config**: `configs/mcps/mcp.json` is installed by Rust. JSON targets use recursive `serde_json` merge; Codex TOML targets use `toml_edit`; AMP settings are wrapped under `amp.mcpServers`.
+- **Codex plugin catalog**: `configs/codex-plugins/plugins.json` is opt-in and Codex global only. Explicit `--codex-plugin` keys imply the internal category and global target; do not require users to pass `--category codex-plugins` or `--scope global`. Plan fixed `codex plugin marketplace add` and `codex plugin add` argv entries, and do not vendor plugin payloads into stacc.
+- **Managed ownership manifest**: installs write `<target-root>/.stacc/manifest.json` for stacc-owned skills, stacks, command-as-skill installs, and Codex plugins. `stacc sync` backfills already-installed stacc skill folders by scanning known stacc source packages and only recording destinations that exist. `stacc update` and `stacc uninstall` must require matching manifest entries instead of scanning arbitrary editor folders. For Codex plugins, backfill is explicit with `--codex-plugin`; update through `codex plugin marketplace upgrade` and `codex plugin add`; uninstall through `codex plugin remove` and remove the marketplace only when no remaining stacc-managed plugin entry uses it.
 - **Conflict resolution**: the Rust installer supports overwrite, backup (timestamped), skip, and selective per-file handling when targets already exist.
 
 ## Supported tools and target directories
@@ -90,7 +96,8 @@ When adding or modifying configurations:
 4. Validate bootstrap syntax with `bash -n install.sh` and lint with `shellcheck -x install.sh` when available
 5. Ensure Bash 3.2 compatibility in `install.sh` (avoid associative arrays and Bash 4-only features)
 6. For MCP changes: verify JSON validity and test merge behavior
-7. Update README.md attributions if adapting from external sources
+7. For Codex plugin catalog changes: verify dry-run command planning and source/license attribution
+8. Update README.md attributions if adapting from external sources
 
 ## Documentation-derived scripts
 - Scripts that refresh, validate, summarize, or otherwise depend on external documentation are recurring maintenance workflows, not one-off scratch files.
