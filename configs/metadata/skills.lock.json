@@ -1060,28 +1060,6 @@
       }
     },
     {
-      "name": "setup-matt-pocock-skills",
-      "description": "Sets up an `## Agent skills` block in AGENTS.md/CLAUDE.md and `docs/agents/` so the engineering skills know this repo's issue tracker (GitHub or local markdown), triage label vocabulary, and domain doc layout. Run before first use of `to-issues`, `to-prd`, `triage`, `diagnose`, `tdd`, `improve-codebase-architecture`, or `zoom-out` — or if those skills appear to be missing context about the issue tracker, triage labels, or domain docs.",
-      "local_path": "configs/skills/setup-matt-pocock-skills",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/setup-matt-pocock-skills/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
-        "head_error": null
-      }
-    },
-    {
       "name": "skill-creator",
       "description": "Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Claude's capabilities with specialized knowledge, workflows, or tool integrations.",
       "local_path": "configs/skills/skill-creator",

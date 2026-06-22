@@ -341,7 +341,6 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/skills/grill-with-docs/` | Grilling session that challenges plans against the existing domain model and docs | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `configs/skills/triage/` | Issue triage through a role/state workflow | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `configs/skills/improve-codebase-architecture/` | Find codebase architecture deepening opportunities | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
-| `configs/skills/setup-matt-pocock-skills/` | Scaffold per-repo agent-skill configuration | Promoted plugin skill; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `configs/skills/tdd/` | Test-driven development with a red-green-refactor loop | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `configs/skills/to-issues/` | Break plans into independently-grabbable issues | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
 | `configs/skills/to-prd/` | Turn conversation context into a PRD for the project issue tracker | Copied from promoted plugin manifest | [mattpocock/skills](https://github.com/mattpocock/skills) | MIT |
