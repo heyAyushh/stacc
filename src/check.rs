@@ -16,8 +16,9 @@ const INSTALL_SCRIPT: &str = "install.sh";
 const SHELLCHECK_COMMAND: &str = "shellcheck";
 const STACC_BUNDLE_ROOT_ENV: &str = "STACC_BUNDLE_ROOT";
 
-const JSON_FILES: [&str; 3] = [
+const JSON_FILES: [&str; 4] = [
     "configs/mcps/mcp.json",
+    "configs/codex-plugins/plugins.json",
     "configs/stacc-panel.json",
     "configs/metadata/skills.lock.json",
 ];
@@ -131,6 +132,99 @@ fn run_installed_binary_checks(root: &Path) -> Result<()> {
         &check_root,
         binary.as_os_str(),
         string_args(&["status", "--json"]),
+        &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
+        OutputMode::Quiet,
+    )?;
+    run_command_with_env(
+        &check_root,
+        binary.as_os_str(),
+        string_args(&[
+            "install",
+            "--editor",
+            "codex",
+            "--codex-plugin",
+            "lazycodex",
+            "--dry-run",
+            "--print-plan",
+        ]),
+        &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
+        OutputMode::Quiet,
+    )?;
+    run_command_with_env(
+        &check_root,
+        binary.as_os_str(),
+        string_args(&[
+            "install",
+            "--editor",
+            "codex",
+            "--scope",
+            "project",
+            "--category",
+            "skills",
+            "--conflict",
+            "overwrite",
+            "--yes",
+        ]),
+        &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
+        OutputMode::Quiet,
+    )?;
+    let manifest = check_root
+        .join(".codex")
+        .join(".stacc")
+        .join("manifest.json");
+    if manifest.is_file() {
+        fs::remove_file(&manifest)
+            .with_context(|| format!("failed to remove {}", manifest.display()))?;
+    }
+    run_command_with_env(
+        &check_root,
+        binary.as_os_str(),
+        string_args(&[
+            "sync",
+            "--editor",
+            "codex",
+            "--scope",
+            "project",
+            "--dry-run",
+            "--print-plan",
+        ]),
+        &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
+        OutputMode::Quiet,
+    )?;
+    run_command_with_env(
+        &check_root,
+        binary.as_os_str(),
+        string_args(&["sync", "--editor", "codex", "--scope", "project", "--yes"]),
+        &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
+        OutputMode::Quiet,
+    )?;
+    run_command_with_env(
+        &check_root,
+        binary.as_os_str(),
+        string_args(&[
+            "update",
+            "--editor",
+            "codex",
+            "--skill",
+            "ultragoal",
+            "--dry-run",
+            "--print-plan",
+        ]),
+        &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
+        OutputMode::Quiet,
+    )?;
+    run_command_with_env(
+        &check_root,
+        binary.as_os_str(),
+        string_args(&[
+            "uninstall",
+            "--editor",
+            "codex",
+            "--skill",
+            "ultragoal",
+            "--dry-run",
+            "--print-plan",
+        ]),
         &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
         OutputMode::Quiet,
     )?;

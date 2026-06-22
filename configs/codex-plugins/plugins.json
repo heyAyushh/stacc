@@ -1,0 +1,12 @@
+{
+  "plugins": {
+    "lazycodex": {
+      "description": "LazyCodex marketplace entry for the OmO Codex plugin.",
+      "marketplace_source": "code-yeongyu/lazycodex",
+      "marketplace": "sisyphuslabs",
+      "plugin": "omo@sisyphuslabs",
+      "source_url": "https://github.com/code-yeongyu/lazycodex",
+      "license": "MIT"
+    }
+  }
+}

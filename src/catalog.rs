@@ -12,6 +12,8 @@ pub const DEFAULT_METADATA_PATH: &str = "configs/metadata/skills.lock.json";
 pub const DEFAULT_PANEL_CONFIG_PATH: &str = "configs/stacc-panel.json";
 
 const CONFIGS_DIR: &str = "configs";
+const CODEX_PLUGINS_CONFIG_FILE: &str = "plugins.json";
+const CODEX_PLUGINS_KEY: &str = "plugins";
 const SKILL_FILE_NAME: &str = "SKILL.md";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize, Deserialize, ValueEnum)]
@@ -84,10 +86,11 @@ pub enum Category {
     Mcps,
     CursorPlugins,
     CodexSkills,
+    CodexPlugins,
 }
 
 impl Category {
-    pub const ALL: [Category; 9] = [
+    pub const ALL: [Category; 10] = [
         Category::Commands,
         Category::Rules,
         Category::Agents,
@@ -97,6 +100,7 @@ impl Category {
         Category::Mcps,
         Category::CursorPlugins,
         Category::CodexSkills,
+        Category::CodexPlugins,
     ];
 
     pub fn install_value(self) -> &'static str {
@@ -110,6 +114,7 @@ impl Category {
             Category::Mcps => "mcps",
             Category::CursorPlugins => "cursor-plugins",
             Category::CodexSkills => "codex-skills",
+            Category::CodexPlugins => "codex-plugins",
         }
     }
 
@@ -124,6 +129,7 @@ impl Category {
             Category::Mcps => "MCPs",
             Category::CursorPlugins => "Cursor plugins",
             Category::CodexSkills => "Codex skills",
+            Category::CodexPlugins => "Codex plugins",
         }
     }
 
@@ -179,6 +185,7 @@ impl Category {
                         | Category::Stack
                         | Category::Mcps
                         | Category::CodexSkills
+                        | Category::CodexPlugins
                 ),
                 Scope::Project => matches!(
                     self,
@@ -212,6 +219,7 @@ impl Category {
             Category::Hooks => hooks_source_exists(root),
             Category::CursorPlugins => root.join(CONFIGS_DIR).join("cursor-plugins").is_dir(),
             Category::CodexSkills => root.join(CONFIGS_DIR).join("codex-skills").is_dir(),
+            Category::CodexPlugins => root.join(CONFIGS_DIR).join("codex-plugins").is_dir(),
             _ => root.join(CONFIGS_DIR).join(self.install_value()).is_dir(),
         }
     }
@@ -278,6 +286,7 @@ pub struct Catalog {
     pub stacks: Vec<String>,
     pub mcp_servers: Vec<String>,
     pub hook_packages: Vec<HookPackage>,
+    pub codex_plugins: Vec<String>,
     pub skill_count: usize,
 }
 
@@ -293,6 +302,7 @@ pub fn discover_catalog(root: &Path) -> Result<Catalog> {
         stacks: discover_child_dirs(&root.join(CONFIGS_DIR).join("stacks"))?,
         mcp_servers: discover_mcp_servers(root)?,
         hook_packages: discover_hook_packages(root)?,
+        codex_plugins: discover_codex_plugins(root)?,
         skill_count: count_skill_files(root)?,
     })
 }
@@ -350,6 +360,24 @@ fn discover_mcp_servers(root: &Path) -> Result<Vec<String>> {
         .unwrap_or_default();
     servers.sort();
     Ok(servers)
+}
+
+fn discover_codex_plugins(root: &Path) -> Result<Vec<String>> {
+    let path = root
+        .join(CONFIGS_DIR)
+        .join("codex-plugins")
+        .join(CODEX_PLUGINS_CONFIG_FILE);
+    if !path.is_file() {
+        return Ok(Vec::new());
+    }
+    let value = read_json(&path)?;
+    let mut plugins = value
+        .get(CODEX_PLUGINS_KEY)
+        .and_then(Value::as_object)
+        .map(|plugins| plugins.keys().cloned().collect::<Vec<_>>())
+        .unwrap_or_default();
+    plugins.sort();
+    Ok(plugins)
 }
 
 fn discover_hook_packages(root: &Path) -> Result<Vec<HookPackage>> {
@@ -445,6 +473,7 @@ mod tests {
     fn category_labels_match_install_values() {
         assert_eq!(Category::CursorPlugins.install_value(), "cursor-plugins");
         assert_eq!(Category::CodexSkills.install_value(), "codex-skills");
+        assert_eq!(Category::CodexPlugins.install_value(), "codex-plugins");
     }
 
     #[test]
