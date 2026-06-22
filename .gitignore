@@ -1,2 +1,10 @@
 target/
 .DS_Store
+.next/
+node_modules/
+docs/.next/
+docs/node_modules/
+docs/package-lock.json
+docs/tsconfig.tsbuildinfo
+.playwright-mcp/
+variant-*
