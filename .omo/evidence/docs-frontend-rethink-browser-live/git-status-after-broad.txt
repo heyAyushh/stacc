@@ -1,0 +1,56 @@
+ M docs/app/docs/[slug]/page.tsx
+ M docs/app/globals.css
+ M docs/app/layout.tsx
+ M docs/app/page.tsx
+ M docs/components/command-search.tsx
+ M docs/components/docs-page-fill.tsx
+ M docs/components/docs-shell.tsx
+ M docs/components/install-copy-card.tsx
+ M docs/components/inventory-panels.tsx
+ M docs/components/landing-page.tsx
+ M docs/components/mdx-components.tsx
+ M docs/components/theme-toggle.tsx
+ M docs/content/skills.md
+ M docs/lib/anchors.ts
+ M docs/lib/highlight.ts
+ M docs/lib/inventory.ts
+ M docs/lib/search.ts
+ M docs/next.config.mjs
+ M docs/package.json
+ M docs/tsconfig.json
+ M package-lock.json
+?? .agents/
+?? .omo/
+?? DESIGN.md
+?? before-architecture.png
+?? docs/app/docs/skills/
+?? docs/components/copy-panel.tsx
+?? docs/components/skill-detail.tsx
+?? docs/lib/clipboard.ts
+?? docs/lib/skill-display.ts
+?? hallmark-architecture-768.png
+?? hallmark-architecture-desktop.png
+?? hallmark-skills-320.png
+?? hallmark-skills-desktop-after.png
+?? hallmark-skills-desktop.png
+?? qa-codeblock-3000.png
+?? qa-codeblock-4174-dark.png
+?? qa-codeblock-4174-focused.png
+?? qa-codeblock-4174.png
+?? qa-codeblock-dark-fixed.png
+?? qa-landing-footer-fixed.png
+?? qa-landing-footer-mobile-fixed.png
+?? qa-layout-architecture-desktop-fixed.png
+?? qa-layout-architecture-desktop.png
+?? qa-layout-skills-mobile-fixed.png
+?? qa-layout-skills-mobile.png
+?? qa-mobile-docs.png
+?? qa-mobile-landing-settled.png
+?? qa-mobile-landing.png
+?? qa-skill-buttons-dark.png
+?? qa-skill-buttons-desktop.png
+?? qa-skill-buttons-mobile.png
+?? skills-lock.json
+?? stacc-fyi-docs.png
+?? stacc-fyi-landing.png
+?? tui-layout-fix-1280.png

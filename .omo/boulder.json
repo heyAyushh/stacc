@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "active_work_id": "docs-frontend-rethink",
+  "works": {
+    "docs-frontend-rethink": {
+      "work_id": "docs-frontend-rethink",
+      "active_plan": ".omo/plans/docs-frontend-rethink.md",
+      "plan_name": "docs-frontend-rethink",
+      "session_ids": [
+        "codex:019ecd2b-2310-7203-bff6-4a2c902e44b5"
+      ],
+      "status": "active",
+      "worktree_path": null
+    }
+  }
+}

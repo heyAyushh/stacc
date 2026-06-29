@@ -1,0 +1,106 @@
+# final gate LOC blocker verification
+generated_at=2026-06-29T21:22:41Z
+repo=/Users/ay/.codex/worktrees/f602/stacc
+next_start_source=https://nextjs.org/docs/app/getting-started/installation says next start starts production server after next build
+
+## changed files in scope
+ M docs/components/inventory-panels.tsx
+ M docs/lib/inventory.ts
+?? .omo/evidence/final-gate-loc-refactor-verify.txt
+?? docs/.qa/loc-refactor-evidence.txt
+?? docs/components/install-surface-matrix.tsx
+?? docs/components/tui-segments.tsx
+?? docs/lib/inventory-config.ts
+?? docs/lib/inventory-shared.ts
+
+## pure LOC command/output
+command=awk non-empty non-comment line count over touched/new source files
+83 docs/components/install-surface-matrix.tsx
+188 docs/components/inventory-panels.tsx
+20 docs/components/tui-segments.tsx
+104 docs/lib/inventory-config.ts
+26 docs/lib/inventory-shared.ts
+195 docs/lib/inventory.ts
+
+## forbidden suppression/cast scan
+command=rg -n "as any|@ts-ignore|@ts-expect-error" touched files
+verdict=PASS no forbidden patterns
+
+## typecheck
+command=timeout 180s npm run docs:typecheck
+
+> stacc-monorepo@0.1.0 docs:typecheck
+> npm --workspace @stacc/docs run typecheck
+
+
+> @stacc/docs@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+
+## build
+command=timeout 240s npm run docs:build
+
+> stacc-monorepo@0.1.0 docs:build
+> npm --workspace @stacc/docs run build
+
+
+> @stacc/docs@0.1.0 build
+> next build
+
+▲ Next.js 16.2.9 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.0s
+  Running TypeScript ...
+  Finished TypeScript in 2.6s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/103) ...
+  Generating static pages using 7 workers (25/103) 
+  Generating static pages using 7 workers (51/103) 
+  Generating static pages using 7 workers (77/103) 
+✓ Generating static pages using 7 workers (103/103) in 3.2s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /docs
+├ ● /docs/[slug]
+│ ├ /docs/getting-started
+│ ├ /docs/architecture
+│ ├ /docs/installation
+│ └ [+3 more paths]
+└ ● /docs/skills/[skillSlug]
+  ├ /docs/skills/codex-skills-babysit-pr
+  ├ /docs/skills/cursor-plugins-cli-for-agents
+  ├ /docs/skills/cursor-plugins-continual-learning
+  └ [+90 more paths]
+
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+
+
+## diff check
+command=git diff --check
+verdict=PASS no whitespace errors
+
+## HTTP smoke
+command=(cd docs && ./node_modules/.bin/next start --hostname 127.0.0.1 --port 4178) + bounded curl probes
+▲ Next.js 16.2.9
+- Local:         http://127.0.0.1:4178
+- Network:       http://127.0.0.1:4178
+✓ Ready in 159ms
+/docs/binary-tui http=200 bytes=137655
+/docs/skills http=200 bytes=355930
+/docs/binary-tui markers=ok
+/docs/skills markers=ok
+server stopped after smoke
+
+## cleanup check
+verdict=PASS port 4178 free
+
+## final verdict
+verdict=PASS all required verification succeeded
