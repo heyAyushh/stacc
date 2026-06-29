@@ -1,7 +1,7 @@
 ---
 title: Skills Inventory
 eyebrow: Catalog
-description: Browse every STACC skill and stack package with collection, version, license, origin links, local paths, and metadata provenance.
+description: Browse every STACC skill and stack package with collection, version, license, original source, and creator repository provenance.
 order: 3
 sections:
   - id: inventory

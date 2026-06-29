@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { DocsShell } from "@/components/docs-shell";
-import { getAllDocsPages, getDocsPage } from "@/lib/docs";
+import { getAllDocsPages } from "@/lib/docs";
 
 type DocsPageProps = {
   params: Promise<{
@@ -18,39 +18,35 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: DocsPageProps) {
   const { slug } = await params;
+  const pages = await getAllDocsPages();
+  const page = pages.find((docsPage) => docsPage.slug === slug);
 
-  try {
-    const page = await getDocsPage(slug);
-
+  if (page) {
     return {
       title: `${page.frontmatter.title} | STACC Documentation`,
       description: page.frontmatter.description,
     };
-  } catch {
-    return {
-      title: "STACC Documentation",
-    };
   }
+
+  return {
+    title: "STACC Documentation",
+  };
 }
 
 export default async function DocsPage({ params }: DocsPageProps) {
   const { slug } = await params;
   const pagesPromise = getAllDocsPages();
 
-  try {
-    const pages = await pagesPromise;
-    const page = pages.find((docsPage) => docsPage.slug === slug);
+  const pages = await pagesPromise;
+  const page = pages.find((docsPage) => docsPage.slug === slug);
 
-    if (!page) {
-      notFound();
-    }
-
-    return (
-      <div className="docs-route min-h-screen bg-white text-black px-4 py-4 sm:px-8 sm:py-8">
-        <DocsShell page={page} pages={pages} />
-      </div>
-    );
-  } catch {
+  if (!page) {
     notFound();
   }
+
+  return (
+    <div className="docs-route">
+      <DocsShell page={page} pages={pages} />
+    </div>
+  );
 }

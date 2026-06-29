@@ -1,33 +1,22 @@
-import { getBinaryInventory, getConfigInventory, getSkillInventory } from "@/lib/inventory";
-import { toAnchorId } from "@/lib/anchors";
+import Link from "next/link";
+import { getBinaryInventory, getConfigInventory, getSkillInventory, type SkillInventoryItem } from "@/lib/inventory";
+import { toAnchorId, toSkillHref } from "@/lib/anchors";
+import {
+  displaySkillVersion,
+  hasDistinctCreatorRepository,
+  originalSourceLabel,
+} from "@/lib/skill-display";
 
-const editorTargets = [
-  { tool: "Cursor", global: "~/.cursor/", project: ".cursor/" },
-  { tool: "Claude Code", global: "~/.claude/", project: ".claude/" },
-  { tool: "Codex", global: "~/.codex/", project: ".codex/" },
-  { tool: "OpenCode", global: "~/.config/opencode/", project: ".opencode/" },
-  { tool: "AMP Code", global: "~/.config/amp/", project: ".agents/" },
-];
+export { AgentDirectorySupport, CategoryRail, InstallSurfaceMatrix } from "@/components/install-surface-matrix";
+export { TuiSegmentGrid } from "@/components/tui-segments";
 
-const installCategories = [
-  "commands",
-  "rules",
-  "agents",
-  "skills",
-  "stack",
-  "hooks",
-  "mcps",
-  "cursor-plugins",
-  "codex-skills",
-];
-
-const tuiSegments = [
-  { name: "Install", detail: "Editor, scope, conflict strategy, dry-run and write execution." },
-  { name: "Customise", detail: "Category and stack selection for rules, skills, stacks, MCPs, hooks." },
-  { name: "Hooks/MCP", detail: "Hook package and MCP server selection before install planning." },
-  { name: "Version", detail: "Git status, binary bootstrap, and the full check gate." },
-  { name: "Skills", detail: "Metadata sync and skill-origin lockfile maintenance." },
-];
+function catalogMetadataRows(skill: SkillInventoryItem): Array<{ label: string; value: string | null }> {
+  return [
+    { label: "License", value: skill.licenseSpdx },
+    { label: "License Source", value: skill.licenseSource },
+    { label: "Original Source", value: originalSourceLabel(skill) },
+  ];
+}
 
 export async function SkillsOverview() {
   const inventory = await getSkillInventory();
@@ -74,53 +63,30 @@ export async function SkillsCatalog() {
                 <div className="skill-card-top">
                   <div>
                     <span className="metric-label">{skill.collection}</span>
-                    <h4>{skill.name}</h4>
+                    <h4>
+                      <Link href={toSkillHref(skill.collection, skill.name)}>{skill.name}</Link>
+                    </h4>
                   </div>
-                  <span className="version-chip">{skill.version}</span>
+                  <span className="version-chip">{displaySkillVersion(skill.version)}</span>
                 </div>
 
                 <p>{skill.description}</p>
 
                 <dl className="skill-meta">
-                  <div>
-                    <dt>License</dt>
-                    <dd>{skill.licenseSpdx}</dd>
-                  </div>
-                  <div>
-                    <dt>License Source</dt>
-                    <dd>{skill.licenseSource}</dd>
-                  </div>
-                  <div>
-                    <dt>Version Source</dt>
-                    <dd>{skill.versionSource}</dd>
-                  </div>
-                  <div>
-                    <dt>Path</dt>
-                    <dd>{skill.localPath}</dd>
-                  </div>
-                  {skill.declaredCommit ? (
-                    <div>
-                      <dt>Declared Commit</dt>
-                      <dd>{skill.declaredCommit}</dd>
-                    </div>
-                  ) : null}
-                  {skill.headCommit ? (
-                    <div>
-                      <dt>Origin Head</dt>
-                      <dd>{skill.headCommit.slice(0, 12)}</dd>
-                    </div>
-                  ) : null}
-                  {skill.licenseFile ? (
-                    <div>
-                      <dt>License File</dt>
-                      <dd>{skill.licenseFile}</dd>
-                    </div>
-                  ) : null}
+                  {catalogMetadataRows(skill).map((row) =>
+                    row.value ? (
+                      <div key={row.label}>
+                        <dt>{row.label}</dt>
+                        <dd>{row.value}</dd>
+                      </div>
+                    ) : null
+                  )}
                 </dl>
 
                 <div className="skill-links">
-                  {skill.sourceUrl ? <a href={skill.sourceUrl}>SOURCE</a> : <span>LOCAL SOURCE</span>}
-                  {skill.repoUrl ? <a href={skill.repoUrl}>REPOSITORY</a> : null}
+                  <Link href={toSkillHref(skill.collection, skill.name)}>DETAILS</Link>
+                  {skill.sourceUrl ? <a href={skill.sourceUrl}>ORIGINAL SOURCE</a> : null}
+                  {hasDistinctCreatorRepository(skill) ? <a href={skill.repoUrl ?? ""}>CREATOR REPO</a> : null}
                   {skill.headError ? <span>ORIGIN ERROR: {skill.headError}</span> : null}
                 </div>
               </article>
@@ -162,15 +128,26 @@ export async function RuntimeDependencyGrid() {
   const binary = await getBinaryInventory();
 
   return (
-    <div className="dependency-grid">
-      {binary.docsDependencies.map((dependency) => (
-        <div className="dependency-row" key={`${dependency.scope}-${dependency.name}`}>
-          <span>{dependency.name}</span>
-          <code>{dependency.version}</code>
-          <em>{dependency.scope}</em>
-        </div>
-      ))}
-    </div>
+    <section className="dependency-ledger" aria-label="Docs runtime dependencies">
+      <div className="dependency-ledger-head" aria-hidden="true">
+        <span>Package</span>
+        <span>Version</span>
+        <span>Scope</span>
+      </div>
+      <ul className="dependency-list">
+        {binary.docsDependencies.map((dependency) => (
+          <li className="dependency-item" key={`${dependency.scope}-${dependency.name}`}>
+            <strong>
+              <a href={dependency.packageUrl} rel="noreferrer" target="_blank">
+                {dependency.name}
+              </a>
+            </strong>
+            <code>{dependency.version}</code>
+            <span className="dependency-scope">{dependency.scope}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
@@ -217,56 +194,13 @@ export async function ConfigInventoryCatalog() {
           <div className="config-list">
             {group.items.map((item) => (
               <div className="config-row" key={`${group.name}-${item.path}-${item.name}`}>
-                <strong>{item.name}</strong>
-                <code>{item.path}</code>
-                {item.detail ? <span>{item.detail}</span> : null}
+                <strong data-label="Name">{item.name}</strong>
+                <code data-label="Path">{item.path}</code>
+                <span data-label="Detail">{item.detail ?? "—"}</span>
               </div>
             ))}
           </div>
         </section>
-      ))}
-    </div>
-  );
-}
-
-export function InstallSurfaceMatrix() {
-  return (
-    <div className="matrix-table">
-      <div className="matrix-row matrix-head">
-        <span>Tool</span>
-        <span>Global</span>
-        <span>Project</span>
-      </div>
-      {editorTargets.map((target) => (
-        <div className="matrix-row" key={target.tool}>
-          <strong>{target.tool}</strong>
-          <code>{target.global}</code>
-          <code>{target.project}</code>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export function CategoryRail() {
-  return (
-    <div className="category-rail">
-      {installCategories.map((category) => (
-        <span key={category}>{category}</span>
-      ))}
-    </div>
-  );
-}
-
-export function TuiSegmentGrid() {
-  return (
-    <div className="tui-grid">
-      {tuiSegments.map((segment, index) => (
-        <article className="tui-card" key={segment.name}>
-          <span className="section-number">#{String(index + 1).padStart(2, "0")}</span>
-          <h4>{segment.name}</h4>
-          <p>{segment.detail}</p>
-        </article>
       ))}
     </div>
   );

@@ -10,7 +10,7 @@ const yamlLanguage: BundledLanguage = "yaml";
 const jsonLanguage: BundledLanguage = "json";
 const javascriptLanguage: BundledLanguage = "javascript";
 const typescriptLanguage: BundledLanguage = "typescript";
-const shikiTheme = "github-light";
+const shikiTheme = "github-dark";
 
 const yamlLabels = new Set(["agent.stacc", ".stacc", "yaml"]);
 const shellActions = new Set(["cli", "copy", "dry-run", "inspect", "run", "verify"]);

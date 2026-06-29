@@ -1,7 +1,17 @@
 import fs from "node:fs/promises";
-import type { Dirent } from "node:fs";
+import { execFile } from "node:child_process";
 import path from "node:path";
 import { cache } from "react";
+import { promisify } from "node:util";
+import { toSkillSlug } from "@/lib/anchors";
+import {
+  asNullableString,
+  asRecord,
+  asString,
+  optionalString,
+  readJsonFile,
+  repoRoot,
+} from "@/lib/inventory-shared";
 
 export type SkillInventoryItem = {
   name: string;
@@ -40,9 +50,10 @@ export type BinaryInventory = {
   crateLicense: string;
   crateDescription: string;
   binaryName: string;
+  latestCommitYear: string;
   docsVersion: string;
   rootVersion: string;
-  docsDependencies: Array<{ name: string; version: string; scope: "runtime" | "dev" }>;
+  docsDependencies: Array<{ name: string; version: string; scope: "runtime" | "dev"; packageUrl: string }>;
 };
 
 export type ConfigInventoryGroup = {
@@ -57,36 +68,11 @@ export type ConfigInventory = {
   groups: ConfigInventoryGroup[];
 };
 
-const repoRoot = path.join(process.cwd(), "..");
 const skillLockPath = path.join(repoRoot, "configs", "metadata", "skills.lock.json");
 const cargoManifestPath = path.join(repoRoot, "Cargo.toml");
 const docsPackagePath = path.join(process.cwd(), "package.json");
 const rootPackagePath = path.join(repoRoot, "package.json");
-const configsRoot = path.join(repoRoot, "configs");
-
-function asRecord(value: unknown, label: string): Record<string, unknown> {
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
-    throw new Error(`Expected object for ${label}`);
-  }
-
-  return value as Record<string, unknown>;
-}
-
-function asString(value: unknown, label: string): string {
-  if (typeof value !== "string" || value.trim().length === 0) {
-    throw new Error(`Expected string for ${label}`);
-  }
-
-  return value;
-}
-
-function asNullableString(value: unknown): string | null {
-  return typeof value === "string" && value.trim().length > 0 ? value : null;
-}
-
-function optionalString(value: unknown, fallback: string): string {
-  return typeof value === "string" && value.trim().length > 0 ? value : fallback;
-}
+const execFileAsync = promisify(execFile);
 
 function readTomlString(source: string, key: string): string {
   const match = source.match(new RegExp(`^${key}\\s*=\\s*"([^"]+)"`, "m"));
@@ -104,10 +90,27 @@ function firstBinName(source: string): string {
   return binSection?.[1] ?? readTomlString(source, "name");
 }
 
-async function readJsonFile(filePath: string): Promise<Record<string, unknown>> {
-  const source = await fs.readFile(filePath, "utf8");
+async function latestCommitYear(): Promise<string> {
+  try {
+    const { stdout } = await execFileAsync("git", ["-C", repoRoot, "log", "-1", "--format=%cd", "--date=format:%Y"]);
+    const year = stdout.trim();
 
-  return asRecord(JSON.parse(source), filePath);
+    if (/^\d{4}$/.test(year)) {
+      return year;
+    }
+  } catch (error: unknown) {
+    if (!(error instanceof Error)) {
+      throw error;
+    }
+
+    return currentCalendarYear();
+  }
+
+  return currentCalendarYear();
+}
+
+function currentCalendarYear(): string {
+  return String(new Date().getFullYear());
 }
 
 function parseSkill(value: unknown): SkillInventoryItem {
@@ -176,10 +179,22 @@ export const getSkillInventory = cache(async function getSkillInventory(): Promi
   };
 });
 
+export const getAllSkillItems = cache(async function getAllSkillItems(): Promise<SkillInventoryItem[]> {
+  const inventory = await getSkillInventory();
+
+  return inventory.collections.flatMap((collection) => collection.skills);
+});
+
+export const getSkillBySlug = cache(async function getSkillBySlug(slug: string): Promise<SkillInventoryItem | null> {
+  const skills = await getAllSkillItems();
+
+  return skills.find((skill) => toSkillSlug(skill.collection, skill.name) === slug) ?? null;
+});
+
 function dependencyRows(
   dependencies: Record<string, unknown> | undefined,
   scope: "runtime" | "dev"
-): Array<{ name: string; version: string; scope: "runtime" | "dev" }> {
+): BinaryInventory["docsDependencies"] {
   if (!dependencies) {
     return [];
   }
@@ -188,14 +203,20 @@ function dependencyRows(
     name,
     version: asString(version, `dependency ${name}`),
     scope,
+    packageUrl: npmPackageUrl(name),
   }));
 }
 
+function npmPackageUrl(packageName: string): string {
+  return `https://www.npmjs.com/package/${packageName.replace("@", "%40")}`;
+}
+
 export const getBinaryInventory = cache(async function getBinaryInventory(): Promise<BinaryInventory> {
-  const [cargoSource, docsPackage, rootPackage] = await Promise.all([
+  const [cargoSource, docsPackage, rootPackage, commitYear] = await Promise.all([
     fs.readFile(cargoManifestPath, "utf8"),
     readJsonFile(docsPackagePath),
     readJsonFile(rootPackagePath),
+    latestCommitYear(),
   ]);
   const docsDependencies = asRecord(docsPackage.dependencies, "docs.dependencies");
   const docsDevDependencies = asRecord(docsPackage.devDependencies, "docs.devDependencies");
@@ -206,6 +227,7 @@ export const getBinaryInventory = cache(async function getBinaryInventory(): Pro
     crateLicense: readTomlString(cargoSource, "license"),
     crateDescription: readTomlString(cargoSource, "description"),
     binaryName: firstBinName(cargoSource),
+    latestCommitYear: commitYear,
     docsVersion: asString(docsPackage.version, "docs.version"),
     rootVersion: asString(rootPackage.version, "root.version"),
     docsDependencies: [
@@ -215,116 +237,4 @@ export const getBinaryInventory = cache(async function getBinaryInventory(): Pro
   };
 });
 
-async function safeReadDir(directoryPath: string): Promise<Dirent[]> {
-  try {
-    return await fs.readdir(directoryPath, { withFileTypes: true });
-  } catch (error) {
-    const nodeError = error as NodeJS.ErrnoException;
-
-    if (nodeError.code === "ENOENT") {
-      return [];
-    }
-
-    throw error;
-  }
-}
-
-async function filesWithExtension(directory: string, extension: string): Promise<Array<{ name: string; path: string }>> {
-  const entries = await safeReadDir(path.join(configsRoot, directory));
-
-  return entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(extension))
-    .map((entry) => ({
-      name: entry.name.replace(extension, ""),
-      path: path.join("configs", directory, entry.name),
-    }))
-    .toSorted((left, right) => left.name.localeCompare(right.name));
-}
-
-async function childDirectories(directory: string): Promise<Array<{ name: string; path: string }>> {
-  const entries = await safeReadDir(path.join(configsRoot, directory));
-
-  return entries
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => ({
-      name: entry.name,
-      path: path.join("configs", directory, entry.name),
-    }))
-    .toSorted((left, right) => left.name.localeCompare(right.name));
-}
-
-async function mcpServers(): Promise<Array<{ name: string; path: string }>> {
-  const mcpPath = path.join(configsRoot, "mcps", "mcp.json");
-  const source = await readJsonFile(mcpPath);
-  const servers = asRecord(source.mcpServers, "mcpServers");
-
-  return Object.keys(servers)
-    .toSorted()
-    .map((name) => ({
-      name,
-      path: "configs/mcps/mcp.json",
-    }));
-}
-
-function group(
-  name: string,
-  description: string,
-  items: Array<{ name: string; path: string; detail?: string | null }>
-): ConfigInventoryGroup {
-  return {
-    name,
-    description,
-    count: items.length,
-    items: items.map((item) => ({
-      name: item.name,
-      path: item.path,
-      detail: item.detail ?? null,
-    })),
-  };
-}
-
-export const getConfigInventory = cache(async function getConfigInventory(): Promise<ConfigInventory> {
-  const [
-    agents,
-    commands,
-    rules,
-    skills,
-    stacks,
-    hooks,
-    cursorPluginSkills,
-    cursorPluginHooks,
-    cursorPluginAgents,
-    codexSkillGroups,
-    mcps,
-  ] = await Promise.all([
-    filesWithExtension("agents", ".md"),
-    filesWithExtension("commands", ".md"),
-    filesWithExtension("rules", ".mdc"),
-    childDirectories("skills"),
-    childDirectories("stacks"),
-    childDirectories("hooks"),
-    childDirectories(path.join("cursor-plugins", "skills")),
-    childDirectories(path.join("cursor-plugins", "hooks")),
-    childDirectories(path.join("cursor-plugins", "agents")),
-    childDirectories(path.join("codex-skills", "skills")),
-    mcpServers(),
-  ]);
-  const groups = [
-    group("Agents", "Prompted agent definitions used by supported tools.", agents),
-    group("Commands", "Slash-command prompt files installed into command-capable editors.", commands),
-    group("Rules", "Always-applied Cursor MDC rules and repo policy files.", rules),
-    group("Skills", "General STACC skill packages with SKILL.md entrypoints.", skills),
-    group("Stacks", "Framework and language stack bundles installable via --category stack.", stacks),
-    group("Hooks", "Optional hook packages selected with --hook.", hooks),
-    group("MCP Servers", "Server keys from configs/mcps/mcp.json.", mcps),
-    group("Cursor Plugin Skills", "Imported Cursor plugin skills kept in a separate category.", cursorPluginSkills),
-    group("Cursor Plugin Hooks", "Imported Cursor plugin hook packages.", cursorPluginHooks),
-    group("Cursor Plugin Agents", "Imported Cursor plugin agent definitions.", cursorPluginAgents),
-    group("Codex Skill Imports", "Codex-specific imported skills.", codexSkillGroups),
-  ];
-
-  return {
-    groups,
-    totalItems: groups.reduce((total, current) => total + current.count, 0),
-  };
-});
+export { getConfigInventory } from "@/lib/inventory-config";

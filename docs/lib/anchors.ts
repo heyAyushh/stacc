@@ -10,3 +10,11 @@ export function toAnchorId(parts: string[]): string {
 
   return anchor.length > 0 ? anchor : "item";
 }
+
+export function toSkillSlug(collection: string, name: string): string {
+  return toAnchorId([collection, name]);
+}
+
+export function toSkillHref(collection: string, name: string): string {
+  return `/docs/skills/${toSkillSlug(collection, name)}`;
+}

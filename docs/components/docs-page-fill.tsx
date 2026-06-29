@@ -1,4 +1,5 @@
 import {
+  AgentDirectorySupport,
   BinaryOverview,
   CategoryRail,
   ConfigInventoryCatalog,
@@ -175,8 +176,10 @@ stacc check`} />
 
       <FillSection id="installer" number="03" title="Installer Surface">
         <CategoryRail />
+        <AgentDirectorySupport />
         <InstallSurfaceMatrix />
-        <CodePanel label="install help" action="cli" snippet={`stacc install --editor cursor --scope project --category rules --category skills --dry-run
+        <CodePanel label="install help" action="cli" snippet={`stacc install --editor ampcode --scope project --category rules --category skills --dry-run
+stacc install --editor cursor --scope project --category rules --category skills --dry-run
 stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --yes
 stacc install --editor cursor --scope project --category hooks --hook continual-learning --dry-run`} />
       </FillSection>
