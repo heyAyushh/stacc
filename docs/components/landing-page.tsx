@@ -2,6 +2,7 @@ import Link from "next/link";
 import { WaveCanvas } from "@/components/wave-canvas";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { InstallCopyCard } from "@/components/install-copy-card";
+import { getBinaryInventory } from "@/lib/inventory";
 
 const staccRepoUrl = "https://github.com/heyAyushh/stacc";
 const staccIssueUrl = `${staccRepoUrl}/issues/new`;
@@ -61,7 +62,10 @@ function getFeatureAction(actionKind: (typeof features)[number]["actionKind"]) {
   return statusAction;
 }
 
-export function LandingPage() {
+export async function LandingPage() {
+  const binary = await getBinaryInventory();
+  const displayVersion = `v.${binary.crateVersion}`;
+
   return (
     <main className="screen min-h-screen overflow-x-hidden" aria-label="STACC Variant landing page">
       <section className="variant-stage" aria-label="Variant generated design stage">
@@ -104,7 +108,9 @@ export function LandingPage() {
                   Scaffolding
                 </div>
                 <div className="link-stack">
-                  <span className="pill-link">GITHUB</span>
+                  <a className="pill-link" href={staccRepoUrl} rel="noreferrer" target="_blank">
+                    GITHUB
+                  </a>
                   <Link className="pill-link" href="/docs">
                     DOCS
                   </Link>
@@ -151,27 +157,29 @@ export function LandingPage() {
             <footer className="footer-grid" aria-label="Stacc links">
               <div className="footer-mark">#</div>
               <div className="version-panel">
-                <span>v.1.0.4</span>
+                <span>{displayVersion}</span>
                 <span className="latest-pill">LATEST STABLE</span>
               </div>
               <div className="footer-actions">
                 <div className="footer-links">
                   <Link href="/docs">DOCUMENTATION</Link>
-                  <a href="#">TWITTER / X</a>
-                  <a href="#">DISCORD</a>
+                  <span aria-disabled="true">TWITTER / X</span>
+                  <span aria-disabled="true">DISCORD</span>
                   <a href={staccIssueUrl} rel="noreferrer" target="_blank">
                     OPEN ISSUE
                   </a>
                 </div>
                 <div className="footer-bottom">
                   <a className="open-source-badge" href={staccRepoUrl} rel="noreferrer" target="_blank">
+                    GITHUB
+                    <br />
                     OPEN
                     <br />
                     SOURCE
                   </a>
                   <span className="footer-brand">
-                    <span>STACC.DEV</span>
-                    <span>© 2024</span>
+                    <span>STACC.FYI</span>
+                    <span>© {binary.latestCommitYear}</span>
                   </span>
                 </div>
               </div>
