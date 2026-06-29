@@ -1,15 +1,26 @@
 import Link from "next/link";
-import { compileMDX } from "next-mdx-remote/rsc";
+import type { ReactNode } from "react";
+import { markdownToHtml } from "satteri";
 import type { DocsPage } from "@/lib/docs";
 import { getSearchItems } from "@/lib/search";
 import { CommandSearch } from "@/components/command-search";
 import { DocsPageFill } from "@/components/docs-page-fill";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { getBinaryInventory } from "@/lib/inventory";
 
 type DocsShellProps = {
   page: DocsPage;
   pages: DocsPage[];
+  children?: ReactNode;
 };
+
+const staccRepoUrl = "https://github.com/heyAyushh/stacc";
+const staccIssueUrl = `${staccRepoUrl}/issues/new`;
+const markdownOptions = {
+  features: {
+    gfm: true,
+  },
+} as const;
 
 const staticNavGroups = [
   {
@@ -19,30 +30,26 @@ const staticNavGroups = [
   {
     eyebrow: "01 / CORE_SYSTEM",
     links: [
-      { label: "Agent Personas", href: "#" },
-      { label: "Global Rules", href: "#" },
-      { label: "Active Hooks", href: "#" },
+      { label: "Agent Personas", href: "/docs/configurations#groups" },
+      { label: "Global Rules", href: "/docs/architecture#config-surface" },
+      { label: "Active Hooks", href: "/docs/configurations#install" },
     ],
   },
   {
     eyebrow: "02 / INTERFACE",
     links: [
-      { label: "CLI Reference", href: "#" },
-      { label: "API Specs", href: "#" },
-      { label: "Plugins", href: "#" },
+      { label: "CLI Reference", href: "/docs/binary-tui#binary" },
+      { label: "API Specs", href: "/docs/architecture#install-planner" },
+      { label: "Plugins", href: "/docs/configurations#payload" },
     ],
   },
 ];
 
-export async function DocsShell({ page, pages }: DocsShellProps) {
-  const [{ content }, searchItems] = await Promise.all([
-    compileMDX({
-      source: page.body,
-      options: {
-        parseFrontmatter: false,
-      },
-    }),
+export async function DocsShell({ page, pages, children }: DocsShellProps) {
+  const [renderedMarkdown, searchItems, binary] = await Promise.all([
+    children ? Promise.resolve(null) : Promise.resolve(markdownToHtml(page.body, markdownOptions).html),
     getSearchItems(),
+    getBinaryInventory(),
   ]);
   const navGroups = [
     {
@@ -73,9 +80,9 @@ export async function DocsShell({ page, pages }: DocsShellProps) {
         </div>
 
         <div className="version-block">
-          <span>v1.0.4</span>
-          <ThemeToggle />
-          <a href="#" className="pill-badge">
+          <span>v{binary.crateVersion}</span>
+          <ThemeToggle variant="icon" />
+          <a href={staccRepoUrl} className="pill-badge" rel="noreferrer" target="_blank">
             GITHUB
           </a>
         </div>
@@ -87,15 +94,20 @@ export async function DocsShell({ page, pages }: DocsShellProps) {
             <div className="nav-group" key={group.eyebrow}>
               <h4 className="nav-eyebrow">{group.eyebrow}</h4>
               <nav className="nav-stack">
-                {group.links.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className={link.label === page.frontmatter.title ? "sidebar-link active" : "sidebar-link"}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {group.links.map((link) => {
+                  const isActivePage = link.href === `/docs/${page.slug}`;
+
+                  return (
+                    <Link
+                      aria-current={isActivePage ? "page" : undefined}
+                      key={link.label}
+                      href={link.href}
+                      className={isActivePage ? "sidebar-link active" : "sidebar-link"}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
               </nav>
             </div>
           ))}
@@ -118,10 +130,16 @@ export async function DocsShell({ page, pages }: DocsShellProps) {
             <p className="docs-lede">{page.frontmatter.description}</p>
           </div>
 
-          <div className="docs-markdown">{content}</div>
-          <div className="docs-sections">
-            <DocsPageFill slug={page.slug} />
-          </div>
+          {children ? (
+            children
+          ) : (
+            <>
+              <div className="docs-markdown" dangerouslySetInnerHTML={{ __html: renderedMarkdown ?? "" }} />
+              <div className="docs-sections">
+                <DocsPageFill slug={page.slug} />
+              </div>
+            </>
+          )}
         </article>
 
         <aside className="right-sidebar">
@@ -133,11 +151,6 @@ export async function DocsShell({ page, pages }: DocsShellProps) {
               </a>
             ))}
           </nav>
-
-          <div className="sales-card">
-            <p>Need custom infrastructure for your enterprise?</p>
-            <button type="button">CONTACT SALES</button>
-          </div>
         </aside>
       </div>
 
@@ -153,11 +166,15 @@ export async function DocsShell({ page, pages }: DocsShellProps) {
         </div>
         <div className="footer-links">
           <div className="footer-nav">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Support</a>
+            <Link href="/docs">Documentation</Link>
+            <a href={staccRepoUrl} rel="noreferrer" target="_blank">
+              GitHub
+            </a>
+            <a href={staccIssueUrl} rel="noreferrer" target="_blank">
+              Support
+            </a>
           </div>
-          <span className="copyright">© 2024 STACC.DEV</span>
+          <span className="copyright">© {binary.latestCommitYear} STACC.FYI</span>
         </div>
       </footer>
     </main>

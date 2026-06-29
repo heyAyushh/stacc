@@ -6,7 +6,7 @@
     "postcss": "8.5.15"
   },
   "scripts": {
-    "dev": "next dev --hostname 127.0.0.1 --port 4174",
+    "dev": "next dev --webpack --hostname 127.0.0.1 --port 4174",
     "build": "next build",
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit"
@@ -14,9 +14,9 @@
   "dependencies": {
     "cmdk": "^1.1.1",
     "next": "16.2.9",
-    "next-mdx-remote": "6.0.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
+    "satteri": "^0.9.3",
     "shiki": "^4.2.0",
     "yaml": "2.9.0"
   },
