@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { CopyPanel } from "@/components/copy-panel";
 import { highlightCode, resolveCodeLanguage } from "@/lib/highlight";
 
 type DocStepProps = {
@@ -46,23 +47,25 @@ export async function CodePanel({ label, action, snippet, children }: CodePanelP
   const highlightedCode = await highlightCode(source, language);
 
   return (
-    <div className="code-block" data-language={language}>
+    <CopyPanel ariaLabel={`Copy ${label} command`} className="code-block copy-panel" mode="overlay" value={source}>
       <div className="code-meta">
         <span>{label}</span>
-        <span>{action}</span>
+        <span className="copy-status" data-label={action}>
+          {action}
+        </span>
       </div>
       <div className="code-highlight" dangerouslySetInnerHTML={{ __html: highlightedCode }} />
-    </div>
+    </CopyPanel>
   );
 }
 
 export function LaunchPanel({ label, command }: LaunchPanelProps) {
   return (
-    <button className="launch-button" type="button">
+    <CopyPanel ariaLabel={`Copy command: ${command}`} className="launch-button" value={command}>
       <span className="launch-row">
         <span className="launch-label">{label}</span>
         <span className="launch-command">{command}</span>
       </span>
-    </button>
+    </CopyPanel>
   );
 }

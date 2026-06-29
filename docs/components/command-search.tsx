@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Command } from "cmdk";
 import type { SearchItem } from "@/lib/search";
@@ -15,6 +15,15 @@ const kindLabels: Record<SearchItem["kind"], string> = {
   section: "Section",
   skill: "Skill",
 };
+
+const searchIcon = (
+  <span className="search-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" focusable="false">
+      <circle cx="11" cy="11" r="7" />
+      <path d="m16.5 16.5 4 4" />
+    </svg>
+  </span>
+);
 
 function groupItems(items: SearchItem[], kind: SearchItem["kind"]): SearchItem[] {
   return items.filter((item) => item.kind === kind);
@@ -55,6 +64,7 @@ function rankSearchResult(value: string, search: string, keywords?: string[]): n
 
 export function CommandSearch({ items }: CommandSearchProps) {
   const router = useRouter();
+  const [, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const groups = useMemo(
@@ -95,12 +105,15 @@ export function CommandSearch({ items }: CommandSearchProps) {
       return;
     }
 
-    router.push(href);
+    startTransition(() => {
+      router.push(href);
+    });
   }
 
   return (
     <>
       <button className="search-field" type="button" onClick={openPalette} aria-label="Search documentation and skills">
+        {searchIcon}
         <span className="search-label">SEARCH_</span>
         <span className="search-placeholder">FIND DOC, SECTION, OR SKILL...</span>
         <span className="search-key">CMD K</span>

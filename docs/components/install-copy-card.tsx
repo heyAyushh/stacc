@@ -1,57 +1,36 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { copyText, isCopyFailure } from "@/lib/clipboard";
 
 const installCommand = "curl -fsSL ay.dog | bash";
 const copiedResetDelayMs = 1400;
-const clipboardWriteTimeoutMs = 800;
-
-function timeoutAfter(delayMs: number): Promise<never> {
-  return new Promise((_, reject) => {
-    window.setTimeout(() => reject(new Error("Clipboard write timed out")), delayMs);
-  });
-}
-
-async function copyWithFallback(value: string): Promise<void> {
-  if (navigator.clipboard) {
-    try {
-      await Promise.race([navigator.clipboard.writeText(value), timeoutAfter(clipboardWriteTimeoutMs)]);
-      return;
-    } catch {
-    }
-  }
-
-  const textarea = document.createElement("textarea");
-  textarea.value = value;
-  textarea.setAttribute("readonly", "true");
-  textarea.style.position = "fixed";
-  textarea.style.left = "-9999px";
-  document.body.appendChild(textarea);
-  textarea.select();
-
-  try {
-    document.execCommand("copy");
-  } finally {
-    document.body.removeChild(textarea);
-  }
-}
+type CopyState = "idle" | "copied" | "error";
 
 export function InstallCopyCard() {
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<CopyState>("idle");
 
   useEffect(() => {
-    if (!copied) {
+    if (copyState === "idle") {
       return undefined;
     }
 
-    const resetTimer = window.setTimeout(() => setCopied(false), copiedResetDelayMs);
+    const resetTimer = window.setTimeout(() => setCopyState("idle"), copiedResetDelayMs);
 
     return () => window.clearTimeout(resetTimer);
-  }, [copied]);
+  }, [copyState]);
 
   async function copyInstallCommand() {
-    await copyWithFallback(installCommand);
-    setCopied(true);
+    try {
+      await copyText(installCommand);
+      setCopyState("copied");
+    } catch (error: unknown) {
+      if (!isCopyFailure(error)) {
+        throw error;
+      }
+
+      setCopyState("error");
+    }
   }
 
   return (
@@ -60,10 +39,19 @@ export function InstallCopyCard() {
       type="button"
       onClick={copyInstallCommand}
       aria-label={`Copy quick install command: ${installCommand}`}
+      data-copy-state={copyState}
     >
-      <span className="install-label">{copied ? "COPIED" : "QUICK INSTALL"}</span>
+      <span className="install-label">
+        {copyState === "copied" ? "COPIED" : null}
+        {copyState === "error" ? "COPY FAILED" : null}
+        {copyState === "idle" ? "QUICK INSTALL" : null}
+      </span>
       <span className="install-command">
         {installCommand} <span className="command-dot" />
+      </span>
+      <span className="copy-live-region" role="status">
+        {copyState === "copied" ? "Copied" : null}
+        {copyState === "error" ? "Copy failed" : null}
       </span>
     </button>
   );
