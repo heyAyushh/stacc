@@ -100,7 +100,7 @@ function parseFrontmatter(data: Record<string, unknown>): DocsFrontmatter {
   };
 }
 
-export const getDocsPage = cache(async function getDocsPage(slug: string): Promise<DocsPage> {
+const getDocsPage = cache(async function getDocsPage(slug: string): Promise<DocsPage> {
   const filePath = await resolveDocsFile(slug);
   const rawSource = await fs.readFile(filePath, "utf8");
   const parsed = splitFrontmatter(rawSource);
@@ -131,9 +131,13 @@ async function resolveDocsFile(slug: string): Promise<string> {
 
 export const getAllDocsPages = cache(async function getAllDocsPages(): Promise<DocsPage[]> {
   const entries = await fs.readdir(docsRoot, { withFileTypes: true });
-  const slugs = entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(markdownExtension))
-    .map((entry) => entry.name.replace(markdownExtensionPattern, ""));
+  const slugs = entries.reduce<string[]>((currentSlugs, entry) => {
+    if (entry.isFile() && entry.name.endsWith(markdownExtension)) {
+      currentSlugs.push(entry.name.replace(markdownExtensionPattern, ""));
+    }
+
+    return currentSlugs;
+  }, []);
   const pages = await Promise.all(slugs.map((slug) => getDocsPage(slug)));
 
   return pages.toSorted((left, right) => left.frontmatter.order - right.frontmatter.order);

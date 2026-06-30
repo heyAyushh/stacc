@@ -2,19 +2,18 @@ import Link from "next/link";
 import { getBinaryInventory, getConfigInventory, getSkillInventory, type SkillInventoryItem } from "@/lib/inventory";
 import { toAnchorId, toSkillHref } from "@/lib/anchors";
 import {
-  displaySkillVersion,
   hasDistinctCreatorRepository,
-  originalSourceLabel,
+  sourceDisplayLabel,
 } from "@/lib/skill-display";
 
-export { AgentDirectorySupport, CategoryRail, InstallSurfaceMatrix } from "@/components/install-surface-matrix";
+export { AgentDirectorySupport } from "@/components/agent-directory-support";
+export { CategoryRail } from "@/components/category-rail";
+export { InstallSurfaceMatrix } from "@/components/install-surface-matrix";
 export { TuiSegmentGrid } from "@/components/tui-segments";
 
 function catalogMetadataRows(skill: SkillInventoryItem): Array<{ label: string; value: string | null }> {
   return [
     { label: "License", value: skill.licenseSpdx },
-    { label: "License Source", value: skill.licenseSource },
-    { label: "Original Source", value: originalSourceLabel(skill) },
   ];
 }
 
@@ -26,7 +25,7 @@ export async function SkillsOverview() {
       <div className="metric-card metric-card-hero">
         <span className="metric-label">TOTAL SKILLS</span>
         <strong>{inventory.totalSkills}</strong>
-        <p>Loaded from {inventory.sourceRepo} metadata lockfile.</p>
+        <p>{inventory.sourceRepo}</p>
       </div>
       <div className="metric-card">
         <span className="metric-label">COLLECTIONS</span>
@@ -64,10 +63,10 @@ export async function SkillsCatalog() {
                   <div>
                     <span className="metric-label">{skill.collection}</span>
                     <h4>
-                      <Link href={toSkillHref(skill.collection, skill.name)}>{skill.name}</Link>
+                      <Link href={toSkillHref(skill.localPath)}>{skill.name}</Link>
                     </h4>
                   </div>
-                  <span className="version-chip">{displaySkillVersion(skill.version)}</span>
+                  <span className="source-chip">{sourceDisplayLabel(skill)}</span>
                 </div>
 
                 <p>{skill.description}</p>
@@ -84,9 +83,17 @@ export async function SkillsCatalog() {
                 </dl>
 
                 <div className="skill-links">
-                  <Link href={toSkillHref(skill.collection, skill.name)}>DETAILS</Link>
-                  {skill.sourceUrl ? <a href={skill.sourceUrl}>ORIGINAL SOURCE</a> : null}
-                  {hasDistinctCreatorRepository(skill) ? <a href={skill.repoUrl ?? ""}>CREATOR REPO</a> : null}
+                  <Link href={toSkillHref(skill.localPath)}>DETAILS</Link>
+                  {skill.sourceUrl ? (
+                    <a href={skill.sourceUrl} rel="noreferrer" target="_blank">
+                      ORIGINAL SOURCE
+                    </a>
+                  ) : null}
+                  {hasDistinctCreatorRepository(skill) ? (
+                    <a href={skill.repoUrl ?? ""} rel="noreferrer" target="_blank">
+                      CREATOR REPO
+                    </a>
+                  ) : null}
                   {skill.headError ? <span>ORIGIN ERROR: {skill.headError}</span> : null}
                 </div>
               </article>
@@ -192,13 +199,21 @@ export async function ConfigInventoryCatalog() {
           </div>
 
           <div className="config-list">
-            {group.items.map((item) => (
-              <div className="config-row" key={`${group.name}-${item.path}-${item.name}`}>
-                <strong data-label="Name">{item.name}</strong>
-                <code data-label="Path">{item.path}</code>
-                <span data-label="Detail">{item.detail ?? "—"}</span>
-              </div>
-            ))}
+            {group.items.map((item) =>
+              item.isExternal ? (
+                <a className="config-row" href={item.href} key={`${group.name}-${item.path}-${item.name}`} rel="noreferrer" target="_blank">
+                  <strong data-label="Name">{item.name}</strong>
+                  <code data-label="Path">{item.path}</code>
+                  <span className="config-row-action" data-label="Open">{item.hrefLabel}</span>
+                </a>
+              ) : (
+                <Link className="config-row" href={item.href} key={`${group.name}-${item.path}-${item.name}`}>
+                  <strong data-label="Name">{item.name}</strong>
+                  <code data-label="Path">{item.path}</code>
+                  <span className="config-row-action" data-label="Open">{item.hrefLabel}</span>
+                </Link>
+              )
+            )}
           </div>
         </section>
       ))}

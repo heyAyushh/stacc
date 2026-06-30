@@ -1,7 +1,17 @@
 import fs from "node:fs/promises";
+import { existsSync } from "node:fs";
 import path from "node:path";
 
-export const repoRoot = path.join(process.cwd(), "..");
+function resolveRepoRoot(): string {
+  const parentRoot = path.join(process.cwd(), "..");
+  if (existsSync(path.join(parentRoot, "configs"))) {
+    return parentRoot;
+  }
+
+  return path.join(process.cwd(), "source");
+}
+
+export const repoRoot = resolveRepoRoot();
 export const configsRoot = path.join(repoRoot, "configs");
 
 export function asRecord(value: unknown, label: string): Record<string, unknown> {

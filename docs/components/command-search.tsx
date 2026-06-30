@@ -1,20 +1,24 @@
 "use client";
 
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { createContext, use, useCallback, useEffect, useMemo, useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Command } from "cmdk";
 import type { SearchItem } from "@/lib/search";
 
-type CommandSearchProps = {
+type CommandSearchProviderProps = {
   items: SearchItem[];
+  children: ReactNode;
+};
+
+type CommandSearchContextValue = {
+  openPalette: () => void;
+};
+
+type CommandSearchProps = {
+  variant?: "docs" | "compact";
 };
 
 const keyboardShortcut = "K";
-const kindLabels: Record<SearchItem["kind"], string> = {
-  doc: "Doc",
-  section: "Section",
-  skill: "Skill",
-};
 
 const searchIcon = (
   <span className="search-icon" aria-hidden="true">
@@ -24,6 +28,8 @@ const searchIcon = (
     </svg>
   </span>
 );
+
+const CommandSearchContext = createContext<CommandSearchContextValue | null>(null);
 
 function groupItems(items: SearchItem[], kind: SearchItem["kind"]): SearchItem[] {
   return items.filter((item) => item.kind === kind);
@@ -36,8 +42,11 @@ function normalizeSearchText(value: string): string {
 function rankSearchResult(value: string, search: string, keywords?: string[]): number {
   const terms = normalizeSearchText(search)
     .split(/\s+/)
-    .map((term) => term.trim())
-    .filter(Boolean);
+    .flatMap((term) => {
+      const trimmedTerm = term.trim();
+
+      return trimmedTerm ? [trimmedTerm] : [];
+    });
 
   if (terms.length === 0) {
     return 1;
@@ -62,7 +71,17 @@ function rankSearchResult(value: string, search: string, keywords?: string[]): n
   return 2;
 }
 
-export function CommandSearch({ items }: CommandSearchProps) {
+function useCommandSearch() {
+  const context = use(CommandSearchContext);
+
+  if (!context) {
+    throw new Error("CommandSearch must be rendered inside CommandSearchProvider");
+  }
+
+  return context;
+}
+
+export function CommandSearchProvider({ items, children }: CommandSearchProviderProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
@@ -88,9 +107,11 @@ export function CommandSearch({ items }: CommandSearchProps) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  function openPalette() {
+  const openPalette = useCallback(function openPalette() {
     setOpen(true);
-  }
+  }, []);
+
+  const contextValue = useMemo(() => ({ openPalette }), [openPalette]);
 
   function selectItem(href: string) {
     setOpen(false);
@@ -111,14 +132,8 @@ export function CommandSearch({ items }: CommandSearchProps) {
   }
 
   return (
-    <>
-      <button className="search-field" type="button" onClick={openPalette} aria-label="Search documentation and skills">
-        {searchIcon}
-        <span className="search-label">SEARCH_</span>
-        <span className="search-placeholder">FIND DOC, SECTION, OR SKILL...</span>
-        <span className="search-key">CMD K</span>
-      </button>
-
+    <CommandSearchContext.Provider value={contextValue}>
+      {children}
       <Command.Dialog
         open={open}
         onOpenChange={setOpen}
@@ -152,13 +167,14 @@ export function CommandSearch({ items }: CommandSearchProps) {
                     keywords={item.keywords}
                     onSelect={() => selectItem(item.href)}
                   >
-                    <span className="command-kind">{kindLabels[item.kind]}</span>
                     <span className="command-copy">
                       <strong>{item.title}</strong>
-                      <small>{item.eyebrow}</small>
+                      <small>
+                        <span>{item.eyebrow}</span>
+                        <span>{item.detail}</span>
+                      </small>
                       <span>{item.description}</span>
                     </span>
-                    <span className="command-arrow">ENTER</span>
                   </Command.Item>
                 ))}
               </Command.Group>
@@ -166,6 +182,34 @@ export function CommandSearch({ items }: CommandSearchProps) {
           </Command.List>
         </div>
       </Command.Dialog>
-    </>
+    </CommandSearchContext.Provider>
+  );
+}
+
+export function CommandSearch({ variant = "docs" }: CommandSearchProps) {
+  const { openPalette } = useCommandSearch();
+  const isCompact = variant === "compact";
+
+  return (
+    <button
+      className={isCompact ? "command-search-compact" : "search-field"}
+      type="button"
+      onClick={openPalette}
+      aria-label="Search documentation and skills with Command K"
+    >
+      {searchIcon}
+      {isCompact ? (
+        <>
+          <span>SEARCH</span>
+          <kbd>CMD K</kbd>
+        </>
+      ) : (
+        <>
+          <span className="search-label">SEARCH_</span>
+          <span className="search-placeholder">FIND DOC, SECTION, OR SKILL...</span>
+          <span className="search-key">CMD K</span>
+        </>
+      )}
+    </button>
   );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { WaveCanvas } from "@/components/wave-canvas";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { InstallCopyCard } from "@/components/install-copy-card";
+import { CommandSearch } from "@/components/command-search";
 import { getBinaryInventory } from "@/lib/inventory";
 
 const staccRepoUrl = "https://github.com/heyAyushh/stacc";
@@ -12,6 +13,7 @@ const features = [
     number: "01",
     titleLines: ["Agent", "Swarms"],
     body: "Pre-configured LLM personas tailored for TypeScript, Rust, and Go environments.",
+    href: "/docs/configurations#groups",
     panelClassName: "border-b md:border-b-0 md:border-r border-black",
     actionKind: "pill",
   },
@@ -19,6 +21,7 @@ const features = [
     number: "02",
     titleLines: ["Global", "Rulesets"],
     body: "Enforce clean code architecture, commit convention, and documentation standards via simple hooks.",
+    href: "/docs/architecture#config-surface",
     panelClassName: "border-b md:border-b-0 md:border-r border-black",
     actionKind: "arrow",
   },
@@ -26,6 +29,7 @@ const features = [
     number: "03",
     titleLines: ["Active", "Hooks"],
     body: "Auto-scaffold project structures. Inject context into your IDE automatically.",
+    href: "/docs/configurations#install",
     panelClassName: "bg-white",
     actionKind: "status",
   },
@@ -70,6 +74,7 @@ export async function LandingPage() {
     <main className="screen min-h-screen overflow-x-hidden" aria-label="STACC Variant landing page">
       <section className="variant-stage" aria-label="Variant generated design stage">
         <div className="stage-theme-toggle">
+          <CommandSearch variant="compact" />
           <ThemeToggle />
         </div>
         <article className="canvas">
@@ -114,6 +119,7 @@ export async function LandingPage() {
                   <Link className="pill-link" href="/docs">
                     DOCS
                   </Link>
+                  <CommandSearch variant="compact" />
                   <ThemeToggle />
                 </div>
                 <div className="curl-hint">curl -fsSL</div>
@@ -131,9 +137,10 @@ export async function LandingPage() {
 
             <section className="grid grid-cols-1 md:grid-cols-3" aria-label="Feature summary">
               {features.map((feature) => (
-                <div
+                <Link
+                  href={feature.href}
                   key={feature.number}
-                  className={`p-8 hover-invert group min-h-[300px] flex flex-col justify-between ${feature.panelClassName}`}
+                  className={`feature-panel p-8 hover-invert group min-h-[300px] flex flex-col justify-between ${feature.panelClassName}`}
                 >
                   <div>
                     <h2 className="text-6xl font-compressed mb-4">#{feature.number}</h2>
@@ -150,7 +157,7 @@ export async function LandingPage() {
                     </p>
                   </div>
                   <div className="mt-8 flex gap-2">{getFeatureAction(feature.actionKind)}</div>
-                </div>
+                </Link>
               ))}
             </section>
 

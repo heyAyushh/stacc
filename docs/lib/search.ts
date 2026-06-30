@@ -2,7 +2,7 @@ import { cache } from "react";
 import { toSkillHref, toSkillSlug } from "@/lib/anchors";
 import { getAllDocsPages } from "@/lib/docs";
 import { getSkillInventory } from "@/lib/inventory";
-import { creatorRepositoryLabel, displaySkillVersion, originalSourceLabel } from "@/lib/skill-display";
+import { creatorRepositoryLabel, displaySkillVersion, originalSourceLabel, sourceDisplayLabel } from "@/lib/skill-display";
 
 export type SearchItemKind = "doc" | "section" | "skill";
 
@@ -11,6 +11,7 @@ export type SearchItem = {
   kind: SearchItemKind;
   title: string;
   eyebrow: string;
+  detail: string;
   description: string;
   href: string;
   keywords: string[];
@@ -30,10 +31,13 @@ function compactDescription(value: string): string {
 function compactKeywords(values: Array<string | null | undefined>): string[] {
   return Array.from(
     new Set(
-      values
-        .flatMap((value) => value?.split(/[\s/|,.-]+/) ?? [])
-        .map((value) => value.trim().toLowerCase())
-        .filter(Boolean)
+      values.flatMap((value) =>
+        (value?.split(/[\s/|,.-]+/) ?? []).flatMap((segment) => {
+          const normalizedSegment = segment.trim().toLowerCase();
+
+          return normalizedSegment ? [normalizedSegment] : [];
+        })
+      )
     )
   ).slice(0, maxKeywordCount);
 }
@@ -47,6 +51,7 @@ export const getSearchItems = cache(async function getSearchItems(): Promise<Sea
       kind: "doc",
       title: page.frontmatter.title,
       eyebrow: page.frontmatter.eyebrow,
+      detail: `/docs/${page.slug}`,
       description: compactDescription(page.frontmatter.description),
       href: pageHref,
       keywords: compactKeywords([page.slug, page.frontmatter.title, page.frontmatter.eyebrow]),
@@ -56,7 +61,8 @@ export const getSearchItems = cache(async function getSearchItems(): Promise<Sea
       kind: "section",
       title: section.label,
       eyebrow: page.frontmatter.title,
-      description: compactDescription(page.frontmatter.description),
+      detail: `/docs/${page.slug}#${section.id}`,
+      description: `Jump to ${section.label} inside ${page.frontmatter.title}.`,
       href: `${pageHref}#${section.id}`,
       keywords: compactKeywords([page.slug, page.frontmatter.title, section.label, section.id]),
     }));
@@ -68,9 +74,10 @@ export const getSearchItems = cache(async function getSearchItems(): Promise<Sea
       id: `skill-${toSkillSlug(skill.collection, skill.name)}`,
       kind: "skill",
       title: skill.name,
-      eyebrow: `${skill.collection} / ${displaySkillVersion(skill.version)} / ${skill.licenseSpdx}`,
+      eyebrow: `${skill.collection} / ${creatorRepositoryLabel(skill)}`,
+      detail: `${sourceDisplayLabel(skill)} / ${displaySkillVersion(skill.version)} / ${skill.licenseSpdx}`,
       description: compactDescription(skill.description),
-      href: toSkillHref(skill.collection, skill.name),
+      href: toSkillHref(skill.localPath),
       keywords: compactKeywords([
         skill.name,
         skill.collection,

@@ -40,7 +40,7 @@ function GettingStartedFill() {
     <>
       <FillSection id="installation" number="01" title="Installation">
         <p>Deploy the STACC binary to your local environment using the universal installer.</p>
-        <CodePanel label="Terminal" action="Copy" snippet="curl -fsSL ay.dog | bash" />
+        <CodePanel label="Terminal" action="Copy" snippet="curl -fsSL https://stacc.fyi/install.sh | bash" />
       </FillSection>
 
       <FillSection id="defining-agents" number="02" title="Define Your Agent">
@@ -129,7 +129,7 @@ shellcheck -x install.sh`} />
 
       <FillSection id="remote-install" number="03" title="Remote Install">
         <p>The universal installer is the user-facing path for remote setup. Keep it display-only inside docs.</p>
-        <CodePanel label="remote" action="copy" snippet="curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash" />
+        <CodePanel label="remote" action="copy" snippet="curl -fsSL https://stacc.fyi/install.sh | bash" />
       </FillSection>
     </>
   );
@@ -139,12 +139,12 @@ function SkillsFill() {
   return (
     <>
       <FillSection id="inventory" number="01" title="Inventory Snapshot">
-        <p>STACC publishes skills from the checked-in metadata lockfile.</p>
+        <p>Counts, collections, and timestamps come from the checked-in metadata lockfile.</p>
         <SkillsOverview />
       </FillSection>
 
       <FillSection id="catalog" number="02" title="All Skills">
-        <p>Every skill, imported plugin skill, Codex-specific skill, and stack package is listed with version and license metadata.</p>
+        <p>Browse each skill package with version, license, and original source metadata.</p>
         <SkillsCatalog />
       </FillSection>
 
@@ -211,6 +211,33 @@ function ConfigurationsFill() {
   );
 }
 
+function LazyCodexFill() {
+  return (
+    <>
+      <FillSection id="package" number="01" title="Package">
+        <p>
+          LazyCodex is published as <code className="inline-code">lazycodex-ai</code>. The package exposes both{" "}
+          <code className="inline-code">lazycodex-ai</code> and <code className="inline-code">lazycodex</code> command names.
+        </p>
+        <CodePanel label="npm" action="inspect" snippet="npm view lazycodex-ai name version description bin license --json" />
+      </FillSection>
+
+      <FillSection id="install" number="02" title="Install">
+        <p>Use the upstream package installer when you want the LazyCodex harness itself.</p>
+        <CodePanel label="lazycodex" action="install" snippet="npx lazycodex-ai install" />
+      </FillSection>
+
+      <FillSection id="source" number="03" title="Source">
+        <p>
+          The npm package points at <code className="inline-code">code-yeongyu/oh-my-openagent</code> and declares the{" "}
+          <code className="inline-code">SUL-1.0</code> license.
+        </p>
+        <CodePanel label="source" action="github" snippet="https://github.com/code-yeongyu/oh-my-openagent" />
+      </FillSection>
+    </>
+  );
+}
+
 export function DocsPageFill({ slug }: PageFillProps) {
   switch (slug) {
     case "getting-started":
@@ -225,6 +252,8 @@ export function DocsPageFill({ slug }: PageFillProps) {
       return <BinaryTuiFill />;
     case "configurations":
       return <ConfigurationsFill />;
+    case "lazycodex":
+      return <LazyCodexFill />;
     default:
       return null;
   }

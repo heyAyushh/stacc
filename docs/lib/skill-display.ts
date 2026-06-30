@@ -46,11 +46,11 @@ function sourceLabel(value: string | null): string | null {
 
 export function displaySkillVersion(version: string): string {
   if (version.startsWith(localGitVersionPrefix)) {
-    return "Bundled source";
+    return "Local bundle";
   }
 
   if (version.startsWith(gitVersionPrefix)) {
-    return "Origin locked";
+    return "Pinned git";
   }
 
   return version;
@@ -65,5 +65,9 @@ export function creatorRepositoryLabel(skill: Pick<SkillInventoryItem, "repoUrl"
 }
 
 export function hasDistinctCreatorRepository(skill: SkillSourceFields): boolean {
-  return Boolean(skill.repoUrl && skill.repoUrl !== skill.sourceUrl);
+  return Boolean(skill.repoUrl && skill.repoUrl !== skill.sourceUrl && creatorRepositoryLabel(skill) !== originalSourceLabel(skill));
+}
+
+export function sourceDisplayLabel(skill: SkillSourceFields & Pick<SkillInventoryItem, "version">): string {
+  return originalSourceLabel(skill) ?? creatorRepositoryLabel(skill) ?? displaySkillVersion(skill.version);
 }

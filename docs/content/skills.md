@@ -12,6 +12,4 @@ sections:
     label: Install Surface
 ---
 
-This page renders the checked-in skill metadata lockfile.
-
-The markdown owns the page copy; the catalog below is generated from repository data.
+Use this inventory to compare packages before opening a skill detail page or installing a collection.

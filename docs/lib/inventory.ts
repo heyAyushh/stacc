@@ -3,7 +3,7 @@ import { execFile } from "node:child_process";
 import path from "node:path";
 import { cache } from "react";
 import { promisify } from "node:util";
-import { toSkillSlug } from "@/lib/anchors";
+import { toSkillPath } from "@/lib/anchors";
 import {
   asNullableString,
   asRecord,
@@ -60,7 +60,7 @@ export type ConfigInventoryGroup = {
   name: string;
   description: string;
   count: number;
-  items: Array<{ name: string; path: string; detail: string | null }>;
+  items: Array<{ name: string; path: string; href: string; hrefLabel: string; isExternal: boolean }>;
 };
 
 export type ConfigInventory = {
@@ -185,10 +185,14 @@ export const getAllSkillItems = cache(async function getAllSkillItems(): Promise
   return inventory.collections.flatMap((collection) => collection.skills);
 });
 
-export const getSkillBySlug = cache(async function getSkillBySlug(slug: string): Promise<SkillInventoryItem | null> {
+export const getSkillByPath = cache(async function getSkillByPath(skillPath: string): Promise<SkillInventoryItem | null> {
   const skills = await getAllSkillItems();
 
-  return skills.find((skill) => toSkillSlug(skill.collection, skill.name) === slug) ?? null;
+  return skills.find((skill) => toSkillPath(skill.localPath).join("/") === skillPath) ?? null;
+});
+
+export const getSkillMarkdown = cache(async function getSkillMarkdown(skill: SkillInventoryItem): Promise<string> {
+  return fs.readFile(path.join(repoRoot, skill.localPath, "SKILL.md"), "utf8");
 });
 
 function dependencyRows(

@@ -13,5 +13,3 @@ sections:
 ---
 
 The configuration payload under `configs/` is what STACC copies into supported editors and agent runtimes.
-
-The generated tables below are read from the repository tree, not maintained by hand.

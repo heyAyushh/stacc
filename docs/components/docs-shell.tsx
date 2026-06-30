@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { markdownToHtml } from "satteri";
 import type { DocsPage } from "@/lib/docs";
-import { getSearchItems } from "@/lib/search";
 import { CommandSearch } from "@/components/command-search";
 import { DocsPageFill } from "@/components/docs-page-fill";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -46,9 +45,9 @@ const staticNavGroups = [
 ];
 
 export async function DocsShell({ page, pages, children }: DocsShellProps) {
-  const [renderedMarkdown, searchItems, binary] = await Promise.all([
+  const isSkillDetailPage = page.slug.startsWith("skills/");
+  const [renderedMarkdown, binary] = await Promise.all([
     children ? Promise.resolve(null) : Promise.resolve(markdownToHtml(page.body, markdownOptions).html),
-    getSearchItems(),
     getBinaryInventory(),
   ]);
   const navGroups = [
@@ -64,9 +63,12 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
     },
     ...staticNavGroups.slice(1),
   ];
+  const currentPageIndex = pages.findIndex((docsPage) => docsPage.slug === page.slug);
+  const currentPageLabel = currentPageIndex >= 0 ? `${String(currentPageIndex + 1).padStart(2, "0")} / ${String(pages.length).padStart(2, "0")}` : "DOC";
+  const sectionCount = page.frontmatter.sections.length;
 
   return (
-    <main className="docs-shell">
+    <main className={isSkillDetailPage ? "docs-shell skill-detail-shell" : "docs-shell"}>
       <header className="docs-header">
         <div className="brand-block">
           <Link href="/" className="docs-logo">
@@ -76,7 +78,7 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
         </div>
 
         <div className="search-block">
-          <CommandSearch items={searchItems} />
+          <CommandSearch />
         </div>
 
         <div className="version-block">
@@ -111,24 +113,26 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
               </nav>
             </div>
           ))}
-
-          <div className="status-card">
-            <div className="status-card-inner">
-              <span className="status-label">SYSTEM STATUS</span>
-              <div className="status-row">
-                <div className="status-dot" />
-                <span className="status-text">ALL NODES ONLINE</span>
-              </div>
-            </div>
-          </div>
         </aside>
 
         <article className="docs-content">
           <div className="hero-copy">
             <span className="pill-badge">{page.frontmatter.eyebrow}</span>
+            <div className="route-meta" aria-label="Page context">
+              <span>{currentPageLabel}</span>
+              <span>{sectionCount} sections</span>
+            </div>
             <h1 className="docs-title">{page.frontmatter.title}</h1>
             <p className="docs-lede">{page.frontmatter.description}</p>
           </div>
+
+          <nav className="mobile-section-rail" aria-label="Sections on this page">
+            {page.frontmatter.sections.map((section) => (
+              <a href={`#${section.id}`} key={section.id}>
+                {section.label}
+              </a>
+            ))}
+          </nav>
 
           {children ? (
             children

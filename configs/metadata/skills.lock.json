@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_unix_seconds": 1781532407,
+  "generated_unix_seconds": 1782826426,
   "source_repo": "stacc",
   "skills": [
     {
@@ -21,7 +21,7 @@
         "source_url": "https://github.com/openai/codex/tree/main/.codex/skills/babysit-pr",
         "repo_url": "https://github.com/openai/codex",
         "declared_commit": "c4e53d1",
-        "head_commit": "e5253b97fb6c39b984d84acb409d0e9552de407f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -43,7 +43,7 @@
         "source_url": "https://github.com/cursor/plugins",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "cfd81b3961ef5fddc90e9f2994fa1c87cd454e61",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -65,7 +65,7 @@
         "source_url": "https://github.com/cursor/plugins",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "cfd81b3961ef5fddc90e9f2994fa1c87cd454e61",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -87,7 +87,7 @@
         "source_url": "https://github.com/cursor/plugins",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "cfd81b3961ef5fddc90e9f2994fa1c87cd454e61",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -109,7 +109,7 @@
         "source_url": "https://github.com/cursor/plugins",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "cfd81b3961ef5fddc90e9f2994fa1c87cd454e61",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -131,7 +131,7 @@
         "source_url": "https://github.com/cursor/plugins",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "cfd81b3961ef5fddc90e9f2994fa1c87cd454e61",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -153,7 +153,7 @@
         "source_url": "https://github.com/cursor/plugins",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "cfd81b3961ef5fddc90e9f2994fa1c87cd454e61",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -175,7 +175,7 @@
         "source_url": "https://github.com/cursor/plugins",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "cfd81b3961ef5fddc90e9f2994fa1c87cd454e61",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -197,7 +197,7 @@
         "source_url": "https://github.com/cursor/plugins",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "cfd81b3961ef5fddc90e9f2994fa1c87cd454e61",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -219,7 +219,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -234,7 +234,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:26ac3769927df309d1b27df6479562fb56ccc624",
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
         "source": "local-repo-head"
       },
       "origin": {
@@ -263,7 +263,7 @@
         "source_url": "https://github.com/heyAyushh/audio-math-haptics",
         "repo_url": "https://github.com/heyAyushh/audio-math-haptics",
         "declared_commit": "dc2ba99",
-        "head_commit": "dc2ba99d31b96fb09be1857da896a60e5ab7725f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -278,7 +278,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:26ac3769927df309d1b27df6479562fb56ccc624",
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
         "source": "local-repo-head"
       },
       "origin": {
@@ -307,7 +307,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -329,7 +329,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -351,7 +351,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -366,14 +366,14 @@
         "file": "configs/skills/caveman/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -388,14 +388,14 @@
         "file": null
       },
       "version": {
-        "value": "git:92568c1edaff1bde5371154f036d959346c145a8",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/ComposioHQ/awesome-claude-skills",
         "repo_url": "https://github.com/ComposioHQ/awesome-claude-skills",
         "declared_commit": null,
-        "head_commit": "92568c1edaff1bde5371154f036d959346c145a8",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -410,14 +410,14 @@
         "file": "configs/skills/diagnose/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -439,7 +439,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -461,7 +461,7 @@
         "source_url": "https://github.com/emilkowalski/skill",
         "repo_url": "https://github.com/emilkowalski/skill",
         "declared_commit": "ecf66bb",
-        "head_commit": "ecf66bbd1fb33c25332b6b0e454d08049978284c",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -483,7 +483,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -505,7 +505,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -527,7 +527,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -549,7 +549,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -571,7 +571,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -593,7 +593,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -615,7 +615,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -637,7 +637,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -659,7 +659,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -674,7 +674,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:26ac3769927df309d1b27df6479562fb56ccc624",
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
         "source": "local-repo-head"
       },
       "origin": {
@@ -696,14 +696,14 @@
         "file": null
       },
       "version": {
-        "value": "git:57546260929473d4e0d1c1bb75297be2fdfa1949",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/anthropics/skills",
         "repo_url": "https://github.com/anthropics/skills",
         "declared_commit": null,
-        "head_commit": "57546260929473d4e0d1c1bb75297be2fdfa1949",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -725,7 +725,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -740,14 +740,14 @@
         "file": "configs/skills/grill-me/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -762,14 +762,14 @@
         "file": "configs/skills/grill-with-docs/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -791,7 +791,7 @@
         "source_url": "https://github.com/nutlope/hallmark",
         "repo_url": "https://github.com/nutlope/hallmark",
         "declared_commit": "9aba10e",
-        "head_commit": "aeb42fb354ff4efa36ab475773a082315a3af2ce",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -806,14 +806,14 @@
         "file": "configs/skills/handoff/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -835,7 +835,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -857,7 +857,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -879,7 +879,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -894,14 +894,14 @@
         "file": "configs/skills/improve-codebase-architecture/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -916,14 +916,14 @@
         "file": null
       },
       "version": {
-        "value": "git:2c606141936f1eeef17fa3043a72095b4765b9c2",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/forrestchang/andrej-karpathy-skills",
         "repo_url": "https://github.com/forrestchang/andrej-karpathy-skills",
         "declared_commit": null,
-        "head_commit": "2c606141936f1eeef17fa3043a72095b4765b9c2",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -938,14 +938,14 @@
         "file": "configs/skills/mcp-builder/LICENSE.txt"
       },
       "version": {
-        "value": "git:57546260929473d4e0d1c1bb75297be2fdfa1949",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/anthropics/skills",
         "repo_url": "https://github.com/anthropics/skills",
         "declared_commit": null,
-        "head_commit": "57546260929473d4e0d1c1bb75297be2fdfa1949",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -967,7 +967,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -989,7 +989,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1011,7 +1011,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1026,14 +1026,36 @@
         "file": "configs/skills/prototype/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
+        "head_error": null
+      }
+    },
+    {
+      "name": "react-doctor",
+      "description": "Use when finishing a feature, fixing a bug, before committing React code, or when the user asks to scan, triage, or clean up React diagnostics. Covers lint, accessibility, bundle size, architecture, regression checks, and local triage with React Doctor.",
+      "local_path": "configs/skills/react-doctor",
+      "collection": "skills",
+      "license": {
+        "spdx": "LicenseRef-Million-Modified-MIT",
+        "source": "frontmatter",
+        "file": "configs/skills/react-doctor/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.2.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/millionco/react-doctor/tree/main/skills/react-doctor",
+        "repo_url": "https://github.com/millionco/react-doctor",
+        "declared_commit": "0b64af58b16329c5cae7a210463d2842e34b150d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1055,7 +1077,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1070,14 +1092,14 @@
         "file": "configs/skills/setup-matt-pocock-skills/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1092,14 +1114,14 @@
         "file": "configs/skills/skill-creator/LICENSE.txt"
       },
       "version": {
-        "value": "git:57546260929473d4e0d1c1bb75297be2fdfa1949",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/anthropics/skills",
         "repo_url": "https://github.com/anthropics/skills",
         "declared_commit": null,
-        "head_commit": "57546260929473d4e0d1c1bb75297be2fdfa1949",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1121,7 +1143,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1143,7 +1165,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1165,7 +1187,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1187,7 +1209,7 @@
         "source_url": "https://github.com/Leonxlnx/taste-skill",
         "repo_url": "https://github.com/Leonxlnx/taste-skill",
         "declared_commit": "339afcb",
-        "head_commit": "01d850496846d21f1f8f89fc8e08c58f76e4ae3e",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1202,14 +1224,14 @@
         "file": "configs/skills/tdd/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1224,14 +1246,14 @@
         "file": "configs/skills/to-issues/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1246,14 +1268,14 @@
         "file": "configs/skills/to-prd/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1268,14 +1290,14 @@
         "file": "configs/skills/triage/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1297,7 +1319,7 @@
         "source_url": "https://github.com/jxnl/dots/tree/master/agents/skills/ultragoal",
         "repo_url": "https://github.com/jxnl/dots",
         "declared_commit": "1eb180fe83e259fc292b8e8766876c9b9b79571e",
-        "head_commit": "e0174bdea2a55e8fe9d2912edafacb4abe9b3251",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1319,7 +1341,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1341,7 +1363,7 @@
         "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
         "repo_url": "https://github.com/expo/skills",
         "declared_commit": "956a92b",
-        "head_commit": "39d50f0caeacec8a17588534bb32aa962c677a3d",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1356,7 +1378,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:26ac3769927df309d1b27df6479562fb56ccc624",
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
         "source": "local-repo-head"
       },
       "origin": {
@@ -1378,14 +1400,14 @@
         "file": "configs/skills/write-a-skill/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1400,14 +1422,14 @@
         "file": "configs/skills/zoom-out/LICENSE.txt"
       },
       "version": {
-        "value": "git:694fa30311e02c2639942308513555e61ee84a6f",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "694fa30311e02c2639942308513555e61ee84a6f",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1422,7 +1444,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:26ac3769927df309d1b27df6479562fb56ccc624",
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
         "source": "local-repo-head"
       },
       "origin": {
@@ -1444,7 +1466,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:26ac3769927df309d1b27df6479562fb56ccc624",
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
         "source": "local-repo-head"
       },
       "origin": {
@@ -1466,7 +1488,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:26ac3769927df309d1b27df6479562fb56ccc624",
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
         "source": "local-repo-head"
       },
       "origin": {
@@ -1488,14 +1510,14 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1510,14 +1532,14 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1532,14 +1554,14 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1554,14 +1576,14 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1576,14 +1598,14 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1598,14 +1620,14 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1620,7 +1642,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:26ac3769927df309d1b27df6479562fb56ccc624",
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
         "source": "local-repo-head"
       },
       "origin": {
@@ -1642,7 +1664,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:26ac3769927df309d1b27df6479562fb56ccc624",
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
         "source": "local-repo-head"
       },
       "origin": {
@@ -1752,14 +1774,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1774,14 +1796,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1796,14 +1818,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1818,14 +1840,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1840,14 +1862,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1862,14 +1884,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1884,14 +1906,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1906,14 +1928,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1928,14 +1950,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1950,14 +1972,14 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -1972,14 +1994,14 @@
         "file": null
       },
       "version": {
-        "value": "git:99be3ef2b55587cbf4cab2bd346160eb75e944a0",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/solana-foundation/solana-dev-skill",
         "repo_url": "https://github.com/solana-foundation/solana-dev-skill",
         "declared_commit": null,
-        "head_commit": "99be3ef2b55587cbf4cab2bd346160eb75e944a0",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -2016,14 +2038,14 @@
         "file": null
       },
       "version": {
-        "value": "git:8fbf26908531c127a6076be0e55fbe17b57fb2d8",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/sanjeed5/awesome-cursor-rules-mdc",
         "repo_url": "https://github.com/sanjeed5/awesome-cursor-rules-mdc",
         "declared_commit": null,
-        "head_commit": "8fbf26908531c127a6076be0e55fbe17b57fb2d8",
+        "head_commit": null,
         "head_error": null
       }
     },
@@ -2038,14 +2060,14 @@
         "file": null
       },
       "version": {
-        "value": "git:8fbf26908531c127a6076be0e55fbe17b57fb2d8",
-        "source": "origin-head"
+        "value": "local-git:841d08735229431b1b5df36ea28dbee8fec098a2",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/sanjeed5/awesome-cursor-rules-mdc",
         "repo_url": "https://github.com/sanjeed5/awesome-cursor-rules-mdc",
         "declared_commit": null,
-        "head_commit": "8fbf26908531c127a6076be0e55fbe17b57fb2d8",
+        "head_commit": null,
         "head_error": null
       }
     }

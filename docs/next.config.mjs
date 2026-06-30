@@ -7,6 +7,8 @@ const docsDir = dirname(fileURLToPath(import.meta.url));
 
 const nextConfig = {
   allowedDevOrigins: localReviewOrigins,
+  output: "export",
+  trailingSlash: true,
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   serverExternalPackages: ["satteri"],
   turbopack: {

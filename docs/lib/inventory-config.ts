@@ -3,9 +3,13 @@ import type { Dirent } from "node:fs";
 import path from "node:path";
 import { cache } from "react";
 import type { ConfigInventory, ConfigInventoryGroup } from "@/lib/inventory";
+import { toSkillHref } from "@/lib/anchors";
 import { asRecord, configsRoot, readJsonFile } from "@/lib/inventory-shared";
 
-type ConfigItem = { name: string; path: string; detail?: string | null };
+type ConfigItem = { name: string; path: string };
+
+const staccRepositoryUrl = "https://github.com/heyAyushh/stacc";
+const docBackedGroups = new Set(["Skills", "Stacks", "Cursor Plugin Skills", "Codex Skill Imports"]);
 
 function isNodeError(error: unknown): error is NodeJS.ErrnoException {
   return error instanceof Error;
@@ -27,11 +31,16 @@ async function filesWithExtension(directory: string, extension: string): Promise
   const entries = await safeReadDir(path.join(configsRoot, directory));
 
   return entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(extension))
-    .map((entry) => ({
-      name: entry.name.replace(extension, ""),
-      path: path.join("configs", directory, entry.name),
-    }))
+    .reduce<Array<{ name: string; path: string }>>((items, entry) => {
+      if (entry.isFile() && entry.name.endsWith(extension)) {
+        items.push({
+          name: entry.name.replace(extension, ""),
+          path: path.join("configs", directory, entry.name),
+        });
+      }
+
+      return items;
+    }, [])
     .toSorted((left, right) => left.name.localeCompare(right.name));
 }
 
@@ -39,11 +48,16 @@ async function childDirectories(directory: string): Promise<Array<{ name: string
   const entries = await safeReadDir(path.join(configsRoot, directory));
 
   return entries
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => ({
-      name: entry.name,
-      path: path.join("configs", directory, entry.name),
-    }))
+    .reduce<Array<{ name: string; path: string }>>((items, entry) => {
+      if (entry.isDirectory()) {
+        items.push({
+          name: entry.name,
+          path: path.join("configs", directory, entry.name),
+        });
+      }
+
+      return items;
+    }, [])
     .toSorted((left, right) => left.name.localeCompare(right.name));
 }
 
@@ -59,16 +73,42 @@ async function mcpServers(): Promise<Array<{ name: string; path: string }>> {
     }));
 }
 
+function sourceHref(configPath: string): string {
+  const sourceKind = path.extname(configPath) ? "blob" : "tree";
+
+  return `${staccRepositoryUrl}/${sourceKind}/main/${configPath}`;
+}
+
+function configItemLink(groupName: string, configPath: string): Pick<ConfigInventoryGroup["items"][number], "href" | "hrefLabel" | "isExternal"> {
+  if (docBackedGroups.has(groupName)) {
+    return {
+      href: toSkillHref(configPath),
+      hrefLabel: "Docs",
+      isExternal: false,
+    };
+  }
+
+  return {
+    href: sourceHref(configPath),
+    hrefLabel: "Source",
+    isExternal: true,
+  };
+}
+
 function group(name: string, description: string, items: ConfigItem[]): ConfigInventoryGroup {
   return {
     name,
     description,
     count: items.length,
-    items: items.map((item) => ({
-      name: item.name,
-      path: item.path,
-      detail: item.detail ?? null,
-    })),
+    items: items.map((item) => {
+      const link = configItemLink(name, item.path);
+
+      return {
+        name: item.name,
+        path: item.path,
+        ...link,
+      };
+    }),
   };
 }
 

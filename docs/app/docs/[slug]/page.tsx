@@ -17,8 +17,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: DocsPageProps) {
-  const { slug } = await params;
-  const pages = await getAllDocsPages();
+  const [{ slug }, pages] = await Promise.all([params, getAllDocsPages()]);
   const page = pages.find((docsPage) => docsPage.slug === slug);
 
   if (page) {
@@ -34,10 +33,7 @@ export async function generateMetadata({ params }: DocsPageProps) {
 }
 
 export default async function DocsPage({ params }: DocsPageProps) {
-  const { slug } = await params;
-  const pagesPromise = getAllDocsPages();
-
-  const pages = await pagesPromise;
+  const [{ slug }, pages] = await Promise.all([params, getAllDocsPages()]);
   const page = pages.find((docsPage) => docsPage.slug === slug);
 
   if (!page) {

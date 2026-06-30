@@ -66,6 +66,32 @@
   color-scheme: dark;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --stroke: #e7e7e7;
+    --muted-stroke: #6f6f6f;
+    --soft-line: #343434;
+    --paper: #080808;
+    --ink: #f7f7f7;
+    --line: #f2f2f2;
+    --muted: #b4b4b4;
+    --soft: #161616;
+    --panel: #0f0f0f;
+    --inverse: #f7f7f7;
+    --inverse-text: #050505;
+    --wave-stroke: rgba(255, 255, 255, 0.68);
+    --body-copy: #d4d4d4;
+    --code-surface: #0b0b0b;
+    --syntax-blue: #8fb8ff;
+    --syntax-green: #94dba3;
+    --syntax-purple: #d2adff;
+    --code-ink: #f0f0f0;
+    --code-muted: #9a9a9a;
+    --online: #7af0a0;
+    color-scheme: dark;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -77,8 +103,7 @@ p {
   margin: 0;
 }
 
-html,
-body {
+html {
   min-height: 100%;
   margin: 0;
   background: var(--paper);
@@ -86,6 +111,17 @@ body {
   font-family: var(--variant-text);
   overflow-x: clip;
   overflow-y: auto;
+  scrollbar-width: none;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--variant-text);
+  overflow-x: clip;
+  overflow-y: visible;
   scrollbar-width: none;
 }
 
@@ -110,6 +146,8 @@ body::-webkit-scrollbar {
   position: relative;
   z-index: 10;
   display: flex;
+  align-items: center;
+  gap: 8px;
   justify-content: flex-end;
   width: var(--board-width);
   max-width: 1280px;
@@ -124,6 +162,66 @@ body::-webkit-scrollbar {
 
 .stage-theme-toggle .theme-toggle {
   z-index: 10;
+}
+
+.command-search-compact {
+  min-height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 4px 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background var(--fast),
+    color var(--fast),
+    border-color var(--fast),
+    transform var(--fast);
+}
+
+.command-search-compact .search-icon {
+  width: 16px;
+  height: 16px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+.command-search-compact .search-icon svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.2;
+}
+
+.command-search-compact kbd {
+  border-left: 1px solid currentColor;
+  padding-left: 7px;
+  font: inherit;
+}
+
+.command-search-compact:hover,
+.command-search-compact:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.command-search-compact:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
 }
 
 .absolute {
@@ -340,6 +438,7 @@ body::-webkit-scrollbar {
 
 .pill-link:active,
 .theme-toggle:active,
+.command-search-compact:active,
 .latest-pill:active,
 .footer-links a:active,
 .open-source-badge:active {
@@ -455,7 +554,8 @@ body::-webkit-scrollbar {
   top: clamp(230px, 44vw, 294px);
   z-index: 4;
   transform: none;
-  width: min(290px, calc(100% - 64px));
+  container-type: inline-size;
+  width: min(640px, calc(100% - 64px));
   height: clamp(58px, 11vw, 64px);
   border: 1px solid var(--stroke);
   background: var(--paper);
@@ -464,6 +564,7 @@ body::-webkit-scrollbar {
   font-family: var(--mono);
   text-align: left;
   cursor: pointer;
+  overflow: hidden;
   transition:
     transform var(--fast),
     box-shadow var(--fast),
@@ -497,16 +598,24 @@ body::-webkit-scrollbar {
 .install-command {
   display: flex;
   align-items: center;
-  gap: 9px;
-  font-size: clamp(13px, 3.2vw, 17px);
+  gap: clamp(6px, 1.4cqw, 9px);
+  min-width: 0;
+  max-width: 100%;
+  font-size: clamp(8px, 2.05cqw, 17px);
   line-height: 1;
   font-weight: 700;
   white-space: nowrap;
 }
 
+.install-command-text {
+  min-width: 0;
+  flex: 0 1 auto;
+  white-space: nowrap;
+}
+
 .command-dot {
-  width: 12px;
-  height: 12px;
+  width: clamp(7px, 1.8cqw, 12px);
+  height: clamp(7px, 1.8cqw, 12px);
   border-radius: 50%;
   background: #565656;
   flex: 0 0 auto;
@@ -656,6 +765,8 @@ body::-webkit-scrollbar {
 }
 
 .hover-invert {
+  color: inherit;
+  text-decoration: none;
   transition:
     background var(--fast),
     color var(--fast),
@@ -666,6 +777,11 @@ body::-webkit-scrollbar {
 .hover-invert:hover {
   background: var(--ink);
   color: var(--paper);
+}
+
+.feature-panel:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -6px;
 }
 
 .hover-invert p,
@@ -1035,7 +1151,7 @@ body::-webkit-scrollbar {
     right: auto;
     top: 294px;
     transform: translateX(-44%);
-    width: 290px;
+    width: min(640px, calc(100% - 96px));
     height: 64px;
   }
 
@@ -1125,7 +1241,7 @@ body::-webkit-scrollbar {
 
   .install-card {
     right: 12px;
-    width: min(270px, calc(100% - 40px));
+    width: min(420px, calc(100% - 40px));
   }
 
   .footer-links {
@@ -1156,6 +1272,8 @@ body::-webkit-scrollbar {
       }
 
       .docs-route {
+        --docs-header-height: 73px;
+        --docs-section-rail-height: 45px;
         min-height: 100dvh;
         background: var(--paper);
         color: var(--ink);
@@ -1199,7 +1317,7 @@ body::-webkit-scrollbar {
       .docs-route .docs-header {
         position: sticky;
         top: 0;
-        z-index: 10;
+        z-index: 30;
         display: grid;
         grid-template-columns: 3fr 6fr 3fr;
         border-bottom: 1px solid var(--line);
@@ -1407,11 +1525,10 @@ body::-webkit-scrollbar {
 
       .command-item {
         display: grid;
-        grid-template-columns: 72px minmax(0, 1fr) auto;
-        gap: 14px;
+        grid-template-columns: minmax(0, 1fr);
         align-items: center;
         border-bottom: 1px solid var(--line);
-        padding: 13px 16px;
+        padding: 15px 16px 16px;
         cursor: pointer;
       }
 
@@ -1424,22 +1541,10 @@ body::-webkit-scrollbar {
         color: var(--inverse-text);
       }
 
-      .command-kind,
-      .command-arrow {
-        border: 1px solid currentColor;
-        border-radius: 999px;
-        padding: 5px 7px;
-        font-family: var(--mono);
-        font-size: 10px;
-        font-weight: 700;
-        text-align: center;
-        text-transform: uppercase;
-      }
-
       .command-copy {
         min-width: 0;
         display: grid;
-        gap: 4px;
+        gap: 6px;
       }
 
       .command-copy strong {
@@ -1450,7 +1555,6 @@ body::-webkit-scrollbar {
         overflow-wrap: anywhere;
       }
 
-      .command-copy small,
       .command-copy span {
         font-family: var(--mono);
         font-size: 11px;
@@ -1459,8 +1563,21 @@ body::-webkit-scrollbar {
       }
 
       .command-copy small {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 10px;
         color: var(--muted);
+        font-family: var(--mono);
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.35;
         text-transform: uppercase;
+      }
+
+      .command-copy small span + span::before {
+        content: "/";
+        margin-right: 10px;
+        color: color-mix(in srgb, currentColor 52%, transparent);
       }
 
       .command-item[data-selected="true"] .command-copy small {
@@ -1569,47 +1686,6 @@ body::-webkit-scrollbar {
         padding: 2px 6px;
       }
 
-      .docs-route .status-card {
-        margin-top: auto;
-        border-top: 1px solid var(--line);
-        padding-top: 32px;
-      }
-
-      .docs-route .status-card-inner {
-        height: 128px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background: var(--ink);
-        color: var(--paper);
-        padding: 16px;
-      }
-
-      .docs-route .status-label {
-        font-family: var(--mono);
-        font-size: 10px;
-      }
-
-      .docs-route .status-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .docs-route .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--online);
-        animation: pulse 1.5s ease-in-out infinite;
-      }
-
-      .docs-route .status-text {
-        font-family: var(--display);
-        font-size: 20px;
-        line-height: 1;
-      }
-
       .docs-route .docs-content {
         padding: 48px;
       }
@@ -1640,6 +1716,35 @@ body::-webkit-scrollbar {
 
       .docs-route .hero-copy .pill-badge {
         margin-bottom: 16px;
+      }
+
+      .docs-route .route-meta {
+        max-width: 680px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        border-block: 1px solid var(--line);
+        margin: 0 0 20px;
+        font-family: var(--mono);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .docs-route .route-meta span {
+        min-width: 0;
+        padding: 9px 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .docs-route .route-meta span + span {
+        border-left: 1px solid var(--line);
+      }
+
+      .docs-route .mobile-section-rail {
+        display: none;
       }
 
       .docs-route .docs-title {
@@ -1701,6 +1806,8 @@ body::-webkit-scrollbar {
       .docs-route .code-block {
         position: relative;
         width: 100%;
+        max-width: 100%;
+        min-width: 0;
         border: 1px solid var(--line);
         background: var(--code-surface);
         color: var(--code-ink);
@@ -1957,6 +2064,11 @@ body::-webkit-scrollbar {
         gap: 1px;
         background: var(--line);
         border-bottom: 1px solid var(--line);
+        color: inherit;
+        text-decoration: none;
+        transition:
+          background var(--fast),
+          color var(--fast);
       }
 
       .docs-route .config-row:last-child {
@@ -1975,6 +2087,23 @@ body::-webkit-scrollbar {
 
       .docs-route .config-row strong {
         text-transform: uppercase;
+      }
+
+      .docs-route .config-row-action {
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .docs-route .config-row:hover > *,
+      .docs-route .config-row:focus-visible > * {
+        background: var(--inverse);
+        color: var(--inverse-text);
+      }
+
+      .docs-route .config-row:focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: -2px;
       }
 
       .docs-route .skill-card {
@@ -2042,6 +2171,25 @@ body::-webkit-scrollbar {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+      }
+
+      .docs-route .source-chip {
+        max-width: min(220px, 46vw);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 6px 9px;
+        color: var(--body-copy);
+        font-family: var(--mono);
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .docs-route .source-chip.current {
+        color: var(--ink);
       }
 
       .docs-route .skill-meta {
@@ -2166,6 +2314,73 @@ body::-webkit-scrollbar {
         line-height: 1.7;
       }
 
+      .docs-route .stack-contents-heading,
+      .docs-route .stack-skill-card-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .docs-route .stack-contents-heading {
+        align-items: baseline;
+        margin-bottom: 24px;
+      }
+
+      .docs-route .stack-contents-heading h3 {
+        margin-bottom: 0;
+      }
+
+      .docs-route .stack-contents-heading span {
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .docs-route .stack-skill-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+
+      .docs-route .stack-skill-card {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        background: var(--panel);
+        padding: 24px;
+      }
+
+      .docs-route .stack-skill-card.current {
+        background: var(--soft);
+      }
+
+      .docs-route .stack-skill-card-top {
+        align-items: start;
+      }
+
+      .docs-route .stack-skill-card h4 {
+        margin-top: 8px;
+        overflow-wrap: anywhere;
+        font-family: var(--display);
+        font-size: clamp(32px, 4vw, 44px);
+        font-weight: 400;
+        line-height: 0.95;
+        text-transform: uppercase;
+      }
+
+      .docs-route .stack-skill-card h4 a {
+        text-decoration: none;
+      }
+
+      .docs-route .stack-skill-card p {
+        color: var(--body-copy);
+      }
+
       .docs-route .skill-detail-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2196,6 +2411,120 @@ body::-webkit-scrollbar {
         font-size: 12px;
         line-height: 1.4;
         overflow-wrap: anywhere;
+      }
+
+      .docs-route .copy-value {
+        width: 100%;
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 10px;
+        appearance: none;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .docs-route .copy-value span:first-child {
+        min-width: 0;
+        flex: 1 1 auto;
+        overflow-wrap: anywhere;
+      }
+
+      .docs-route .copy-value-action {
+        flex: 0 0 auto;
+        width: 24px;
+        height: 24px;
+        display: inline-grid;
+        place-items: center;
+        border: 1px solid var(--muted-stroke);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 0;
+        line-height: 1;
+        transition:
+          background var(--fast),
+          color var(--fast),
+          border-color var(--fast);
+      }
+
+      .docs-route .copy-value-action svg {
+        width: 13px;
+        height: 13px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2;
+      }
+
+      .docs-route .copy-value:hover .copy-value-action,
+      .docs-route .copy-value:focus-visible .copy-value-action {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      .docs-route .copy-value[data-copy-state="copied"] .copy-value-action,
+      .docs-route .copy-value[data-copy-state="error"] .copy-value-action {
+        width: auto;
+        min-width: 48px;
+        padding-inline: 8px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .docs-route .copy-value[data-copy-state="copied"] .copy-value-action {
+        color: var(--online);
+      }
+
+      .docs-route .copy-value[data-copy-state="error"] .copy-value-action {
+        color: var(--muted);
+      }
+
+      .docs-route .copy-value[data-copy-state="copied"] .copy-value-action svg,
+      .docs-route .copy-value[data-copy-state="error"] .copy-value-action svg {
+        display: none;
+      }
+
+      .docs-route .copy-value[data-copy-state="copied"] .copy-value-action::before {
+        content: "DONE";
+      }
+
+      .docs-route .copy-value[data-copy-state="error"] .copy-value-action::before {
+        content: "ERR";
+      }
+
+      .docs-route .copy-value:focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 3px;
+      }
+
+      .docs-route .skill-markdown-panel {
+        margin-top: 0;
+      }
+
+      .docs-route .skill-markdown-panel pre {
+        max-width: 100%;
+        margin: 0;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .docs-route .skill-markdown-panel code {
+        display: block;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
 
       .docs-route .matrix-table-wrap {
@@ -2449,7 +2778,7 @@ body::-webkit-scrollbar {
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
         border-top: 1px solid var(--line);
-        background: var(--soft);
+        background: var(--panel);
       }
 
       .docs-route .footer-brand,
@@ -2506,20 +2835,6 @@ body::-webkit-scrollbar {
         text-transform: uppercase;
       }
 
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 0.45;
-        }
-        50% {
-          opacity: 1;
-        }
-      }
-
-      .docs-route .docs-shell {
-        overflow: clip;
-      }
-
       .docs-route .left-sidebar {
         border-right: 0;
       }
@@ -2568,6 +2883,14 @@ body::-webkit-scrollbar {
         align-items: end;
         border-bottom: 1px solid var(--line);
         padding-bottom: 16px;
+      }
+
+      .docs-route .section-heading {
+        position: sticky;
+        top: var(--docs-header-height);
+        z-index: 18;
+        margin-inline: -1px;
+        background: var(--paper);
       }
 
       .docs-route .section-heading h2 {
@@ -2642,12 +2965,14 @@ body::-webkit-scrollbar {
       .docs-route .skill-links span,
       .docs-route .category-rail span,
       .docs-route .footer-nav a,
-      .docs-route .right-sidebar .nav-stack a {
+      .docs-route .right-sidebar .nav-stack a,
+      .docs-route .mobile-section-rail a {
         transition: background var(--fast), color var(--fast), border-color var(--fast), transform var(--fast);
       }
 
       .docs-route .footer-nav a,
-      .docs-route .right-sidebar .nav-stack a {
+      .docs-route .right-sidebar .nav-stack a,
+      .docs-route .mobile-section-rail a {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -2658,7 +2983,9 @@ body::-webkit-scrollbar {
       .docs-route .category-rail span:hover,
       .docs-route .footer-nav a:hover,
       .docs-route .right-sidebar .nav-stack a:hover,
-      .docs-route .right-sidebar .nav-stack a:focus-visible {
+      .docs-route .right-sidebar .nav-stack a:focus-visible,
+      .docs-route .mobile-section-rail a:hover,
+      .docs-route .mobile-section-rail a:focus-visible {
         background: var(--inverse);
         color: var(--inverse-text);
       }
@@ -2666,6 +2993,7 @@ body::-webkit-scrollbar {
       .docs-route .skill-links a:focus-visible,
       .docs-route .footer-nav a:focus-visible,
       .docs-route .right-sidebar .nav-stack a:focus-visible,
+      .docs-route .mobile-section-rail a:focus-visible,
       .docs-route .sidebar-link:focus-visible,
       .docs-route .search-field:focus-visible,
       .docs-route .pill-badge:focus-visible {
@@ -2684,7 +3012,8 @@ body::-webkit-scrollbar {
       .docs-route .skill-links a:active,
       .docs-route .category-rail span:active,
       .docs-route .footer-nav a:active,
-      .docs-route .right-sidebar .nav-stack a:active {
+      .docs-route .right-sidebar .nav-stack a:active,
+      .docs-route .mobile-section-rail a:active {
         transform: scale(0.97);
         transition-duration: var(--press-duration);
       }
@@ -2700,7 +3029,8 @@ body::-webkit-scrollbar {
         .docs-route .skill-links a:hover,
         .docs-route .category-rail span:hover,
         .docs-route .footer-nav a:hover,
-        .docs-route .right-sidebar .nav-stack a:hover {
+        .docs-route .right-sidebar .nav-stack a:hover,
+        .docs-route .mobile-section-rail a:hover {
           transform: translateY(-1px);
         }
       }
@@ -2715,7 +3045,8 @@ body::-webkit-scrollbar {
       .docs-route .skill-links a:hover:active,
       .docs-route .category-rail span:hover:active,
       .docs-route .footer-nav a:hover:active,
-      .docs-route .right-sidebar .nav-stack a:hover:active {
+      .docs-route .right-sidebar .nav-stack a:hover:active,
+      .docs-route .mobile-section-rail a:hover:active {
         transform: scale(0.97);
       }
 
@@ -2729,6 +3060,14 @@ body::-webkit-scrollbar {
         }
 
         .docs-route .left-sidebar {
+          order: 2;
+        }
+
+        .docs-route .skill-detail-shell .left-sidebar {
+          order: 1;
+        }
+
+        .docs-route .skill-detail-shell .docs-content {
           order: 2;
         }
 
@@ -2747,16 +3086,45 @@ body::-webkit-scrollbar {
           border-bottom: 1px solid var(--line);
         }
 
+        .docs-route .mobile-section-rail {
+          display: flex;
+          gap: 1px;
+          margin: -22px 0 34px;
+          overflow-x: auto;
+          position: relative;
+          z-index: 1;
+          border-block: 1px solid var(--line);
+          background: var(--soft);
+          scrollbar-width: thin;
+        }
+
+        .docs-route .mobile-section-rail a {
+          flex: 0 0 auto;
+          min-height: var(--docs-section-rail-height);
+          padding: 0 14px;
+          background: var(--paper);
+          color: var(--ink);
+          font-family: var(--mono);
+          font-size: 12px;
+          font-weight: 700;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+
+        .docs-route .docs-section {
+          scroll-margin-top: calc(var(--docs-header-height) + 16px);
+        }
+
+        .docs-route .catalog-section,
+        .docs-route .skill-detail-hero,
+        .docs-route .skill-detail-section {
+          scroll-margin-top: calc(var(--docs-header-height) + 16px);
+        }
+
         .docs-route .left-sidebar {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 28px;
-        }
-
-        .docs-route .status-card {
-          margin-top: 0;
-          border-top: 0;
-          padding-top: 0;
         }
 
         .docs-route .footer-brand,
@@ -2789,17 +3157,12 @@ body::-webkit-scrollbar {
 
         .command-item {
           grid-template-columns: 1fr;
-          gap: 8px;
-        }
-
-        .command-kind,
-        .command-arrow {
-          width: fit-content;
         }
       }
 
       @media (max-width: 760px) {
         .docs-route {
+          --docs-header-height: 64px;
           padding: 10px;
         }
 
@@ -2881,10 +3244,39 @@ body::-webkit-scrollbar {
           padding: 28px 18px;
         }
 
+        .docs-route .code-block {
+          padding: 28px 16px 20px;
+        }
+
+        .docs-route .skill-markdown-panel pre,
+        .docs-route .skill-markdown-panel code {
+          font-size: clamp(11px, 3.1vw, 14px);
+          line-height: 1.55;
+        }
+
+        .docs-route .route-meta {
+          grid-template-columns: 1fr;
+          margin-bottom: 18px;
+        }
+
+        .docs-route .route-meta span + span {
+          border-top: 1px solid var(--line);
+          border-left: 0;
+        }
+
+        .docs-route .mobile-section-rail {
+          margin: -12px -18px 28px;
+          padding-inline: 18px;
+        }
+
         .docs-route .left-sidebar,
         .docs-route .right-sidebar {
           display: block;
           padding: 20px;
+        }
+
+        .docs-route .nav-group + .nav-group {
+          margin-top: 30px;
         }
 
         .docs-route .docs-title {
@@ -2900,6 +3292,7 @@ body::-webkit-scrollbar {
           grid-template-columns: minmax(0, 1fr);
           align-items: start;
           gap: 8px;
+          padding-block: 12px;
         }
 
         .docs-route .section-heading h2 {
@@ -2915,6 +3308,13 @@ body::-webkit-scrollbar {
         .docs-route .catalog-heading,
         .docs-route .skill-detail-hero,
         .docs-route .skill-card-top {
+          grid-template-columns: minmax(0, 1fr);
+          align-items: stretch;
+        }
+
+        .docs-route .stack-contents-heading,
+        .docs-route .stack-skill-card-top {
+          display: grid;
           grid-template-columns: minmax(0, 1fr);
           align-items: stretch;
         }

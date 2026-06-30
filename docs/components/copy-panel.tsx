@@ -51,10 +51,10 @@ export function CopyPanel({ value, className, ariaLabel, mode = "button", childr
           onClick={copyPanelValue}
           type="button"
         >
-          <span className="copy-live-region" role="status">
+          <output className="copy-live-region">
             {copyState === "copied" ? "Copied" : null}
             {copyState === "error" ? "Copy failed" : null}
-          </span>
+          </output>
         </button>
       </div>
     );
@@ -69,10 +69,10 @@ export function CopyPanel({ value, className, ariaLabel, mode = "button", childr
       type="button"
     >
       {children}
-      <span className="copy-live-region" role="status">
+      <output className="copy-live-region">
         {copyState === "copied" ? "Copied" : null}
         {copyState === "error" ? "Copy failed" : null}
-      </span>
+      </output>
     </button>
   );
 }

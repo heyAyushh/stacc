@@ -13,5 +13,3 @@ sections:
 ---
 
 STACC is split between the Rust control plane and the checked-in configuration payload.
-
-The sections below are filled from reusable page components so the same architecture facts can stay typed and testable.

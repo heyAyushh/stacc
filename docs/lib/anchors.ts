@@ -15,6 +15,18 @@ export function toSkillSlug(collection: string, name: string): string {
   return toAnchorId([collection, name]);
 }
 
-export function toSkillHref(collection: string, name: string): string {
-  return `/docs/skills/${toSkillSlug(collection, name)}`;
+export function toSkillPath(localPath: string): string[] {
+  return localPath.split("/").reduce<string[]>((segments, segment) => {
+    const trimmedSegment = segment.trim();
+
+    if (trimmedSegment) {
+      segments.push(trimmedSegment);
+    }
+
+    return segments;
+  }, []);
+}
+
+export function toSkillHref(localPath: string): string {
+  return `/docs/skills/${toSkillPath(localPath).map(encodeURIComponent).join("/")}`;
 }

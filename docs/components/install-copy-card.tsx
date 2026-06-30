@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { copyText, isCopyFailure } from "@/lib/clipboard";
 
-const installCommand = "curl -fsSL ay.dog | bash";
+const installCommand = "curl -fsSL https://stacc.fyi/install.sh | bash";
 const copiedResetDelayMs = 1400;
 type CopyState = "idle" | "copied" | "error";
 
@@ -47,12 +47,13 @@ export function InstallCopyCard() {
         {copyState === "idle" ? "QUICK INSTALL" : null}
       </span>
       <span className="install-command">
-        {installCommand} <span className="command-dot" />
+        <span className="install-command-text">{installCommand}</span>
+        <span className="command-dot" />
       </span>
-      <span className="copy-live-region" role="status">
+      <output className="copy-live-region">
         {copyState === "copied" ? "Copied" : null}
         {copyState === "error" ? "Copy failed" : null}
-      </span>
+      </output>
     </button>
   );
 }
