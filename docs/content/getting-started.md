@@ -1,15 +1,17 @@
 ---
 title: Getting Started
-eyebrow: Start here
-description: Install STACC, choose one project and editor, inspect exactly what will change, then apply and verify the result.
+eyebrow: Your first setup
+description: Put a useful agent setup into one editor, see every change before it happens, and confirm the result.
 order: 0
 sections:
   - id: install
-    label: Install
+    label: Install STACC
+  - id: choose
+    label: Choose a target
   - id: preview
-    label: Preview
+    label: Preview the setup
   - id: apply
-    label: Apply
+    label: Install and confirm
   - id: next
-    label: Next steps
+    label: Add more
 ---

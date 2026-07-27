@@ -1,13 +1,15 @@
 ---
-title: CLI & TUI
-eyebrow: Operate STACC
-description: Use the terminal control panel interactively or the typed CLI in repeatable, non-interactive workflows.
+title: Ways to Use STACC
+eyebrow: Guided or scripted
+description: Use the control panel for a guided setup, or precise commands for repeatable installs and automation.
 order: 4
 sections:
-  - id: commands
-    label: Commands
+  - id: choose
+    label: Choose an interface
   - id: tui
-    label: Control panel
-  - id: automation
-    label: Automation
+    label: Use the control panel
+  - id: commands
+    label: Use commands
+  - id: scripts
+    label: Automate safely
 ---

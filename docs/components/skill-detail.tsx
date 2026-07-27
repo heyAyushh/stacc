@@ -6,7 +6,6 @@ import {
   hasDistinctCreatorRepository,
   originalSourceLabel,
   creatorRepositoryLabel,
-  sourceDisplayLabel,
 } from "@/lib/skill-display";
 
 type SkillDetailProps = {
@@ -18,20 +17,12 @@ type SkillDetailProps = {
 
 const emptySkills: SkillInventoryItem[] = [];
 
-function metadataRows(skill: SkillInventoryItem): Array<{ label: string; value: string | null }> {
-  return [
-    { label: "Config Path", value: skill.localPath },
-    { label: "License", value: skill.licenseSpdx },
-    { label: "License Source", value: skill.licenseSource },
-  ];
-}
-
 function sourceRows(skill: SkillInventoryItem): Array<{ label: string; value: string | null }> {
   return [
+    { label: "License", value: skill.licenseSpdx },
     { label: "Original Source", value: originalSourceLabel(skill) },
     { label: "Creator Repository", value: hasDistinctCreatorRepository(skill) ? creatorRepositoryLabel(skill) : null },
-    { label: "Declared Commit", value: skill.declaredCommit },
-    { label: "Head Commit", value: skill.headCommit },
+    { label: "Imported Revision", value: skill.declaredCommit },
   ];
 }
 
@@ -80,42 +71,18 @@ function SkillSection({
 }
 
 export function SkillDetail({ includedSkills = emptySkills, siblingSkills = emptySkills, skill, skillMarkdown }: SkillDetailProps) {
-  const heroChipLabel = sourceDisplayLabel(skill);
   let sectionCounter = 1;
   const nextSectionNumber = () => String(sectionCounter++).padStart(2, "0");
 
   return (
     <div className="skill-detail">
-      <section className="skill-detail-hero" id="overview">
-        <div>
-          <span className="metric-label">{skill.collection}</span>
-          <h2>{skill.name}</h2>
-        </div>
-        <span className="source-chip">{heroChipLabel}</span>
-      </section>
-
-      <SkillSection id="metadata" number={nextSectionNumber()} title="Metadata">
-        <dl className="skill-detail-grid">
-          {metadataRows(skill).map((row) =>
-            row.value ? (
-              <div key={row.label}>
-                <dt>{row.label}</dt>
-                <dd>
-                  <CopyValue label={row.label} value={row.value} />
-                </dd>
-              </div>
-            ) : null
-          )}
-        </dl>
-      </SkillSection>
-
-      <SkillSection id="description" number={nextSectionNumber()} title="Description">
+      <SkillSection id="description" number={nextSectionNumber()} title="What it helps with">
         <p>{skill.description}</p>
       </SkillSection>
 
       {includedSkills.length > 0 ? (
-        <SkillSection className="stack-contents" id="included-skills" number={nextSectionNumber()} title="Included Skills">
-          <p className="section-summary">{includedSkills.length} skills in this stack.</p>
+        <SkillSection className="stack-contents" id="included-skills" number={nextSectionNumber()} title="What this stack includes">
+          <p className="section-summary">{includedSkills.length} focused skills are available when a matching task needs them.</p>
           <div className="stack-skill-list">
             {includedSkills.map((includedSkill) => (
               <article className="stack-skill-card" key={includedSkill.localPath}>
@@ -141,7 +108,10 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
         </SkillSection>
       ) : null}
 
-      <SkillSection id="source" number={nextSectionNumber()} title="Source">
+      <SkillSection id="source" number={nextSectionNumber()} title="Source and license">
+        <p className="section-summary">
+          STACC keeps the original author, license, and imported revision visible so you can review where this guidance came from.
+        </p>
         <dl className="skill-detail-grid">
           {sourceRows(skill).map((row) =>
             row.value ? (
@@ -157,8 +127,8 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
       </SkillSection>
 
       {siblingSkills.length > 0 ? (
-        <SkillSection className="stack-contents" id="stack-context" number={nextSectionNumber()} title="Stack Context">
-          <p className="section-summary">{siblingSkills.length} skills share this stack.</p>
+        <SkillSection className="stack-contents" id="stack-context" number={nextSectionNumber()} title="Related skills in this stack">
+          <p className="section-summary">{siblingSkills.length} skills cover nearby tasks without loading all of their instructions at once.</p>
           <div className="stack-skill-list">
             {siblingSkills.map((siblingSkill) => {
               const isCurrentSkill = siblingSkill.localPath === skill.localPath;
@@ -187,11 +157,12 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
         </SkillSection>
       ) : null}
 
-      <SkillSection id="markdown" number={nextSectionNumber()} title="Markdown">
-        <CopyPanel ariaLabel={`Copy ${skill.name} Markdown`} className="code-block copy-panel skill-markdown-panel" mode="overlay" value={skillMarkdown}>
+      <SkillSection id="instructions" number={nextSectionNumber()} title="Read the instructions">
+        <p className="section-summary">This is the complete guidance an agent can load when the skill matches a task.</p>
+        <CopyPanel ariaLabel={`Copy ${skill.name} instructions`} className="code-block copy-panel skill-markdown-panel" mode="overlay" value={skillMarkdown}>
           <div className="code-meta">
             <span>{skill.localPath}/SKILL.md</span>
-            <span>Markdown</span>
+            <span>Skill instructions</span>
           </div>
           <pre className="max-w-full whitespace-pre-wrap break-words">
             <code className="block max-w-full break-words [overflow-wrap:anywhere]">{skillMarkdown}</code>
@@ -199,9 +170,9 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
         </CopyPanel>
       </SkillSection>
 
-      <SkillSection id="links" number={nextSectionNumber()} title="Links">
+      <SkillSection id="links" number={nextSectionNumber()} title="Explore more">
         <div className="skill-links">
-          <Link href="/docs/skills">ALL SKILLS</Link>
+          <Link href="/docs/skills">BROWSE ALL SKILLS</Link>
           {skill.sourceUrl ? (
             <a href={skill.sourceUrl} rel="noreferrer" target="_blank">
               {originalSourceLabel(skill)}

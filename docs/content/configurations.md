@@ -1,15 +1,15 @@
 ---
-title: Configurations
-eyebrow: Choose payload
-description: Select the rules, skills, stacks, hooks, MCP servers, and editor adapters that STACC installs.
+title: What You Can Install
+eyebrow: Build your setup
+description: Start with shared rules and everyday skills, then add focused expertise, tools, automations, and editor-specific extras when they help.
 order: 2
 sections:
+  - id: base
+    label: Start with the base
   - id: categories
-    label: Categories
-  - id: selection
-    label: Selection rules
-  - id: defaults
-    label: Panel defaults
+    label: Choose capabilities
+  - id: compatibility
+    label: Check compatibility
   - id: catalog
-    label: Payload catalog
+    label: Browse everything
 ---

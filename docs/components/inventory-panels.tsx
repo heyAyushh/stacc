@@ -15,27 +15,27 @@ const skillCollectionDetails: Record<string, { label: string; order: number; des
   skills: {
     label: "Everyday Skills",
     order: 0,
-    description: "The small, broadly useful set to keep available in regular agent work.",
+    description: "Broad help for tasks that appear across most projects.",
   },
   stack: {
     label: "Focused Stacks",
     order: 1,
-    description: "Specialized guidance for a language, framework, platform, or workflow.",
+    description: "Deeper expertise grouped by language, framework, platform, or workflow.",
   },
   "command-skills": {
     label: "Workflow Commands",
     order: 2,
-    description: "Explicit commands for repeatable engineering and repository workflows.",
+    description: "Named workflows to invoke when you want a specific engineering routine.",
   },
   "codex-skills": {
     label: "Codex Skills",
     order: 3,
-    description: "Packages that integrate with Codex-specific workflows.",
+    description: "Optional workflows designed specifically for Codex.",
   },
   "cursor-plugins": {
     label: "Cursor Plugins",
     order: 4,
-    description: "Packages that integrate with Cursor-specific workflows.",
+    description: "Optional workflows and automations designed specifically for Cursor.",
   },
 };
 
@@ -55,6 +55,25 @@ function catalogMetadataRows(skill: SkillInventoryItem): Array<{ label: string; 
   ];
 }
 
+function configInstallHint(groupName: string, itemName: string): string {
+  switch (groupName) {
+    case "Stacks":
+      return `--category stack --stack ${itemName}`;
+    case "Hooks":
+      return `--category hooks --hook ${itemName}`;
+    case "MCP Servers":
+      return `--category mcps --mcp-server ${itemName}`;
+    case "Cursor Plugin Skills":
+    case "Cursor Plugin Hooks":
+    case "Cursor Plugin Agents":
+      return "--category cursor-plugins";
+    case "Codex Skill Imports":
+      return "--category codex-skills";
+    default:
+      return `--category ${groupName.toLowerCase()}`;
+  }
+}
+
 export async function SkillsOverview() {
   const inventory = await getSkillInventory();
   const everydaySkills = inventory.collections.find((collection) => collection.name === "skills")?.count ?? 0;
@@ -64,19 +83,19 @@ export async function SkillsOverview() {
   return (
     <div className="inventory-grid">
       <div className="metric-card metric-card-hero">
-        <span className="metric-label">START HERE</span>
-        <strong>CORE</strong>
-        <p>{everydaySkills} everyday skills for common agent work.</p>
+        <span className="metric-label">USE EVERYWHERE</span>
+        <strong>EVERYDAY</strong>
+        <p>{everydaySkills} skills for recurring work across projects.</p>
       </div>
       <div className="metric-card">
-        <span className="metric-label">GO DEEPER</span>
-        <strong>STACKS</strong>
-        <p>{focusedStackSkills} specialized skills that stay out of context until the task needs them.</p>
+        <span className="metric-label">ADD WHEN NEEDED</span>
+        <strong>FOCUSED</strong>
+        <p>{focusedStackSkills} skills grouped into task-specific stacks.</p>
       </div>
       <div className="metric-card">
-        <span className="metric-label">ADD ON PURPOSE</span>
-        <strong>TOOLS</strong>
-        <p>{workflowPackages} command and editor packages for explicit workflows.</p>
+        <span className="metric-label">EDITOR-SPECIFIC</span>
+        <strong>EXTRAS</strong>
+        <p>{workflowPackages} command and editor packages you opt into.</p>
       </div>
     </div>
   );
@@ -188,9 +207,9 @@ export async function ConfigInventoryOverview() {
   return (
     <div className="inventory-grid">
       <div className="metric-card metric-card-hero">
-        <span className="metric-label">CONFIG ITEMS</span>
+        <span className="metric-label">AVAILABLE</span>
         <strong>{inventory.totalItems}</strong>
-        <p>Installable assets under configs/.</p>
+        <p>Rules, skills, tools, and integrations you can choose from.</p>
       </div>
       {largestGroups.map((group) => (
         <div className="metric-card" key={group.name}>
@@ -223,13 +242,13 @@ export async function ConfigInventoryCatalog() {
               item.isExternal ? (
                 <a className="config-row" href={item.href} key={`${group.name}-${item.path}-${item.name}`} rel="noreferrer" target="_blank">
                   <strong data-label="Name">{item.name}</strong>
-                  <code data-label="Path">{item.path}</code>
+                  <code data-label="Install">{configInstallHint(group.name, item.name)}</code>
                   <span className="config-row-action" data-label="Open">{item.hrefLabel}</span>
                 </a>
               ) : (
                 <Link className="config-row" href={item.href} key={`${group.name}-${item.path}-${item.name}`}>
                   <strong data-label="Name">{item.name}</strong>
-                  <code data-label="Path">{item.path}</code>
+                  <code data-label="Install">{configInstallHint(group.name, item.name)}</code>
                   <span className="config-row-action" data-label="Open">{item.hrefLabel}</span>
                 </Link>
               )
