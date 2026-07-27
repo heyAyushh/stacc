@@ -1,15 +1,15 @@
 ---
 title: Configurations
-eyebrow: Payload
-description: "Inspect the installable STACC payload: agents, commands, rules, skills, stacks, hooks, MCP servers, Cursor plugin imports, and Codex skill imports."
-order: 5
+eyebrow: Choose payload
+description: Select the rules, skills, stacks, hooks, MCP servers, and editor adapters that STACC installs.
+order: 2
 sections:
-  - id: payload
-    label: Payload
-  - id: groups
-    label: Groups
-  - id: install
-    label: Install
+  - id: categories
+    label: Categories
+  - id: selection
+    label: Selection rules
+  - id: defaults
+    label: Panel defaults
+  - id: catalog
+    label: Payload catalog
 ---
-
-The configuration payload under `configs/` is what STACC copies into supported editors and agent runtimes.

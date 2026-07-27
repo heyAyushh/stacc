@@ -1,15 +1,13 @@
 ---
 title: Skills Inventory
-eyebrow: Catalog
-description: Browse every STACC skill and stack package with collection, version, license, original source, and creator repository provenance.
+eyebrow: Browse packages
+description: Compare core skills and focused stacks, inspect provenance and licenses, and install only the guidance your workflow needs.
 order: 3
 sections:
-  - id: inventory
-    label: Inventory
+  - id: choose
+    label: Choose
+  - id: install
+    label: Install
   - id: catalog
     label: Catalog
-  - id: install
-    label: Install Surface
 ---
-
-Use this inventory to compare packages before opening a skill detail page or installing a collection.

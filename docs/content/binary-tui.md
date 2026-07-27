@@ -1,15 +1,13 @@
 ---
-title: Binary & TUI
-eyebrow: Runtime
-description: STACC ships as a Rust binary with a terminal control panel, typed install planning, metadata sync, bootstrap, and a full local check gate.
+title: CLI & TUI
+eyebrow: Operate STACC
+description: Use the terminal control panel interactively or the typed CLI in repeatable, non-interactive workflows.
 order: 4
 sections:
-  - id: binary
-    label: Binary
+  - id: commands
+    label: Commands
   - id: tui
-    label: TUI
-  - id: installer
-    label: Installer
+    label: Control panel
+  - id: automation
+    label: Automation
 ---
-
-The Rust binary is the product runtime. The terminal UI is the human control surface for the same install and verification paths agents use from the CLI.

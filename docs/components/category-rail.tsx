@@ -8,6 +8,7 @@ const installCategories = [
   "mcps",
   "cursor-plugins",
   "codex-skills",
+  "codex-plugins",
 ];
 
 export function CategoryRail() {

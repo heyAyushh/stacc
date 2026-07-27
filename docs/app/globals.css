@@ -1621,7 +1621,7 @@ body::-webkit-scrollbar {
       .docs-route .left-sidebar,
       .docs-route .right-sidebar {
         min-width: 0;
-        padding: 32px;
+        padding: 24px;
       }
 
       .docs-route .brand-block,
@@ -1649,11 +1649,11 @@ body::-webkit-scrollbar {
       }
 
       .docs-route .nav-group + .nav-group {
-        margin-top: 32px;
+        margin-top: 24px;
       }
 
       .docs-route .nav-eyebrow {
-        margin-bottom: 16px;
+        margin-bottom: 10px;
         color: var(--muted);
         font-family: var(--mono);
         font-size: 10px;
@@ -1664,7 +1664,7 @@ body::-webkit-scrollbar {
       .docs-route .nav-stack {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
       }
 
       .docs-route .sidebar-link {
@@ -1687,11 +1687,15 @@ body::-webkit-scrollbar {
       }
 
       .docs-route .docs-content {
-        padding: 48px;
+        padding: 32px;
       }
 
       .docs-route .docs-markdown {
-        margin-bottom: 36px;
+        margin-bottom: 24px;
+      }
+
+      .docs-route .docs-markdown:empty {
+        display: none;
       }
 
       .docs-route .docs-markdown p {
@@ -1711,11 +1715,11 @@ body::-webkit-scrollbar {
       }
 
       .docs-route .hero-copy {
-        margin-bottom: 48px;
+        margin-bottom: 32px;
       }
 
       .docs-route .hero-copy .pill-badge {
-        margin-bottom: 16px;
+        margin-bottom: 12px;
       }
 
       .docs-route .route-meta {
@@ -1748,22 +1752,22 @@ body::-webkit-scrollbar {
       }
 
       .docs-route .docs-title {
-        margin-bottom: 24px;
+        margin-bottom: 16px;
         font-family: var(--display);
-        font-size: clamp(72px, 7vw, 96px);
-        line-height: 0.88;
+        font-size: clamp(56px, 6vw, 76px);
+        line-height: 0.92;
         letter-spacing: -0.045em;
       }
 
       .docs-route .docs-lede {
         max-width: 680px;
         font-family: var(--mono);
-        font-size: 20px;
-        line-height: 1.65;
+        font-size: 17px;
+        line-height: 1.5;
       }
 
       .docs-route .docs-section + .docs-section {
-        margin-top: 64px;
+        margin-top: 44px;
       }
 
       .docs-route .docs-section {
@@ -1774,13 +1778,13 @@ body::-webkit-scrollbar {
         display: grid;
         grid-template-columns: auto minmax(0, 1fr);
         align-items: end;
-        gap: 16px;
-        margin-bottom: 24px;
+        gap: 12px;
+        margin-bottom: 18px;
       }
 
       .docs-route .section-number {
         font-family: var(--display);
-        font-size: 40px;
+        font-size: 32px;
         line-height: 1;
       }
 
@@ -1792,10 +1796,10 @@ body::-webkit-scrollbar {
       }
 
       .docs-route .section-body {
-        margin-bottom: 24px;
+        margin-bottom: 0;
         color: var(--body-copy);
         font-family: var(--mono);
-        line-height: 1.7;
+        line-height: 1.6;
       }
 
       .docs-route .inline-code {
@@ -1812,7 +1816,7 @@ body::-webkit-scrollbar {
         background: var(--code-surface);
         color: var(--code-ink);
         appearance: none;
-        padding: 34px 24px 24px;
+        padding: 28px 20px 20px;
         overflow: hidden;
         text-align: left;
         cursor: pointer;
@@ -1960,13 +1964,13 @@ body::-webkit-scrollbar {
         gap: 1px;
         border: 1px solid var(--line);
         background: var(--line);
-        margin-top: 24px;
+        margin-top: 18px;
       }
 
       .docs-route .metric-card {
         background: var(--panel);
-        padding: 18px;
-        min-height: 148px;
+        padding: 16px;
+        min-height: 128px;
         display: grid;
         grid-template-rows: auto minmax(0, 1fr) auto;
         gap: 14px;
@@ -2015,8 +2019,8 @@ body::-webkit-scrollbar {
 
       .docs-route .catalog-stack {
         display: grid;
-        gap: 28px;
-        margin-top: 24px;
+        gap: 20px;
+        margin-top: 18px;
       }
 
       .docs-route .catalog-section {
@@ -2793,7 +2797,7 @@ body::-webkit-scrollbar {
       .docs-route .footer-brand,
       .docs-route .footer-links {
         grid-column: span 6;
-        padding: 32px;
+        padding: 20px 24px;
       }
 
       .docs-route .footer-brand {
@@ -2807,8 +2811,8 @@ body::-webkit-scrollbar {
       }
 
       .docs-route .footer-sigil {
-        width: 48px;
-        height: 48px;
+        width: 40px;
+        height: 40px;
         border: 1px solid var(--line);
         border-radius: 50%;
         display: grid;
@@ -2880,7 +2884,7 @@ body::-webkit-scrollbar {
 
       .docs-route .docs-section {
         border-top: 1px solid var(--line);
-        padding-top: 32px;
+        padding-top: 24px;
       }
 
       .docs-route .docs-section:first-child {
@@ -2891,7 +2895,7 @@ body::-webkit-scrollbar {
       .docs-route .section-heading {
         align-items: end;
         border-bottom: 1px solid var(--line);
-        padding-bottom: 16px;
+        padding-bottom: 12px;
       }
 
       .docs-route .section-heading {
@@ -2904,9 +2908,9 @@ body::-webkit-scrollbar {
 
       .docs-route .section-heading h2,
       .docs-route .section-heading h3 {
-        max-width: 14ch;
+        max-width: 20ch;
         font-family: var(--display);
-        font-size: clamp(32px, 5vw, 52px);
+        font-size: clamp(28px, 4vw, 40px);
         font-weight: 400;
         letter-spacing: -0.035em;
       }
@@ -3082,7 +3086,7 @@ body::-webkit-scrollbar {
         }
 
         .docs-route .right-sidebar {
-          order: 3;
+          display: none;
         }
 
         .docs-route .left-sidebar,
@@ -3279,14 +3283,19 @@ body::-webkit-scrollbar {
           padding-inline: 18px;
         }
 
-        .docs-route .left-sidebar,
-        .docs-route .right-sidebar {
-          display: block;
+        .docs-route .left-sidebar {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 20px;
           padding: 20px;
         }
 
+        .docs-route .right-sidebar {
+          display: none;
+        }
+
         .docs-route .nav-group + .nav-group {
-          margin-top: 30px;
+          margin-top: 0;
         }
 
         .docs-route .docs-title {
@@ -3394,6 +3403,16 @@ body::-webkit-scrollbar {
           font-weight: 700;
           letter-spacing: 0.11em;
           text-transform: uppercase;
+        }
+
+        .docs-route .reference-table th,
+        .docs-route .reference-table td {
+          display: block;
+        }
+
+        .docs-route .reference-table th::before,
+        .docs-route .reference-table td::before {
+          display: none;
         }
 
         .docs-route .dependency-ledger-head {

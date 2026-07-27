@@ -21,26 +21,18 @@ const markdownOptions = {
   },
 } as const;
 
-const staticNavGroups = [
+const docsNavGroups = [
   {
-    eyebrow: "00 / INTRODUCTION",
-    links: [],
+    eyebrow: "Start",
+    slugs: ["getting-started", "installation"],
   },
   {
-    eyebrow: "01 / CORE_SYSTEM",
-    links: [
-      { label: "Agent Personas", href: "/docs/configurations#groups" },
-      { label: "Global Rules", href: "/docs/architecture#config-surface" },
-      { label: "Active Hooks", href: "/docs/configurations#install" },
-    ],
+    eyebrow: "Use STACC",
+    slugs: ["configurations", "skills", "binary-tui", "managed-lifecycle"],
   },
   {
-    eyebrow: "02 / INTERFACE",
-    links: [
-      { label: "CLI Reference", href: "/docs/binary-tui#binary" },
-      { label: "API Specs", href: "/docs/architecture#install-planner" },
-      { label: "Plugins", href: "/docs/configurations#payload" },
-    ],
+    eyebrow: "Reference",
+    slugs: ["troubleshooting", "architecture", "lazycodex"],
   },
 ];
 
@@ -50,22 +42,16 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
     children ? Promise.resolve(null) : Promise.resolve(markdownToHtml(page.body, markdownOptions).html),
     getBinaryInventory(),
   ]);
-  const navGroups = [
-    {
-      eyebrow: "00 / INTRODUCTION",
-      links: [
-        ...pages.map((docsPage) => ({
-          label: docsPage.frontmatter.title,
-          href: `/docs/${docsPage.slug}`,
-        })),
-        ...staticNavGroups[0].links,
-      ],
-    },
-    ...staticNavGroups.slice(1),
-  ];
-  const currentPageIndex = pages.findIndex((docsPage) => docsPage.slug === page.slug);
-  const currentPageLabel = currentPageIndex >= 0 ? `${String(currentPageIndex + 1).padStart(2, "0")} / ${String(pages.length).padStart(2, "0")}` : "DOC";
-  const sectionCount = page.frontmatter.sections.length;
+  const navGroups = docsNavGroups.map((group) => ({
+    eyebrow: group.eyebrow,
+    links: group.slugs.flatMap((slug) => {
+      const docsPage = pages.find((candidate) => candidate.slug === slug);
+
+      return docsPage
+        ? [{ label: docsPage.frontmatter.title, href: `/docs/${docsPage.slug}` }]
+        : [];
+    }),
+  }));
 
   return (
     <main className={isSkillDetailPage ? "docs-shell skill-detail-shell" : "docs-shell"}>
@@ -118,10 +104,6 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
         <article className="docs-content">
           <div className="hero-copy">
             <span className="pill-badge">{page.frontmatter.eyebrow}</span>
-            <div className="route-meta" aria-label="Page context">
-              <span>{currentPageLabel}</span>
-              <span>{sectionCount} sections</span>
-            </div>
             <h1 className="docs-title">{page.frontmatter.title}</h1>
             <p className="docs-lede">{page.frontmatter.description}</p>
           </div>
@@ -164,7 +146,7 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
             <div className="footer-sigil">S</div>
             <div>
               <p className="footer-title">STACC Documentation</p>
-              <p className="footer-subtitle">Built with stability and velocity.</p>
+              <p className="footer-subtitle">Install agent configuration safely across supported editors.</p>
             </div>
           </div>
         </div>

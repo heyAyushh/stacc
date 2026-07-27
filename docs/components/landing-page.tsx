@@ -11,25 +11,25 @@ const staccIssueUrl = `${staccRepoUrl}/issues/new`;
 const features = [
   {
     number: "01",
-    titleLines: ["Agent", "Swarms"],
-    body: "Pre-configured LLM personas tailored for TypeScript, Rust, and Go environments.",
-    href: "/docs/configurations#groups",
+    titleLines: ["Safe", "Plans"],
+    body: "Preview exact targets, conflicts, and file operations before STACC writes anything.",
+    href: "/docs/getting-started#preview",
     panelClassName: "border-b md:border-b-0 md:border-r border-black",
     actionKind: "pill",
   },
   {
     number: "02",
-    titleLines: ["Global", "Rulesets"],
-    body: "Enforce clean code architecture, commit convention, and documentation standards via simple hooks.",
-    href: "/docs/architecture#config-surface",
+    titleLines: ["Focused", "Stacks"],
+    body: "Install progressive-disclosure bundles for the language, framework, or workflow you are using.",
+    href: "/docs/skills#choose",
     panelClassName: "border-b md:border-b-0 md:border-r border-black",
     actionKind: "arrow",
   },
   {
     number: "03",
-    titleLines: ["Active", "Hooks"],
-    body: "Auto-scaffold project structures. Inject context into your IDE automatically.",
-    href: "/docs/configurations#install",
+    titleLines: ["Managed", "Installs"],
+    body: "Update and remove only the skills, stacks, and plugins STACC has recorded as its own.",
+    href: "/docs/managed-lifecycle#ownership",
     panelClassName: "bg-white",
     actionKind: "status",
   },
@@ -43,13 +43,13 @@ const arrowAction = (
   </div>
 );
 
-const pillAction = <div className="pill-badge group-hover:border-white group-hover:text-white">/etc/agents</div>;
+const pillAction = <div className="pill-badge group-hover:border-white group-hover:text-white">/dry-run</div>;
 
 const statusAction = (
   <div className="mt-8 w-full border-t border-black pt-4 group-hover:border-white">
     <div className="flex justify-between items-center font-mono text-xs">
       <span>STATUS</span>
-      <span className="animate-pulse">ONLINE</span>
+      <span>TRACKED</span>
     </div>
   </div>
 );

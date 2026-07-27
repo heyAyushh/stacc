@@ -1,15 +1,15 @@
 ---
-title: Architecture
-eyebrow: Core System
-description: STACC organizes agent behavior, rules, hooks, and install targets into a predictable configuration pipeline for local and global coding environments.
-order: 1
+title: How STACC Works
+eyebrow: Reference
+description: Follow configuration from the bundled payload through deterministic planning, format-aware merging, and managed ownership.
+order: 7
 sections:
-  - id: config-surface
-    label: Config Surface
-  - id: install-planner
-    label: Install Planner
-  - id: merge-boundaries
-    label: Merge Boundaries
+  - id: payload
+    label: Source payload
+  - id: planning
+    label: Planning
+  - id: merging
+    label: Merging
+  - id: ownership
+    label: Ownership
 ---
-
-STACC is split between the Rust control plane and the checked-in configuration payload.

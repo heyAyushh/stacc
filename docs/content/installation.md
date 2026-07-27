@@ -1,17 +1,15 @@
 ---
 title: Installation
-eyebrow: Interface
-description: Install STACC locally from the checkout, run the bootstrap for legacy compatibility, or use the universal installer for remote setup.
-order: 2
+eyebrow: Setup
+description: Choose an installation method, understand project and global targets, handle conflicts, and upgrade the binary.
+order: 1
 sections:
-  - id: local-checkout
-    label: Local Checkout
-  - id: bootstrap
-    label: Bootstrap
-  - id: remote-install
-    label: Remote Install
+  - id: methods
+    label: Methods
+  - id: targets
+    label: Scopes and targets
+  - id: conflicts
+    label: Conflicts
+  - id: upgrade
+    label: Upgrade
 ---
-
-Install paths are intentionally split between local development, shell bootstrap compatibility, and remote setup.
-
-Use dry-runs when inspecting installer behavior from automation.
