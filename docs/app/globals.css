@@ -545,9 +545,7 @@ body::-webkit-scrollbar {
 }
 
 .mega-line.depth {
-  font-size: clamp(70px, 19vw, 150px);
   margin-left: clamp(12px, 4vw, 28px);
-  white-space: nowrap;
 }
 
 .install-card {

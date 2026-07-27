@@ -1,7 +1,5 @@
 # stacc
-One setup for every coding agent. STACC curates and safely installs skills,
-rules, stacks, MCP servers, hooks, and plugins across Cursor, Claude Code,
-Codex, OpenCode, and Amp.
+Curated configs for an AI coding workflow with muscles.
   
 ![Cursor](https://img.shields.io/badge/Cursor-black?style=flat&logo=cursor) ![Claude Code](https://img.shields.io/badge/Claude_Code-cc785c?style=flat&logo=anthropic) ![Codex](https://img.shields.io/badge/Codex-10a37f?style=flat&logo=openai&logoColor=white) ![OpenCode](https://img.shields.io/badge/OpenCode-1a1a2e?style=flat&logo=go&logoColor=00ADD8) ![AMP](https://img.shields.io/badge/AMP-ff5543?style=flat&logo=sourcegraph&logoColor=white)
 
