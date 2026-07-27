@@ -2,6 +2,9 @@
 name: web-design-guidelines
 description: Review UI code for Web Interface Guidelines compliance. Use when asked to "review my UI", "check accessibility", "audit design", "review UX", or "check my site against best practices".
 argument-hint: <file-or-pattern>
+license: MIT
+origin_url: https://github.com/vercel-labs/web-interface-guidelines
+origin_commit: 4e799d45c17aec1498c269287a83b9dba22b966b
 metadata:
   author: vercel
   version: "1.0.0"

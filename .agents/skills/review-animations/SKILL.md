@@ -1,6 +1,8 @@
 ---
 name: review-animations
 description: Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.
+license: MIT
+origin_url: https://github.com/emilkowalski/skills/tree/main/skills/review-animations
 disable-model-invocation: true
 ---
 

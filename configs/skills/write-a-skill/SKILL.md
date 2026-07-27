@@ -1,6 +1,9 @@
 ---
 name: write-a-skill
 description: Create new agent skills with proper structure, progressive disclosure, and bundled resources. Use when user wants to create, write, or build a new skill.
+license: MIT
+origin_url: https://github.com/mattpocock/skills/tree/v1/write-a-skill
+origin_commit: 8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd
 ---
 
 # Writing Skills

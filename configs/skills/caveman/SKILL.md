@@ -5,6 +5,9 @@ description: >
   filler, articles, and pleasantries while keeping full technical accuracy.
   Use when user says "caveman mode", "talk like caveman", "use caveman",
   "less tokens", "be brief", or invokes /caveman.
+license: MIT
+origin_url: https://github.com/mattpocock/skills/tree/v1/caveman
+origin_commit: 8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd
 ---
 
 Respond terse like smart caveman. All technical substance stay. Only fluff die.

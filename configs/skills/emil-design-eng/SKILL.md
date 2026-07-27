@@ -1,8 +1,9 @@
 ---
 name: emil-design-eng
 description: This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.
-license: NOASSERTION
-origin_url: https://github.com/emilkowalski/skill/tree/main/skills/emil-design-eng
+license: MIT
+origin_url: https://github.com/emilkowalski/skills/tree/main/skills/emil-design-eng
+origin_commit: ecf66bbd1fb33c25332b6b0e454d08049978284c
 ---
 
 # Design Engineering
