@@ -20,7 +20,7 @@ const features = [
   {
     number: "02",
     titleLines: ["Focused", "Stacks"],
-    body: "Install progressive-disclosure bundles for the language, framework, or workflow you are using.",
+    body: "Add deep expertise without bloating every prompt. Pick focused stacks for your language, framework, or workflow; agents load each skill only when the task calls for it.",
     href: "/docs/skills#choose",
     panelClassName: "border-b md:border-b-0 md:border-r border-black",
     actionKind: "arrow",
