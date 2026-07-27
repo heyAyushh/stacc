@@ -1,52 +1,51 @@
 ---
 name: commit
-description: Commit local changes on the current branch following conventional commit message format. Use when you need to create a git commit without pushing, or when you want to stage and commit changes with a properly formatted message.
+description: Commit reviewed local changes on the current branch using conventional commit messages. Use when you need to create one or more atomic commits without pushing.
 ---
 
 # Commit Changes
 
-Commit local changes following conventional commit message format.
+Review the whole change set, then choose a single atomic commit or a small
+series of atomic commits. Do not silently include unrelated work.
 
 ## Steps
 
-1. **Review uncommitted changes**
+1. **Assess all pending changes**
    ```bash
-   git status
+   git status --short
    git diff
+   git diff --cached
    ```
 
-2. **Stage changes**
-   ```bash
-   git add -A
-   ```
+2. **Choose the commit shape**
+   - Use one commit when the implementation, tests, and docs serve one concern.
+   - Split unrelated concerns into separate commits, keeping every intermediate
+     commit buildable where practical.
 
-3. **Commit with conventional format**
+3. **Stage and commit deliberately**
    ```bash
+   git add -- path/to/related-file
+   git diff --cached
    git commit -m "<prefix>: <summary (imperative, concise)>"
    ```
+   Repeat step 3 for each concern. Use `git add -A` only after confirming every
+   staged, unstaged, and untracked item belongs in the same commit.
 
 ## Commit Message Format
 
 Use conventional commit prefixes:
-- `feat`: New feature
-- `fix`: Bug fix
-- `refactor`: Code refactoring
-- `perf`: Performance improvement
-- `test`: Tests
-- `docs`: Documentation
-- `build`: Build system
-- `ci`: CI configuration
-- `chore`: Maintenance
-- `style`: Code style
-- `revert`: Revert changes
+
+- `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `build`, `ci`, `chore`,
+  `style`, or `revert`
 
 Example:
 ```bash
-git add -A && git commit -m "fix: remove unnecessary debug log output"
+git add src/parser.rs tests/parser_test.rs
+git diff --cached
+git commit -m "fix: handle empty parser input"
 ```
 
 ## Notes
 
-- This command only commits; it does not push to remote
-- Branch protection policies are out of scope
-- Always review diffs before committing
+- This command only commits; it does not push or change branch-protection policy.
+- Run the relevant project checks before committing when the repository defines them.

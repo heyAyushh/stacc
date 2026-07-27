@@ -55,7 +55,7 @@ origin_url: https://github.com/actionbook/rust-skills/tree/main/skills
 | Rule | Guideline |
 |------|-----------|
 | Identify lock ordering | Prevent deadlocks |
-| Atomics for primitives | Not `Mutex` for `bool`/`usize` |
+| Atomics for independent scalar state | Document the required memory ordering; use a mutex when updates must preserve a compound invariant or coordinate with other state |
 | Choose memory order carefully | `Relaxed`/`Acquire`/`Release`/`SeqCst` |
 
 ## Async
@@ -74,14 +74,14 @@ origin_url: https://github.com/actionbook/rust-skills/tree/main/skills
 
 ---
 
-## Deprecated → Better
+## Consider Alternatives
 
-| Deprecated | Better | Since |
+| Existing choice | Consider | When |
 |------------|--------|-------|
 | `lazy_static!` | `std::sync::OnceLock` | Rust 1.70 |
 | `once_cell::Lazy` | `std::sync::LazyLock` | Rust 1.80 |
-| `std::sync::mpsc` | `crossbeam::channel` | — |
-| `std::sync::Mutex` | `parking_lot::Mutex` | — |
+| `std::sync::mpsc` | `crossbeam::channel` | You need its additional channel semantics or already depend on it; `std::sync::mpsc` remains supported |
+| `std::sync::Mutex` | `parking_lot::Mutex` | You need its documented behavior or performance characteristics; `std::sync::Mutex` remains supported |
 | `failure`/`error-chain` | `thiserror`/`anyhow` | — |
 | `try!()` | `?` operator | 2018 edition |
 

@@ -1,6 +1,6 @@
 ---
 name: grill-with-docs
-description: Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.
+description: Grilling session that challenges your plan against the existing domain model and sharpens terminology. Use when user wants to stress-test a plan against their project's language and documented decisions; propose documentation updates for approval as decisions crystallise.
 ---
 
 <what-to-do>
@@ -49,7 +49,7 @@ If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The ma
 │       └── docs/adr/
 ```
 
-Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
+Propose files lazily — only when there is something worth recording. If no `CONTEXT.md` exists, propose creating one when the first term is resolved. If no `docs/adr/` exists, propose creating it when the first ADR is needed. Do not create or edit either until the user explicitly authorizes the documentation change.
 
 ## During the session
 
@@ -69,9 +69,9 @@ When domain relationships are being discussed, stress-test them with specific sc
 
 When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible — which is right?"
 
-### Update CONTEXT.md inline
+### Propose CONTEXT.md updates
 
-When a term is resolved, update `CONTEXT.md` right there. Don't batch these up — capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
+When a term is resolved, propose the corresponding `CONTEXT.md` update right there rather than batching it. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md), but do not write it until the user explicitly authorizes that edit.
 
 `CONTEXT.md` should be totally devoid of implementation details. Do not treat `CONTEXT.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
 

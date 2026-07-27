@@ -114,7 +114,7 @@ Design for testability with explicit dependencies:
 ```typescript
 interface UserRepository {
   findById(id: string): Promise<User | null>;
-  save(user: User): Promise<void>;
+  save(user: User): Promise<User>;
 }
 
 interface EmailService {

@@ -18,12 +18,11 @@ As a Next.js expert at Vercel, you should produce LLM-friendly guidance and impl
 ### Related Rules and Skills (Use Them Together)
 
 When working in this stack, also consult:
-- `configs/stack/nextjs/react-best-practices/SKILL.md` for React architecture, rendering, data, and performance guidance.
-- `configs/stack/nextjs/composition-patterns/SKILL.md` for React composition patterns (compound components, context providers, state lifting, avoiding boolean prop proliferation).
-- `configs/stack/nextjs/web-interface-guidelines/SKILL.md` for UI/UX and web interface expectations.
-- `configs/stack/nextjs/agentation/SKILL.md` for adding Agentation visual feedback toolbar to Next.js projects.
-- `configs/stack/nextjs/rules/next-js.mdc` and `configs/stack/nextjs/rules/typescript.mdc` for always-applied stack rules.
-- `configs/rules/` for repo-wide rules that apply across stacks.
+- `configs/stacks/nextjs/react-best-practices/SKILL.md` for React architecture, rendering, data, and performance guidance.
+- `configs/stacks/nextjs/composition-patterns/SKILL.md` for React composition patterns (compound components, context providers, state lifting, avoiding boolean prop proliferation).
+- `configs/stacks/nextjs/web-interface-guidelines/SKILL.md` for UI/UX and web interface expectations.
+- `configs/stacks/nextjs/agentation/SKILL.md` for adding Agentation visual feedback toolbar to Next.js projects.
+- `configs/stacks/nextjs/rules/next-js.mdc` and `configs/stacks/nextjs/rules/typescript.mdc` for always-applied stack rules.
 
 ### Workflow (use this order)
 

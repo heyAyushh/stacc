@@ -228,11 +228,9 @@ Landing pages and portfolios are **visual products**. Text-only pages with fake-
 
 **Even minimalist sites need real images.** A pure-text page is not minimalism. It is incomplete work. Even an editorial Linear-style site needs at least 2-3 real images (hero, one product/lifestyle shot, one supporting image). Generate B&W minimalist photography if the brief is restrained; do not skip images entirely because the dial is low.
 
-**Real company logos for social proof.** When the brief calls for a "Trusted by / Used by / Customers" logo wall, do NOT default to plain text wordmarks (`<span>Acme Co</span>` styled in a row). Use real SVG logos:
-* **Source: Simple Icons** (`https://cdn.simpleicons.org/{slug}/ffffff` for any color, or `simple-icons` npm package). Covers most known brands.
-* **Alternative: devicon** for tech-stack logos (`@svgr/cli` or CDN).
-* **Make-up the brand name? Then make-up an SVG mark too.** Generate a simple monogram (one letter in a circle, two-letter ligature, abstract glyph) rendered as an inline `<svg>` matching the page style. Plain text wordmarks for invented brand names look generic.
-* **Always** ensure logos render in both light and dark mode (white-on-dark, black-on-light, or single-color theme variable).
+**Verified social proof only.** Only add a "Trusted by / Used by / Customers" logo wall when the brief supplies a verified customer relationship and permission to use each logo. Prefer supplied brand assets; use Simple Icons (`https://cdn.simpleicons.org/{slug}/ffffff` or the `simple-icons` package) or devicon only when their licenses and the customer's brand-use terms allow it. If those conditions are not met, omit the wall.
+* Fictional demo content must be visibly labeled as fictional/demo content and use clearly non-confusable invented marks. Never present it as customer proof.
+* Always ensure authorized logos render in both light and dark mode (white-on-dark, black-on-light, or single-color theme variable).
 
 **Hand-rolled illustrations:**
 * SVG icons from libraries: fine (see Section 3.C).
@@ -383,14 +381,15 @@ export function HorizontalPan({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (reduce || !wrap.current || !track.current) return;
     const ctx = gsap.context(() => {
-      const distance = track.current!.scrollWidth - window.innerWidth;
+      const distance = () =>
+        Math.max(0, track.current!.scrollWidth - window.innerWidth);
       gsap.to(track.current, {
-        x: -distance,
+        x: () => -distance(),
         ease: "none",
         scrollTrigger: {
           trigger: wrap.current,
           start: "top top",                              // pin starts when section top hits viewport top
-          end: () => `+=${distance}`,                    // scroll distance = track width minus viewport
+          end: () => `+=${distance()}`,                  // scroll distance = track width minus viewport
           pin: true,
           scrub: 1,
           invalidateOnRefresh: true,
@@ -401,8 +400,15 @@ export function HorizontalPan({ children }: { children: React.ReactNode }) {
   }, [reduce]);
 
   return (
-    <section ref={wrap} className="relative overflow-hidden">
-      <div ref={track} className="flex h-[100dvh] items-center">
+    <section ref={wrap} className={reduce ? "relative" : "relative overflow-hidden"}>
+      <div
+        ref={track}
+        className={
+          reduce
+            ? "flex flex-col gap-6"
+            : "flex h-[100dvh] items-center"
+        }
+      >
         {children}
       </div>
     </section>
@@ -410,7 +416,7 @@ export function HorizontalPan({ children }: { children: React.ReactNode }) {
 }
 ```
 
-Critical points: `start: "top top"`, `pin: true`, `end: "+=${distance}"` (scroll length = horizontal travel needed), `scrub: 1`. The wrapper is pinned, the inner track slides horizontally as the user scrolls vertically.
+Critical points: `start: "top top"`, `pin: true`, `end: "+=${distance()}"` (scroll length = horizontal travel needed), `scrub: 1`. The wrapper is pinned, the inner track slides horizontally as the user scrolls vertically. The function-valued distance is recomputed during `ScrollTrigger` refreshes. Under reduced motion, the children render as an unclipped vertical stack with no pinning or horizontal transform.
 
 ### 5.C Scroll-Reveal Stagger - Canonical Skeleton (lighter alternative)
 
@@ -642,7 +648,7 @@ This rule is non-negotiable. The agent has historically ignored em-dash limits w
 
 ## 10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)
 
-This is a vocabulary, not a library. The agent should KNOW these pattern names to communicate about them, design with them in mind, and reach for them when the design read calls for them. **Implementations and code sketches live in the Block Library (Section 12), which is populated iteratively.**
+This is a vocabulary, not a bundled library. The agent should KNOW these pattern names to communicate about them, design with them in mind, and reach for them when the design read calls for them. Section 12 is a brief contract for a consumer-owned block library; this skill does not ship block implementations.
 
 ### Hero Paradigms
 * **Asymmetric Split Hero** - Text on one side, asset on the other, generous white space.
@@ -770,15 +776,15 @@ Never modify without explicit user approval:
 
 ---
 
-## 12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)
+## 12. BLOCK-LIBRARY CONTRACT (Consumer-Owned)
 
-The Reference Vocabulary (Section 10) names patterns. The Block Library implements them with real props, real motion specs, and real code sketches.
+The Reference Vocabulary (Section 10) names patterns. If a project explicitly adopts a block library, use this contract for its real props, motion specs, and code sketches.
 
-**Status:** schema defined here. Blocks will be added iteratively. Do not freelance new blocks without following this schema.
+**Status:** this package ships no block files. The schema below is guidance for a project-owned library, not a reference to installed payload.
 
-### 12.A File Location
+### 12.A Recommended Consumer-Owned File Location
 ```
-skills/taste-skill/blocks/
+<project>/blocks/
   hero/
     asymmetric-split.md
     editorial-manifesto.md
@@ -827,7 +833,7 @@ stack: ["react", "next", "tailwind", "motion"]
 * One block per file. No multi-block files.
 * Every block must work standalone (drop it into a page, it renders).
 * Every block must pass the Pre-Flight Check (Section 14).
-* Blocks that depend on a design system from Section 2.A live under `blocks/<category>/<name>--<system>.md` (e.g. `feature/bento-grid--material.md`).
+* Blocks that depend on a design system from Section 2.A live under `<project>/blocks/<category>/<name>--<system>.md` (e.g. `feature/bento-grid--material.md`).
 
 ---
 

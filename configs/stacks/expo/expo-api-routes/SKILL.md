@@ -31,6 +31,19 @@ Avoid API routes when:
 
 ## File Structure
 
+API routes require server output. Configure it before adding a `+api.ts` file:
+
+```json
+// app.json
+{
+  "expo": {
+    "web": {
+      "output": "server"
+    }
+  }
+}
+```
+
 API routes live in the `app` directory with `+api.ts` suffix:
 
 ```
@@ -132,6 +145,8 @@ export async function POST(request: Request) {
 
 Use `process.env` for server-side secrets:
 
+> **Demo only:** Do not deploy a secret-backed proxy like this without authentication and authorization, request/body-size limits, rate limiting, input validation, and safe upstream-error handling. Keep the key server-side and return only the response data your client needs.
+
 ```ts
 // app/api/ai+api.ts
 export async function POST(request: Request) {
@@ -161,7 +176,7 @@ Set environment variables:
 
 ## CORS Headers
 
-Add CORS for web clients:
+Only add CORS when a browser client from a different origin must call the route. The wildcard example below is for a **public, unauthenticated demo endpoint only**; never combine `Access-Control-Allow-Origin: "*"` with routes that expose user data or accept authenticated requests. For production, allowlist the exact trusted origins, required methods, and headers.
 
 ```ts
 const corsHeaders = {
@@ -299,6 +314,19 @@ export async function GET() {
 ```
 
 ## Calling API Routes from Client
+
+Relative requests work automatically in development. For native production builds, deploy the server to HTTPS and set the Expo Router plugin's `origin` to that server URL; otherwise `fetch("/api/...")` has no production server origin.
+
+```json
+// app.json
+{
+  "expo": {
+    "plugins": [
+      ["expo-router", { "origin": "https://api.example.com" }]
+    ]
+  }
+}
+```
 
 ```ts
 // From React Native components

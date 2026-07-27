@@ -16,8 +16,8 @@ Use the PostgreSQL rule file in this folder as the authoritative reference.
 2. Draft query with explicit columns and clear aliases.
 3. Prefer CTEs for readability and reuse.
 4. Avoid `NOT IN`; use `NOT EXISTS` or `LEFT JOIN ... IS NULL`.
-5. Run `explain analyze` and address sequential scans.
-6. Add or adjust indexes if query plan needs them.
+5. Start with `explain`; run `explain analyze` only for read-only queries or in an explicitly authorized rollback transaction.
+6. Interpret the query plan in context, then add or adjust indexes only when the plan and workload justify them.
 
 ## Review Checklist
 

@@ -191,13 +191,13 @@ Look at the `infoPlist` object — mirror the permission keys in the App Clip's 
 
 Set `deploymentTarget: "17.6"` in the Clip's target config — App Clips have a higher minimum size limit in iOS 17.6.
 
-If the app uses push notifications or location services, add to the App Clip's `Info.plist` to request the necessary permissions:
+If the App Clip needs ephemeral notifications or location confirmation, add only the corresponding keys to its `Info.plist`. The example below enables both; omit a key when that capability is not needed:
 
 ```xml
 <key>NSAppClip</key>
 <dict>
   <key>NSAppClipRequestEphemeralUserNotification</key>
-  <false/>
+  <true/>
   <key>NSAppClipRequestLocationConfirmation</key>
   <true/>
 </dict>
@@ -265,7 +265,6 @@ Apple's recommended App Clip metadata guidelines: https://sosumi.ai/documentatio
 - App Clip target: `com.bacon.may20.clip`, lives in `targets/clip/`
 - AASA hosted at `https://may20.expo.app/.well-known/apple-app-site-association`
 - Smart App Banner meta tag on every web route
-- Every route linked to its native counterpart
 - TestFlight build of the parent app with the Clip embedded
 
 Once Apple invokes the Clip from a URL on the domain, iOS opens `targets/clip/`'s entry point which loads the React Native app.

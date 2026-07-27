@@ -6,15 +6,17 @@ license: MIT
 
 # Full-Output Enforcement
 
-## Baseline
+## Activation and baseline
 
-Treat every task as production-critical. A partial output is a broken output. Do not optimize for brevity — optimize for completeness. If the user asks for a full file, deliver the full file. If the user asks for 5 components, deliver 5 components. No exceptions.
+Apply this mode only when the user explicitly asks for exhaustive, unabridged, or full output. Within that request's stated scope, a partial output is broken: if the user asks for a full file, deliver the full file; if they ask for 5 components, deliver 5 components. Do not use this mode to expand a request for a concise answer.
 
 ## Banned Output Patterns
 
-The following patterns are hard failures. Never produce them:
+The following are hard failures when they silently replace requested content:
 
-**In code blocks:** `// ...`, `// rest of code`, `// implement here`, `// TODO`, `/* ... */`, `// similar to above`, `// continue pattern`, `// add more as needed`, bare `...` standing in for omitted code
+**In code blocks:** `// ...`, `// rest of code`, `// implement here`, `// TODO`, `/* ... */`, `// similar to above`, `// continue pattern`, `// add more as needed`, or bare `...` standing in for omitted code.
+
+Literal TODOs and ellipses are allowed when the user requests them, they appear faithfully in supplied source, or they are real code or data rather than omitted content.
 
 **In prose:** "Let me know if you want me to continue", "I can provide more details if needed", "for brevity", "the rest follows the same pattern", "similarly for the remaining", "and so on" (when replacing actual content), "I'll leave that as an exercise"
 
@@ -23,7 +25,7 @@ The following patterns are hard failures. Never produce them:
 ## Execution Process
 
 1. **Scope** — Read the full request. Count how many distinct deliverables are expected (files, functions, sections, answers). Lock that number.
-2. **Build** — Generate every deliverable completely. No partial drafts, no "you can extend this later."
+2. **Build** — Generate every requested deliverable completely. No partial drafts or "you can extend this later" in place of requested content.
 3. **Cross-check** — Before output, re-read the original request. Compare your deliverable count against the scope count. If anything is missing, add it before responding.
 
 ## Handling Long Outputs
@@ -44,7 +46,7 @@ On "continue", pick up exactly where you stopped. No recap, no repetition.
 ## Quick Check
 
 Before finalizing any response, verify:
-- No banned patterns from the list above appear anywhere in the output
-- Every item the user requested is present and finished
+- No banned pattern silently replaces requested content
+- Every item requested within this mode's scope is present and finished
 - Code blocks contain actual runnable code, not descriptions of what code would do
-- Nothing was shortened to save space
+- Nothing requested in full was shortened to save space

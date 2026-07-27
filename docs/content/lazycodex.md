@@ -1,7 +1,7 @@
 ---
 title: LazyCodex
 eyebrow: Optional plugin
-description: Preview, install, update, or remove the LazyCodex Codex plugin through STACC's managed plugin catalog.
+description: With a working Codex CLI, preview, install, update, or remove LazyCodex through STACC's managed plugin catalog.
 order: 8
 sections:
   - id: catalog

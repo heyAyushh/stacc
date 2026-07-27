@@ -32,10 +32,10 @@ eas login
 ### Initialize EAS
 
 ```bash
-npx eas-cli@latest init
+npx eas-cli@latest build:configure
 ```
 
-This creates `eas.json` with build profiles.
+This configures the project for EAS Build and creates `eas.json` with build profiles on first run.
 
 ## Build Commands
 
@@ -121,20 +121,20 @@ Standard `eas.json` for production deployments:
 
 - Use `npx testflight` for quick TestFlight submissions
 - Configure Apple credentials via `eas credentials`
-- See ./reference/testflight.md for credential setup
-- See ./reference/ios-app-store.md for App Store submission
+- See ./references/testflight.md for credential setup
+- See ./references/ios-app-store.md for App Store submission
 
 ### Android
 
 - Set up Google Play Console service account
 - Configure tracks: internal → closed → open → production
-- See ./reference/play-store.md for detailed setup
+- See ./references/play-store.md for detailed setup
 
 ### Web
 
 - EAS Hosting provides preview URLs for PRs
 - Production deploys to your custom domain
-- See ./reference/workflows.md for CI/CD automation
+- See ./references/workflows.md for CI/CD automation
 
 ## Automated Deployments
 
@@ -149,21 +149,22 @@ on:
     branches: [main]
 
 jobs:
-  build-ios:
+  build_ios:
     type: build
     params:
       platform: ios
       profile: production
 
-  submit-ios:
+  submit_ios:
     type: submit
-    needs: [build-ios]
+    needs: [build_ios]
     params:
+      build_id: ${{ needs.build_ios.outputs.build_id }}
       platform: ios
       profile: production
 ```
 
-See ./reference/workflows.md for more workflow examples.
+See ./references/workflows.md for more workflow examples.
 
 ## Version Management
 

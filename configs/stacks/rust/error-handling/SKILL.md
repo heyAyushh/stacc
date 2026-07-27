@@ -71,7 +71,7 @@ Use ? → Need context?
 | `Option<T>` | Absence is normal | `fn find() -> Option<&Item>` |
 | `?` | Propagate error | `let data = file.read()?;` |
 | `unwrap()` | Dev/test only | `config.get("key").unwrap()` |
-| `expect()` | Invariant holds | `env.get("HOME").expect("HOME set")` |
+| `expect()` | A documented, proven internal invariant holds | `non_empty.first().expect("validated non-empty before indexing")` |
 | `panic!` | Unrecoverable | `panic!("critical failure")` |
 
 ## Library vs Application

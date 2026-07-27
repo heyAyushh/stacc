@@ -1,80 +1,59 @@
 ---
 name: commit-push-pr
-description: Complete workflow to commit changes, push to remote, and create a pull request. Use when you want to ship changes end-to-end in one operation, from local changes to an open PR.
+description: Review, commit, push, and create a pull request through the current branch's configured upstream. Use when you want to ship deliberate changes end-to-end without assuming a particular remote or base branch.
 ---
 
 # Commit, Push, and Create PR
 
-One-shot workflow for committing, pushing, and creating a pull request.
+Review the changes and project checks before creating a commit, remote update, or
+pull request.
 
 ## Preconditions
 
-- Modified files exist
-- Remote `origin` is configured
-- GitHub CLI (`gh`) is installed
-- On a working branch (not main/master)
+- GitHub CLI (`gh`) is installed and authenticated.
+- The current branch has an intended upstream, or you have selected the remote
+  to configure as its upstream.
 
 ## Steps
 
-1. **Check branch**
+1. **Confirm branch and upstream**
    ```bash
-   BRANCH=$(git branch --show-current)
-   if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
-     echo "Direct pushes to main/master not allowed"
-     exit 1
-   fi
+   BRANCH="$(git branch --show-current)"
+   UPSTREAM="$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)"
+   test -n "$BRANCH" || { echo "Detached HEAD; create or check out a branch first"; exit 1; }
+   test -n "$UPSTREAM" || { echo "No upstream configured; choose the intended remote, then run: git push -u <remote> $BRANCH"; exit 1; }
+   case "$BRANCH" in main|master) echo "Direct pushes to $BRANCH are not allowed"; exit 1;; esac
+   printf 'Branch: %s\\nUpstream: %s\\n' "$BRANCH" "$UPSTREAM"
    ```
+   Do not push directly to protected branches such as `main` or `master`.
 
-2. **Stage and commit**
+2. **Review and validate**
    ```bash
-   git add -A
-   git commit -m "<prefix>: <summary>"
+   git status --short
+   git diff
+   git diff --cached
    ```
+   Run the relevant repository checks, then stage only the files that belong to
+   this commit. Split unrelated work into separate commits.
 
-3. **Push**
+3. **Commit and push**
    ```bash
-   git push -u origin "$BRANCH"
+   git add -- path/to/related-file
+   git diff --cached
+   git commit -m "<prefix>: <summary (imperative, concise)>"
+   git push
    ```
+   Use `git add -A` only when every pending item belongs in the commit.
 
-4. **Create PR**
+4. **Create the PR**
    ```bash
-   gh pr create --title "<prefix>: <summary>" --body "$(cat <<'EOF'
-   ## Summary
-   - Change description
-
-   ## Test plan
-   - How to verify
-   EOF
-   )"
+   gh pr create --title "<prefix>: <summary>" --body "<summary and test plan>"
    ```
+   Confirm the target/base branch shown by `gh` before submitting. If a PR
+   already exists for the branch, update it rather than creating a duplicate.
 
-## PR Auto-generation Info
+## PR Content
 
-When generating PR content, use:
-```bash
-git branch --show-current              # Branch name for intent
-git merge-base origin/main HEAD        # Merge base
-git diff --name-status $(git merge-base origin/main HEAD)...HEAD  # Changed files
-git log origin/main..HEAD --oneline    # Commit history
-```
-
-## Branch Prefix to Commit Prefix
-
-| Branch prefix | Commit prefix |
-|---------------|---------------|
-| feature/      | feat          |
-| fix/          | fix           |
-| refactor/     | refactor      |
-| perf/         | perf          |
-| test/         | test          |
-| docs/         | docs          |
-| build/        | build         |
-| ci/           | ci            |
-| chore/        | chore         |
-
-## Troubleshooting
-
-If push succeeded but PR creation failed:
-```bash
-gh pr create --title "Title" --body "Message" --base main
-```
+Include a concise summary, the relevant validation performed, and any remaining
+risks or follow-ups. Derive this from the reviewed diff and commits, not the
+branch name alone.

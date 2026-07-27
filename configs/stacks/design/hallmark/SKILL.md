@@ -277,7 +277,7 @@ Before loading any visual ruleset, **read the slim index at [`references/macrost
 
 If the previous output was Specimen (light · italic-serif · warm), the next can be Studio (light · italic-serif · chromatic-green) — the *accent hue* differs. But the next can't be Salon (light · roman-serif · warm) which only differs on display style and shares both paper band and accent — pick a more distant theme.
 
-The per-theme axis values live as comments at the top of each theme's tokens block in [`site/css/tokens.css`](../site/css/tokens.css). When in doubt, name your candidate theme out loud and identify its three axis values; if two of three match the previous output, redirect.
+The theme catalog above defines the per-theme axis values. When in doubt, name your candidate theme out loud and identify its three axis values; if two of three match the previous output, redirect.
 
 **State your pick.** Before writing any code, say "Macrostructure: <name>. Theme: <name>. Differs from the last on: <axes>." in plain text. This is a deliberate accountability step — picking on the page (not in your head) prevents the default-attractor sameness that kept the skill emitting Specimen output.
 
@@ -339,7 +339,7 @@ By the time you reach this step, one of four things is true:
 
 **Custom is a quiet branch, not a default question.** Most briefs route to catalog and the user never sees the words "catalog" or "custom." The 22 named themes plus the rotation rule already deliver structural variety; the fork is reserved for when the brief specifically asks for a tuned look the catalog can't carry.
 
-A custom theme is a **complete** OKLCH palette + font pairing tuned to the brief — not a one-off colour swap, not an excuse to bypass the rules. Every constraint in [`color.md`](references/color.md), [`typography.md`](references/typography.md), and [`anti-patterns.md`](references/anti-patterns.md) still applies. The 65 slop-test gates fire unchanged. The Step 5 preview block surfaces the palette + pairing in plain text **before** any code is emitted, so the user can redirect.
+A custom theme is a **complete** OKLCH palette + font pairing tuned to the brief — not a one-off colour swap, not an excuse to bypass the rules. Every constraint in [`color.md`](references/color.md), [`typography.md`](references/typography.md), and [`anti-patterns.md`](references/anti-patterns.md) still applies. The 69 slop-test gates fire unchanged. The Step 5 preview block surfaces the palette + pairing in plain text **before** any code is emitted, so the user can redirect.
 
 The diversification rule is theme-route-blind: a custom run that follows another custom (or a catalog) must differ on at least one of the three axes from the previous entry, same as catalog-vs-catalog. Custom entries record their three axes explicitly into `.hallmark/log.json` (see [`custom-theme.md`](references/custom-theme.md) § F).
 
@@ -375,17 +375,13 @@ The non-negotiables live in [`references/`](references/). **Be precise about wha
 - [`preview-examples.md`](references/preview-examples.md) — load only if you need a worked example of the Step 5 preview block format. The bullet list in Step 5 itself is normally enough; reach for the file only when picking unusual macrostructures / custom themes.
 
 **Load-at-the-end (Step 7 only):**
-- [`slop-test.md`](references/slop-test.md) — **strictly Step 7, after Build.** The 66 gates are a post-emit check, not a pre-emit reference. Pre-loading slop-test.md costs ~7K tokens for nothing — the gates inform fixes, not generation. If a gate fails at Step 7, fix and re-test; do not consult the file earlier "to know what to avoid" — that's what `anti-patterns.md` is for.
+- [`slop-test.md`](references/slop-test.md) — **strictly Step 7, after Build.** The 69 gates are a post-emit check, not a pre-emit reference. Pre-loading slop-test.md costs ~7K tokens for nothing — the gates inform fixes, not generation. If a gate fails at Step 7, fix and re-test; do not consult the file earlier "to know what to avoid" — that's what `anti-patterns.md` is for.
 - [`contract.md`](references/contract.md) — load at handoff time for output-contract + scope rules.
 - [`export-formats.md`](references/export-formats.md) — load at Step 6 only when the project warrants multi-format exports (i.e. has a `design.md`). Single-page builds emit `tokens.css` from the in-memory token state and don't need this file.
 
 **Verb-specific:**
 - [`verbs/audit.md`](references/verbs/audit.md), [`verbs/redesign.md`](references/verbs/redesign.md) — load only when that verb runs.
 - [`study.md`](references/study.md) — load only when `hallmark study` runs.
-
-**Human-only (do NOT auto-load):**
-- [`../docs/recipes.md`](../docs/recipes.md) — eight worked briefs for human readers.
-- [`../docs/study-examples.md`](../docs/study-examples.md) — three worked DNA-extractions for human readers.
 
 ### 4. Decide on hero enrichment
 

@@ -1,50 +1,45 @@
 ---
 name: commit-push
-description: Commit changes and push to the current branch remote. Use when you want to commit local changes and push them upstream in one workflow, with branch protection against main/master.
+description: Review, commit, and push local changes through the current branch's configured upstream. Use when you want to ship a deliberate commit without assuming a particular remote.
 ---
 
 # Commit and Push
 
-Commit changes on the current branch and push to the remote.
+Commit reviewed changes and push only through the branch's configured upstream.
 
 ## Steps
 
-1. **Check branch (prevent direct pushes to main/master)**
+1. **Confirm branch and upstream**
    ```bash
-   BRANCH=$(git branch --show-current)
-   if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
-     echo "Direct pushes to main/master are not allowed"
-     exit 1
-   fi
+   BRANCH="$(git branch --show-current)"
+   UPSTREAM="$(git rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)"
+   test -n "$BRANCH" || { echo "Detached HEAD; create or check out a branch first"; exit 1; }
+   test -n "$UPSTREAM" || { echo "No upstream configured; choose the intended remote, then run: git push -u <remote> $BRANCH"; exit 1; }
+   case "$BRANCH" in main|master) echo "Direct pushes to $BRANCH are not allowed"; exit 1;; esac
+   printf 'Branch: %s\\nUpstream: %s\\n' "$BRANCH" "$UPSTREAM"
    ```
+   Do not push directly to protected branches such as `main` or `master`.
 
-2. **Stage changes**
+2. **Review and validate**
    ```bash
-   git add -A
+   git status --short
+   git diff
+   git diff --cached
    ```
+   Run the relevant project checks documented by the repository before staging.
 
-3. **Commit**
+3. **Stage, commit, and push**
    ```bash
+   git add -- path/to/related-file
+   git diff --cached
    git commit -m "<prefix>: <summary (imperative, concise)>"
+   git push
    ```
-
-4. **Push**
-   ```bash
-   git push -u origin "$BRANCH"
-   ```
-
-## One-liner
-
-```bash
-MSG="fix: remove unnecessary debug log output" \
-BRANCH=$(git branch --show-current) && \
-if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then \
-  echo "Direct pushes to main/master not allowed"; exit 1; \
-fi && \
-git add -A && git commit -m "$MSG" && git push -u origin "$BRANCH"
-```
+   Use `git add -A` only when every pending item belongs in this commit. Split
+   unrelated work into separate commits instead of pushing it together.
 
 ## Notes
 
-- Always review diffs with `git status` or `git diff` before executing
-- Use conventional commit prefixes: feat, fix, refactor, perf, test, docs, build, ci, chore, style, revert
+- `git push` uses the resolved upstream rather than assuming `origin`.
+- Use conventional prefixes: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`,
+  `build`, `ci`, `chore`, `style`, or `revert`.

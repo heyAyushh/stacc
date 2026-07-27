@@ -62,10 +62,9 @@ git check-ignore -q .worktrees 2>/dev/null || git check-ignore -q worktrees 2>/d
 
 **If NOT ignored:**
 
-Per Jesse's rule "Fix broken things immediately":
-1. Add appropriate line to .gitignore
-2. Commit the change
-3. Proceed with worktree creation
+Stop and report the missing ignore rule. Ask the user whether to add it before
+creating the worktree. Do not edit or commit `.gitignore` as part of worktree
+setup without explicit approval.
 
 **Why critical:** Prevents accidentally committing worktree contents to repository.
 
@@ -89,8 +88,8 @@ case $LOCATION in
   .worktrees|worktrees)
     path="$LOCATION/$BRANCH_NAME"
     ;;
-  ~/.config/superpowers/worktrees/*)
-    path="~/.config/superpowers/worktrees/$project/$BRANCH_NAME"
+  "$HOME"/.config/superpowers/worktrees/*)
+    path="$HOME/.config/superpowers/worktrees/$project/$BRANCH_NAME"
     ;;
 esac
 
@@ -99,23 +98,20 @@ git worktree add "$path" -b "$BRANCH_NAME"
 cd "$path"
 ```
 
-### 3. Run Project Setup
+### 3. Offer Project Setup
 
-Auto-detect and run appropriate setup:
+Identify the project's documented setup command and propose it to the user.
+Dependency installers execute third-party package scripts and can change local
+or global state, so run them only after approval. Do not infer that a manifest
+alone authorizes installation.
 
 ```bash
-# Node.js
-if [ -f package.json ]; then npm install; fi
-
-# Rust
-if [ -f Cargo.toml ]; then cargo build; fi
-
-# Python
-if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-if [ -f pyproject.toml ]; then poetry install; fi
-
-# Go
-if [ -f go.mod ]; then go mod download; fi
+# Examples to propose after reading project instructions:
+npm install
+cargo build
+pip install -r requirements.txt
+poetry install
+go mod download
 ```
 
 ### 4. Verify Clean Baseline
@@ -150,7 +146,7 @@ Ready to implement <feature-name>
 | `worktrees/` exists | Use it (verify ignored) |
 | Both exist | Use `.worktrees/` |
 | Neither exists | Check CLAUDE.md → Ask user |
-| Directory not ignored | Add to .gitignore + commit |
+| Directory not ignored | Report it and request approval before changing `.gitignore` |
 | Tests fail during baseline | Report failures + ask |
 | No package.json/Cargo.toml | Skip dependency install |
 
@@ -204,7 +200,7 @@ Ready to implement auth feature
 **Always:**
 - Follow directory priority: existing > CLAUDE.md > ask
 - Verify directory is ignored for project-local
-- Auto-detect and run project setup
+- Propose the documented project setup and run it only with approval
 - Verify clean test baseline
 
 ## Integration

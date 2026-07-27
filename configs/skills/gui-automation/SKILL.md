@@ -37,7 +37,6 @@ cua do-host-consent && cua do switch host   # local machine (one-time consent)
 cua do screenshot          # look
 cua do click 450 280       # act
 cua do screenshot          # verify
-cua trajectory share       # share replay link with user
 ```
 
 > Re-screenshot after every UI change — coordinates go stale when the screen changes.
@@ -113,15 +112,19 @@ cua do screenshot              # check for errors, crashes, unexpected behavior
 ## Trajectory
 
 Every action is auto-recorded to `~/.cua/trajectories/{machine}/{session}/`.
+Trajectories can contain screenshots, typed text, and other sensitive session
+state. Keep them local by default.
 
 ```bash
-cua trajectory share           # upload and get shareable HTTPS link (always do this at end)
+cua trajectory share           # upload and get a shareable HTTPS link (only after approval)
 cua trajectory ls              # list sessions
 cua trajectory export          # generate HTML report
 cua do --no-record click 100 200   # disable recording for a single action
 ```
 
-Tell the user: `"Here is the trajectory of my session: {url}"`
+Before sharing, inspect the trajectory for secrets or personal data and ask the
+user to approve the upload and destination. Share only after that approval;
+otherwise report the local trajectory path instead.
 
 ## Quick Reference
 

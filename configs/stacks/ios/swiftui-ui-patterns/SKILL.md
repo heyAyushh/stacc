@@ -21,7 +21,7 @@ Choose a track based on your goal:
 
 ### New project scaffolding
 
-- Start with `references/app-scaffolding-wiring.md` to wire TabView + NavigationStack + sheets.
+- Start with `references/app-wiring.md` to wire TabView + NavigationStack + sheets.
 - Add a minimal `AppTab` and `RouterPath` based on the provided skeletons.
 - Choose the next component reference based on the UI you need first (TabView, NavigationStack, Sheets).
 - Expand the route and sheet enums as new screens are added.

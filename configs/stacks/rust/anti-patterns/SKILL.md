@@ -37,7 +37,7 @@ When reviewing code:
 | Anti-Pattern | Why Bad | Better |
 |--------------|---------|--------|
 | `.clone()` everywhere | Hides ownership issues | Proper references or ownership |
-| `.unwrap()` in production | Runtime panics | `?`, `expect`, or matching |
+| `.unwrap()` in production | Runtime panics | `?` or matching; use `expect` only for a documented, proven invariant |
 | `Rc` when single owner | Unnecessary overhead | Simple ownership |
 | `unsafe` for convenience | UB risk | Find safe pattern |
 | OOP via `Deref` | Misleading API | Composition, traits |

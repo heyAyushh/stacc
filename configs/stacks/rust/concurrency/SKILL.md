@@ -31,13 +31,13 @@ Before adding concurrency:
 
 2. **What's the sharing model?**
    - No sharing → message passing (channels)
-   - Immutable sharing → `Arc<T>`
-   - Mutable sharing → `Arc<Mutex<T>>` or `Arc<RwLock<T>>`
+   - Immutable sharing → `Arc<T>` when `T: Send + Sync`
+   - Mutable sharing → `Arc<Mutex<T>>` or `Arc<RwLock<T>>` when the inner type and lock choice satisfy the required bounds
 
 3. **What are the Send/Sync requirements?**
    - Cross-thread ownership → `Send`
    - Cross-thread references → `Sync`
-   - Single-thread async → `spawn_local`
+   - Single-thread async → `spawn_local` only on a compatible local executor (for example, Tokio `LocalSet` or current-thread runtime)
 
 ---
 
@@ -58,9 +58,9 @@ Need to share data?
    └─ Simple counter → AtomicUsize
 
 Async context?
-├─ Type is Send → tokio::spawn
-├─ Type is !Send → spawn_local
-└─ Blocking code → spawn_blocking
+├─ Future is Send → tokio::spawn (on a Tokio runtime)
+├─ Future is !Send → spawn_local only with a local executor/runtime context
+└─ Blocking code → the runtime's blocking facility (for example, tokio::task::spawn_blocking)
 ```
 
 ---
@@ -69,8 +69,8 @@ Async context?
 
 | Marker | Meaning | Example |
 |--------|---------|---------|
-| `Send` | Can transfer ownership between threads | Most types |
-| `Sync` | Can share references between threads | `Arc<T>` |
+| `Send` | Can transfer ownership between threads | Many types; depends on all contained fields |
+| `Sync` | Can share references between threads | Types whose shared references are safe; depends on all contained fields |
 | `!Send` | Must stay on one thread | `Rc<T>` |
 | `!Sync` | No shared refs across threads | `RefCell<T>` |
 
@@ -78,12 +78,12 @@ Async context?
 
 | Pattern | Thread-Safe | Blocking | Use When |
 |---------|-------------|----------|----------|
-| `std::thread` | Yes | Yes | CPU-bound parallelism |
-| `async/await` | Yes | No | I/O-bound concurrency |
-| `Mutex<T>` | Yes | Yes | Shared mutable state |
-| `RwLock<T>` | Yes | Yes | Read-heavy shared state |
-| `mpsc::channel` | Yes | Optional | Message passing |
-| `Arc<Mutex<T>>` | Yes | Yes | Shared mutable across threads |
+| `std::thread` | Depends on captured values being `Send` | Yes | CPU-bound parallelism |
+| `async/await` | A future is not necessarily `Send` | Cooperatively scheduled; avoid blocking the executor | I/O-bound concurrency |
+| `Mutex<T>` | Depends on `T` and the mutex implementation | Yes | Shared mutable state |
+| `RwLock<T>` | Depends on `T` and the lock implementation | Yes | Read-heavy shared state |
+| `mpsc::channel` | Depends on the channel implementation and message type | Optional | Message passing |
+| `Arc<Mutex<T>>` | Depends on `T: Send` and the chosen mutex | Yes | Shared mutable across threads |
 
 ---
 

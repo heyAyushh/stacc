@@ -1,23 +1,23 @@
 ---
 name: to-prd
-description: Turn the current conversation context into a PRD and publish it to the project issue tracker. Use when user wants to create a PRD from the current context.
+description: Turn the current conversation context into a PRD draft. Use when user wants to create a PRD from the current context; publish it to an issue tracker only after explicit approval.
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a PRD. Do NOT interview the user — just synthesize what you already know.
+This skill takes the current conversation context and codebase understanding and produces a PRD draft. Do NOT interview the user to fill gaps — synthesize what you already know and record material assumptions or open questions in the draft.
 
-The issue tracker and triage label vocabulary should have been provided to you. If either is missing, ask the maintainer for the project-specific tracker and label vocabulary before publishing the PRD.
+If the user explicitly approves publication, the issue tracker and triage label vocabulary must be known first. Ask the maintainer for any missing project-specific tracker or label mapping before publishing.
 
 ## Process
 
 1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the PRD, and respect any ADRs in the area you're touching.
 
-2. Sketch out the major modules you will need to build or modify to complete the implementation. Actively look for opportunities to extract deep modules that can be tested in isolation.
+2. Sketch out the major modules likely to be built or modified to complete the implementation. Actively look for opportunities to extract deep modules that can be tested in isolation.
 
 A deep module (as opposed to a shallow module) is one which encapsulates a lot of functionality in a simple, testable interface which rarely changes.
 
-Check with the user that these modules match their expectations. Check with the user which modules they want tests written for.
+Record uncertain module or testing choices as assumptions or open questions; do not interrupt the synthesis to interview the user.
 
-3. Write the PRD using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. Write the PRD using the template below and present it as a draft. Publish it to the project issue tracker, and apply the mapped `ready-for-agent` triage label, only after the user explicitly approves that external action.
 
 <prd-template>
 

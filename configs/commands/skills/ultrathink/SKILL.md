@@ -11,11 +11,13 @@ Engage maximum cognitive depth for complex problems.
 
 ### 1. Clarify First
 
-Before implementation, use the AskUserQuestion subagent to:
+Before implementation, ask only questions that materially block a safe or correct decision. Use the host's available user-input mechanism to:
 - Confirm understanding of the core problem
 - Surface hidden assumptions
 - Identify edge cases and constraints
 - Validate success criteria
+
+If the request already supplies these details, state the assumptions you will use and proceed.
 
 ### 2. Think Deeply
 
@@ -23,7 +25,7 @@ Before implementation, use the AskUserQuestion subagent to:
 - Consider multiple approaches with trade-offs
 - Reason through edge cases and failure modes
 - Think about security, performance, and maintainability
-- Document your reasoning chain explicitly
+- Record a concise decision summary: assumptions, options considered, chosen approach, and verification plan
 
 ### 3. Implement Carefully
 
@@ -34,18 +36,11 @@ Before implementation, use the AskUserQuestion subagent to:
 
 ### 4. Verify Rigorously
 
-After implementation, invoke the verifier subagent to:
+After implementation, use available verification tools or an independent reviewer when supported to:
 - Confirm the solution addresses the original problem
 - Test critical paths and edge cases
 - Validate no regressions were introduced
 - Ensure code quality standards are met
-
-## Subagent Usage
-
-```
-Task(subagent_type="AskUserQuestion", prompt="Clarify X before proceeding...")
-Task(subagent_type="verifier", prompt="Verify implementation of X...")
-```
 
 ## Mindset
 

@@ -159,6 +159,11 @@ cargo install --git https://github.com/heyAyushh/stacc --locked --force
           ]}
         />
         <p>For scripts and agents, prefer backup, overwrite, skip, or a dry run. Selective mode expects an interactive terminal.</p>
+        <CodePanel
+          label="conflict strategy"
+          action="preview"
+          snippet="stacc install --editor codex --scope project --category skills --conflict overwrite --dry-run --print-plan"
+        />
       </FillSection>
 
       <FillSection id="upgrade" number="04" title="Upgrade the binary">
@@ -359,7 +364,11 @@ function TroubleshootingFill() {
       </FillSection>
 
       <FillSection id="checks" number="04" title="Run diagnostics">
-        <p>Repository maintainers can run the full format, test, lint, installer, JSON, offline install, and binary smoke gate.</p>
+        <p>
+          Repository maintainers can run the full format, test, lint, installer, JSON, offline install, and binary smoke gate. If a gate fails,
+          fix the named source input and rerun the check. Use <code className="inline-code">--require-shellcheck</code> only when ShellCheck is
+          expected in the environment.
+        </p>
         <CodePanel label="repository" action="validate" snippet={`stacc check\nstacc check --require-shellcheck`} />
       </FillSection>
     </>
@@ -403,7 +412,8 @@ function LazyCodexFill() {
     <>
       <FillSection id="catalog" number="01" title="Optional Codex plugin">
         <p>
-          LazyCodex is an opt-in entry in STACC&apos;s Codex plugin catalog. STACC delegates installation to the Codex plugin marketplace and does not vendor the plugin payload.
+          LazyCodex is an opt-in entry in STACC&apos;s Codex plugin catalog. It requires a working local Codex CLI because STACC delegates installation
+          to the Codex plugin marketplace and does not vendor the plugin payload.
         </p>
       </FillSection>
 
