@@ -328,6 +328,8 @@ This repository contains configurations adapted from open-source projects. Below
 
 | File | Description | Notes | Source | License |
 |------|-------------|-------|--------|---------|
+| `configs/stacks/nextjs/react-best-practices/` | React and Next.js performance guidance from Vercel Engineering | Imported as a stack skill and rule catalog | [Vercel Engineering](https://vercel.com) | MIT |
+| `configs/stacks/nextjs/web-interface-guidelines/` | Web interface, accessibility, and UI review guidance | Imported as a stack skill for interface audits | [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) | MIT |
 | `configs/commands/skills/*` | Stacc command-as-skill packages generated from the tracked command library | Local stacc-authored wrappers; installable as skills for editors that use skill folders | local stacc | MIT |
 | `configs/skills/mcp-builder/` | MCP Server Development Guide - creating high-quality MCP servers |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
 | `configs/skills/skill-creator/` | Skill Creator Guide - creating effective Claude skills |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
