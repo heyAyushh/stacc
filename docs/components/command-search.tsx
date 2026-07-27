@@ -90,6 +90,7 @@ export function CommandSearchProvider({ items, children }: CommandSearchProvider
     () => [
       { label: "Documentation", items: [...groupItems(items, "doc"), ...groupItems(items, "section")] },
       { label: "Skills", items: groupItems(items, "skill") },
+      { label: "MCP Servers", items: groupItems(items, "mcp") },
     ],
     [items]
   );
@@ -137,7 +138,7 @@ export function CommandSearchProvider({ items, children }: CommandSearchProvider
       <Command.Dialog
         open={open}
         onOpenChange={setOpen}
-        label="Search STACC documentation and skills"
+        label="Search STACC documentation, skills, and MCP servers"
         loop
         shouldFilter
         filter={rankSearchResult}
@@ -149,7 +150,7 @@ export function CommandSearchProvider({ items, children }: CommandSearchProvider
             <Command.Input
               value={search}
               onValueChange={setSearch}
-              placeholder="TYPE A DOC, SECTION, OR SKILL"
+              placeholder="TYPE A DOC, SECTION, SKILL, OR MCP"
               autoFocus
             />
             <kbd>ESC</kbd>
@@ -195,7 +196,7 @@ export function CommandSearch({ variant = "docs" }: CommandSearchProps) {
       className={isCompact ? "command-search-compact" : "search-field"}
       type="button"
       onClick={openPalette}
-      aria-label="Search documentation and skills with Command K"
+      aria-label="Search documentation, skills, and MCP servers with Command K"
     >
       {searchIcon}
       {isCompact ? (
@@ -206,7 +207,7 @@ export function CommandSearch({ variant = "docs" }: CommandSearchProps) {
       ) : (
         <>
           <span className="search-label">SEARCH_</span>
-          <span className="search-placeholder">FIND DOC, SECTION, OR SKILL...</span>
+          <span className="search-placeholder">FIND DOC, SECTION, SKILL, OR MCP...</span>
           <span className="search-key">CMD K</span>
         </>
       )}

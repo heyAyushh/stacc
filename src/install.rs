@@ -33,12 +33,12 @@ const CONFIGS_DIR: &str = "configs";
 const CURSOR_RULES_DIR: &str = "rules";
 const DEFAULT_PROJECT_CLAUDE_RULE_LIMIT: usize = 3;
 const DOT_AGENT_DIR: &str = ".agents";
+const DOT_AMP_DIR: &str = ".amp";
 const DOT_CODEX_DIR: &str = ".codex";
 const DOT_CURSOR_DIR: &str = ".cursor";
 const DOT_CLAUDE_DIR: &str = ".claude";
 const DOT_MCP_FILE: &str = ".mcp.json";
 const DOT_OPENCODE_DIR: &str = ".opencode";
-const DOT_OPENCODE_FILE: &str = ".opencode.json";
 const GLOBAL_AGENT_RULES_DIR: &str = ".agents/rules";
 const GLOBAL_AMP_DIR: &str = ".config/amp";
 const GLOBAL_AMP_SKILLS_DIR: &str = ".config/agents/skills";
@@ -48,6 +48,7 @@ const GLOBAL_CODEX_DIR: &str = ".codex";
 const GLOBAL_CURSOR_DIR: &str = ".cursor";
 const GLOBAL_OPENCODE_DIR: &str = ".config/opencode";
 const HOOKS_DIR: &str = "hooks";
+const AMP_MCP_SERVERS_KEY: &str = "amp.mcpServers";
 const MCP_SERVERS_KEY: &str = "mcpServers";
 const MCP_SERVERS_TOML_KEY: &str = "mcp_servers";
 const METADATA_FILE_NAME: &str = ".DS_Store";
@@ -60,6 +61,8 @@ const RULES_SUMMARY_FILE: &str = "configs/rules/summary.md";
 const RULES_SUMMARY_MARKER: &str = "<!-- stacc:rules-summary -->";
 const SKILLS_DIR: &str = "skills";
 const STACKS_DIR: &str = "configs/stacks";
+const OPENCODE_CONFIG_FILE: &str = "opencode.json";
+const OPENCODE_MCP_KEY: &str = "mcp";
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 pub struct InstallRequest {
@@ -1767,12 +1770,9 @@ fn install_mcp(
     let destination = mcp_path_for(plan.editor, plan.scope, &plan.target_root, context);
     let contents = match plan.editor {
         Editor::Codex => build_codex_mcp_config(&source, &destination, request)?,
-        Editor::Ampcode => {
-            let mut amp = Map::new();
-            amp.insert("amp".to_string(), source);
-            format_json(&Value::Object(amp))?
-        }
-        Editor::Cursor | Editor::Claude | Editor::Opencode => {
+        Editor::Ampcode => build_amp_mcp_config(&source, &destination)?,
+        Editor::Opencode => build_opencode_mcp_config(&source, &destination)?,
+        Editor::Cursor | Editor::Claude => {
             let merged = merged_json_target(&source, &destination)?;
             format_json(&merged)?
         }
@@ -1874,6 +1874,83 @@ fn merge_json(destination: &mut Value, source: Value) {
     }
 }
 
+fn build_amp_mcp_config(source: &Value, destination: &Path) -> Result<String> {
+    let servers = source
+        .get(MCP_SERVERS_KEY)
+        .and_then(Value::as_object)
+        .context("MCP config missing mcpServers object")?;
+    let mut converted_servers = Map::new();
+    for (name, server) in servers {
+        let mut converted = server
+            .as_object()
+            .context("MCP server entry must be a JSON object")?
+            .clone();
+        converted.remove("type");
+        converted_servers.insert(name.clone(), Value::Object(converted));
+    }
+
+    let mut amp = Map::new();
+    amp.insert(
+        AMP_MCP_SERVERS_KEY.to_string(),
+        Value::Object(converted_servers),
+    );
+    let merged = merged_json_target(&Value::Object(amp), destination)?;
+    format_json(&merged)
+}
+
+fn build_opencode_mcp_config(source: &Value, destination: &Path) -> Result<String> {
+    let servers = source
+        .get(MCP_SERVERS_KEY)
+        .and_then(Value::as_object)
+        .context("MCP config missing mcpServers object")?;
+    let mut converted_servers = Map::new();
+    for (name, server) in servers {
+        converted_servers.insert(name.clone(), opencode_mcp_server(server)?);
+    }
+
+    let mut opencode = Map::new();
+    opencode.insert(
+        OPENCODE_MCP_KEY.to_string(),
+        Value::Object(converted_servers),
+    );
+    let merged = merged_json_target(&Value::Object(opencode), destination)?;
+    format_json(&merged)
+}
+
+fn opencode_mcp_server(server: &Value) -> Result<Value> {
+    let object = server
+        .as_object()
+        .context("MCP server entry must be a JSON object")?;
+    let mut converted = Map::new();
+
+    if let Some(command) = object.get("command").and_then(Value::as_str) {
+        let mut command_parts = vec![Value::String(command.to_string())];
+        if let Some(args) = object.get("args").and_then(Value::as_array) {
+            for arg in args {
+                let arg = arg
+                    .as_str()
+                    .context("MCP server args entries must be strings")?;
+                command_parts.push(Value::String(arg.to_string()));
+            }
+        }
+        converted.insert("type".to_string(), Value::String("local".to_string()));
+        converted.insert("command".to_string(), Value::Array(command_parts));
+        if let Some(environment) = object.get("env") {
+            converted.insert("environment".to_string(), environment.clone());
+        }
+    } else if let Some(url) = object.get("url").and_then(Value::as_str) {
+        converted.insert("type".to_string(), Value::String("remote".to_string()));
+        converted.insert("url".to_string(), Value::String(url.to_string()));
+        if let Some(headers) = object.get("headers") {
+            converted.insert("headers".to_string(), headers.clone());
+        }
+    } else {
+        anyhow::bail!("MCP server entry must define command or url");
+    }
+
+    Ok(Value::Object(converted))
+}
+
 fn build_codex_mcp_config(
     source: &Value,
     destination: &Path,
@@ -1937,9 +2014,6 @@ fn codex_mcp_server_table(server: &Value) -> Result<TomlItem> {
             array.push(arg);
         }
         table["args"] = TomlItem::Value(toml_edit::Value::Array(array));
-    }
-    if let Some(server_type) = object.get("type").and_then(Value::as_str) {
-        table["type"] = toml_value(server_type);
     }
     if let Some(url) = object.get("url").and_then(Value::as_str) {
         table["url"] = toml_value(url);
@@ -2495,10 +2569,13 @@ fn mcp_path_for(
         (Editor::Claude, Scope::Global) => context.home.join(GLOBAL_CLAUDE_MCP_FILE),
         (Editor::Claude, Scope::Project) => context.project_root.join(DOT_MCP_FILE),
         (Editor::Cursor, _) => target_root.join("mcp.json"),
-        (Editor::Opencode, Scope::Global) => target_root.join(DOT_OPENCODE_FILE),
-        (Editor::Opencode, Scope::Project) => context.project_root.join(DOT_OPENCODE_FILE),
+        (Editor::Opencode, Scope::Global) => target_root.join(OPENCODE_CONFIG_FILE),
+        (Editor::Opencode, Scope::Project) => context.project_root.join(OPENCODE_CONFIG_FILE),
         (Editor::Codex, _) => target_root.join(CODEX_CONFIG_FILE),
-        (Editor::Ampcode, _) => target_root.join("settings.json"),
+        (Editor::Ampcode, Scope::Global) => target_root.join("settings.json"),
+        (Editor::Ampcode, Scope::Project) => {
+            context.project_root.join(DOT_AMP_DIR).join("settings.json")
+        }
     }
 }
 
@@ -2625,10 +2702,69 @@ mod tests {
                 destination,
                 contents
             } if destination.ends_with(".config/amp/settings.json")
-                && contents.contains("\"amp\"")
-                && contents.contains("\"mcpServers\"")
+                && contents.contains("\"amp.mcpServers\"")
                 && contents.contains("\"github\"")
         )));
+    }
+
+    #[test]
+    fn merges_amp_mcp_servers_without_replacing_other_settings() {
+        let root = TestDir::new("amp-mcp-merge");
+        let destination = root.path.join("settings.json");
+        write_test_file(
+            &destination,
+            r#"{"amp.theme":"dark","amp.mcpServers":{"existing":{"url":"https://existing.test"}}}"#,
+        );
+        let source = serde_json::json!({
+            "mcpServers": {
+                "github": {"type": "http", "url": "https://example.test"}
+            }
+        });
+
+        let rendered =
+            build_amp_mcp_config(&source, &destination).expect("AMP MCP config should merge");
+        let value: Value = serde_json::from_str(&rendered).expect("AMP config should be JSON");
+
+        assert_eq!(value["amp.theme"], "dark");
+        assert_eq!(
+            value["amp.mcpServers"]["existing"]["url"],
+            "https://existing.test"
+        );
+        assert_eq!(
+            value["amp.mcpServers"]["github"]["url"],
+            "https://example.test"
+        );
+        assert!(value["amp.mcpServers"]["github"].get("type").is_none());
+    }
+
+    #[test]
+    fn converts_and_merges_opencode_mcp_servers() {
+        let root = TestDir::new("opencode-mcp-merge");
+        let destination = root.path.join("opencode.json");
+        write_test_file(
+            &destination,
+            r#"{"theme":"system","mcp":{"existing":{"type":"remote","url":"https://existing.test"}}}"#,
+        );
+        let source = serde_json::json!({
+            "mcpServers": {
+                "playwright": {"command": "bunx", "args": ["@playwright/mcp@latest"]},
+                "github": {"type": "http", "url": "https://example.test"}
+            }
+        });
+
+        let rendered = build_opencode_mcp_config(&source, &destination)
+            .expect("OpenCode MCP config should merge");
+        let value: Value = serde_json::from_str(&rendered).expect("OpenCode config should be JSON");
+
+        assert_eq!(value["theme"], "system");
+        assert_eq!(value["mcp"]["existing"]["url"], "https://existing.test");
+        assert_eq!(value["mcp"]["github"]["type"], "remote");
+        assert_eq!(value["mcp"]["github"]["url"], "https://example.test");
+        assert_eq!(value["mcp"]["playwright"]["type"], "local");
+        assert_eq!(
+            value["mcp"]["playwright"]["command"],
+            serde_json::json!(["bunx", "@playwright/mcp@latest"])
+        );
     }
 
     #[test]
@@ -2669,8 +2805,8 @@ mod tests {
             .expect("codex config should render");
 
         assert!(rendered.contains("[mcp_servers.github]"));
-        assert!(rendered.contains("type = \"http\""));
         assert!(rendered.contains("url = \"https://api.githubcopilot.com/mcp/\""));
+        assert!(!rendered.contains("type = "));
     }
 
     #[test]

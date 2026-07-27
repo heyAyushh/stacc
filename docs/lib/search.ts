@@ -2,9 +2,10 @@ import { cache } from "react";
 import { toSkillHref, toSkillSlug } from "@/lib/anchors";
 import { getAllDocsPages } from "@/lib/docs";
 import { getSkillInventory } from "@/lib/inventory";
+import { getConfigInventory } from "@/lib/inventory-config";
 import { creatorRepositoryLabel, displaySkillVersion, originalSourceLabel, sourceDisplayLabel } from "@/lib/skill-display";
 
-export type SearchItemKind = "doc" | "section" | "skill";
+export type SearchItemKind = "doc" | "section" | "skill" | "mcp";
 
 export type SearchItem = {
   id: string;
@@ -43,7 +44,11 @@ function compactKeywords(values: Array<string | null | undefined>): string[] {
 }
 
 export const getSearchItems = cache(async function getSearchItems(): Promise<SearchItem[]> {
-  const [pages, skillInventory] = await Promise.all([getAllDocsPages(), getSkillInventory()]);
+  const [pages, skillInventory, configInventory] = await Promise.all([
+    getAllDocsPages(),
+    getSkillInventory(),
+    getConfigInventory(),
+  ]);
   const docItems = pages.flatMap<SearchItem>((page) => {
     const pageHref = `/docs/${page.slug}`;
     const pageItem: SearchItem = {
@@ -92,6 +97,18 @@ export const getSearchItems = cache(async function getSearchItems(): Promise<Sea
       ]),
     }))
   );
+  const mcpItems = (configInventory.groups.find((group) => group.name === "MCP Servers")?.items ?? []).map<SearchItem>(
+    (server) => ({
+      id: `mcp-${server.name}`,
+      kind: "mcp",
+      title: server.name,
+      eyebrow: "MCP Server",
+      detail: `--mcp-server ${server.name}`,
+      description: `Install the ${server.name} MCP server from the STACC catalog.`,
+      href: "/docs/configurations#catalog",
+      keywords: compactKeywords(["mcp", "server", server.name, server.path, `--mcp-server ${server.name}`]),
+    })
+  );
 
-  return [...docItems, ...skillItems];
+  return [...docItems, ...skillItems, ...mcpItems];
 });
