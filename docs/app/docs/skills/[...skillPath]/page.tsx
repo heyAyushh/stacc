@@ -12,27 +12,23 @@ type SkillPageProps = {
 };
 
 const baseSkillSections = [
-  { id: "description", label: "What it helps with" },
-  { id: "source", label: "Source and license" },
-  { id: "instructions", label: "Instructions" },
-  { id: "links", label: "Explore more" },
+  { id: "overview", label: "Overview" },
+  { id: "metadata", label: "Metadata" },
+  { id: "description", label: "Description" },
+  { id: "source", label: "Source" },
+  { id: "markdown", label: "Markdown" },
+  { id: "links", label: "Links" },
 ];
 
 const stackSkillSections = [
-  { id: "description", label: "What it helps with" },
-  { id: "included-skills", label: "Included skills" },
-  { id: "source", label: "Source and license" },
-  { id: "instructions", label: "Instructions" },
-  { id: "links", label: "Explore more" },
+  { id: "overview", label: "Overview" },
+  { id: "metadata", label: "Metadata" },
+  { id: "description", label: "Description" },
+  { id: "included-skills", label: "Included Skills" },
+  { id: "source", label: "Source" },
+  { id: "markdown", label: "Markdown" },
+  { id: "links", label: "Links" },
 ];
-
-const skillCollectionLabels: Record<string, string> = {
-  skills: "Everyday skill",
-  stack: "Focused skill",
-  "command-skills": "Workflow command",
-  "codex-skills": "Codex skill",
-  "cursor-plugins": "Cursor plugin",
-};
 
 function includedStackSkills(stack: SkillInventoryItem, skills: SkillInventoryItem[]): SkillInventoryItem[] {
   const stackPath = `${stack.localPath}/`;
@@ -98,9 +94,9 @@ export default async function SkillPage({ params }: SkillPageProps) {
     ? stackSkillSections
     : siblingSkills.length > 0
       ? [
-          ...baseSkillSections.slice(0, 2),
-          { id: "stack-context", label: "Related skills" },
-          ...baseSkillSections.slice(2),
+          ...baseSkillSections.slice(0, 4),
+          { id: "stack-context", label: "Stack Context" },
+          ...baseSkillSections.slice(4),
         ]
       : baseSkillSections;
 
@@ -111,7 +107,7 @@ export default async function SkillPage({ params }: SkillPageProps) {
           slug: `skills/${normalizedSkillPath}`,
           frontmatter: {
             title: skill.name,
-            eyebrow: skillCollectionLabels[skill.collection] ?? "Skill",
+            eyebrow: `${skill.collection} / ${skill.licenseSpdx}`,
             description: skill.description,
             order: 999,
             sections,

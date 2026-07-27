@@ -1,17 +1,15 @@
 ---
-title: Fix a Problem
-eyebrow: Get unstuck
-description: "Start from what you see: nothing changed, a selection was rejected, an existing file conflicted, or an update was blocked."
+title: Troubleshooting
+eyebrow: Recover safely
+description: Resolve dry-run confusion, invalid selections, missing ownership manifests, and named repository gate failures.
 order: 6
 sections:
   - id: nothing-written
-    label: Nothing changed
-  - id: conflict
-    label: A file already exists
+    label: Nothing written
   - id: invalid-selection
-    label: A selection was rejected
+    label: Invalid selection
   - id: manifest
-    label: Update or removal was blocked
-  - id: runtime
-    label: An MCP or plugin is unavailable
+    label: Manifest missing
+  - id: checks
+    label: Diagnostics
 ---

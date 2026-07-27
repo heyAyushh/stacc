@@ -1,15 +1,15 @@
 ---
-title: Update or Remove
-eyebrow: Stay in control
-description: See what STACC owns, adopt an earlier install, refresh selected packages, or remove them without touching unrelated editor files.
+title: Managed Lifecycle
+eyebrow: Maintain installs
+description: Adopt existing STACC packages, update managed content, and uninstall without touching files STACC does not own.
 order: 5
 sections:
   - id: ownership
-    label: What STACC owns
+    label: Ownership
   - id: adopt
-    label: Adopt an older install
+    label: Adopt existing
   - id: update
-    label: Update packages
+    label: Update
   - id: uninstall
-    label: Remove packages
+    label: Uninstall
 ---

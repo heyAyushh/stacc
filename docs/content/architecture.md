@@ -1,15 +1,15 @@
 ---
-title: What STACC Changes
-eyebrow: Know the boundaries
-description: Understand where STACC writes, how it treats existing configuration, what it merges, and what it will never remove.
+title: How STACC Works
+eyebrow: Reference
+description: Follow configuration from the bundled payload through deterministic planning, format-aware merging, and managed ownership.
 order: 7
 sections:
-  - id: destinations
-    label: Where files go
-  - id: existing
-    label: Existing configuration
-  - id: structured
-    label: MCP settings
+  - id: payload
+    label: Source payload
+  - id: planning
+    label: Planning
+  - id: merging
+    label: Merging
   - id: ownership
-    label: Updates and removal
+    label: Ownership
 ---

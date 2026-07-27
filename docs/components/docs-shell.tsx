@@ -23,15 +23,15 @@ const markdownOptions = {
 
 const docsNavGroups = [
   {
-    eyebrow: "Get started",
+    eyebrow: "Start",
     slugs: ["getting-started", "installation"],
   },
   {
-    eyebrow: "Build your setup",
+    eyebrow: "Use STACC",
     slugs: ["configurations", "skills", "binary-tui", "managed-lifecycle"],
   },
   {
-    eyebrow: "Help and details",
+    eyebrow: "Reference",
     slugs: ["troubleshooting", "architecture", "lazycodex"],
   },
 ];
@@ -189,7 +189,7 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
             <div className="footer-sigil">S</div>
             <div>
               <p className="footer-title">STACC Documentation</p>
-              <p className="footer-subtitle">Build one agent setup and bring it to every supported editor.</p>
+              <p className="footer-subtitle">Install agent configuration safely across supported editors.</p>
             </div>
           </div>
         </div>

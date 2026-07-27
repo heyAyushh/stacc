@@ -139,17 +139,17 @@ export const getConfigInventory = cache(async function getConfigInventory(): Pro
     mcpServers(),
   ]);
   const groups = [
-    group("Agents", "Reusable specialist roles for editors that support custom agents.", agents),
-    group("Commands", "Named workflows you invoke when you want a repeatable engineering routine.", commands),
-    group("Rules", "Shared expectations the editor applies automatically while an agent works.", rules),
-    group("Skills", "Broadly useful guidance for recurring work across projects.", skills),
-    group("Stacks", "Focused expertise grouped by language, framework, platform, or workflow.", stacks),
-    group("Hooks", "Automations that react to supported editor events.", hooks),
-    group("MCP Servers", "Connections that let an agent use another tool or data source.", mcps),
-    group("Cursor Plugin Skills", "Optional skill packages designed specifically for Cursor.", cursorPluginSkills),
-    group("Cursor Plugin Hooks", "Optional Cursor automations that react to editor events.", cursorPluginHooks),
-    group("Cursor Plugin Agents", "Optional specialist roles designed specifically for Cursor.", cursorPluginAgents),
-    group("Codex Skill Imports", "Optional workflows designed specifically for Codex.", codexSkillGroups),
+    group("Agents", "Prompted agent definitions used by supported tools.", agents),
+    group("Commands", "Slash-command prompt files installed into command-capable editors.", commands),
+    group("Rules", "Always-applied Cursor MDC rules and repo policy files.", rules),
+    group("Skills", "General STACC skill packages with SKILL.md entrypoints.", skills),
+    group("Stacks", "Framework and language stack bundles installable via --category stack.", stacks),
+    group("Hooks", "Optional hook packages selected with --hook.", hooks),
+    group("MCP Servers", "Server keys from configs/mcps/mcp.json.", mcps),
+    group("Cursor Plugin Skills", "Imported Cursor plugin skills kept in a separate category.", cursorPluginSkills),
+    group("Cursor Plugin Hooks", "Imported Cursor plugin hook packages.", cursorPluginHooks),
+    group("Cursor Plugin Agents", "Imported Cursor plugin agent definitions.", cursorPluginAgents),
+    group("Codex Skill Imports", "Codex-specific imported skills.", codexSkillGroups),
   ];
 
   return {
