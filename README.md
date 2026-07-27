@@ -157,6 +157,30 @@ Local checkout form prefixes the same commands with `cargo run --`:
 cargo run -- install --editor cursor --scope project --category hooks --hook continual-learning --dry-run --print-plan
 ```
 
+#### Apple container environment
+
+On an Apple silicon Mac running macOS 26 or newer, the repository can build and
+test inside [Apple container](https://github.com/apple/container). The tracked
+image includes pinned Rust, Node.js, and ShellCheck toolchains plus Git, Clippy,
+and rustfmt.
+
+Start the Apple container service once, then use the repository wrapper:
+
+```bash
+container system start
+./container.sh build
+./container.sh check
+./container.sh docs
+```
+
+`./container.sh shell` opens an interactive shell in the same image.
+`STACC_CONTAINER_IMAGE`, `STACC_CONTAINER_CPUS`, and
+`STACC_CONTAINER_MEMORY` override the image name and default resource limits.
+Each run mounts the checkout read-only and works from an ephemeral copy, so
+Linux build outputs do not overwrite the host checkout.
+The image is OCI-compatible; `container.sh` intentionally uses Apple
+`container build` and `container run` rather than requiring Docker Desktop.
+
 #### TUI parity
 
 | Feature | TUI | CLI |
