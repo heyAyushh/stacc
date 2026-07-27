@@ -52,9 +52,21 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
         : [];
     }),
   }));
+  const docsLinks = navGroups.flatMap((group) => group.links);
+  const currentPageIndex = docsLinks.findIndex((link) => link.href === `/docs/${page.slug}`);
+  const previousPage =
+    currentPageIndex > 0
+      ? docsLinks[currentPageIndex - 1]
+      : isSkillDetailPage
+        ? docsLinks.find((link) => link.href === "/docs/skills")
+        : undefined;
+  const nextPage = currentPageIndex >= 0 ? docsLinks[currentPageIndex + 1] : undefined;
 
   return (
     <main className={isSkillDetailPage ? "docs-shell skill-detail-shell" : "docs-shell"}>
+      <a className="skip-link" href="#docs-content">
+        Skip to documentation
+      </a>
       <header className="docs-header">
         <div className="brand-block">
           <Link href="/" className="docs-logo">
@@ -76,12 +88,24 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
         </div>
       </header>
 
+      <nav className="mobile-docs-rail" aria-label="Documentation pages">
+        {docsLinks.map((link) => {
+          const isActivePage = link.href === `/docs/${page.slug}`;
+
+          return (
+            <Link aria-current={isActivePage ? "page" : undefined} href={link.href} key={link.href}>
+              {link.label}
+            </Link>
+          );
+        })}
+      </nav>
+
       <div className="docs-layout">
         <aside className="left-sidebar">
           {navGroups.map((group) => (
             <div className="nav-group" key={group.eyebrow}>
-              <h4 className="nav-eyebrow">{group.eyebrow}</h4>
-              <nav className="nav-stack">
+              <p className="nav-eyebrow">{group.eyebrow}</p>
+              <nav className="nav-stack" aria-label={`${group.eyebrow} documentation`}>
                 {group.links.map((link) => {
                   const isActivePage = link.href === `/docs/${page.slug}`;
 
@@ -101,7 +125,7 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
           ))}
         </aside>
 
-        <article className="docs-content">
+        <article className="docs-content" id="docs-content" tabIndex={-1}>
           <div className="hero-copy">
             <span className="pill-badge">{page.frontmatter.eyebrow}</span>
             <h1 className="docs-title">{page.frontmatter.title}</h1>
@@ -126,11 +150,30 @@ export async function DocsShell({ page, pages, children }: DocsShellProps) {
               </div>
             </>
           )}
+
+          {previousPage || nextPage ? (
+            <nav className="docs-pagination" aria-label="Continue through documentation">
+              {previousPage ? (
+                <Link className="docs-pagination-link previous" href={previousPage.href}>
+                  <span>Previous</span>
+                  <strong>{previousPage.label}</strong>
+                </Link>
+              ) : (
+                <span aria-hidden="true" />
+              )}
+              {nextPage ? (
+                <Link className="docs-pagination-link next" href={nextPage.href}>
+                  <span>Next</span>
+                  <strong>{nextPage.label}</strong>
+                </Link>
+              ) : null}
+            </nav>
+          ) : null}
         </article>
 
         <aside className="right-sidebar">
-          <h4 className="nav-eyebrow">ON THIS PAGE</h4>
-          <nav className="nav-stack">
+          <p className="nav-eyebrow">ON THIS PAGE</p>
+          <nav className="nav-stack" aria-label="On this page">
             {page.frontmatter.sections.map((section) => (
               <a href={`#${section.id}`} key={section.id}>
                 {section.label}

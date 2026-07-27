@@ -11,6 +11,44 @@ export { CategoryRail } from "@/components/category-rail";
 export { InstallSurfaceMatrix } from "@/components/install-surface-matrix";
 export { TuiSegmentGrid } from "@/components/tui-segments";
 
+const skillCollectionDetails: Record<string, { label: string; order: number; description: string }> = {
+  skills: {
+    label: "Everyday Skills",
+    order: 0,
+    description: "The small, broadly useful set to keep available in regular agent work.",
+  },
+  stack: {
+    label: "Focused Stacks",
+    order: 1,
+    description: "Specialized guidance for a language, framework, platform, or workflow.",
+  },
+  "command-skills": {
+    label: "Workflow Commands",
+    order: 2,
+    description: "Explicit commands for repeatable engineering and repository workflows.",
+  },
+  "codex-skills": {
+    label: "Codex Skills",
+    order: 3,
+    description: "Packages that integrate with Codex-specific workflows.",
+  },
+  "cursor-plugins": {
+    label: "Cursor Plugins",
+    order: 4,
+    description: "Packages that integrate with Cursor-specific workflows.",
+  },
+};
+
+function skillCollectionDetailsFor(name: string) {
+  return (
+    skillCollectionDetails[name] ?? {
+      label: name,
+      order: Number.MAX_SAFE_INTEGER,
+      description: "Additional agent guidance available through STACC.",
+    }
+  );
+}
+
 function catalogMetadataRows(skill: SkillInventoryItem): Array<{ label: string; value: string | null }> {
   return [
     { label: "License", value: skill.licenseSpdx },
@@ -19,23 +57,26 @@ function catalogMetadataRows(skill: SkillInventoryItem): Array<{ label: string; 
 
 export async function SkillsOverview() {
   const inventory = await getSkillInventory();
+  const everydaySkills = inventory.collections.find((collection) => collection.name === "skills")?.count ?? 0;
+  const focusedStackSkills = inventory.collections.find((collection) => collection.name === "stack")?.count ?? 0;
+  const workflowPackages = inventory.totalSkills - everydaySkills - focusedStackSkills;
 
   return (
     <div className="inventory-grid">
       <div className="metric-card metric-card-hero">
-        <span className="metric-label">TOTAL SKILLS</span>
-        <strong>{inventory.totalSkills}</strong>
-        <p>{inventory.sourceRepo}</p>
+        <span className="metric-label">START HERE</span>
+        <strong>CORE</strong>
+        <p>{everydaySkills} everyday skills for common agent work.</p>
       </div>
       <div className="metric-card">
-        <span className="metric-label">COLLECTIONS</span>
-        <strong>{inventory.collections.length}</strong>
-        <p>{inventory.collections.map((collection) => collection.name).join(" / ")}</p>
+        <span className="metric-label">GO DEEPER</span>
+        <strong>STACKS</strong>
+        <p>{focusedStackSkills} specialized skills that stay out of context until the task needs them.</p>
       </div>
       <div className="metric-card">
-        <span className="metric-label">GENERATED</span>
-        <strong>{inventory.generatedAt.slice(0, 10)}</strong>
-        <p>{inventory.generatedAt.slice(11, 19)} UTC</p>
+        <span className="metric-label">ADD ON PURPOSE</span>
+        <strong>TOOLS</strong>
+        <p>{workflowPackages} command and editor packages for explicit workflows.</p>
       </div>
     </div>
   );
@@ -43,17 +84,23 @@ export async function SkillsOverview() {
 
 export async function SkillsCatalog() {
   const inventory = await getSkillInventory();
+  const collections = inventory.collections.toSorted(
+    (left, right) => skillCollectionDetailsFor(left.name).order - skillCollectionDetailsFor(right.name).order
+  );
 
   return (
     <div className="catalog-stack">
-      {inventory.collections.map((collection) => (
-        <section className="catalog-section" id={`collection-${collection.name}`} key={collection.name}>
+      {collections.map((collection) => {
+        const collectionDetails = skillCollectionDetailsFor(collection.name);
+
+        return (
+          <section className="catalog-section" id={`collection-${collection.name}`} key={collection.name}>
           <div className="catalog-heading">
             <div>
               <span className="metric-label">{collection.count} ITEMS</span>
-              <h3>{collection.name}</h3>
+              <h3>{collectionDetails.label}</h3>
             </div>
-            <p>{collection.licenses.join(" / ")}</p>
+            <p>{collectionDetails.description}</p>
           </div>
 
           <div className="skill-list">
@@ -61,7 +108,7 @@ export async function SkillsCatalog() {
               <article className="skill-card" id={toAnchorId([skill.collection, skill.name])} key={`${skill.collection}-${skill.name}`}>
                 <div className="skill-card-top">
                   <div>
-                    <span className="metric-label">{skill.collection}</span>
+                    <span className="metric-label">{collectionDetails.label}</span>
                     <h4>
                       <Link href={toSkillHref(skill.localPath)}>{skill.name}</Link>
                     </h4>
@@ -94,13 +141,13 @@ export async function SkillsCatalog() {
                       CREATOR REPO
                     </a>
                   ) : null}
-                  {skill.headError ? <span>ORIGIN ERROR: {skill.headError}</span> : null}
                 </div>
               </article>
             ))}
           </div>
         </section>
-      ))}
+        );
+      })}
     </div>
   );
 }

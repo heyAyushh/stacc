@@ -150,7 +150,7 @@ export function CommandSearchProvider({ items, children }: CommandSearchProvider
             <Command.Input
               value={search}
               onValueChange={setSearch}
-              placeholder="TYPE A DOC, SECTION, SKILL, OR MCP"
+              placeholder="TYPE A DOC, SECTION, SKILL, OR MCP…"
               autoFocus
             />
             <kbd>ESC</kbd>
@@ -196,7 +196,7 @@ export function CommandSearch({ variant = "docs" }: CommandSearchProps) {
       className={isCompact ? "command-search-compact" : "search-field"}
       type="button"
       onClick={openPalette}
-      aria-label="Search documentation, skills, and MCP servers with Command K"
+      aria-label="Search documentation, skills, and MCP servers with Command or Control K"
     >
       {searchIcon}
       {isCompact ? (
@@ -207,7 +207,7 @@ export function CommandSearch({ variant = "docs" }: CommandSearchProps) {
       ) : (
         <>
           <span className="search-label">SEARCH_</span>
-          <span className="search-placeholder">FIND DOC, SECTION, SKILL, OR MCP...</span>
+          <span className="search-placeholder">FIND DOC, SECTION, SKILL, OR MCP…</span>
           <span className="search-key">CMD K</span>
         </>
       )}

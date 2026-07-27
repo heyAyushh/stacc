@@ -1286,6 +1286,12 @@ body::-webkit-scrollbar {
         text-decoration: none;
       }
 
+      .docs-route a,
+      .docs-route button {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+
       .docs-route code,
       .docs-route pre,
       .docs-route button,
@@ -1314,6 +1320,27 @@ body::-webkit-scrollbar {
         background: var(--paper);
       }
 
+      .docs-route .skip-link {
+        position: fixed;
+        top: -80px;
+        left: 16px;
+        z-index: 120;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        padding: 10px 14px;
+        color: var(--ink);
+        font-family: var(--mono);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .docs-route .skip-link:focus-visible {
+        top: 16px;
+        outline: 2px solid var(--paper);
+        outline-offset: 2px;
+      }
+
       .docs-route .docs-header {
         position: sticky;
         top: 0;
@@ -1322,6 +1349,10 @@ body::-webkit-scrollbar {
         grid-template-columns: 3fr 6fr 3fr;
         border-bottom: 1px solid var(--line);
         background: var(--paper);
+      }
+
+      .docs-route .mobile-docs-rail {
+        display: none;
       }
 
       .docs-route .brand-block,
@@ -1496,6 +1527,11 @@ body::-webkit-scrollbar {
         font-size: 16px;
         font-weight: 700;
         text-transform: uppercase;
+      }
+
+      .command-input-row:focus-within {
+        outline: 2px solid var(--ink);
+        outline-offset: -2px;
       }
 
       .command-list {
@@ -1802,6 +1838,53 @@ body::-webkit-scrollbar {
         line-height: 1.6;
       }
 
+      .docs-route .docs-pagination {
+        max-width: 760px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 64px;
+        border: 1px solid var(--line);
+        background: var(--line);
+        gap: 1px;
+      }
+
+      .docs-route .docs-pagination-link {
+        min-width: 0;
+        min-height: 112px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 18px;
+        background: var(--paper);
+        padding: 18px;
+        transition:
+          background var(--fast),
+          color var(--fast),
+          transform var(--fast);
+      }
+
+      .docs-route .docs-pagination-link.next {
+        text-align: right;
+      }
+
+      .docs-route .docs-pagination-link span {
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .docs-route .docs-pagination-link strong {
+        font-family: var(--display);
+        font-size: clamp(24px, 4vw, 34px);
+        font-weight: 400;
+        line-height: 0.95;
+        text-transform: uppercase;
+        overflow-wrap: anywhere;
+      }
+
       .docs-route .inline-code {
         background: var(--soft);
         padding: 1px 5px;
@@ -2023,6 +2106,29 @@ body::-webkit-scrollbar {
         margin-top: 18px;
       }
 
+      .docs-route .catalog-discovery {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 24px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        padding: 18px;
+      }
+
+      .docs-route .catalog-discovery p {
+        max-width: 560px;
+        margin-top: 8px;
+        font-family: var(--mono);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .docs-route .catalog-discovery .command-search-compact {
+        min-height: 42px;
+        white-space: nowrap;
+      }
+
       .docs-route .catalog-section {
         border: 1px solid var(--line);
       }
@@ -2117,6 +2223,8 @@ body::-webkit-scrollbar {
         padding: 18px;
         display: grid;
         gap: 16px;
+        content-visibility: auto;
+        contain-intrinsic-size: 220px;
       }
 
       .docs-route .skill-card:nth-child(odd) {
@@ -2979,12 +3087,15 @@ body::-webkit-scrollbar {
       .docs-route .skill-links span,
       .docs-route .category-rail span,
       .docs-route .footer-nav a,
+      .docs-route .mobile-docs-rail a,
+      .docs-route .docs-pagination-link,
       .docs-route .right-sidebar .nav-stack a,
       .docs-route .mobile-section-rail a {
         transition: background var(--fast), color var(--fast), border-color var(--fast), transform var(--fast);
       }
 
       .docs-route .footer-nav a,
+      .docs-route .mobile-docs-rail a,
       .docs-route .right-sidebar .nav-stack a,
       .docs-route .mobile-section-rail a {
         display: inline-flex;
@@ -2996,6 +3107,10 @@ body::-webkit-scrollbar {
       .docs-route .skill-links a:focus-visible,
       .docs-route .category-rail span:hover,
       .docs-route .footer-nav a:hover,
+      .docs-route .mobile-docs-rail a:hover,
+      .docs-route .mobile-docs-rail a:focus-visible,
+      .docs-route .docs-pagination-link:hover,
+      .docs-route .docs-pagination-link:focus-visible,
       .docs-route .right-sidebar .nav-stack a:hover,
       .docs-route .right-sidebar .nav-stack a:focus-visible,
       .docs-route .mobile-section-rail a:hover,
@@ -3006,6 +3121,8 @@ body::-webkit-scrollbar {
 
       .docs-route .skill-links a:focus-visible,
       .docs-route .footer-nav a:focus-visible,
+      .docs-route .mobile-docs-rail a:focus-visible,
+      .docs-route .docs-pagination-link:focus-visible,
       .docs-route .right-sidebar .nav-stack a:focus-visible,
       .docs-route .mobile-section-rail a:focus-visible,
       .docs-route .sidebar-link:focus-visible,
@@ -3026,6 +3143,8 @@ body::-webkit-scrollbar {
       .docs-route .skill-links a:active,
       .docs-route .category-rail span:active,
       .docs-route .footer-nav a:active,
+      .docs-route .mobile-docs-rail a:active,
+      .docs-route .docs-pagination-link:active,
       .docs-route .right-sidebar .nav-stack a:active,
       .docs-route .mobile-section-rail a:active {
         transform: scale(0.97);
@@ -3043,6 +3162,8 @@ body::-webkit-scrollbar {
         .docs-route .skill-links a:hover,
         .docs-route .category-rail span:hover,
         .docs-route .footer-nav a:hover,
+        .docs-route .mobile-docs-rail a:hover,
+        .docs-route .docs-pagination-link:hover,
         .docs-route .right-sidebar .nav-stack a:hover,
         .docs-route .mobile-section-rail a:hover {
           transform: translateY(-1px);
@@ -3059,12 +3180,45 @@ body::-webkit-scrollbar {
       .docs-route .skill-links a:hover:active,
       .docs-route .category-rail span:hover:active,
       .docs-route .footer-nav a:hover:active,
+      .docs-route .mobile-docs-rail a:hover:active,
+      .docs-route .docs-pagination-link:hover:active,
       .docs-route .right-sidebar .nav-stack a:hover:active,
       .docs-route .mobile-section-rail a:hover:active {
         transform: scale(0.97);
       }
 
       @media (max-width: 1040px) {
+        .docs-route .mobile-docs-rail {
+          position: sticky;
+          top: var(--docs-header-height);
+          z-index: 24;
+          display: flex;
+          overflow-x: auto;
+          border-bottom: 1px solid var(--line);
+          background: var(--line);
+          gap: 1px;
+          scrollbar-width: thin;
+        }
+
+        .docs-route .mobile-docs-rail a {
+          min-height: 42px;
+          flex: 0 0 auto;
+          display: inline-flex;
+          align-items: center;
+          background: var(--paper);
+          padding: 0 14px;
+          font-family: var(--mono);
+          font-size: 11px;
+          font-weight: 700;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+
+        .docs-route .mobile-docs-rail a[aria-current="page"] {
+          background: var(--inverse);
+          color: var(--inverse-text);
+        }
+
         .docs-route .docs-layout {
           grid-template-columns: minmax(0, 1fr);
         }
@@ -3256,6 +3410,28 @@ body::-webkit-scrollbar {
 
         .docs-route .docs-content {
           padding: 28px 18px;
+        }
+
+        .docs-route .docs-pagination {
+          grid-template-columns: minmax(0, 1fr);
+          margin-top: 48px;
+        }
+
+        .docs-route .docs-pagination > span[aria-hidden="true"] {
+          display: none;
+        }
+
+        .docs-route .docs-pagination-link {
+          min-height: 96px;
+        }
+
+        .docs-route .catalog-discovery {
+          grid-template-columns: minmax(0, 1fr);
+          align-items: stretch;
+        }
+
+        .docs-route .catalog-discovery .command-search-compact {
+          justify-content: center;
         }
 
         .docs-route .code-block {

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Anton, IBM_Plex_Mono } from "next/font/google";
-import Script from "next/script";
 import { CommandSearchProvider } from "@/components/command-search";
 import { getSearchItems } from "@/lib/search";
 import "./globals.css";
@@ -14,6 +13,10 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#080808" },
+  ],
 };
 
 const anton = Anton({
@@ -80,7 +83,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${anton.variable} ${ibmPlexMono.variable}`} suppressHydrationWarning>
       <head>
-        <Script id="stacc-theme-script" strategy="beforeInteractive" dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script id="stacc-theme-script" dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
         <CommandSearchProvider items={searchItems}>{children}</CommandSearchProvider>

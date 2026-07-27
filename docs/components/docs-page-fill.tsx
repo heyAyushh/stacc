@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { CommandSearch } from "@/components/command-search";
 import {
   ConfigInventoryCatalog,
   ConfigInventoryOverview,
@@ -21,7 +23,7 @@ type FillSectionProps = {
 
 type ReferenceRow = {
   label: string;
-  value: string;
+  value: React.ReactNode;
 };
 
 function FillSection({ id, number, title, children }: FillSectionProps) {
@@ -104,7 +106,15 @@ stacc status`}
             { label: "Framework or language", value: "Add --category stack --stack <name>" },
             { label: "One MCP server", value: "Add --category mcps --mcp-server <name>" },
             { label: "Cursor hook", value: "Add --category hooks --hook <name>" },
-            { label: "Browse available packages", value: "Open Skills Inventory and Configurations" },
+            {
+              label: "Browse available packages",
+              value: (
+                <>
+                  Open <Link href="/docs/skills">Skills &amp; Stacks</Link> or{" "}
+                  <Link href="/docs/configurations">What You Can Install</Link>
+                </>
+              ),
+            },
           ]}
         />
       </FillSection>
@@ -164,8 +174,8 @@ function SkillsFill() {
     <>
       <FillSection id="choose" number="01" title="Choose a package">
         <p>
-          Core skills are broadly useful. Stacks are focused bundles whose router loads deeper guidance only when a task matches.
-          Each detail page records the original source and license.
+          Keep the everyday set small, then add focused stacks for the work you actually do. Agents see the lightweight router first and load deeper guidance only when a task matches.
+          Every detail page keeps the original source and license visible.
         </p>
         <SkillsOverview />
       </FillSection>
@@ -181,6 +191,13 @@ stacc install --editor codex --scope project --category codex-skills --dry-run -
       </FillSection>
 
       <FillSection id="catalog" number="03" title="Browse the catalog">
+        <div className="catalog-discovery">
+          <div>
+            <span className="metric-label">FIND ONE FAST</span>
+            <p>Search by skill, stack, framework, source, or license instead of scanning the full catalog.</p>
+          </div>
+          <CommandSearch variant="compact" />
+        </div>
         <SkillsCatalog />
       </FillSection>
     </>

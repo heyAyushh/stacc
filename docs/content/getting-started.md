@@ -1,7 +1,7 @@
 ---
 title: Getting Started
 eyebrow: Start here
-description: Install STACC, preview a safe project-scoped configuration plan, apply it, and verify the result.
+description: Install STACC, choose one project and editor, inspect exactly what will change, then apply and verify the result.
 order: 0
 sections:
   - id: install

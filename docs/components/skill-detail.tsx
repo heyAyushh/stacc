@@ -23,7 +23,6 @@ function metadataRows(skill: SkillInventoryItem): Array<{ label: string; value: 
     { label: "Config Path", value: skill.localPath },
     { label: "License", value: skill.licenseSpdx },
     { label: "License Source", value: skill.licenseSource },
-    { label: "Origin Error", value: skill.headError },
   ];
 }
 

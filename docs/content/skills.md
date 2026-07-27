@@ -1,7 +1,7 @@
 ---
-title: Skills Inventory
-eyebrow: Browse packages
-description: Compare core skills and focused stacks, inspect provenance and licenses, and install only the guidance your workflow needs.
+title: Skills & Stacks
+eyebrow: Add expertise
+description: Keep everyday agent context lean, then add focused language, framework, platform, and workflow guidance when you need it.
 order: 3
 sections:
   - id: choose
