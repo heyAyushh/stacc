@@ -10,8 +10,6 @@ sections:
     label: TUI
   - id: installer
     label: Installer
-  - id: dependencies
-    label: Dependencies
 ---
 
 The Rust binary is the product runtime. The terminal UI is the human control surface for the same install and verification paths agents use from the CLI.

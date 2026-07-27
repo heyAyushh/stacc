@@ -1,0 +1,214 @@
+{
+  "generatedAt": "2026-06-29T19:59:14.990Z",
+  "surface": "live docs app at http://127.0.0.1:4174/",
+  "browser": "Google Chrome via Chrome DevTools Protocol",
+  "routes": [
+    "/",
+    "/docs/getting-started",
+    "/docs/binary-tui",
+    "/docs/skills",
+    "/docs/architecture"
+  ],
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1280,
+      "height": 900
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "interactions": {
+    "landingCopy": "copied",
+    "docsCopy": "copied",
+    "searchState": {
+      "hasDialog": true,
+      "activeTag": "INPUT",
+      "activeRole": "combobox",
+      "inputFontSize": 16,
+      "inputPlaceholder": "TYPE A DOC, SECTION, OR SKILL",
+      "bodyTextSample": "STACC\nDOCUMENTATION\nSEARCH_\nFIND DOC, SECTION, OR SKILL...\nCMD K\nv0.1.0\nGITHUB\n00 / INTRODUCTION\nGETTING STARTED\nARCHITECTURE\nINSTALLATION\nSKILLS INVENTORY\nBINARY & TUI\nCONFIGURATIONS\n01 / CORE_SYSTEM\nAGENT PERSONAS\nGLOBAL RULES\nACTIVE HOOKS\n02 / INTERFACE\nCLI REFERENCE\nAPI SPECS\nPLUGINS\nSYSTEM STATUS\nALL NODES ONLINE\nQuick Start\nGetting Started\n\nSTACC is a high-performance configuration suite designed to bridge the gap between human intent and machine execution through standardized agent behavi"
+    },
+    "landingShot": ".omo/evidence/docs-frontend-rethink-browser-live/interaction-landing-copy.png",
+    "docsCopyShot": ".omo/evidence/docs-frontend-rethink-browser-live/interaction-docs-code-copy.png",
+    "searchShot": ".omo/evidence/docs-frontend-rethink-browser-live/interaction-command-search.png"
+  },
+  "observations": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4174/",
+      "metrics": {
+        "title": "STACC | Agent Config Suite",
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "bodyScrollWidth": 1280,
+        "viewportWidth": 1280,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/desktop-root.png"
+    },
+    {
+      "route": "/docs/getting-started",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4174/docs/getting-started",
+      "metrics": {
+        "title": "Getting Started | STACC Documentation",
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "bodyScrollWidth": 1280,
+        "viewportWidth": 1280,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/desktop-docs-getting-started.png"
+    },
+    {
+      "route": "/docs/binary-tui",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4174/docs/binary-tui",
+      "metrics": {
+        "title": "Binary & TUI | STACC Documentation",
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "bodyScrollWidth": 1280,
+        "viewportWidth": 1280,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/desktop-docs-binary-tui.png"
+    },
+    {
+      "route": "/docs/skills",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4174/docs/skills",
+      "metrics": {
+        "title": "Skills Inventory | STACC Documentation",
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "bodyScrollWidth": 1280,
+        "viewportWidth": 1280,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/desktop-docs-skills.png"
+    },
+    {
+      "route": "/docs/architecture",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4174/docs/architecture",
+      "metrics": {
+        "title": "Architecture | STACC Documentation",
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "bodyScrollWidth": 1280,
+        "viewportWidth": 1280,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/desktop-docs-architecture.png"
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4174/",
+      "metrics": {
+        "title": "STACC | Agent Config Suite",
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "viewportWidth": 390,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/mobile-root.png"
+    },
+    {
+      "route": "/docs/getting-started",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4174/docs/getting-started",
+      "metrics": {
+        "title": "Getting Started | STACC Documentation",
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "viewportWidth": 390,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/mobile-docs-getting-started.png"
+    },
+    {
+      "route": "/docs/binary-tui",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4174/docs/binary-tui",
+      "metrics": {
+        "title": "Binary & TUI | STACC Documentation",
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "viewportWidth": 390,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/mobile-docs-binary-tui.png"
+    },
+    {
+      "route": "/docs/skills",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4174/docs/skills",
+      "metrics": {
+        "title": "Skills Inventory | STACC Documentation",
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "viewportWidth": 390,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/mobile-docs-skills.png"
+    },
+    {
+      "route": "/docs/architecture",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4174/docs/architecture",
+      "metrics": {
+        "title": "Architecture | STACC Documentation",
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "viewportWidth": 390,
+        "hasHorizontalOverflow": false,
+        "smallEditableFonts": [],
+        "overflowingElements": []
+      },
+      "routeErrors": [],
+      "screenshotPath": ".omo/evidence/docs-frontend-rethink-browser-live/mobile-docs-architecture.png"
+    }
+  ],
+  "browserErrors": [],
+  "failures": [],
+  "verdict": "PASS"
+}

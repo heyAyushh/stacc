@@ -1,0 +1,16 @@
+[0630/212020.328337:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/212020.329015:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size com.googlecode.crashpad.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/212020.329052:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:66] setxattr org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/212020.330038:ERROR:third_party/crashpad/crashpad/util/file/file_io.cc:103] ReadExactly: expected 8, observed 0
+[0630/212020.332951:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/212020.333053:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size com.googlecode.crashpad.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/212020.333257:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:66] setxattr org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[95353:432021:0630/212020.690960:ERROR:net/cert/internal/trust_store_mac.cc:380] Error parsing certificate:
+ERROR: Failed parsing extensions
+
+[95353:432021:0630/212020.693113:ERROR:net/cert/internal/trust_store_mac.cc:807] Error parsing certificate:
+ERROR: Failed parsing extensions
+
+
+DevTools listening on ws://127.0.0.1:9231/devtools/browser/70f7eab6-4274-416c-a9c0-8f293fb93e27
+[95360:432048:0630/212023.855339:ERROR:gpu/command_buffer/service/shared_image/shared_image_manager.cc:385] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.

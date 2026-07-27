@@ -1,0 +1,16 @@
+[0630/231031.229798:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231031.231091:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size com.googlecode.crashpad.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231031.231127:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:66] setxattr org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231031.232941:ERROR:third_party/crashpad/crashpad/util/file/file_io.cc:103] ReadExactly: expected 8, observed 0
+[0630/231031.237111:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231031.237350:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size com.googlecode.crashpad.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231031.237525:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:66] setxattr org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[86561:1657040:0630/231031.825705:ERROR:net/cert/internal/trust_store_mac.cc:380] Error parsing certificate:
+ERROR: Failed parsing extensions
+
+[86561:1657040:0630/231031.827990:ERROR:net/cert/internal/trust_store_mac.cc:807] Error parsing certificate:
+ERROR: Failed parsing extensions
+
+
+DevTools listening on ws://127.0.0.1:9234/devtools/browser/fd703dc9-b8b0-4945-a76f-fcd92783c34f
+[86922:1657077:0630/231035.820295:ERROR:gpu/command_buffer/service/shared_image/shared_image_manager.cc:385] SharedImageManager::ProduceMemory: Trying to Produce a Memory representation from a non-existent mailbox.

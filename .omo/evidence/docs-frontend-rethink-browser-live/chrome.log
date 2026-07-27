@@ -1,0 +1,15 @@
+[0630/012633.256638:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/012633.264471:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size com.googlecode.crashpad.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/012633.264514:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:66] setxattr org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/012633.268378:ERROR:third_party/crashpad/crashpad/util/file/file_io.cc:103] ReadExactly: expected 8, observed 0
+[0630/012633.281568:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/012633.284505:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size com.googlecode.crashpad.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/012633.285212:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:66] setxattr org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[94333:1323932:0630/012634.256940:ERROR:net/cert/internal/trust_store_mac.cc:380] Error parsing certificate:
+ERROR: Failed parsing extensions
+
+[94333:1323932:0630/012634.263925:ERROR:net/cert/internal/trust_store_mac.cc:807] Error parsing certificate:
+ERROR: Failed parsing extensions
+
+
+DevTools listening on ws://127.0.0.1:9224/devtools/browser/2396d3ec-bfc8-4285-9ecb-2bc1029e8b19

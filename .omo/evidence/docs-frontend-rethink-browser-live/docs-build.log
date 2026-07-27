@@ -1,0 +1,41 @@
+
+> stacc-monorepo@0.1.0 docs:build
+> npm --workspace @stacc/docs run build
+
+
+> @stacc/docs@0.1.0 build
+> next build
+
+▲ Next.js 16.2.9 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.5s
+  Running TypeScript ...
+  Finished TypeScript in 3.1s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/103) ...
+  Generating static pages using 7 workers (25/103) 
+  Generating static pages using 7 workers (51/103) 
+  Generating static pages using 7 workers (77/103) 
+✓ Generating static pages using 7 workers (103/103) in 3.6s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /docs
+├ ● /docs/[slug]
+│ ├ /docs/getting-started
+│ ├ /docs/architecture
+│ ├ /docs/installation
+│ └ [+3 more paths]
+└ ● /docs/skills/[skillSlug]
+  ├ /docs/skills/codex-skills-babysit-pr
+  ├ /docs/skills/cursor-plugins-cli-for-agents
+  ├ /docs/skills/cursor-plugins-continual-learning
+  └ [+90 more paths]
+
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+

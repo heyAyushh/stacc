@@ -1,0 +1,8 @@
+startedAt=2026-06-29T20:12:10.007Z
+cwd=/Users/ay/.codex/worktrees/f602/stacc
+baseUrl=http://127.0.0.1:4174
+chrome=/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+invocation=node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs
+serverProbe=HTTP 200
+devToolsPort=63502
+userDataDir=/var/folders/j6/4dpy4_z5197d8xfwpbrkd1tc0000gn/T/stacc-docs-qa-chrome-jCoahj

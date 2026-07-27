@@ -51,9 +51,6 @@ export type BinaryInventory = {
   crateDescription: string;
   binaryName: string;
   latestCommitYear: string;
-  docsVersion: string;
-  rootVersion: string;
-  docsDependencies: Array<{ name: string; version: string; scope: "runtime" | "dev"; packageUrl: string }>;
 };
 
 export type ConfigInventoryGroup = {
@@ -70,8 +67,6 @@ export type ConfigInventory = {
 
 const skillLockPath = path.join(repoRoot, "configs", "metadata", "skills.lock.json");
 const cargoManifestPath = path.join(repoRoot, "Cargo.toml");
-const docsPackagePath = path.join(process.cwd(), "package.json");
-const rootPackagePath = path.join(repoRoot, "package.json");
 const execFileAsync = promisify(execFile);
 
 function readTomlString(source: string, key: string): string {
@@ -195,35 +190,11 @@ export const getSkillMarkdown = cache(async function getSkillMarkdown(skill: Ski
   return fs.readFile(path.join(repoRoot, skill.localPath, "SKILL.md"), "utf8");
 });
 
-function dependencyRows(
-  dependencies: Record<string, unknown> | undefined,
-  scope: "runtime" | "dev"
-): BinaryInventory["docsDependencies"] {
-  if (!dependencies) {
-    return [];
-  }
-
-  return Object.entries(dependencies).map(([name, version]) => ({
-    name,
-    version: asString(version, `dependency ${name}`),
-    scope,
-    packageUrl: npmPackageUrl(name),
-  }));
-}
-
-function npmPackageUrl(packageName: string): string {
-  return `https://www.npmjs.com/package/${packageName.replace("@", "%40")}`;
-}
-
 export const getBinaryInventory = cache(async function getBinaryInventory(): Promise<BinaryInventory> {
-  const [cargoSource, docsPackage, rootPackage, commitYear] = await Promise.all([
+  const [cargoSource, commitYear] = await Promise.all([
     fs.readFile(cargoManifestPath, "utf8"),
-    readJsonFile(docsPackagePath),
-    readJsonFile(rootPackagePath),
     latestCommitYear(),
   ]);
-  const docsDependencies = asRecord(docsPackage.dependencies, "docs.dependencies");
-  const docsDevDependencies = asRecord(docsPackage.devDependencies, "docs.devDependencies");
 
   return {
     crateName: readTomlString(cargoSource, "name"),
@@ -232,12 +203,6 @@ export const getBinaryInventory = cache(async function getBinaryInventory(): Pro
     crateDescription: readTomlString(cargoSource, "description"),
     binaryName: firstBinName(cargoSource),
     latestCommitYear: commitYear,
-    docsVersion: asString(docsPackage.version, "docs.version"),
-    rootVersion: asString(rootPackage.version, "root.version"),
-    docsDependencies: [
-      ...dependencyRows(docsDependencies, "runtime"),
-      ...dependencyRows(docsDevDependencies, "dev"),
-    ].toSorted((left, right) => left.name.localeCompare(right.name)),
   };
 });
 

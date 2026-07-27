@@ -1,0 +1,19 @@
+[0630/231701.885728:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231701.886473:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size com.googlecode.crashpad.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231701.886511:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:66] setxattr org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231701.887583:ERROR:third_party/crashpad/crashpad/util/file/file_io.cc:103] ReadExactly: expected 8, observed 0
+[0630/231701.890445:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231701.890506:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:41] getxattr size com.googlecode.crashpad.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[0630/231701.890699:ERROR:third_party/crashpad/crashpad/util/mac/xattr.cc:66] setxattr org.chromium.crashpad.database.initialized on file /Users/ay/Library/Application Support/Google/Chrome/Crashpad: Operation not permitted (1)
+[50036:1737573:0630/231702.231191:ERROR:net/cert/internal/trust_store_mac.cc:380] Error parsing certificate:
+ERROR: Failed parsing extensions
+
+[50036:1737573:0630/231702.233089:ERROR:net/cert/internal/trust_store_mac.cc:807] Error parsing certificate:
+ERROR: Failed parsing extensions
+
+
+DevTools listening on ws://127.0.0.1:9235/devtools/browser/52667e61-2678-41a2-9944-5cae179025ca
+Trying to load the allocator multiple times. This is *not* supported.
+[50036:1737562:0630/231707.317092:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[50036:1737562:0630/231707.320586:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[50036:1737562:0630/231707.321829:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR

@@ -1,0 +1,10 @@
+
+> stacc-monorepo@0.1.0 docs:typecheck
+> npm --workspace @stacc/docs run typecheck
+
+
+> @stacc/docs@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully

@@ -1,0 +1,91 @@
+# LOC refactor evidence
+generated_at=2026-06-29T21:17:52Z
+
+$ awk pure LOC touched files
+83 docs/components/install-surface-matrix.tsx
+188 docs/components/inventory-panels.tsx
+20 docs/components/tui-segments.tsx
+104 docs/lib/inventory-config.ts
+26 docs/lib/inventory-shared.ts
+195 docs/lib/inventory.ts
+
+$ rg forbidden TS suppressions/casts
+no forbidden suppressions/casts found
+
+$ timeout 180s npm run docs:typecheck
+
+> stacc-monorepo@0.1.0 docs:typecheck
+> npm --workspace @stacc/docs run typecheck
+
+
+> @stacc/docs@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+
+$ timeout 240s npm run docs:build
+
+> stacc-monorepo@0.1.0 docs:build
+> npm --workspace @stacc/docs run build
+
+
+> @stacc/docs@0.1.0 build
+> next build
+
+▲ Next.js 16.2.9 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 10.9s
+  Running TypeScript ...
+  Finished TypeScript in 5.0s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/103) ...
+  Generating static pages using 7 workers (25/103) 
+  Generating static pages using 7 workers (51/103) 
+  Generating static pages using 7 workers (77/103) 
+✓ Generating static pages using 7 workers (103/103) in 5.0s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /docs
+├ ● /docs/[slug]
+│ ├ /docs/getting-started
+│ ├ /docs/architecture
+│ ├ /docs/installation
+│ └ [+3 more paths]
+└ ● /docs/skills/[skillSlug]
+  ├ /docs/skills/codex-skills-babysit-pr
+  ├ /docs/skills/cursor-plugins-cli-for-agents
+  ├ /docs/skills/cursor-plugins-continual-learning
+  └ [+90 more paths]
+
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+
+
+$ git diff --check
+no whitespace errors
+
+$ HTTP smoke /docs/binary-tui and /docs/skills
+▲ Next.js 16.2.9
+- Local:         http://127.0.0.1:4177
+- Network:       http://127.0.0.1:4177
+✓ Ready in 217ms
+/docs/binary-tui http=200 bytes=137698
+/docs/skills http=200 bytes=355930
+/docs/binary-tui markers=ok
+/docs/skills markers=ok
+server stopped after smoke
+
+$ git status --short touched/new files
+ M docs/components/inventory-panels.tsx
+ M docs/lib/inventory.ts
+?? docs/.qa/loc-refactor-evidence.txt
+?? docs/components/install-surface-matrix.tsx
+?? docs/components/tui-segments.tsx
+?? docs/lib/inventory-config.ts
+?? docs/lib/inventory-shared.ts

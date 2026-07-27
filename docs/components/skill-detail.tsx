@@ -29,7 +29,6 @@ function metadataRows(skill: SkillInventoryItem): Array<{ label: string; value: 
 
 function sourceRows(skill: SkillInventoryItem): Array<{ label: string; value: string | null }> {
   return [
-    { label: "Docs Path", value: toSkillHref(skill.localPath) },
     { label: "Original Source", value: originalSourceLabel(skill) },
     { label: "Creator Repository", value: hasDistinctCreatorRepository(skill) ? creatorRepositoryLabel(skill) : null },
     { label: "Declared Commit", value: skill.declaredCommit },
@@ -57,8 +56,34 @@ function SkillSourceChip({ skill }: { skill: SkillInventoryItem }) {
   return source ? <span className="source-chip">{source}</span> : null;
 }
 
+function SkillSection({
+  children,
+  className,
+  id,
+  number,
+  title,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  id: string;
+  number: string;
+  title: string;
+}) {
+  return (
+    <section className={className ? `skill-detail-section ${className}` : "skill-detail-section"} id={id}>
+      <div className="section-heading">
+        <span className="section-number">#{number}</span>
+        <h3>{title}</h3>
+      </div>
+      {children}
+    </section>
+  );
+}
+
 export function SkillDetail({ includedSkills = emptySkills, siblingSkills = emptySkills, skill, skillMarkdown }: SkillDetailProps) {
   const heroChipLabel = sourceDisplayLabel(skill);
+  let sectionCounter = 1;
+  const nextSectionNumber = () => String(sectionCounter++).padStart(2, "0");
 
   return (
     <div className="skill-detail">
@@ -70,8 +95,7 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
         <span className="source-chip">{heroChipLabel}</span>
       </section>
 
-      <section className="skill-detail-section" id="metadata">
-        <h3>Metadata</h3>
+      <SkillSection id="metadata" number={nextSectionNumber()} title="Metadata">
         <dl className="skill-detail-grid">
           {metadataRows(skill).map((row) =>
             row.value ? (
@@ -84,19 +108,15 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
             ) : null
           )}
         </dl>
-      </section>
+      </SkillSection>
 
-      <section className="skill-detail-section" id="description">
-        <h3>Description</h3>
+      <SkillSection id="description" number={nextSectionNumber()} title="Description">
         <p>{skill.description}</p>
-      </section>
+      </SkillSection>
 
       {includedSkills.length > 0 ? (
-        <section className="skill-detail-section stack-contents" id="included-skills">
-          <div className="stack-contents-heading">
-            <h3>Included Skills</h3>
-            <span>{includedSkills.length} skills</span>
-          </div>
+        <SkillSection className="stack-contents" id="included-skills" number={nextSectionNumber()} title="Included Skills">
+          <p className="section-summary">{includedSkills.length} skills in this stack.</p>
           <div className="stack-skill-list">
             {includedSkills.map((includedSkill) => (
               <article className="stack-skill-card" key={includedSkill.localPath}>
@@ -119,11 +139,10 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
               </article>
             ))}
           </div>
-        </section>
+        </SkillSection>
       ) : null}
 
-      <section className="skill-detail-section" id="source">
-        <h3>Source</h3>
+      <SkillSection id="source" number={nextSectionNumber()} title="Source">
         <dl className="skill-detail-grid">
           {sourceRows(skill).map((row) =>
             row.value ? (
@@ -136,14 +155,11 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
             ) : null
           )}
         </dl>
-      </section>
+      </SkillSection>
 
       {siblingSkills.length > 0 ? (
-        <section className="skill-detail-section stack-contents" id="stack-context">
-          <div className="stack-contents-heading">
-            <h3>Stack Context</h3>
-            <span>{siblingSkills.length} skills in stack</span>
-          </div>
+        <SkillSection className="stack-contents" id="stack-context" number={nextSectionNumber()} title="Stack Context">
+          <p className="section-summary">{siblingSkills.length} skills share this stack.</p>
           <div className="stack-skill-list">
             {siblingSkills.map((siblingSkill) => {
               const isCurrentSkill = siblingSkill.localPath === skill.localPath;
@@ -169,11 +185,10 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
               );
             })}
           </div>
-        </section>
+        </SkillSection>
       ) : null}
 
-      <section className="skill-detail-section" id="markdown">
-        <h3>Markdown</h3>
+      <SkillSection id="markdown" number={nextSectionNumber()} title="Markdown">
         <CopyPanel ariaLabel={`Copy ${skill.name} Markdown`} className="code-block copy-panel skill-markdown-panel" mode="overlay" value={skillMarkdown}>
           <div className="code-meta">
             <span>{skill.localPath}/SKILL.md</span>
@@ -183,10 +198,9 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
             <code className="block max-w-full break-words [overflow-wrap:anywhere]">{skillMarkdown}</code>
           </pre>
         </CopyPanel>
-      </section>
+      </SkillSection>
 
-      <section className="skill-detail-section" id="links">
-        <h3>Links</h3>
+      <SkillSection id="links" number={nextSectionNumber()} title="Links">
         <div className="skill-links">
           <Link href="/docs/skills">ALL SKILLS</Link>
           {skill.sourceUrl ? (
@@ -200,7 +214,7 @@ export function SkillDetail({ includedSkills = emptySkills, siblingSkills = empt
             </a>
           ) : null}
         </div>
-      </section>
+      </SkillSection>
     </div>
   );
 }

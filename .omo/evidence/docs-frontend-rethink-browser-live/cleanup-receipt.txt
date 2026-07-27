@@ -1,0 +1,8 @@
+cleanup_checked_at=2026-06-29T20:00:31Z
+reused_dev_server=http://127.0.0.1:4174/
+started_dev_server=false
+started_browser=Google Chrome CDP ports 9224,9225,9226,9227 attempts; successful QA on 9227
+port_9224=closed
+port_9225=closed
+port_9226=closed
+port_9227=closed

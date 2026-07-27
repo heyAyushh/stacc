@@ -12,4 +12,4 @@ sections:
     label: Source
 ---
 
-LazyCodex is not part of the STACC installer payload yet. It is documented here so the docs search can route users to the current upstream package, binary names, and source repository without pretending it is a local STACC skill.
+LazyCodex is not part of the STACC installer payload yet. This page points to the current upstream package, binary names, and source repository without pretending it is a local STACC skill.

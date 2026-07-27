@@ -118,9 +118,9 @@ export async function BinaryOverview() {
         </p>
       </div>
       <div className="metric-card">
-        <span className="metric-label">DOCS APP</span>
-        <strong>v{binary.docsVersion}</strong>
-        <p>Root workspace v{binary.rootVersion}</p>
+        <span className="metric-label">CHECK GATE</span>
+        <strong>stacc check</strong>
+        <p>Full local validation for the binary, installer, and payload.</p>
       </div>
       <div className="metric-card">
         <span className="metric-label">DESCRIPTION</span>
@@ -128,33 +128,6 @@ export async function BinaryOverview() {
         <p>{binary.crateDescription}</p>
       </div>
     </div>
-  );
-}
-
-export async function RuntimeDependencyGrid() {
-  const binary = await getBinaryInventory();
-
-  return (
-    <section className="dependency-ledger" aria-label="Docs runtime dependencies">
-      <div className="dependency-ledger-head" aria-hidden="true">
-        <span>Package</span>
-        <span>Version</span>
-        <span>Scope</span>
-      </div>
-      <ul className="dependency-list">
-        {binary.docsDependencies.map((dependency) => (
-          <li className="dependency-item" key={`${dependency.scope}-${dependency.name}`}>
-            <strong>
-              <a href={dependency.packageUrl} rel="noreferrer" target="_blank">
-                {dependency.name}
-              </a>
-            </strong>
-            <code>{dependency.version}</code>
-            <span className="dependency-scope">{dependency.scope}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }
 

@@ -5,7 +5,6 @@ import {
   ConfigInventoryCatalog,
   ConfigInventoryOverview,
   InstallSurfaceMatrix,
-  RuntimeDependencyGrid,
   SkillsCatalog,
   SkillsOverview,
   TuiSegmentGrid,
@@ -128,7 +127,7 @@ shellcheck -x install.sh`} />
       </FillSection>
 
       <FillSection id="remote-install" number="03" title="Remote Install">
-        <p>The universal installer is the user-facing path for remote setup. Keep it display-only inside docs.</p>
+        <p>The universal installer is the user-facing path for remote setup.</p>
         <CodePanel label="remote" action="copy" snippet="curl -fsSL https://stacc.fyi/install.sh | bash" />
       </FillSection>
     </>
@@ -182,10 +181,6 @@ stacc check`} />
 stacc install --editor cursor --scope project --category rules --category skills --dry-run
 stacc install --editor codex --scope global --category rules --category skills --category mcps --mcp-server github --yes
 stacc install --editor cursor --scope project --category hooks --hook continual-learning --dry-run`} />
-      </FillSection>
-
-      <FillSection id="dependencies" number="04" title="Docs Runtime">
-        <RuntimeDependencyGrid />
       </FillSection>
     </>
   );
