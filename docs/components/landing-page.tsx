@@ -11,11 +11,11 @@ const staccIssueUrl = `${staccRepoUrl}/issues/new`;
 const features = [
   {
     number: "01",
-    titleLines: ["Safe", "Plans"],
-    body: "Preview exact targets, conflicts, and file operations before STACC writes anything.",
-    href: "/docs/getting-started#preview",
+    titleLines: ["One", "Setup"],
+    body: "Bring the same skills, rules, agents, and MCP servers to Cursor, Claude Code, Codex, OpenCode, and Amp.",
+    href: "/docs/installation#targets",
     panelClassName: "border-b md:border-b-0 md:border-r border-black",
-    actionKind: "pill",
+    actionKind: "arrow",
   },
   {
     number: "02",
@@ -43,8 +43,6 @@ const arrowAction = (
   </div>
 );
 
-const pillAction = <div className="pill-badge group-hover:border-white group-hover:text-white">/dry-run</div>;
-
 const statusAction = (
   <div className="mt-8 w-full border-t border-black pt-4 group-hover:border-white">
     <div className="flex justify-between items-center font-mono text-xs">
@@ -55,10 +53,6 @@ const statusAction = (
 );
 
 function getFeatureAction(actionKind: (typeof features)[number]["actionKind"]) {
-  if (actionKind === "pill") {
-    return pillAction;
-  }
-
   if (actionKind === "arrow") {
     return arrowAction;
   }
