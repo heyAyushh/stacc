@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { LandingPage } from "@/components/landing-page";
 
 export const metadata: Metadata = {
-  title: "STACC | Agent Config Suite",
-  description: "Generate a universal agent configuration suite for rules, agents, hooks, and editor-ready scaffolding.",
+  title: "STACC | One setup for every coding agent",
+  description:
+    "Curated skills, rules, stacks, MCP servers, and plugins for Cursor, Claude Code, Codex, OpenCode, and Amp.",
 };
 
 export default function Page() {

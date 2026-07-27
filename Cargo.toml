@@ -3,7 +3,7 @@ name = "stacc"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-description = "Rust TUI control panel and metadata sync for stacc agent configs"
+description = "Curated agent configs with safe installs across Cursor, Claude Code, Codex, OpenCode, and Amp"
 
 [[bin]]
 name = "stacc"

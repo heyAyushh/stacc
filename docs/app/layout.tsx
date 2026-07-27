@@ -6,8 +6,8 @@ import { getSearchItems } from "@/lib/search";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "STACC Documentation",
-  description: "STACC agent configuration suite and documentation.",
+  title: "STACC Docs | One setup for every coding agent",
+  description: "Install and manage a portable agent setup across every supported editor.",
 };
 
 export const viewport: Viewport = {

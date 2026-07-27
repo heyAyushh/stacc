@@ -11,24 +11,24 @@ const staccIssueUrl = `${staccRepoUrl}/issues/new`;
 const features = [
   {
     number: "01",
-    titleLines: ["Safe", "Plans"],
-    body: "Preview exact targets, conflicts, and file operations before STACC writes anything.",
+    titleLines: ["See", "The Plan"],
+    body: "Preview every file, merge, and conflict before STACC touches your setup.",
     href: "/docs/getting-started#preview",
     panelClassName: "border-b md:border-b-0 md:border-r border-black",
     actionKind: "pill",
   },
   {
     number: "02",
-    titleLines: ["Focused", "Stacks"],
-    body: "Install progressive-disclosure bundles for the language, framework, or workflow you are using.",
+    titleLines: ["Pick", "Your Stack"],
+    body: "Install the skills this project needs. Keep everything else out of your agent’s context.",
     href: "/docs/skills#choose",
     panelClassName: "border-b md:border-b-0 md:border-r border-black",
     actionKind: "arrow",
   },
   {
     number: "03",
-    titleLines: ["Managed", "Installs"],
-    body: "Update and remove only the skills, stacks, and plugins STACC has recorded as its own.",
+    titleLines: ["Stay", "In Control"],
+    body: "Update or remove exactly what STACC installed. Your own files stay yours.",
     href: "/docs/managed-lifecycle#ownership",
     panelClassName: "bg-white",
     actionKind: "status",
@@ -48,8 +48,8 @@ const pillAction = <div className="pill-badge group-hover:border-white group-hov
 const statusAction = (
   <div className="mt-8 w-full border-t border-black pt-4 group-hover:border-white">
     <div className="flex justify-between items-center font-mono text-xs">
-      <span>STATUS</span>
-      <span>TRACKED</span>
+      <span>YOUR FILES</span>
+      <span>STAY YOURS</span>
     </div>
   </div>
 );
@@ -71,51 +71,42 @@ export async function LandingPage() {
   const displayVersion = `v.${binary.crateVersion}`;
 
   return (
-    <main className="screen min-h-screen overflow-x-hidden" aria-label="STACC Variant landing page">
-      <section className="variant-stage" aria-label="Variant generated design stage">
+    <main className="screen min-h-screen overflow-x-hidden" aria-label="STACC agent setup">
+      <section className="variant-stage" aria-label="STACC product overview">
         <div className="stage-theme-toggle">
           <CommandSearch variant="compact" />
           <ThemeToggle />
         </div>
         <article className="canvas">
           <div className="board">
-            <section className="board-top" aria-label="Stacc suite header">
+            <section className="board-top" aria-label="STACC product header">
               <div className="header-cell">
                 <div className="logo-pill">
-                  <small>v2</small>STACC
+                  <small>OSS</small>STACC
                 </div>
-                <div className="system-ready">SYSTEM READY</div>
+                <div className="system-ready">STACK READY</div>
               </div>
               <div className="header-cell">
                 <h1 className="suite-title">
                   AGENT
                   <br />
-                  CONFIG
-                  <br />
-                  SUITE
+                  STACK
                 </h1>
-                <div className="suite-kicker">• RULES • AGENTS • HOOKS •</div>
+                <div className="suite-kicker">• SKILLS • RULES • MCP •</div>
                 <div className="spinner" aria-hidden="true" />
                 <div className="mobile-right-copy">
-                  Universal
+                  One setup
                   <br />
-                  Dev Environment
-                  <br />
-                  Scaffolding
+                  Any agent
                 </div>
               </div>
               <div className="header-cell">
                 <div className="right-copy">
-                  Universal
+                  One setup
                   <br />
-                  Dev Environment
-                  <br />
-                  Scaffolding
+                  Any agent
                 </div>
                 <div className="link-stack">
-                  <a className="pill-link" href={staccRepoUrl} rel="noreferrer" target="_blank">
-                    GITHUB
-                  </a>
                   <Link className="pill-link" href="/docs">
                     DOCS
                   </Link>
@@ -126,11 +117,11 @@ export async function LandingPage() {
               </div>
             </section>
 
-            <section className="wave-panel" aria-label="Generate deploy hero">
+            <section className="wave-panel" aria-label="Set up any coding agent">
               <WaveCanvas />
-              <div className="mega" aria-label="Generate deploy">
-                <span className="mega-line">GENERATE</span>
-                <span className="mega-line depth">DEPLOY</span>
+              <div className="mega" aria-label="Set up any coding agent">
+                <span className="mega-line">SET UP</span>
+                <span className="mega-line depth">ANY AGENT</span>
               </div>
               <InstallCopyCard />
             </section>
@@ -169,9 +160,9 @@ export async function LandingPage() {
               </div>
               <div className="footer-actions">
                 <div className="footer-links">
-                  <Link href="/docs">DOCUMENTATION</Link>
-                  <span aria-disabled="true">TWITTER / X</span>
-                  <span aria-disabled="true">DISCORD</span>
+                  <Link href="/docs/getting-started">GET STARTED</Link>
+                  <Link href="/docs/installation">INSTALLATION</Link>
+                  <Link href="/docs/configurations#catalog">CONFIG CATALOG</Link>
                   <a href={staccIssueUrl} rel="noreferrer" target="_blank">
                     OPEN ISSUE
                   </a>
