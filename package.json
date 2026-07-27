@@ -1,0 +1,17 @@
+{
+  "name": "stacc-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "docs"
+  ],
+  "scripts": {
+    "docs:dev": "npm --workspace @stacc/docs run dev",
+    "docs:build": "npm --workspace @stacc/docs run build",
+    "docs:start": "npm --workspace @stacc/docs run start",
+    "docs:typecheck": "npm --workspace @stacc/docs run typecheck",
+    "docs:audit": "npm audit --workspace @stacc/docs --audit-level=moderate",
+    "build": "npm run docs:build",
+    "typecheck": "npm run docs:typecheck"
+  }
+}

@@ -1,0 +1,1810 @@
+{
+  "doneClaim": "PASS",
+  "startedAt": "2026-06-29T20:12:10.007Z",
+  "finishedAt": "2026-06-29T20:13:04.610Z",
+  "baseUrl": "http://127.0.0.1:4174",
+  "serverProbeStatus": 200,
+  "chrome": {
+    "executable": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "version": "Chrome/147.0.7727.102",
+    "protocolVersion": "1.3",
+    "userDataDir": "/var/folders/j6/4dpy4_z5197d8xfwpbrkd1tc0000gn/T/stacc-docs-qa-chrome-jCoahj"
+  },
+  "routes": [
+    "/",
+    "/docs/getting-started",
+    "/docs/architecture",
+    "/docs/installation",
+    "/docs/skills",
+    "/docs/binary-tui",
+    "/docs/configurations",
+    "/docs/skills/codex-skills-babysit-pr"
+  ],
+  "viewports": [
+    {
+      "label": "w320",
+      "width": 320,
+      "height": 844
+    },
+    {
+      "label": "w375",
+      "width": 375,
+      "height": 844
+    },
+    {
+      "label": "w768",
+      "width": 768,
+      "height": 900
+    },
+    {
+      "label": "w1024",
+      "width": 1024,
+      "height": 900
+    },
+    {
+      "label": "w1280",
+      "width": 1280,
+      "height": 900
+    }
+  ],
+  "pageResults": [
+    {
+      "scenarioId": "route:/:w320",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=320x844",
+      "route": "/",
+      "viewport": {
+        "label": "w320",
+        "width": 320,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "STACC | Agent Config Suite",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-root-w320"
+      ]
+    },
+    {
+      "scenarioId": "route:/:w375",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=375x844",
+      "route": "/",
+      "viewport": {
+        "label": "w375",
+        "width": 375,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "STACC | Agent Config Suite",
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-root-w375"
+      ]
+    },
+    {
+      "scenarioId": "route:/:w768",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=768x900",
+      "route": "/",
+      "viewport": {
+        "label": "w768",
+        "width": 768,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "STACC | Agent Config Suite",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-root-w768"
+      ]
+    },
+    {
+      "scenarioId": "route:/:w1024",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=1024x900",
+      "route": "/",
+      "viewport": {
+        "label": "w1024",
+        "width": 1024,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "STACC | Agent Config Suite",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-root-w1024"
+      ]
+    },
+    {
+      "scenarioId": "route:/:w1280",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=1280x900",
+      "route": "/",
+      "viewport": {
+        "label": "w1280",
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "STACC | Agent Config Suite",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-root-w1280"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/getting-started:w320",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=320x844",
+      "route": "/docs/getting-started",
+      "viewport": {
+        "label": "w320",
+        "width": 320,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Getting Started | STACC Documentation",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-getting-started-w320"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/getting-started:w375",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=375x844",
+      "route": "/docs/getting-started",
+      "viewport": {
+        "label": "w375",
+        "width": 375,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Getting Started | STACC Documentation",
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-getting-started-w375"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/getting-started:w768",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=768x900",
+      "route": "/docs/getting-started",
+      "viewport": {
+        "label": "w768",
+        "width": 768,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Getting Started | STACC Documentation",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-getting-started-w768"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/getting-started:w1024",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=1024x900",
+      "route": "/docs/getting-started",
+      "viewport": {
+        "label": "w1024",
+        "width": 1024,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Getting Started | STACC Documentation",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-getting-started-w1024"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/getting-started:w1280",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=1280x900",
+      "route": "/docs/getting-started",
+      "viewport": {
+        "label": "w1280",
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Getting Started | STACC Documentation",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-getting-started-w1280"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/architecture:w320",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=320x844",
+      "route": "/docs/architecture",
+      "viewport": {
+        "label": "w320",
+        "width": 320,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Architecture | STACC Documentation",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-architecture-w320"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/architecture:w375",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=375x844",
+      "route": "/docs/architecture",
+      "viewport": {
+        "label": "w375",
+        "width": 375,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Architecture | STACC Documentation",
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-architecture-w375"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/architecture:w768",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=768x900",
+      "route": "/docs/architecture",
+      "viewport": {
+        "label": "w768",
+        "width": 768,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Architecture | STACC Documentation",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-architecture-w768"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/architecture:w1024",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=1024x900",
+      "route": "/docs/architecture",
+      "viewport": {
+        "label": "w1024",
+        "width": 1024,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Architecture | STACC Documentation",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-architecture-w1024"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/architecture:w1280",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=1280x900",
+      "route": "/docs/architecture",
+      "viewport": {
+        "label": "w1280",
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Architecture | STACC Documentation",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-architecture-w1280"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/installation:w320",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=320x844",
+      "route": "/docs/installation",
+      "viewport": {
+        "label": "w320",
+        "width": 320,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Installation | STACC Documentation",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-installation-w320"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/installation:w375",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=375x844",
+      "route": "/docs/installation",
+      "viewport": {
+        "label": "w375",
+        "width": 375,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Installation | STACC Documentation",
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-installation-w375"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/installation:w768",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=768x900",
+      "route": "/docs/installation",
+      "viewport": {
+        "label": "w768",
+        "width": 768,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Installation | STACC Documentation",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-installation-w768"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/installation:w1024",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=1024x900",
+      "route": "/docs/installation",
+      "viewport": {
+        "label": "w1024",
+        "width": 1024,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Installation | STACC Documentation",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-installation-w1024"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/installation:w1280",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=1280x900",
+      "route": "/docs/installation",
+      "viewport": {
+        "label": "w1280",
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Installation | STACC Documentation",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-installation-w1280"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills:w320",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=320x844",
+      "route": "/docs/skills",
+      "viewport": {
+        "label": "w320",
+        "width": 320,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Skills Inventory | STACC Documentation",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-w320"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills:w375",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=375x844",
+      "route": "/docs/skills",
+      "viewport": {
+        "label": "w375",
+        "width": 375,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Skills Inventory | STACC Documentation",
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-w375"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills:w768",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=768x900",
+      "route": "/docs/skills",
+      "viewport": {
+        "label": "w768",
+        "width": 768,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Skills Inventory | STACC Documentation",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-w768"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills:w1024",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=1024x900",
+      "route": "/docs/skills",
+      "viewport": {
+        "label": "w1024",
+        "width": 1024,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Skills Inventory | STACC Documentation",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-w1024"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills:w1280",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=1280x900",
+      "route": "/docs/skills",
+      "viewport": {
+        "label": "w1280",
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Skills Inventory | STACC Documentation",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-w1280"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/binary-tui:w320",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=320x844",
+      "route": "/docs/binary-tui",
+      "viewport": {
+        "label": "w320",
+        "width": 320,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Binary & TUI | STACC Documentation",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-binary-tui-w320"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/binary-tui:w375",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=375x844",
+      "route": "/docs/binary-tui",
+      "viewport": {
+        "label": "w375",
+        "width": 375,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Binary & TUI | STACC Documentation",
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-binary-tui-w375"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/binary-tui:w768",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=768x900",
+      "route": "/docs/binary-tui",
+      "viewport": {
+        "label": "w768",
+        "width": 768,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Binary & TUI | STACC Documentation",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-binary-tui-w768"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/binary-tui:w1024",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=1024x900",
+      "route": "/docs/binary-tui",
+      "viewport": {
+        "label": "w1024",
+        "width": 1024,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Binary & TUI | STACC Documentation",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-binary-tui-w1024"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/binary-tui:w1280",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=1280x900",
+      "route": "/docs/binary-tui",
+      "viewport": {
+        "label": "w1280",
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Binary & TUI | STACC Documentation",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-binary-tui-w1280"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/configurations:w320",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=320x844",
+      "route": "/docs/configurations",
+      "viewport": {
+        "label": "w320",
+        "width": 320,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Configurations | STACC Documentation",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-configurations-w320"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/configurations:w375",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=375x844",
+      "route": "/docs/configurations",
+      "viewport": {
+        "label": "w375",
+        "width": 375,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "Configurations | STACC Documentation",
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-configurations-w375"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/configurations:w768",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=768x900",
+      "route": "/docs/configurations",
+      "viewport": {
+        "label": "w768",
+        "width": 768,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Configurations | STACC Documentation",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-configurations-w768"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/configurations:w1024",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=1024x900",
+      "route": "/docs/configurations",
+      "viewport": {
+        "label": "w1024",
+        "width": 1024,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Configurations | STACC Documentation",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-configurations-w1024"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/configurations:w1280",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=1280x900",
+      "route": "/docs/configurations",
+      "viewport": {
+        "label": "w1280",
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "Configurations | STACC Documentation",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-configurations-w1280"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w320",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=320x844",
+      "route": "/docs/skills/codex-skills-babysit-pr",
+      "viewport": {
+        "label": "w320",
+        "width": 320,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "babysit-pr | STACC Skill",
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-codex-skills-babysit-pr-w320"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w375",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=375x844",
+      "route": "/docs/skills/codex-skills-babysit-pr",
+      "viewport": {
+        "label": "w375",
+        "width": 375,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "browserTitle": "babysit-pr | STACC Skill",
+      "scrollWidth": 375,
+      "clientWidth": 375,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-codex-skills-babysit-pr-w375"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w768",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=768x900",
+      "route": "/docs/skills/codex-skills-babysit-pr",
+      "viewport": {
+        "label": "w768",
+        "width": 768,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "babysit-pr | STACC Skill",
+      "scrollWidth": 768,
+      "clientWidth": 768,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-codex-skills-babysit-pr-w768"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w1024",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=1024x900",
+      "route": "/docs/skills/codex-skills-babysit-pr",
+      "viewport": {
+        "label": "w1024",
+        "width": 1024,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "babysit-pr | STACC Skill",
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-codex-skills-babysit-pr-w1024"
+      ]
+    },
+    {
+      "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w1280",
+      "criterionRef": "REQ-4,REQ-5,REQ-6",
+      "surface": "Chrome CDP browser page",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=1280x900",
+      "route": "/docs/skills/codex-skills-babysit-pr",
+      "viewport": {
+        "label": "w1280",
+        "width": 1280,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "browserTitle": "babysit-pr | STACC Skill",
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "smallEditables": [],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "verdict": "PASS",
+      "artifactRefs": [
+        "shot-docs-skills-codex-skills-babysit-pr-w1280"
+      ]
+    }
+  ],
+  "interactionResults": [
+    {
+      "scenarioId": "interaction:landing-copy",
+      "criterionRef": "REQ-7",
+      "surface": "Chrome CDP browser interaction",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs click=.install-card route=/ viewport=1280x900",
+      "assertion": "landing quick install copy sets data-copy-state=copied",
+      "verdict": "PASS",
+      "artifactRefs": [
+        "interaction-landing-copy-broad"
+      ]
+    },
+    {
+      "scenarioId": "interaction:docs-copy",
+      "criterionRef": "REQ-7",
+      "surface": "Chrome CDP browser interaction",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs click='button[data-copy-state]:not(.install-card)' route=/docs/getting-started viewport=1280x900",
+      "assertion": "first docs copy panel sets data-copy-state=copied",
+      "verdict": "PASS",
+      "artifactRefs": [
+        "interaction-docs-copy-broad"
+      ]
+    },
+    {
+      "scenarioId": "interaction:command-search",
+      "criterionRef": "REQ-7",
+      "surface": "Chrome CDP browser interaction",
+      "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs click=.search-field route=/docs/getting-started viewport=1280x900",
+      "assertion": "command search opens and active input font is >=16px",
+      "activeInput": {
+        "activeTag": "input",
+        "activeClass": "",
+        "fontSize": 16
+      },
+      "verdict": "PASS",
+      "artifactRefs": [
+        "interaction-command-search-broad"
+      ]
+    }
+  ],
+  "manualQa": {
+    "surfaceEvidence": [
+      {
+        "scenarioId": "route:/:w320",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=320x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-root-w320"
+        ]
+      },
+      {
+        "scenarioId": "route:/:w375",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=375x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-root-w375"
+        ]
+      },
+      {
+        "scenarioId": "route:/:w768",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=768x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-root-w768"
+        ]
+      },
+      {
+        "scenarioId": "route:/:w1024",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=1024x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-root-w1024"
+        ]
+      },
+      {
+        "scenarioId": "route:/:w1280",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/ viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-root-w1280"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/getting-started:w320",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=320x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-getting-started-w320"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/getting-started:w375",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=375x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-getting-started-w375"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/getting-started:w768",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=768x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-getting-started-w768"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/getting-started:w1024",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=1024x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-getting-started-w1024"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/getting-started:w1280",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/getting-started viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-getting-started-w1280"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/architecture:w320",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=320x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-architecture-w320"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/architecture:w375",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=375x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-architecture-w375"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/architecture:w768",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=768x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-architecture-w768"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/architecture:w1024",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=1024x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-architecture-w1024"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/architecture:w1280",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/architecture viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-architecture-w1280"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/installation:w320",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=320x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-installation-w320"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/installation:w375",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=375x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-installation-w375"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/installation:w768",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=768x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-installation-w768"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/installation:w1024",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=1024x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-installation-w1024"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/installation:w1280",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/installation viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-installation-w1280"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills:w320",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=320x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-w320"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills:w375",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=375x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-w375"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills:w768",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=768x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-w768"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills:w1024",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=1024x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-w1024"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills:w1280",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-w1280"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/binary-tui:w320",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=320x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-binary-tui-w320"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/binary-tui:w375",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=375x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-binary-tui-w375"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/binary-tui:w768",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=768x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-binary-tui-w768"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/binary-tui:w1024",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=1024x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-binary-tui-w1024"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/binary-tui:w1280",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/binary-tui viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-binary-tui-w1280"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/configurations:w320",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=320x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-configurations-w320"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/configurations:w375",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=375x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-configurations-w375"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/configurations:w768",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=768x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-configurations-w768"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/configurations:w1024",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=1024x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-configurations-w1024"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/configurations:w1280",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/configurations viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-configurations-w1280"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w320",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=320x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-codex-skills-babysit-pr-w320"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w375",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=375x844",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-codex-skills-babysit-pr-w375"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w768",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=768x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-codex-skills-babysit-pr-w768"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w1024",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=1024x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-codex-skills-babysit-pr-w1024"
+        ]
+      },
+      {
+        "scenarioId": "route:/docs/skills/codex-skills-babysit-pr:w1280",
+        "criterionRef": "REQ-4,REQ-5,REQ-6",
+        "surface": "Chrome CDP browser page",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs route=/docs/skills/codex-skills-babysit-pr viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "shot-docs-skills-codex-skills-babysit-pr-w1280"
+        ]
+      },
+      {
+        "scenarioId": "interaction:landing-copy",
+        "criterionRef": "REQ-7",
+        "surface": "Chrome CDP browser interaction",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs click=.install-card route=/ viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "interaction-landing-copy-broad"
+        ]
+      },
+      {
+        "scenarioId": "interaction:docs-copy",
+        "criterionRef": "REQ-7",
+        "surface": "Chrome CDP browser interaction",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs click='button[data-copy-state]:not(.install-card)' route=/docs/getting-started viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "interaction-docs-copy-broad"
+        ]
+      },
+      {
+        "scenarioId": "interaction:command-search",
+        "criterionRef": "REQ-7",
+        "surface": "Chrome CDP browser interaction",
+        "exactInvocation": "node .omo/evidence/docs-frontend-rethink-browser-live/qa-cdp-broad.mjs click=.search-field route=/docs/getting-started viewport=1280x900",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "interaction-command-search-broad"
+        ]
+      }
+    ],
+    "adversarialCases": [
+      {
+        "scenarioId": "adv:stale_state",
+        "criterionRef": "ADVERSARIAL-stale_state",
+        "adversarialClass": "stale_state",
+        "expectedBehavior": "Use current live DOM and route discovery from http://127.0.0.1:4174, not stale summaries.",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "discover-skills",
+          "summary-json"
+        ]
+      },
+      {
+        "scenarioId": "adv:misleading_success_output",
+        "criterionRef": "ADVERSARIAL-misleading_success_output",
+        "adversarialClass": "misleading_success_output",
+        "expectedBehavior": "PASS must be backed by JSON details and screenshots, not terminal text alone.",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "summary-json",
+          "shot-root-w1280",
+          "interaction-command-search-broad"
+        ]
+      },
+      {
+        "scenarioId": "adv:dirty_worktree",
+        "criterionRef": "ADVERSARIAL-dirty_worktree",
+        "adversarialClass": "dirty_worktree",
+        "expectedBehavior": "Write only requested evidence paths; do not touch unrelated screenshots or product files.",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "git-status-after"
+        ]
+      },
+      {
+        "scenarioId": "adv:hung_commands",
+        "criterionRef": "ADVERSARIAL-hung_commands",
+        "adversarialClass": "hung_commands",
+        "expectedBehavior": "Browser and HTTP waits use bounded timeouts.",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "run-log"
+        ]
+      },
+      {
+        "scenarioId": "adv:flaky_tests",
+        "criterionRef": "ADVERSARIAL-flaky_tests",
+        "adversarialClass": "flaky_tests",
+        "expectedBehavior": "Interactions wait for deterministic DOM states and record reruns if any.",
+        "verdict": "PASS",
+        "artifactRefs": [
+          "summary-json"
+        ]
+      }
+    ],
+    "artifactRefs": [
+      {
+        "id": "chrome-log",
+        "kind": "text",
+        "description": "Chrome stderr/stdout for broad CDP QA run",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/chrome-cdp-broad.log"
+      },
+      {
+        "id": "discover-skills",
+        "kind": "screenshot",
+        "description": "Live /docs/skills route used to discover a real skill detail route",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/discover-skills-route.png"
+      },
+      {
+        "id": "shot-root-w320",
+        "kind": "screenshot",
+        "description": "Screenshot for / at 320x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-root-w320.png"
+      },
+      {
+        "id": "shot-root-w375",
+        "kind": "screenshot",
+        "description": "Screenshot for / at 375x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-root-w375.png"
+      },
+      {
+        "id": "shot-root-w768",
+        "kind": "screenshot",
+        "description": "Screenshot for / at 768x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-root-w768.png"
+      },
+      {
+        "id": "shot-root-w1024",
+        "kind": "screenshot",
+        "description": "Screenshot for / at 1024x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-root-w1024.png"
+      },
+      {
+        "id": "shot-root-w1280",
+        "kind": "screenshot",
+        "description": "Screenshot for / at 1280x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-root-w1280.png"
+      },
+      {
+        "id": "shot-docs-getting-started-w320",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/getting-started at 320x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-getting-started-w320.png"
+      },
+      {
+        "id": "shot-docs-getting-started-w375",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/getting-started at 375x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-getting-started-w375.png"
+      },
+      {
+        "id": "shot-docs-getting-started-w768",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/getting-started at 768x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-getting-started-w768.png"
+      },
+      {
+        "id": "shot-docs-getting-started-w1024",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/getting-started at 1024x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-getting-started-w1024.png"
+      },
+      {
+        "id": "shot-docs-getting-started-w1280",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/getting-started at 1280x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-getting-started-w1280.png"
+      },
+      {
+        "id": "shot-docs-architecture-w320",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/architecture at 320x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-architecture-w320.png"
+      },
+      {
+        "id": "shot-docs-architecture-w375",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/architecture at 375x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-architecture-w375.png"
+      },
+      {
+        "id": "shot-docs-architecture-w768",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/architecture at 768x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-architecture-w768.png"
+      },
+      {
+        "id": "shot-docs-architecture-w1024",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/architecture at 1024x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-architecture-w1024.png"
+      },
+      {
+        "id": "shot-docs-architecture-w1280",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/architecture at 1280x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-architecture-w1280.png"
+      },
+      {
+        "id": "shot-docs-installation-w320",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/installation at 320x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-installation-w320.png"
+      },
+      {
+        "id": "shot-docs-installation-w375",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/installation at 375x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-installation-w375.png"
+      },
+      {
+        "id": "shot-docs-installation-w768",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/installation at 768x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-installation-w768.png"
+      },
+      {
+        "id": "shot-docs-installation-w1024",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/installation at 1024x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-installation-w1024.png"
+      },
+      {
+        "id": "shot-docs-installation-w1280",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/installation at 1280x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-installation-w1280.png"
+      },
+      {
+        "id": "shot-docs-skills-w320",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills at 320x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-w320.png"
+      },
+      {
+        "id": "shot-docs-skills-w375",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills at 375x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-w375.png"
+      },
+      {
+        "id": "shot-docs-skills-w768",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills at 768x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-w768.png"
+      },
+      {
+        "id": "shot-docs-skills-w1024",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills at 1024x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-w1024.png"
+      },
+      {
+        "id": "shot-docs-skills-w1280",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills at 1280x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-w1280.png"
+      },
+      {
+        "id": "shot-docs-binary-tui-w320",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/binary-tui at 320x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-binary-tui-w320.png"
+      },
+      {
+        "id": "shot-docs-binary-tui-w375",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/binary-tui at 375x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-binary-tui-w375.png"
+      },
+      {
+        "id": "shot-docs-binary-tui-w768",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/binary-tui at 768x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-binary-tui-w768.png"
+      },
+      {
+        "id": "shot-docs-binary-tui-w1024",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/binary-tui at 1024x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-binary-tui-w1024.png"
+      },
+      {
+        "id": "shot-docs-binary-tui-w1280",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/binary-tui at 1280x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-binary-tui-w1280.png"
+      },
+      {
+        "id": "shot-docs-configurations-w320",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/configurations at 320x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-configurations-w320.png"
+      },
+      {
+        "id": "shot-docs-configurations-w375",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/configurations at 375x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-configurations-w375.png"
+      },
+      {
+        "id": "shot-docs-configurations-w768",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/configurations at 768x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-configurations-w768.png"
+      },
+      {
+        "id": "shot-docs-configurations-w1024",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/configurations at 1024x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-configurations-w1024.png"
+      },
+      {
+        "id": "shot-docs-configurations-w1280",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/configurations at 1280x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-configurations-w1280.png"
+      },
+      {
+        "id": "shot-docs-skills-codex-skills-babysit-pr-w320",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills/codex-skills-babysit-pr at 320x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-codex-skills-babysit-pr-w320.png"
+      },
+      {
+        "id": "shot-docs-skills-codex-skills-babysit-pr-w375",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills/codex-skills-babysit-pr at 375x844",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-codex-skills-babysit-pr-w375.png"
+      },
+      {
+        "id": "shot-docs-skills-codex-skills-babysit-pr-w768",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills/codex-skills-babysit-pr at 768x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-codex-skills-babysit-pr-w768.png"
+      },
+      {
+        "id": "shot-docs-skills-codex-skills-babysit-pr-w1024",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills/codex-skills-babysit-pr at 1024x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-codex-skills-babysit-pr-w1024.png"
+      },
+      {
+        "id": "shot-docs-skills-codex-skills-babysit-pr-w1280",
+        "kind": "screenshot",
+        "description": "Screenshot for /docs/skills/codex-skills-babysit-pr at 1280x900",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/shot-docs-skills-codex-skills-babysit-pr-w1280.png"
+      },
+      {
+        "id": "interaction-landing-copy-broad",
+        "kind": "screenshot",
+        "description": "Landing quick install copy reached copied state",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/interaction-landing-copy-broad.png"
+      },
+      {
+        "id": "interaction-docs-copy-broad",
+        "kind": "screenshot",
+        "description": "First docs copy panel reached copied state",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/interaction-docs-copy-broad.png"
+      },
+      {
+        "id": "interaction-command-search-broad",
+        "kind": "screenshot",
+        "description": "Command search open with active input",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/interaction-command-search-broad.png"
+      },
+      {
+        "id": "summary-json",
+        "kind": "json",
+        "description": "Broad route and viewport browser QA JSON summary",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/browser-qa-broad-results.json"
+      },
+      {
+        "id": "run-log",
+        "kind": "text",
+        "description": "Exact invocation and runtime log for broad browser QA",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/browser-qa-broad-run.log"
+      },
+      {
+        "id": "cleanup-receipt",
+        "kind": "text",
+        "description": "Text cleanup receipt for broad browser QA",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/cleanup-receipt-broad.txt"
+      },
+      {
+        "id": "cleanup-json",
+        "kind": "json",
+        "description": "Cleanup receipt for temp Chrome profile and repo profile scan",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/cleanup-receipt-broad.json"
+      },
+      {
+        "id": "git-status-after",
+        "kind": "text",
+        "description": "Post-QA git status showing product files were not newly edited by QA",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/git-status-after-broad.txt"
+      },
+      {
+        "id": "shell-exit",
+        "kind": "text",
+        "description": "Outer timeout shell exit code for broad browser QA",
+        "path": "/Users/ay/.codex/worktrees/f602/stacc/.omo/evidence/docs-frontend-rethink-browser-live/browser-qa-broad-shell-exit.txt"
+      }
+    ]
+  },
+  "reruns": []
+}

@@ -42,9 +42,6 @@ Direct stacc examples:
   ./install.sh check
   ./install.sh bootstrap --dry-run
   ./install.sh install --editor codex --scope global --category rules --dry-run
-  ./install.sh sync --editor codex --scope project --dry-run --print-plan
-  ./install.sh update --editor codex --skill ultragoal --dry-run --print-plan
-  ./install.sh uninstall --editor codex --codex-plugin lazycodex --dry-run --print-plan
 
 Legacy install options translated to `stacc install`:
   --root PATH
@@ -61,7 +58,6 @@ Legacy install options translated to `stacc install`:
 Examples:
   ./install.sh --yes
   ./install.sh --codex --global --categories rules,skills,mcps --mcp-servers github --yes
-  ./install.sh install --editor codex --codex-plugin lazycodex --dry-run --print-plan
   ./install.sh --cursor --project --categories hooks --hooks continual-learning --dry-run
   curl -fsSL https://stacc.fyi/install.sh | bash
 EOF
@@ -393,7 +389,7 @@ is_direct_stacc_invocation() {
     shift
   fi
   case "$1" in
-    status|install|sync|update|uninstall|sync-metadata|bootstrap|check|--panel|--config|--help|-h|--version|-V)
+    status|install|sync-metadata|bootstrap|check|--panel|--config|--help|-h|--version|-V)
       return 0
       ;;
     *)

@@ -1,0 +1,5 @@
+
+> stacc-monorepo@0.1.0 docs:audit
+> npm audit --workspace @stacc/docs --audit-level=moderate
+
+found 0 vulnerabilities

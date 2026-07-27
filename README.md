@@ -10,12 +10,12 @@ Curated configs for an AI coding workflow with muscles.
 ### Quick Install
 
 ```bash
-curl -fsSL ay.dog | bash
+curl -fsSL https://stacc.fyi/install.sh | bash
 ```
 
 **Or using GitHub URL:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/heyAyushh/stacc/main/install.sh | bash
+curl -fsSL https://stacc.fyi/install.sh | bash
 ```
 
 ### Local Install
@@ -330,6 +330,7 @@ This repository contains configurations adapted from open-source projects. Below
 | `configs/skills/emil-design-eng/` | Emil Kowalski design engineering philosophy for UI polish, component design, animation decisions | Copied from `skills/emil-design-eng` at `ecf66bb`; no license file found in source | [emilkowalski/skill](https://github.com/emilkowalski/skill) | NOASSERTION |
 | `configs/skills/audio-math-haptics/` | First-principles audio-coupled haptic and kinetic UI feedback | Copied from `skill/audio-math-haptics` at `dc2ba99` | [heyAyushh/audio-math-haptics](https://github.com/heyAyushh/audio-math-haptics) | MIT |
 | `configs/skills/hallmark/` | Anti-AI-slop design skill for greenfield pages, audits, redesigns, and design extraction | Copied package payload (`SKILL.md` + `references/`) at `9aba10e`; frontmatter adapted for stacc validator | [nutlope/hallmark](https://github.com/nutlope/hallmark) | MIT |
+| `configs/skills/react-doctor/` | React diagnostics skill for scanner-backed cleanup, triage, and rule explanation workflows | Copied from `skills/react-doctor` at `0b64af58`; frontmatter adapted for stacc validator | [millionco/react-doctor](https://github.com/millionco/react-doctor/tree/main/skills/react-doctor) | LicenseRef-Million-Modified-MIT |
 | `configs/skills/add-app-clip/`, `configs/skills/building-native-ui/`, `configs/skills/eas-update-insights/`, `configs/skills/expo-*/`, `configs/skills/native-data-fetching/`, `configs/skills/upgrading-expo/`, `configs/skills/use-dom/` | Official Expo skills for App Clips, native UI, EAS, deployment, SDK upgrades, modules, data fetching, and DOM components | Copied from `plugins/expo/skills` at `956a92b`; frontmatter adapted for stacc validator | [expo/skills](https://github.com/expo/skills/tree/main/plugins/expo/skills) | MIT |
 | `configs/cursor-plugins/skills/cli-for-agents/references/agent-browser-runtime-skills.md` | Reference pattern for versioned, CLI-served agent instructions | Summarizes the current agent-browser discovery-skill/runtime-skill architecture | [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) | Apache-2.0 |
 | `configs/skills/ultragoal/` | Durable Codex goal design and activation workflow | Copied from `agents/skills/ultragoal`; no license file found in source | [jxnl/dots](https://github.com/jxnl/dots/tree/master/agents/skills/ultragoal) | NOASSERTION |

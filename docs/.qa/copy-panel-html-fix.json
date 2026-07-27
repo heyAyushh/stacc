@@ -1,0 +1,52 @@
+{
+  "scenario": "Live /docs/getting-started copyable rich code panel DOM semantics and click-to-copy behavior",
+  "invocation": "Chrome CDP against http://127.0.0.1:4174/docs/getting-started from existing Next dev server for docs directory",
+  "binaryObservable": {
+    "pass": true,
+    "route": "/docs/getting-started",
+    "clickedPoint": {
+      "x": 378,
+      "y": 234.6484375,
+      "width": 698,
+      "height": 107.390625
+    },
+    "richCodePanelWrapperTagName": "DIV",
+    "dedicatedControlTagName": "BUTTON",
+    "firstCopyPanelStateAfterClick": "copied",
+    "noButtonContainsCodeHighlight": true,
+    "codeHighlightHasNoButtonAncestor": true,
+    "clipboardMatchesVisibleSnippet": true
+  },
+  "before": {
+    "route": "/docs/getting-started",
+    "panelTagName": "DIV",
+    "controlTagName": "BUTTON",
+    "controlType": "button",
+    "initialCopyState": "idle",
+    "hasCodeHighlight": true,
+    "buttonContainsCodeHighlight": false,
+    "codeHighlightButtonAncestor": false,
+    "visibleSnippetText": "curl -fsSL ay.dog | bash"
+  },
+  "after": {
+    "copyStateAfterClick": "copied",
+    "copiedStatusText": "Copied",
+    "statusLabelContent": "\"COPIED\"",
+    "clipboardText": "curl -fsSL ay.dog | bash",
+    "clipboardReadError": null,
+    "buttonContainsCodeHighlight": false,
+    "codeHighlightButtonAncestor": false
+  },
+  "chrome": {
+    "binary": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "args": [
+      "--headless=new",
+      "--remote-debugging-port=9342",
+      "--disable-gpu",
+      "--no-first-run",
+      "--no-default-browser-check",
+      "about:blank"
+    ]
+  },
+  "capturedAt": "2026-06-29T20:44:45.484Z"
+}
