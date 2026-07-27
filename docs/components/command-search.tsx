@@ -164,7 +164,7 @@ export function CommandSearchProvider({ items, children }: CommandSearchProvider
                   <Command.Item
                     className="command-item"
                     key={item.id}
-                    value={item.title}
+                    value={`${item.title} ${item.id}`}
                     keywords={item.keywords}
                     onSelect={() => selectItem(item.href)}
                   >

@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { toSkillHref, toSkillSlug } from "@/lib/anchors";
+import { toSkillHref } from "@/lib/anchors";
 import { getAllDocsPages } from "@/lib/docs";
 import { getSkillInventory } from "@/lib/inventory";
 import { getConfigInventory } from "@/lib/inventory-config";
@@ -76,7 +76,7 @@ export const getSearchItems = cache(async function getSearchItems(): Promise<Sea
   });
   const skillItems = skillInventory.collections.flatMap<SearchItem>((collection) =>
     collection.skills.map((skill) => ({
-      id: `skill-${toSkillSlug(skill.collection, skill.name)}`,
+      id: `skill-${skill.localPath}`,
       kind: "skill",
       title: skill.name,
       eyebrow: `${skill.collection} / ${creatorRepositoryLabel(skill)}`,
