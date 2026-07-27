@@ -1,6 +1,6 @@
 ---
 name: ios
-description: iOS and Swift/SwiftUI development guidance, including UI patterns, Liquid Glass styling, performance audits, view refactors, Swift concurrency, and iOS debugging. Use when building or reviewing iOS apps, SwiftUI views, or troubleshooting iOS issues.
+description: iOS and Swift/SwiftUI development guidance, including App Clips, haptics, UI patterns, Liquid Glass styling, performance audits, view refactors, Swift concurrency, and iOS debugging. Use when building or reviewing iOS apps, SwiftUI views, or troubleshooting iOS issues.
 license: MIT
 ---
 
@@ -34,3 +34,5 @@ Use the focused sub-skills in this folder based on the task type.
 - `swiftui-view-refactor/SKILL.md` for refactoring and view decomposition workflows.
 - `swift-concurrency-expert/SKILL.md` for structured concurrency and async/await guidance.
 - `ios-debugger-agent/SKILL.md` for debugging, crash triage, and device/simulator diagnostics.
+- `add-app-clip/SKILL.md` for adding an App Clip target to an Expo iOS app.
+- `audio-math-haptics/SKILL.md` for signal-driven haptic and audio feedback.

@@ -1,9 +1,9 @@
 # Orchestrate Skill Guide
 
 This directory is the canonical source for the explicit `/orchestrate` Cursor
-skill. The installed copy under `.cursor/skills/orchestrate/` is a mirror; edit
-this package, then use the repository refresh workflow rather than patching the
-mirror.
+skill under `configs/plugins/cursor/`. The installed copy under
+`.cursor/skills/orchestrate/` is a mirror; edit this package, then use the
+repository refresh workflow rather than patching the mirror.
 
 ## Where to Look
 

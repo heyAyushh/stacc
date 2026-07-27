@@ -1,17 +1,21 @@
 # SKILLS KNOWLEDGE BASE
 
 ## OVERVIEW
-`configs/skills` holds editor-neutral skills installed by the `skills` category. Source-specific editor packages live elsewhere: `configs/cursor-plugins/` and `configs/codex-skills/`.
+`configs/skills` is the small, frequently used editor-neutral core installed by
+the `skills` category. Focused domains live in `configs/stacks/`; editor
+adapters live in `configs/plugins/`.
 
 ## CATEGORY MAP
-| Category | Skills | Notes |
-|---|---|---|
-| Authoring + maintenance | `skill-creator`, `writing-great-skills`, `find-skills`, `mcp-builder`, `changelog-generator` | Create, package, discover, or summarize config assets. |
-| Engineering workflow | `diagnose`, `tdd`, `prototype`, `to-prd`, `to-issues`, `triage`, `zoom-out` | Process skills. Keep references close to the skill folder. |
-| Communication + review modes | `caveman`, `ponytail*`, `karpathy-guidelines`, `bash-expert` | Behavior modes and review lenses. Ponytail is a family; do not merge the six entrypoints. |
-| Frontend + product craft | `frontend-design`, `apple-design`, `hallmark`, `brandkit`, `stitch-skill`, `redesign-skill`, `imagegen-*`, `taste-skill*`, `minimalist-skill`, `brutalist-skill`, `soft-skill` | Design/UI guidance. Prefer references for long visual rules and examples. |
-| Platform + runtime | Expo skills, `building-native-ui`, `native-data-fetching`, `agent-browser`, `gui-automation`, `audio-math-haptics`, `add-app-clip` | Tool/runtime skills. Keep install commands informational unless user explicitly asks to run them. |
-| Local conventions | `using-git-worktrees`, `ultragoal`, repo-specific imports | Keep repo-specific behavior explicit in the skill description. |
+| Role | Skills |
+|---|---|
+| Discovery and execution | `find-skills`, `diagnose`, `tdd` |
+| Browser and desktop surfaces | `agent-browser`, `gui-automation` |
+| Coordination | `handoff`, `ultragoal`, `using-git-worktrees` |
+| Skill maintenance | `skill-creator`, `writing-great-skills` |
+
+Adding a core skill requires evidence that it is broadly applicable and used
+often enough to justify default installation. Otherwise place it in the
+smallest matching stack.
 
 ## PROGRESSIVE DISCLOSURE
 - `SKILL.md` is the routing surface: frontmatter, trigger description, core workflow, and the smallest useful command set.

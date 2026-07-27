@@ -31,7 +31,7 @@ Freshness:
 
 | Local path | Source mapping | Status | License | Repo-head stale | Notes |
 | --- | --- | --- | --- | --- | --- |
-| `configs/codex-skills/skills/babysit-pr/` | `openai/codex/.codex/skills/babysit-pr` | `exact-current` | `Apache-2.0` | `yes` | Current upstream path found; see source mapping. |
+| `configs/plugins/codex/skills/babysit-pr/` | `openai/codex/.codex/skills/babysit-pr` | `exact-current` | `Apache-2.0` | `yes` | Current upstream path found; see source mapping. |
 | `configs/commands/skills/clean-gone/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc command-as-skill wrapper generated from the tracked command library. |
 | `configs/commands/skills/commit/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc command-as-skill wrapper generated from the tracked command library. |
 | `configs/commands/skills/commit-push/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc command-as-skill wrapper generated from the tracked command library. |
@@ -49,80 +49,83 @@ Freshness:
 | `configs/commands/skills/simplify/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc command-as-skill wrapper generated from the tracked command library. |
 | `configs/commands/skills/ultrathink/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc command-as-skill wrapper generated from the tracked command library. |
 | `configs/commands/skills/visualize/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc command-as-skill wrapper generated from the tracked command library. |
-| `configs/cursor-plugins/skills/cli-for-agents/` | `cursor/plugins/cli-for-agent/skills/cli-for-agents` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/cursor-plugins/skills/continual-learning/` | `cursor/plugins/continual-learning/skills/continual-learning` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/cursor-plugins/skills/create-learning-path/` | `cursor/plugins/teaching/skills/create-learning-path` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/cursor-plugins/skills/deslop/` | `cursor/plugins/cursor-team-kit/skills/deslop` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/cursor-plugins/skills/orchestrate/` | `cursor/plugins/orchestrate/skills/orchestrate` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/cursor-plugins/skills/run-learning-retrospective/` | `cursor/plugins/teaching/skills/run-learning-retrospective` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/cursor-plugins/skills/thermo-nuclear-code-quality-review/` | `cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/cursor-plugins/skills/what-did-i-get-done/` | `cursor/plugins/cursor-team-kit/skills/what-did-i-get-done` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/add-app-clip/` | `expo/skills/plugins/expo/skills/add-app-clip` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/engineering/cli-for-agents/` | `cursor/plugins/cli-for-agent/skills/cli-for-agents` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/plugins/cursor/skills/continual-learning/` | `cursor/plugins/continual-learning/skills/continual-learning` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/productivity/create-learning-path/` | `cursor/plugins/teaching/skills/create-learning-path` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/review/deslop/` | `cursor/plugins/cursor-team-kit/skills/deslop` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/plugins/cursor/skills/orchestrate/` | `cursor/plugins/orchestrate/skills/orchestrate` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/productivity/run-learning-retrospective/` | `cursor/plugins/teaching/skills/run-learning-retrospective` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/review/thermo-nuclear-code-quality-review/` | `cursor/plugins/cursor-team-kit/skills/thermo-nuclear-code-quality-review` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/productivity/what-did-i-get-done/` | `cursor/plugins/cursor-team-kit/skills/what-did-i-get-done` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/ios/add-app-clip/` | `expo/skills/plugins/expo/skills/add-app-clip` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/agent-browser/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
-| `configs/skills/apple-design/` | `emilkowalski/skills/skills/apple-design` | `exact-current` | `MIT` | `yes` | Imported at `56de6f5`; upstream path and repository MIT license verified. |
-| `configs/skills/audio-math-haptics/` | `heyAyushh/audio-math-haptics/skill/audio-math-haptics` | `exact-current` | `MIT` | `no` | Current upstream path found; see source mapping. |
-| `configs/skills/bash-expert/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
-| `configs/skills/brandkit/` | `Leonxlnx/taste-skill/skills/brandkit` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/brutalist-skill/` | `Leonxlnx/taste-skill/skills/brutalist-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/building-native-ui/` | `expo/skills/plugins/expo/skills/building-native-ui` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/caveman/` | `mattpocock/skills@v1/caveman` | `historical-exact` | `MIT` | `yes` | Local `SKILL.md` and `LICENSE.txt` Git blobs exactly match the pinned `v1` branch at `8a54bc3`; repository default HEAD is newer. |
-| `configs/skills/changelog-generator/` | `ComposioHQ/awesome-claude-skills/changelog-generator` | `exact-current` | `Apache-2.0` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/apple-design/` | `emilkowalski/skills/skills/apple-design` | `exact-current` | `MIT` | `yes` | Imported at `56de6f5`; upstream path and repository MIT license verified. |
+| `configs/stacks/ios/audio-math-haptics/` | `heyAyushh/audio-math-haptics/skill/audio-math-haptics` | `exact-current` | `MIT` | `no` | Current upstream path found; see source mapping. |
+| `configs/stacks/engineering/bash-expert/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
+| `configs/stacks/design/brandkit/` | `Leonxlnx/taste-skill/skills/brandkit` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/brutalist-skill/` | `Leonxlnx/taste-skill/skills/brutalist-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/building-native-ui/` | `expo/skills/plugins/expo/skills/building-native-ui` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/productivity/caveman/` | `mattpocock/skills@v1/caveman` | `historical-exact` | `MIT` | `yes` | Local `SKILL.md` and `LICENSE.txt` Git blobs exactly match the pinned `v1` branch at `8a54bc3`; repository default HEAD is newer. |
+| `configs/stacks/engineering/changelog-generator/` | `ComposioHQ/awesome-claude-skills/changelog-generator` | `exact-current` | `Apache-2.0` | `not pinned` | Current upstream path found; see source mapping. |
 | `configs/skills/diagnose/` | `mattpocock/skills/skills/engineering/diagnosing-bugs` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/eas-update-insights/` | `expo/skills/plugins/expo/skills/eas-update-insights` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/emil-design-eng/` | `emilkowalski/skills/skills/emil-design-eng` | `exact-current` | `MIT` | `yes` | Imported at `ecf66bb`; the upstream repository moved from `emilkowalski/skill` to `emilkowalski/skills` and now publishes an MIT license. |
-| `configs/skills/expo-api-routes/` | `expo/skills/plugins/expo/skills/expo-api-routes` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/expo-brownfield/` | `expo/skills/plugins/expo/skills/expo-brownfield` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/expo-cicd-workflows/` | `expo/skills/plugins/expo/skills/expo-cicd-workflows` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/expo-deployment/` | `expo/skills/plugins/expo/skills/expo-deployment` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/expo-dev-client/` | `expo/skills/plugins/expo/skills/expo-dev-client` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/expo-module/` | `expo/skills/plugins/expo/skills/expo-module` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/expo-tailwind-setup/` | `expo/skills/plugins/expo/skills/expo-tailwind-setup` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/expo-ui-jetpack-compose/` | `expo/skills/plugins/expo/skills/expo-ui/references/jetpack-compose.md` | `reference-derived` | `MIT` | `yes` | Local split-out skill derived from an exact upstream reference file, not an upstream skill folder. |
-| `configs/skills/expo-ui-swift-ui/` | `expo/skills/plugins/expo/skills/expo-ui/references/swift-ui.md` | `reference-derived` | `MIT` | `yes` | Local split-out skill derived from an exact upstream reference file, not an upstream skill folder. |
+| `configs/stacks/expo/eas-update-insights/` | `expo/skills/plugins/expo/skills/eas-update-insights` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/emil-design-eng/` | `emilkowalski/skills/skills/emil-design-eng` | `exact-current` | `MIT` | `yes` | Imported at `ecf66bb`; the upstream repository moved from `emilkowalski/skill` to `emilkowalski/skills` and now publishes an MIT license. |
+| `configs/stacks/expo/expo-api-routes/` | `expo/skills/plugins/expo/skills/expo-api-routes` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/expo-brownfield/` | `expo/skills/plugins/expo/skills/expo-brownfield` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/expo-cicd-workflows/` | `expo/skills/plugins/expo/skills/expo-cicd-workflows` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/expo-deployment/` | `expo/skills/plugins/expo/skills/expo-deployment` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/expo-dev-client/` | `expo/skills/plugins/expo/skills/expo-dev-client` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/expo-module/` | `expo/skills/plugins/expo/skills/expo-module` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/expo-tailwind-setup/` | `expo/skills/plugins/expo/skills/expo-tailwind-setup` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/expo-ui-jetpack-compose/` | `expo/skills/plugins/expo/skills/expo-ui/references/jetpack-compose.md` | `reference-derived` | `MIT` | `yes` | Local split-out skill derived from an exact upstream reference file, not an upstream skill folder. |
+| `configs/stacks/expo/expo-ui-swift-ui/` | `expo/skills/plugins/expo/skills/expo-ui/references/swift-ui.md` | `reference-derived` | `MIT` | `yes` | Local split-out skill derived from an exact upstream reference file, not an upstream skill folder. |
 | `configs/skills/find-skills/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
-| `configs/skills/frontend-design/` | `anthropics/skills/skills/frontend-design` | `exact-current` | `Apache-2.0` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/gpt-tasteskill/` | `Leonxlnx/taste-skill/skills/gpt-tasteskill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/frontend-design/` | `anthropics/skills/skills/frontend-design` | `exact-current` | `Apache-2.0` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/gpt-tasteskill/` | `Leonxlnx/taste-skill/skills/gpt-tasteskill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/gui-automation/` | `trycua/cua/skills/gui-automation` | `exact-current` | `MIT` | `yes` | Imported at `73fe822`; current upstream path and MIT license found. |
-| `configs/skills/grill-me/` | `mattpocock/skills@v1/grill-me` | `historical-exact` | `MIT` | `yes` | Local `SKILL.md` Git blob exactly matches the pinned `v1` branch at `8a54bc3`; repository default HEAD is newer. |
-| `configs/skills/grill-with-docs/` | `mattpocock/skills/skills/engineering/grill-with-docs` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/hallmark/` | `nutlope/hallmark/skills/hallmark` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/productivity/grill-me/` | `mattpocock/skills@v1/grill-me` | `historical-exact` | `MIT` | `yes` | Local `SKILL.md` Git blob exactly matches the pinned `v1` branch at `8a54bc3`; repository default HEAD is newer. |
+| `configs/stacks/engineering/grill-with-docs/` | `mattpocock/skills/skills/engineering/grill-with-docs` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/hallmark/` | `nutlope/hallmark/skills/hallmark` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/handoff/` | `mattpocock/skills/skills/productivity/handoff` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/image-to-code-skill/` | `Leonxlnx/taste-skill/skills/image-to-code-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/imagegen-frontend-mobile/` | `Leonxlnx/taste-skill/skills/imagegen-frontend-mobile` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/imagegen-frontend-web/` | `Leonxlnx/taste-skill/skills/imagegen-frontend-web` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/improve-codebase-architecture/` | `mattpocock/skills/skills/engineering/improve-codebase-architecture` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/karpathy-guidelines/` | `forrestchang/andrej-karpathy-skills/skills/karpathy-guidelines` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/mcp-builder/` | `anthropics/skills/skills/mcp-builder` | `exact-current` | `Apache-2.0` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/minimalist-skill/` | `Leonxlnx/taste-skill/skills/minimalist-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/native-data-fetching/` | `expo/skills/plugins/expo/skills/native-data-fetching` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/output-skill/` | `Leonxlnx/taste-skill/skills/output-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/ponytail/` | `DietrichGebert/ponytail/skills/ponytail` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
-| `configs/skills/ponytail-audit/` | `DietrichGebert/ponytail/skills/ponytail-audit` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
-| `configs/skills/ponytail-debt/` | `DietrichGebert/ponytail/skills/ponytail-debt` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
-| `configs/skills/ponytail-gain/` | `DietrichGebert/ponytail/skills/ponytail-gain` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
-| `configs/skills/ponytail-help/` | `DietrichGebert/ponytail/skills/ponytail-help` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
-| `configs/skills/ponytail-review/` | `DietrichGebert/ponytail/skills/ponytail-review` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
-| `configs/skills/prototype/` | `mattpocock/skills/skills/engineering/prototype` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/react-doctor/` | `millionco/react-doctor/skills/react-doctor` | `exact-current` | `LicenseRef-Million-Modified-MIT` | `yes` | Imported at `0b64af5`; current upstream path and modified-MIT license file found. |
-| `configs/skills/redesign-skill/` | `Leonxlnx/taste-skill/skills/redesign-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/image-to-code-skill/` | `Leonxlnx/taste-skill/skills/image-to-code-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/imagegen-frontend-mobile/` | `Leonxlnx/taste-skill/skills/imagegen-frontend-mobile` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/imagegen-frontend-web/` | `Leonxlnx/taste-skill/skills/imagegen-frontend-web` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/engineering/improve-codebase-architecture/` | `mattpocock/skills/skills/engineering/improve-codebase-architecture` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/review/karpathy-guidelines/` | `forrestchang/andrej-karpathy-skills/skills/karpathy-guidelines` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/engineering/mcp-builder/` | `anthropics/skills/skills/mcp-builder` | `exact-current` | `Apache-2.0` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/minimalist-skill/` | `Leonxlnx/taste-skill/skills/minimalist-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/native-data-fetching/` | `expo/skills/plugins/expo/skills/native-data-fetching` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/productivity/output-skill/` | `Leonxlnx/taste-skill/skills/output-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/review/ponytail/` | `DietrichGebert/ponytail/skills/ponytail` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
+| `configs/stacks/review/ponytail-audit/` | `DietrichGebert/ponytail/skills/ponytail-audit` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
+| `configs/stacks/review/ponytail-debt/` | `DietrichGebert/ponytail/skills/ponytail-debt` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
+| `configs/stacks/review/ponytail-gain/` | `DietrichGebert/ponytail/skills/ponytail-gain` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
+| `configs/stacks/review/ponytail-help/` | `DietrichGebert/ponytail/skills/ponytail-help` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
+| `configs/stacks/review/ponytail-review/` | `DietrichGebert/ponytail/skills/ponytail-review` | `exact-current` | `MIT` | `yes` | Imported from the upstream skills subtree at `40e50d9`. |
+| `configs/stacks/engineering/prototype/` | `mattpocock/skills/skills/engineering/prototype` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/review/react-doctor/` | `millionco/react-doctor/skills/react-doctor` | `exact-current` | `LicenseRef-Million-Modified-MIT` | `yes` | Imported at `0b64af5`; current upstream path and modified-MIT license file found. |
+| `configs/stacks/design/redesign-skill/` | `Leonxlnx/taste-skill/skills/redesign-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/skill-creator/` | `anthropics/skills/skills/skill-creator` | `exact-current` | `Apache-2.0` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/soft-skill/` | `Leonxlnx/taste-skill/skills/soft-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/stitch-skill/` | `Leonxlnx/taste-skill/skills/stitch-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/taste-skill/` | `Leonxlnx/taste-skill/skills/taste-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/taste-skill-v1/` | `Leonxlnx/taste-skill/skills/taste-skill-v1` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/soft-skill/` | `Leonxlnx/taste-skill/skills/soft-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/stitch-skill/` | `Leonxlnx/taste-skill/skills/stitch-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/taste-skill/` | `Leonxlnx/taste-skill/skills/taste-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/design/taste-skill-v1/` | `Leonxlnx/taste-skill/skills/taste-skill-v1` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/tdd/` | `mattpocock/skills/skills/engineering/tdd` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/to-issues/` | `mattpocock/skills/skills/engineering/to-issues` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/to-prd/` | `mattpocock/skills/skills/engineering/to-prd` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
-| `configs/skills/triage/` | `mattpocock/skills/skills/engineering/triage` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/engineering/to-issues/` | `mattpocock/skills/skills/engineering/to-issues` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/engineering/to-prd/` | `mattpocock/skills/skills/engineering/to-prd` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
+| `configs/stacks/engineering/triage/` | `mattpocock/skills/skills/engineering/triage` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
 | `configs/skills/ultragoal/` | `jxnl/dots/agents/skills/ultragoal` | `exact-current` | `LicenseRef-No-Published-License` | `yes` | Imported at `1eb180f`; GitHub reports no detected license and the repository tree publishes no license file. |
-| `configs/skills/upgrading-expo/` | `expo/skills/plugins/expo/skills/upgrading-expo` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/use-dom/` | `expo/skills/plugins/expo/skills/use-dom` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/upgrading-expo/` | `expo/skills/plugins/expo/skills/upgrading-expo` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
+| `configs/stacks/expo/use-dom/` | `expo/skills/plugins/expo/skills/use-dom` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/using-git-worktrees/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
-| `configs/skills/write-a-skill/` | `mattpocock/skills@v1/write-a-skill` | `historical-exact` | `MIT` | `yes` | Local `SKILL.md` Git blob exactly matches the pinned `v1` branch at `8a54bc3`; repository default HEAD is newer. |
+| `configs/stacks/engineering/write-a-skill/` | `mattpocock/skills@v1/write-a-skill` | `historical-exact` | `MIT` | `yes` | Local `SKILL.md` Git blob exactly matches the pinned `v1` branch at `8a54bc3`; repository default HEAD is newer. |
 | `configs/skills/writing-great-skills/` | `mattpocock/skills/skills/productivity/writing-great-skills` | `exact-current` | `MIT` | `yes` | Imported at `d574778`; current upstream path and MIT license found. |
-| `configs/skills/zoom-out/` | `mattpocock/skills@v1/zoom-out` | `historical-adapted` | `MIT` | `yes` | Adapted from the pinned `v1` package at `8a54bc3`; local frontmatter differs and repository default HEAD is newer. |
+| `configs/stacks/productivity/zoom-out/` | `mattpocock/skills@v1/zoom-out` | `historical-adapted` | `MIT` | `yes` | Adapted from the pinned `v1` package at `8a54bc3`; local frontmatter differs and repository default HEAD is newer. |
 | `configs/stacks/bun/` | `local stacc` | `local-original` | `MIT AND CC0-1.0` | `n/a` | Stacc-authored skill package with no external freshness target. |
 | `configs/stacks/databases/` | `local stacc` | `local-original` | `MIT AND CC0-1.0` | `n/a` | Stacc-authored skill package with no external freshness target. |
+| `configs/stacks/design/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored progressive router for bundled design skills. |
+| `configs/stacks/engineering/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored progressive router for bundled engineering workflows. |
+| `configs/stacks/expo/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored progressive router for bundled Expo skills. |
 | `configs/stacks/ios/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
 | `configs/stacks/ios/ios-debugger-agent/` | `Dimillian/Skills/ios-debugger-agent` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
 | `configs/stacks/ios/swift-concurrency-expert/` | `Dimillian/Skills/swift-concurrency-expert` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
@@ -135,7 +138,9 @@ Freshness:
 | `configs/stacks/nextjs/composition-patterns/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
 | `configs/stacks/nextjs/react-best-practices/` | `vercel-labs/agent-skills/skills/react-best-practices` | `exact-current` | `MIT` | `no` | Imported from Vercel's agent skills at `7c180d9`; package frontmatter declares MIT. |
 | `configs/stacks/nextjs/web-interface-guidelines/` | `vercel-labs/web-interface-guidelines` | `exact-current` | `MIT` | `no` | Imported from the standalone Vercel Labs package at `4e799d4`; upstream repository publishes an MIT license. |
+| `configs/stacks/productivity/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored progressive router for bundled productivity modes. |
 | `configs/stacks/react-native/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
+| `configs/stacks/review/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored progressive router for bundled review modes. |
 | `configs/stacks/rust/` | `actionbook/rust-skills/skills` | `subtree-current` | `MIT` | `not pinned` | Part of the imported Rust skills subtree; local names are normalized. |
 | `configs/stacks/rust/agent-friendly-cli/` | `actionbook/rust-skills/skills/domain-cli plus local cli-for-agents adaptation` | `subtree-current` | `MIT` | `not pinned` | Part of the imported Rust skills subtree; local names are normalized. |
 | `configs/stacks/rust/anti-patterns/` | `actionbook/rust-skills/skills/m15-anti-pattern` | `subtree-current` | `MIT` | `not pinned` | Part of the imported Rust skills subtree; local names are normalized. |
@@ -164,7 +169,7 @@ These packages are tracked in editor-specific folders but are outside the canoni
 
 | Local path | Status | Notes |
 | --- | --- | --- |
-| `configs/codex-plugins/plugins.json` | reference-only | Optional marketplace entry for LazyCodex; no LazyCodex payload is vendored. |
-| `configs/cursor-plugins/agents/agents-memory-updater.md` | exact-current | `cursor/plugins/continual-learning/agents/agents-memory-updater.md`; same upstream plugin as the continual-learning hook. |
-| `configs/cursor-plugins/hooks/continual-learning/` | exact-current | `cursor/plugins/continual-learning/hooks`; hook package, not a skill package. |
+| `configs/plugins/codex/plugins.json` | reference-only | Optional marketplace entry for LazyCodex; no LazyCodex payload is vendored. |
+| `configs/plugins/cursor/agents/agents-memory-updater.md` | exact-current | `cursor/plugins/continual-learning/agents/agents-memory-updater.md`; same upstream plugin as the continual-learning hook. |
+| `configs/plugins/cursor/hooks/continual-learning/` | exact-current | `cursor/plugins/continual-learning/hooks`; hook package, not a skill package. |
 | `configs/commands/ultrathink.md`, `configs/commands/init.md`, `configs/commands/review-pr.md`, `configs/agents/verifier.md` | local-original | stacc-authored non-skill references. |

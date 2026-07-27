@@ -132,10 +132,10 @@ export const getConfigInventory = cache(async function getConfigInventory(): Pro
     childDirectories("skills"),
     childDirectories("stacks"),
     childDirectories("hooks"),
-    childDirectories(path.join("cursor-plugins", "skills")),
-    childDirectories(path.join("cursor-plugins", "hooks")),
-    childDirectories(path.join("cursor-plugins", "agents")),
-    childDirectories(path.join("codex-skills", "skills")),
+    childDirectories(path.join("plugins", "cursor", "skills")),
+    childDirectories(path.join("plugins", "cursor", "hooks")),
+    childDirectories(path.join("plugins", "cursor", "agents")),
+    childDirectories(path.join("plugins", "codex", "skills")),
     mcpServers(),
   ]);
   const groups = [

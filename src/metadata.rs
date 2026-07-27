@@ -6,7 +6,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
 
-use crate::catalog::default_metadata_path;
+use crate::catalog::{default_metadata_path, Category};
 use crate::git_utils;
 
 const README_FILE: &str = "README.md";
@@ -597,8 +597,8 @@ fn discover_skill_dirs(root: &Path) -> Result<Vec<PathBuf>> {
     let roots = [
         root.join("configs").join("skills"),
         root.join("configs").join("commands").join("skills"),
-        root.join("configs").join("codex-skills").join("skills"),
-        root.join("configs").join("cursor-plugins").join("skills"),
+        Category::CodexSkills.source_path(root).join("skills"),
+        Category::CursorPlugins.source_path(root).join("skills"),
         root.join("configs").join("stacks"),
     ];
     for path in roots {
@@ -636,7 +636,7 @@ fn discover_hooks(root: &Path) -> Result<Vec<HookMetadata>> {
     )?;
     append_hooks(
         root,
-        &root.join("configs").join("cursor-plugins").join("hooks"),
+        &Category::CursorPlugins.source_path(root).join("hooks"),
         "cursor-plugin",
         &mut hooks,
     )?;
@@ -770,11 +770,11 @@ fn github_repo_url(source_url: &str) -> Option<String> {
 }
 
 fn collection_for_path(relative_path: &str) -> String {
-    if relative_path.starts_with("configs/codex-skills/") {
+    if relative_path.starts_with("configs/plugins/codex/") {
         "codex-skills".to_string()
     } else if relative_path.starts_with("configs/commands/skills/") {
         "command-skills".to_string()
-    } else if relative_path.starts_with("configs/cursor-plugins/") {
+    } else if relative_path.starts_with("configs/plugins/cursor/") {
         "cursor-plugins".to_string()
     } else if relative_path.starts_with("configs/stacks/") {
         "stack".to_string()
@@ -813,11 +813,11 @@ mod tests {
     #[test]
     fn matches_wildcard_paths() {
         assert!(path_pattern_matches(
-            "configs/skills/expo-*",
-            "configs/skills/expo-module"
+            "configs/stacks/expo/expo-*",
+            "configs/stacks/expo/expo-module"
         ));
         assert!(!path_pattern_matches(
-            "configs/skills/expo-*",
+            "configs/stacks/expo/expo-*",
             "configs/skills/tdd"
         ));
     }
@@ -835,6 +835,14 @@ mod tests {
         assert_eq!(
             collection_for_path("configs/commands/skills/commit"),
             "command-skills"
+        );
+        assert_eq!(
+            collection_for_path("configs/plugins/cursor/skills/orchestrate"),
+            "cursor-plugins"
+        );
+        assert_eq!(
+            collection_for_path("configs/plugins/codex/skills/babysit-pr"),
+            "codex-skills"
         );
     }
 

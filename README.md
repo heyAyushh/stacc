@@ -37,7 +37,11 @@ The Rust control panel will guide you through:
 
 #### Stacks
 
-Stacks are framework/language-specific skill bundles under `configs/stacks/`. When you select the `stack` category, the installer prompts you to choose one or more stack folders and installs them into each editor's `skills/` directory.
+Stacks are focused domain, workflow, framework, or language bundles under
+`configs/stacks/`. When you select the `stack` category, the installer prompts
+you to choose one or more stack folders and installs them into each editor's
+`skills/` directory. Each stack `SKILL.md` is a router; child skills are loaded
+only when their branch matches the task.
 
 #### Installer options
 
@@ -182,8 +186,8 @@ Use `backup`, `overwrite`, `skip`, or `--dry-run` for non-interactive agents.
 
 - Install execution is native Rust: file copying, conflict handling, rules summaries, hook package filtering, MCP JSON/TOML merge, and installed-binary smoke checks use typed Rust planning with explicit dry-run/yes gates.
 - Installs write a stacc ownership manifest at `<target-root>/.stacc/manifest.json`. `stacc update` and `stacc uninstall` only operate on skill, stack, and Codex plugin entries recorded there by stacc; they do not infer ownership from arbitrary files already present in an editor directory.
-- Use `stacc sync --editor ... --scope ... --dry-run --print-plan` to backfill the ownership manifest for stacc skill folders that are already installed. With no `--skill`, it scans all stacc skill sources that install into an editor `skills/` directory, including `configs/skills`, stack folders, Codex/Cursor-specific skill imports, and command skills for editors that store commands as skills. Codex plugin backfill is explicit with `--codex-plugin` because Codex owns the plugin installation state.
-- Optional Codex plugins live in `configs/codex-plugins/plugins.json`. Explicit `--codex-plugin` keys imply the internal `codex-plugins` category and a global Codex target, so `--scope global` is not required. The installer plans fixed `codex plugin marketplace add ...` and `codex plugin add ...` commands, then runs them only with `--yes`. Managed updates use `codex plugin marketplace upgrade ...` plus `codex plugin add ...`; managed uninstalls use `codex plugin remove ...` and remove the marketplace when no other stacc-managed plugin entry uses it.
+- Use `stacc sync --editor ... --scope ... --dry-run --print-plan` to backfill the ownership manifest for stacc skill folders that are already installed. With no `--skill`, it scans the small core in `configs/skills`, stack folders, editor adapters under `configs/plugins`, and command skills for editors that store commands as skills. Codex plugin backfill is explicit with `--codex-plugin` because Codex owns the plugin installation state.
+- Optional Codex plugins live in `configs/plugins/codex/plugins.json`. Explicit `--codex-plugin` keys imply the internal `codex-plugins` category and a global Codex target, so `--scope global` is not required. The installer plans fixed `codex plugin marketplace add ...` and `codex plugin add ...` commands, then runs them only with `--yes`. Managed updates use `codex plugin marketplace upgrade ...` plus `codex plugin add ...`; managed uninstalls use `codex plugin remove ...` and remove the marketplace when no other stacc-managed plugin entry uses it.
 - Metadata sync writes `configs/metadata/skills.lock.json` with each skill's local path, license, version, source URL, declared origin commit, and current upstream repo HEAD commit when GitHub lookup is enabled. Its report includes `outdated`, `outdated_count`, and an `outdated_sources` table with `freshness_scope: "repo-head"`, computed by comparing the declared imported commit with the current upstream repository HEAD. Use `stacc sync-metadata --refresh-origin --dry-run --json` for a non-mutating freshness report, or add `--fail-on-outdated` when CI should block on stale pinned source snapshots.
 - Source freshness is a maintainer signal, not a payload updater. When `outdated` is true, review the upstream diff, refresh the vendored files under `configs/`, update attribution/license metadata, then run `stacc check`.
 - Custom panel defaults live in `configs/stacc-panel.json`.
@@ -267,55 +271,35 @@ The `ci` workflow runs `stacc check` on pushes and pull requests. It also runs a
 ```
 configs/
 ├── agents/          # Agent definitions (verifier, askuserquestion)
-├── codex-skills/    # Codex-specific skill imports kept as a separate install category
-│   └── skills/
-│       └── babysit-pr/
-├── codex-plugins/   # Optional Codex marketplace plugin catalog
-│   └── plugins.json
 ├── commands/        # Slash commands (commit, deslop, ultrathink, etc.)
-├── cursor-plugins/  # Cursor plugin imports kept as a separate install category
-│   ├── agents/
-│   ├── hooks/
-│   └── skills/
-│       ├── cli-for-agents/
-│       ├── continual-learning/
-│       ├── create-learning-path/
-│       ├── deslop/
-│       ├── orchestrate/
-│       ├── run-learning-retrospective/
-│       ├── thermo-nuclear-code-quality-review/
-│       └── what-did-i-get-done/
 ├── hooks/           # Optional generic hook packages
 ├── mcps/            # MCP server configurations
+├── plugins/         # Editor-specific adapters only
+│   ├── codex/       # babysit-pr skill + optional marketplace catalog
+│   └── cursor/      # continual-learning + orchestrate skills, agents, hooks
 ├── rules/           # Always-applied rules (clean-code, commit format, etc.)
-├── skills/          # Modular skills for specific tasks
-│   ├── bash-expert/
-│   ├── changelog-generator/
-│   ├── add-app-clip/
-│   ├── audio-math-haptics/
-│   ├── brandkit/
-│   ├── building-native-ui/
-│   ├── eas-update-insights/
-│   ├── emil-design-eng/
-│   ├── expo-api-routes/
-│   ├── expo-*/
-│   ├── find-skills/
-│   ├── frontend-design/
-│   ├── hallmark/
+├── skills/          # Small, frequently used cross-domain core
+│   ├── agent-browser/
 │   ├── diagnose/
-│   ├── grill-with-docs/
-│   ├── imagegen-frontend-web/
-│   ├── taste-skill/
-│   ├── tdd/
-│   ├── mcp-builder/
+│   ├── find-skills/
+│   ├── gui-automation/
+│   ├── handoff/
 │   ├── skill-creator/
-│   └── ...
-└── stacks/          # Language/framework-specific skill bundles
+│   ├── tdd/
+│   ├── ultragoal/
+│   ├── using-git-worktrees/
+│   └── writing-great-skills/
+└── stacks/          # Focused domain/framework/language bundles
     ├── bun/
     ├── databases/
+    ├── design/
+    ├── engineering/
+    ├── expo/
     ├── ios/         # SwiftUI, Swift concurrency, performance, Liquid Glass
     ├── nextjs/
+    ├── productivity/
     ├── react-native/
+    ├── review/
     ├── rust/
     ├── solana/
     ├── turborepo/
@@ -332,48 +316,48 @@ The package-by-package inventory, including stacc-authored packages and non-cano
 | `configs/stacks/nextjs/react-best-practices/` | React and Next.js performance guidance from Vercel Engineering | Copied from `skills/react-best-practices` at `7c180d9` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices) | MIT |
 | `configs/stacks/nextjs/web-interface-guidelines/` | Web interface, accessibility, and UI review guidance | Copied from the Web Interface Guidelines package at `4e799d4` | [vercel-labs/web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines) | MIT |
 | `configs/commands/skills/*` | Stacc command-as-skill packages generated from the tracked command library | Local stacc-authored wrappers; installable as skills for editors that use skill folders | local stacc | MIT |
-| `configs/skills/agent-browser/`, `configs/skills/bash-expert/`, `configs/skills/find-skills/`, `configs/skills/using-git-worktrees/` | Stacc workflow skills | Local stacc-authored packages | local stacc | MIT |
-| `configs/stacks/bun/`, `configs/stacks/databases/`, `configs/stacks/ios/`, `configs/stacks/nextjs/`, `configs/stacks/react-native/`, `configs/stacks/turborepo/` | Stacc stack wrappers and locally authored stack skills | Local wrappers are MIT; imported child packages and CC0 rule content are attributed separately below | local stacc | MIT; imported components retain the licenses listed below |
-| `configs/skills/mcp-builder/` | MCP Server Development Guide - creating high-quality MCP servers |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
+| `configs/skills/agent-browser/`, `configs/stacks/engineering/bash-expert/`, `configs/skills/find-skills/`, `configs/skills/using-git-worktrees/` | Stacc workflow skills | Local stacc-authored packages | local stacc | MIT |
+| `configs/stacks/bun/`, `configs/stacks/databases/`, `configs/stacks/design/`, `configs/stacks/engineering/`, `configs/stacks/expo/`, `configs/stacks/ios/`, `configs/stacks/nextjs/`, `configs/stacks/productivity/`, `configs/stacks/react-native/`, `configs/stacks/review/`, `configs/stacks/turborepo/` | Stacc stack routers and locally authored stack skills | Local routers are MIT; imported child packages and CC0 rule content are attributed separately below | local stacc | MIT; imported components retain the licenses listed below |
+| `configs/stacks/engineering/mcp-builder/` | MCP Server Development Guide - creating high-quality MCP servers |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
 | `configs/skills/skill-creator/` | Skill Creator Guide - creating effective Claude skills |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
-| `configs/skills/frontend-design/` | Frontend Design - distinctive, production-grade UI creation |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
-| `configs/skills/karpathy-guidelines` | Behavioral guidelines to reduce common LLM coding mistakes. |  | [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) | MIT |
-| `configs/skills/emil-design-eng/` | Emil Kowalski design engineering philosophy for UI polish, component design, animation decisions | Copied from `skills/emil-design-eng` at `ecf66bb`; upstream repository later moved from `emilkowalski/skill` to `emilkowalski/skills` and publishes an MIT license | [emilkowalski/skills](https://github.com/emilkowalski/skills/tree/main/skills/emil-design-eng) | MIT |
-| `configs/skills/apple-design/` | Apple interface-design and fluid-motion principles translated for web implementation | Copied from `skills/apple-design` at `56de6f5`; provenance frontmatter added for stacc metadata | [emilkowalski/skills](https://github.com/emilkowalski/skills/tree/main/skills/apple-design) | MIT |
+| `configs/stacks/design/frontend-design/` | Frontend Design - distinctive, production-grade UI creation |  | [anthropics/skills](https://github.com/anthropics/skills) | Apache-2.0 |
+| `configs/stacks/review/karpathy-guidelines/` | Behavioral guidelines to reduce common LLM coding mistakes. |  | [forrestchang/andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) | MIT |
+| `configs/stacks/design/emil-design-eng/` | Emil Kowalski design engineering philosophy for UI polish, component design, animation decisions | Copied from `skills/emil-design-eng` at `ecf66bb`; upstream repository later moved from `emilkowalski/skill` to `emilkowalski/skills` and publishes an MIT license | [emilkowalski/skills](https://github.com/emilkowalski/skills/tree/main/skills/emil-design-eng) | MIT |
+| `configs/stacks/design/apple-design/` | Apple interface-design and fluid-motion principles translated for web implementation | Copied from `skills/apple-design` at `56de6f5`; provenance frontmatter added for stacc metadata | [emilkowalski/skills](https://github.com/emilkowalski/skills/tree/main/skills/apple-design) | MIT |
 | `.agents/skills/review-animations/` | Strict animation and motion review guidance | Project-local adapted mirror of Emil Kowalski's review skill; not part of the canonical installer catalog | [emilkowalski/skills](https://github.com/emilkowalski/skills/tree/main/skills/review-animations) | MIT |
-| `configs/skills/audio-math-haptics/` | First-principles audio-coupled haptic and kinetic UI feedback | Copied from `skill/audio-math-haptics` at `dc2ba99` | [heyAyushh/audio-math-haptics](https://github.com/heyAyushh/audio-math-haptics) | MIT |
-| `configs/skills/hallmark/` | Anti-AI-slop design skill for greenfield pages, audits, redesigns, and design extraction | Copied package payload (`SKILL.md` + `references/`) at `9aba10e`; frontmatter adapted for stacc validator | [nutlope/hallmark](https://github.com/nutlope/hallmark) | MIT |
-| `configs/skills/react-doctor/` | React diagnostics skill for scanner-backed cleanup, triage, and rule explanation workflows | Copied from `skills/react-doctor` at `0b64af58`; frontmatter adapted for stacc validator | [millionco/react-doctor](https://github.com/millionco/react-doctor/tree/main/skills/react-doctor) | LicenseRef-Million-Modified-MIT |
-| `configs/skills/add-app-clip/`, `configs/skills/building-native-ui/`, `configs/skills/eas-update-insights/`, `configs/skills/expo-*/`, `configs/skills/native-data-fetching/`, `configs/skills/upgrading-expo/`, `configs/skills/use-dom/` | Official Expo skills for App Clips, native UI, EAS, deployment, SDK upgrades, modules, data fetching, and DOM components | Copied from `plugins/expo/skills` at `956a92b`; frontmatter adapted for stacc validator | [expo/skills](https://github.com/expo/skills/tree/main/plugins/expo/skills) | MIT |
-| `configs/cursor-plugins/skills/cli-for-agents/references/agent-browser-runtime-skills.md` | Reference pattern for versioned, CLI-served agent instructions | Summarizes the current agent-browser discovery-skill/runtime-skill architecture | [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) | Apache-2.0 |
+| `configs/stacks/ios/audio-math-haptics/` | First-principles audio-coupled haptic and kinetic UI feedback | Copied from `skill/audio-math-haptics` at `dc2ba99` | [heyAyushh/audio-math-haptics](https://github.com/heyAyushh/audio-math-haptics) | MIT |
+| `configs/stacks/design/hallmark/` | Anti-AI-slop design skill for greenfield pages, audits, redesigns, and design extraction | Copied package payload (`SKILL.md` + `references/`) at `9aba10e`; frontmatter adapted for stacc validator | [nutlope/hallmark](https://github.com/nutlope/hallmark) | MIT |
+| `configs/stacks/review/react-doctor/` | React diagnostics skill for scanner-backed cleanup, triage, and rule explanation workflows | Copied from `skills/react-doctor` at `0b64af58`; frontmatter adapted for stacc validator | [millionco/react-doctor](https://github.com/millionco/react-doctor/tree/main/skills/react-doctor) | LicenseRef-Million-Modified-MIT |
+| `configs/stacks/ios/add-app-clip/`, `configs/stacks/expo/*/` | Official Expo skills for App Clips, native UI, EAS, deployment, SDK upgrades, modules, data fetching, and DOM components | Copied from `plugins/expo/skills` at `956a92b`; frontmatter adapted for stacc validator | [expo/skills](https://github.com/expo/skills/tree/main/plugins/expo/skills) | MIT |
+| `configs/stacks/engineering/cli-for-agents/references/agent-browser-runtime-skills.md` | Reference pattern for versioned, CLI-served agent instructions | Summarizes the current agent-browser discovery-skill/runtime-skill architecture | [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) | Apache-2.0 |
 | `configs/skills/ultragoal/` | Durable Codex goal design and activation workflow | Copied from `agents/skills/ultragoal` at `1eb180f`; upstream publishes no repository license, so no reuse license is asserted here | [jxnl/dots](https://github.com/jxnl/dots/tree/master/agents/skills/ultragoal) | LicenseRef-No-Published-License |
-| `configs/skills/brandkit/`, `configs/skills/brutalist-skill/`, `configs/skills/gpt-tasteskill/`, `configs/skills/image-to-code-skill/`, `configs/skills/imagegen-frontend-*/`, `configs/skills/minimalist-skill/`, `configs/skills/output-skill/`, `configs/skills/redesign-skill/`, `configs/skills/soft-skill/`, `configs/skills/stitch-skill/`, `configs/skills/taste-skill*/` | Anti-slop frontend, image-generation, brand-kit, redesign, and output-completion skills | Copied from `skills/` at `339afcb`; frontmatter adapted for stacc validator | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | MIT |
-| `configs/cursor-plugins/skills/cli-for-agents/` | Agent-friendly CLI design guidance | Copied from `cli-for-agent/skills/cli-for-agents` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cli-for-agent/skills/cli-for-agents) | MIT |
-| `configs/cursor-plugins/skills/continual-learning/` | Continual learning skill for transcript-derived memory updates | Copied from `continual-learning/skills/continual-learning` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/continual-learning/skills/continual-learning) | MIT |
-| `configs/cursor-plugins/skills/create-learning-path/` | Create a learning path from current work context | Copied from `teaching/skills/create-learning-path` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/teaching/skills/create-learning-path) | MIT |
-| `configs/cursor-plugins/skills/run-learning-retrospective/` | Run a learning retrospective from completed work | Copied from `teaching/skills/run-learning-retrospective` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/teaching/skills/run-learning-retrospective) | MIT |
-| `configs/cursor-plugins/skills/orchestrate/` | Multi-agent orchestration workflow | Copied from `orchestrate/skills/orchestrate` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/orchestrate/skills/orchestrate) | MIT |
-| `configs/cursor-plugins/skills/thermo-nuclear-code-quality-review/` | Strict code-quality review skill | Copied from `cursor-team-kit/skills/thermo-nuclear-code-quality-review` at `21327be`; identical payload also exists in `thermos/skills/thermo-nuclear-code-quality-review` | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review) | MIT |
-| `configs/cursor-plugins/skills/what-did-i-get-done/` | Work-summary skill | Copied from `cursor-team-kit/skills/what-did-i-get-done` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/what-did-i-get-done) | MIT |
-| `configs/cursor-plugins/skills/deslop/` | Deslop skill from Cursor Team Kit | Copied from `cursor-team-kit/skills/deslop` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/deslop) | MIT |
-| `configs/cursor-plugins/agents/agents-memory-updater.md`, `configs/cursor-plugins/hooks/continual-learning/` | Continual-learning agent and hook package | Copied from `continual-learning/agents` and `continual-learning/hooks` at `21327be` | [cursor/plugins](https://github.com/cursor/plugins/tree/main/continual-learning) | MIT |
-| `configs/codex-skills/skills/babysit-pr/` | Codex PR babysitter skill for monitoring GitHub PR review feedback, CI, and mergeability | Copied from `.codex/skills/babysit-pr` at `c4e53d1`; frontmatter adapted for stacc validator | [openai/codex](https://github.com/openai/codex/tree/main/.codex/skills/babysit-pr) | Apache-2.0 |
-| `configs/codex-plugins/plugins.json` | Optional LazyCodex Codex plugin marketplace entry | References `code-yeongyu/lazycodex` as an opt-in Codex marketplace source; no LazyCodex payload is vendored | [code-yeongyu/lazycodex](https://github.com/code-yeongyu/lazycodex) | MIT |
+| `configs/stacks/design/brandkit/`, `configs/stacks/design/brutalist-skill/`, `configs/stacks/design/gpt-tasteskill/`, `configs/stacks/design/image-to-code-skill/`, `configs/stacks/design/imagegen-frontend-*/`, `configs/stacks/design/minimalist-skill/`, `configs/stacks/productivity/output-skill/`, `configs/stacks/design/redesign-skill/`, `configs/stacks/design/soft-skill/`, `configs/stacks/design/stitch-skill/`, `configs/stacks/design/taste-skill*/` | Anti-slop frontend, image-generation, brand-kit, redesign, and output-completion skills | Copied from `skills/` at `339afcb`; frontmatter adapted for stacc validator | [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) | MIT |
+| `configs/stacks/engineering/cli-for-agents/` | Agent-friendly CLI design guidance | Copied from `cli-for-agent/skills/cli-for-agents` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cli-for-agent/skills/cli-for-agents) | MIT |
+| `configs/plugins/cursor/skills/continual-learning/` | Continual learning skill for transcript-derived memory updates | Copied from `continual-learning/skills/continual-learning` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/continual-learning/skills/continual-learning) | MIT |
+| `configs/stacks/productivity/create-learning-path/` | Create a learning path from current work context | Copied from `teaching/skills/create-learning-path` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/teaching/skills/create-learning-path) | MIT |
+| `configs/stacks/productivity/run-learning-retrospective/` | Run a learning retrospective from completed work | Copied from `teaching/skills/run-learning-retrospective` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/teaching/skills/run-learning-retrospective) | MIT |
+| `configs/plugins/cursor/skills/orchestrate/` | Multi-agent orchestration workflow | Copied from `orchestrate/skills/orchestrate` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/orchestrate/skills/orchestrate) | MIT |
+| `configs/stacks/review/thermo-nuclear-code-quality-review/` | Strict code-quality review skill | Copied from `cursor-team-kit/skills/thermo-nuclear-code-quality-review` at `21327be`; identical payload also exists in `thermos/skills/thermo-nuclear-code-quality-review` | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review) | MIT |
+| `configs/stacks/productivity/what-did-i-get-done/` | Work-summary skill | Copied from `cursor-team-kit/skills/what-did-i-get-done` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/what-did-i-get-done) | MIT |
+| `configs/stacks/review/deslop/` | Deslop skill from Cursor Team Kit | Copied from `cursor-team-kit/skills/deslop` at `21327be`; frontmatter adapted for stacc validator | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/deslop) | MIT |
+| `configs/plugins/cursor/agents/agents-memory-updater.md`, `configs/plugins/cursor/hooks/continual-learning/` | Continual-learning agent and hook package | Copied from `continual-learning/agents` and `continual-learning/hooks` at `21327be` | [cursor/plugins](https://github.com/cursor/plugins/tree/main/continual-learning) | MIT |
+| `configs/plugins/codex/skills/babysit-pr/` | Codex PR babysitter skill for monitoring GitHub PR review feedback, CI, and mergeability | Copied from `.codex/skills/babysit-pr` at `c4e53d1`; frontmatter adapted for stacc validator | [openai/codex](https://github.com/openai/codex/tree/main/.codex/skills/babysit-pr) | Apache-2.0 |
+| `configs/plugins/codex/plugins.json` | Optional LazyCodex Codex plugin marketplace entry | References `code-yeongyu/lazycodex` as an opt-in Codex marketplace source; no LazyCodex payload is vendored | [code-yeongyu/lazycodex](https://github.com/code-yeongyu/lazycodex) | MIT |
 | `configs/skills/gui-automation/` | GUI automation workflow for visual interaction, screenshots, and end-to-end QA with CUA | Copied from `skills/gui-automation` at `73fe822`; command examples retained as documentation only | [trycua/cua](https://github.com/trycua/cua/tree/main/skills/gui-automation) | MIT |
-| `configs/skills/ponytail/`, `configs/skills/ponytail-*` | Minimalist coding mode plus over-engineering review, audit, debt, gain, and help skills | Copied from `skills/` at `40e50d9`; frontmatter adapted for stacc validator | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | MIT |
+| `configs/stacks/review/ponytail/`, `configs/stacks/review/ponytail-*` | Minimalist coding mode plus over-engineering review, audit, debt, gain, and help skills | Copied from `skills/` at `40e50d9`; frontmatter adapted for stacc validator | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | MIT |
 | `configs/skills/diagnose/` | Disciplined diagnosis loop for hard bugs and performance regressions | Copied from `skills/engineering/diagnosing-bugs`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs) | MIT |
-| `configs/skills/grill-with-docs/` | Grilling session that challenges plans against the existing domain model and docs | Copied from `skills/engineering/grill-with-docs`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs) | MIT |
-| `configs/skills/triage/` | Issue triage through a role/state workflow | Copied from `skills/engineering/triage`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/triage) | MIT |
-| `configs/skills/improve-codebase-architecture/` | Find codebase architecture deepening opportunities | Copied from `skills/engineering/improve-codebase-architecture`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture) | MIT |
+| `configs/stacks/engineering/grill-with-docs/` | Grilling session that challenges plans against the existing domain model and docs | Copied from `skills/engineering/grill-with-docs`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs) | MIT |
+| `configs/stacks/engineering/triage/` | Issue triage through a role/state workflow | Copied from `skills/engineering/triage`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/triage) | MIT |
+| `configs/stacks/engineering/improve-codebase-architecture/` | Find codebase architecture deepening opportunities | Copied from `skills/engineering/improve-codebase-architecture`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture) | MIT |
 | `configs/skills/tdd/` | Test-driven development with a red-green-refactor loop | Copied from `skills/engineering/tdd`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd) | MIT |
-| `configs/skills/to-issues/` | Break plans into independently-grabbable issues | Copied from `skills/engineering/to-issues`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/to-issues) | MIT |
-| `configs/skills/to-prd/` | Turn conversation context into a PRD for the project issue tracker | Copied from `skills/engineering/to-prd`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/to-prd) | MIT |
-| `configs/skills/zoom-out/` | Ask for a higher-level map of unfamiliar code | Adapted from the root `zoom-out` package on the historical `v1` branch at `8a54bc3` | [mattpocock/skills v1](https://github.com/mattpocock/skills/tree/v1/zoom-out) | MIT |
-| `configs/skills/prototype/` | Build throwaway prototypes for logic or UI design questions | Copied from `skills/engineering/prototype`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype) | MIT |
-| `configs/skills/caveman/` | Ultra-compressed communication mode | Exact copy of the root `caveman` package on the historical `v1` branch at `8a54bc3` | [mattpocock/skills v1](https://github.com/mattpocock/skills/tree/v1/caveman) | MIT |
-| `configs/skills/grill-me/` | Interview the user until a plan or design is fully resolved | Exact copy of the root `grill-me` package on the historical `v1` branch at `8a54bc3` | [mattpocock/skills v1](https://github.com/mattpocock/skills/tree/v1/grill-me) | MIT |
+| `configs/stacks/engineering/to-issues/` | Break plans into independently-grabbable issues | Copied from `skills/engineering/to-issues`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/to-issues) | MIT |
+| `configs/stacks/engineering/to-prd/` | Turn conversation context into a PRD for the project issue tracker | Copied from `skills/engineering/to-prd`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/to-prd) | MIT |
+| `configs/stacks/productivity/zoom-out/` | Ask for a higher-level map of unfamiliar code | Adapted from the root `zoom-out` package on the historical `v1` branch at `8a54bc3` | [mattpocock/skills v1](https://github.com/mattpocock/skills/tree/v1/zoom-out) | MIT |
+| `configs/stacks/engineering/prototype/` | Build throwaway prototypes for logic or UI design questions | Copied from `skills/engineering/prototype`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype) | MIT |
+| `configs/stacks/productivity/caveman/` | Ultra-compressed communication mode | Exact copy of the root `caveman` package on the historical `v1` branch at `8a54bc3` | [mattpocock/skills v1](https://github.com/mattpocock/skills/tree/v1/caveman) | MIT |
+| `configs/stacks/productivity/grill-me/` | Interview the user until a plan or design is fully resolved | Exact copy of the root `grill-me` package on the historical `v1` branch at `8a54bc3` | [mattpocock/skills v1](https://github.com/mattpocock/skills/tree/v1/grill-me) | MIT |
 | `configs/skills/handoff/` | Compact the current conversation into a handoff document | Copied from `skills/productivity/handoff`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff) | MIT |
-| `configs/skills/write-a-skill/` | Create new agent skills with proper structure and resources | Exact copy of the root `write-a-skill` package on the historical `v1` branch at `8a54bc3` | [mattpocock/skills v1](https://github.com/mattpocock/skills/tree/v1/write-a-skill) | MIT |
+| `configs/stacks/engineering/write-a-skill/` | Create new agent skills with proper structure and resources | Exact copy of the root `write-a-skill` package on the historical `v1` branch at `8a54bc3` | [mattpocock/skills v1](https://github.com/mattpocock/skills/tree/v1/write-a-skill) | MIT |
 | `.agents/skills/setup-matt-pocock-skills/`, `.claude/skills/setup-matt-pocock-skills/`, `.codex/skills/setup-matt-pocock-skills/`, `.cursor/skills*/setup-matt-pocock-skills/`, `.opencode/skills*/setup-matt-pocock-skills/` | Tool-specific installed mirrors of the Matt Pocock setup skill | Tracked legacy mirrors; canonical installer source is not present under `configs/` | [mattpocock/skills](https://github.com/mattpocock/skills/tree/main/skills/engineering/setup-matt-pocock-skills) | MIT |
 | `configs/skills/writing-great-skills/` | Reference vocabulary and principles for writing predictable skills | Copied from `skills/productivity/writing-great-skills` at `d574778`; frontmatter adapted for stacc validator | [mattpocock/skills](https://github.com/mattpocock/skills/blob/main/skills/productivity/writing-great-skills/SKILL.md) | MIT |
 | `configs/stacks/ios/swift-concurrency-expert/` | Swift 6.2+ concurrency review and remediation |  | [Dimillian/Skills](https://github.com/Dimillian/Skills) | MIT |
@@ -405,7 +389,7 @@ The package-by-package inventory, including stacc-authored packages and non-cano
 | `configs/commands/review.md` | Security-focused code review |  | [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) | MIT |
 | `configs/commands/council.md` | Spawn multiple agents to deeply explore a codebase area before acting |  | [@shaoruu](https://shaoruu.io/cursor/council) | NOASSERTION |
 | `configs/commands/iterate-browser.md` | Autonomously iterate on UI changes using console.log and browser tools |  | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) | Apache-2.0 |
-| `configs/skills/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills/tree/master/changelog-generator) | Apache-2.0 |
+| `configs/stacks/engineering/changelog-generator/` | Changelog generation from git commits | Also found in [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates) (MIT) and [skillcreatorai/Ai-Agent-Skills](https://github.com/skillcreatorai/Ai-Agent-Skills) (MIT). | [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills/tree/master/changelog-generator) | Apache-2.0 |
 | `configs/commands/ultrathink.md` | Deep reasoning mode protocol | Local stacc command | Original / stacc | MIT |
 | `configs/commands/init.md` | AGENTS.md initialization | Local stacc command | Original / stacc | MIT |
 | `configs/agents/verifier.md` | Work verification agent | Local stacc agent | Original / stacc | MIT |

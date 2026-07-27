@@ -3,10 +3,9 @@ use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
 
-use crate::catalog::Editor;
+use crate::catalog::{Category, Editor};
 
 const CONFIGS_DIR: &str = "configs";
-const CURSOR_PLUGINS_DIR: &str = "cursor-plugins";
 const HOOKS_DIR: &str = "hooks";
 
 pub fn selected_hook_packages(
@@ -45,10 +44,7 @@ fn available_hook_packages(root: &Path, editor: Editor) -> Result<Vec<(String, P
     if editor == Editor::Cursor {
         append_hook_packages(
             &mut packages,
-            &root
-                .join(CONFIGS_DIR)
-                .join(CURSOR_PLUGINS_DIR)
-                .join(HOOKS_DIR),
+            &Category::CursorPlugins.source_path(root).join(HOOKS_DIR),
         )?;
     }
     packages.sort_by(|left, right| left.0.cmp(&right.0).then_with(|| left.1.cmp(&right.1)));
@@ -143,10 +139,8 @@ mod tests {
     fn selected_hook_packages_reject_unknown_values() {
         let root = TestDir::new("unknown");
         write_test_file(
-            &root
-                .path
-                .join(CONFIGS_DIR)
-                .join(CURSOR_PLUGINS_DIR)
+            &Category::CursorPlugins
+                .source_path(&root.path)
                 .join(HOOKS_DIR)
                 .join("continual-learning")
                 .join("hooks.json"),
@@ -168,10 +162,8 @@ mod tests {
     #[test]
     fn selected_hook_packages_uses_cursor_plugin_hooks_for_cursor() {
         let root = TestDir::new("cursor");
-        let hook_file = root
-            .path
-            .join(CONFIGS_DIR)
-            .join(CURSOR_PLUGINS_DIR)
+        let hook_file = Category::CursorPlugins
+            .source_path(&root.path)
             .join(HOOKS_DIR)
             .join("continual-learning")
             .join("hooks.json");

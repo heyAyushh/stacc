@@ -1,30 +1,8 @@
 {
   "schema_version": 1,
-  "generated_unix_seconds": 1785150002,
+  "generated_unix_seconds": 1785151535,
   "source_repo": "stacc",
   "skills": [
-    {
-      "name": "babysit-pr",
-      "description": "Babysit a GitHub pull request after creation by continuously polling review comments, CI checks/workflow runs, and mergeability state until the PR is merged/closed or user help is required. Diagnose failures, retry likely flaky failures up to 3 times, auto-fix/push branch-related issues when appropriate, and keep watching open PRs so fresh review feedback is surfaced promptly. Use when the user asks Codex to monitor a PR, watch CI, handle review comments, or keep an eye on failures and feedback on an open PR.",
-      "local_path": "configs/codex-skills/skills/babysit-pr",
-      "collection": "codex-skills",
-      "license": {
-        "spdx": "Apache-2.0",
-        "source": "frontmatter",
-        "file": "configs/codex-skills/skills/babysit-pr/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:c4e53d1",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/openai/codex/tree/main/.codex/skills/babysit-pr",
-        "repo_url": "https://github.com/openai/codex",
-        "declared_commit": "c4e53d1",
-        "head_commit": "3d519bf63a1ca9b319b1aefc3062558af0c06273",
-        "head_error": null
-      }
-    },
     {
       "name": "clean-gone",
       "description": "Clean up git branches marked as [gone] (deleted on remote but still exist locally). Use when you want to prune stale local branches, remove worktrees for deleted branches, or clean up after PR merges.",
@@ -36,7 +14,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -58,7 +36,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -80,7 +58,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -102,7 +80,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -124,7 +102,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -146,7 +124,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -168,7 +146,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -190,7 +168,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -212,7 +190,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -234,7 +212,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -256,7 +234,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -278,7 +256,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -300,7 +278,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -322,7 +300,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -344,7 +322,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -366,7 +344,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -388,7 +366,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -400,36 +378,36 @@
       }
     },
     {
-      "name": "cli-for-agents",
-      "description": "Designs or reviews CLIs so coding agents can run them reliably: non-interactive flags, layered --help with examples, stdin/pipelines, fast actionable errors, idempotency, dry-run, and predictable structure. Use when building a CLI, adding commands, writing --help, or when the user mentions agents, terminals, or automation-friendly CLIs.",
-      "local_path": "configs/cursor-plugins/skills/cli-for-agents",
-      "collection": "cursor-plugins",
+      "name": "babysit-pr",
+      "description": "Babysit a GitHub pull request after creation by continuously polling review comments, CI checks/workflow runs, and mergeability state until the PR is merged/closed or user help is required. Diagnose failures, retry likely flaky failures up to 3 times, auto-fix/push branch-related issues when appropriate, and keep watching open PRs so fresh review feedback is surfaced promptly. Use when the user asks Codex to monitor a PR, watch CI, handle review comments, or keep an eye on failures and feedback on an open PR.",
+      "local_path": "configs/plugins/codex/skills/babysit-pr",
+      "collection": "codex-skills",
       "license": {
-        "spdx": "MIT",
+        "spdx": "Apache-2.0",
         "source": "frontmatter",
-        "file": "configs/cursor-plugins/skills/cli-for-agents/LICENSE.txt"
+        "file": "configs/plugins/codex/skills/babysit-pr/LICENSE.txt"
       },
       "version": {
-        "value": "git:21327be",
+        "value": "git:c4e53d1",
         "source": "declared-origin-commit"
       },
       "origin": {
-        "source_url": "https://github.com/cursor/plugins/tree/main/cli-for-agent/skills/cli-for-agents",
-        "repo_url": "https://github.com/cursor/plugins",
-        "declared_commit": "21327be",
-        "head_commit": "ba7b5907843e1e21ec692418c180e1f912cbf7d3",
-        "head_error": null
+        "source_url": "https://github.com/openai/codex/tree/main/.codex/skills/babysit-pr",
+        "repo_url": "https://github.com/openai/codex",
+        "declared_commit": "c4e53d1",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/openai/codex: fatal: unable to access 'https://github.com/openai/codex/': Could not resolve host: github.com\n"
       }
     },
     {
       "name": "continual-learning",
       "description": "Orchestrate continual learning by delegating transcript mining and AGENTS.md updates to `agents-memory-updater`.",
-      "local_path": "configs/cursor-plugins/skills/continual-learning",
+      "local_path": "configs/plugins/cursor/skills/continual-learning",
       "collection": "cursor-plugins",
       "license": {
         "spdx": "MIT",
         "source": "frontmatter",
-        "file": "configs/cursor-plugins/skills/continual-learning/LICENSE.txt"
+        "file": "configs/plugins/cursor/skills/continual-learning/LICENSE.txt"
       },
       "version": {
         "value": "git:21327be",
@@ -439,63 +417,19 @@
         "source_url": "https://github.com/cursor/plugins/tree/main/continual-learning/skills/continual-learning",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "ba7b5907843e1e21ec692418c180e1f912cbf7d3",
-        "head_error": null
-      }
-    },
-    {
-      "name": "create-learning-path",
-      "description": "Build a personalized learning roadmap with milestones and practice checkpoints",
-      "local_path": "configs/cursor-plugins/skills/create-learning-path",
-      "collection": "cursor-plugins",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/cursor-plugins/skills/create-learning-path/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:21327be",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/cursor/plugins/tree/main/teaching/skills/create-learning-path",
-        "repo_url": "https://github.com/cursor/plugins",
-        "declared_commit": "21327be",
-        "head_commit": "ba7b5907843e1e21ec692418c180e1f912cbf7d3",
-        "head_error": null
-      }
-    },
-    {
-      "name": "deslop",
-      "description": "Remove AI-generated code slop and clean up code style",
-      "local_path": "configs/cursor-plugins/skills/deslop",
-      "collection": "cursor-plugins",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/cursor-plugins/skills/deslop/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:21327be",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/deslop",
-        "repo_url": "https://github.com/cursor/plugins",
-        "declared_commit": "21327be",
-        "head_commit": "ba7b5907843e1e21ec692418c180e1f912cbf7d3",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/cursor/plugins: fatal: unable to access 'https://github.com/cursor/plugins/': Could not resolve host: github.com\n"
       }
     },
     {
       "name": "orchestrate",
       "description": "Use only when the user explicitly types `/orchestrate goal` to decompose a large task, spawn a tree of parallel cloud-agent workers/subplanners/verifiers via the Cursor SDK, and collect structured handoffs; do not invoke autonomously.",
-      "local_path": "configs/cursor-plugins/skills/orchestrate",
+      "local_path": "configs/plugins/cursor/skills/orchestrate",
       "collection": "cursor-plugins",
       "license": {
         "spdx": "MIT",
         "source": "frontmatter",
-        "file": "configs/cursor-plugins/skills/orchestrate/LICENSE.txt"
+        "file": "configs/plugins/cursor/skills/orchestrate/LICENSE.txt"
       },
       "version": {
         "value": "git:21327be",
@@ -505,96 +439,8 @@
         "source_url": "https://github.com/cursor/plugins/tree/main/orchestrate/skills/orchestrate",
         "repo_url": "https://github.com/cursor/plugins",
         "declared_commit": "21327be",
-        "head_commit": "ba7b5907843e1e21ec692418c180e1f912cbf7d3",
-        "head_error": null
-      }
-    },
-    {
-      "name": "run-learning-retrospective",
-      "description": "Evaluate learning progress, identify blockers, and adjust the learning plan",
-      "local_path": "configs/cursor-plugins/skills/run-learning-retrospective",
-      "collection": "cursor-plugins",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/cursor-plugins/skills/run-learning-retrospective/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:21327be",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/cursor/plugins/tree/main/teaching/skills/run-learning-retrospective",
-        "repo_url": "https://github.com/cursor/plugins",
-        "declared_commit": "21327be",
-        "head_commit": "ba7b5907843e1e21ec692418c180e1f912cbf7d3",
-        "head_error": null
-      }
-    },
-    {
-      "name": "thermo-nuclear-code-quality-review",
-      "description": "Run an extremely strict maintainability review for abstraction quality, giant files, and spaghetti-condition growth. Use for a thermo-nuclear code quality review, thermonuclear review, deep code quality audit, or especially harsh maintainability review.",
-      "local_path": "configs/cursor-plugins/skills/thermo-nuclear-code-quality-review",
-      "collection": "cursor-plugins",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/cursor-plugins/skills/thermo-nuclear-code-quality-review/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:21327be",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review",
-        "repo_url": "https://github.com/cursor/plugins",
-        "declared_commit": "21327be",
-        "head_commit": "ba7b5907843e1e21ec692418c180e1f912cbf7d3",
-        "head_error": null
-      }
-    },
-    {
-      "name": "what-did-i-get-done",
-      "description": "Summarize authored commits over a user-specified time period into a concise update",
-      "local_path": "configs/cursor-plugins/skills/what-did-i-get-done",
-      "collection": "cursor-plugins",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/cursor-plugins/skills/what-did-i-get-done/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:21327be",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/what-did-i-get-done",
-        "repo_url": "https://github.com/cursor/plugins",
-        "declared_commit": "21327be",
-        "head_commit": "ba7b5907843e1e21ec692418c180e1f912cbf7d3",
-        "head_error": null
-      }
-    },
-    {
-      "name": "add-app-clip",
-      "description": "Add an iOS App Clip target to an Expo app. Use when the user mentions App Clip, AASA, apple-app-site-association, appclips, smart app banner, or wants to ship a lightweight iOS Clip invoked from a URL alongside their parent app.",
-      "local_path": "configs/skills/add-app-clip",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/add-app-clip/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:956a92b",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/cursor/plugins: fatal: unable to access 'https://github.com/cursor/plugins/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -608,7 +454,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -616,182 +462,6 @@
         "repo_url": null,
         "declared_commit": null,
         "head_commit": null,
-        "head_error": null
-      }
-    },
-    {
-      "name": "apple-design",
-      "description": "Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.",
-      "local_path": "configs/skills/apple-design",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/apple-design/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:56de6f5d6642f761b5e17629fccf53e303b3da9b",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/emilkowalski/skills/tree/main/skills/apple-design",
-        "repo_url": "https://github.com/emilkowalski/skills",
-        "declared_commit": "56de6f5d6642f761b5e17629fccf53e303b3da9b",
-        "head_commit": "e695d13cb298db0f46d5ef05be2ad13fa12908a6",
-        "head_error": null
-      }
-    },
-    {
-      "name": "audio-math-haptics",
-      "description": "Derive and implement first-principles audio-coupled haptic and kinetic UI feedback. Use when designing, reviewing, or coding haptics/audio for mobile apps, native iOS/Android, React Native/Expo, SwiftUI, games, detent pickers, toggles, sliders, page curls, scroll gestures, wallet/signature flows, Solana transactions, backend/realtime state changes, confirmations, settlements, and semantic UI events where feedback should follow signal math instead of ad hoc vibration calls.",
-      "local_path": "configs/skills/audio-math-haptics",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/audio-math-haptics/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:dc2ba99",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/heyAyushh/audio-math-haptics",
-        "repo_url": "https://github.com/heyAyushh/audio-math-haptics",
-        "declared_commit": "dc2ba99",
-        "head_commit": "dc2ba99d31b96fb09be1857da896a60e5ab7725f",
-        "head_error": null
-      }
-    },
-    {
-      "name": "bash-expert",
-      "description": "Expert Bash help for writing, debugging, and optimizing safe, portable shell one-liners and scripts on macOS/Linux. Use when users ask for Bash or POSIX sh commands, script reviews, ShellCheck fixes, quoting/pipeline issues, process/file automation, or converting requirements into shell scripts.",
-      "local_path": "configs/skills/bash-expert",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": null
-      },
-      "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
-        "source": "local-repo-head"
-      },
-      "origin": {
-        "source_url": null,
-        "repo_url": null,
-        "declared_commit": null,
-        "head_commit": null,
-        "head_error": null
-      }
-    },
-    {
-      "name": "brandkit",
-      "description": "Premium brand-kit image generation skill for creating high-end brand-guidelines boards, logo systems, identity decks, and visual-world presentations. Trained for minimalist, cinematic, editorial, dark-tech, luxury, cultural, security, gaming, developer-tool, and consumer-app brand systems. Optimized for intentional logo concepting, refined composition, sparse typography, strong symbolic meaning, premium mockups, art-directed imagery, and flexible grid layouts.",
-      "local_path": "configs/skills/brandkit",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/brandkit/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "industrial-brutalist-ui",
-      "description": "Raw mechanical interfaces fusing Swiss typographic print with military terminal aesthetics. Rigid grids, extreme type scale contrast, utilitarian color, analog degradation effects. For data-heavy dashboards, portfolios, or editorial sites that need to feel like declassified blueprints.",
-      "local_path": "configs/skills/brutalist-skill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/brutalist-skill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "building-native-ui",
-      "description": "Complete guide for building beautiful apps with Expo Router. Covers fundamentals, styling, components, navigation, animations, patterns, and native tabs.",
-      "local_path": "configs/skills/building-native-ui",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/building-native-ui/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.1",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "caveman",
-      "description": "Ultra-compressed communication mode. Cuts token usage ~75% by dropping filler, articles, and pleasantries while keeping full technical accuracy. Use when user says \"caveman mode\", \"talk like caveman\", \"use caveman\", \"less tokens\", \"be brief\", or invokes /caveman.",
-      "local_path": "configs/skills/caveman",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/caveman/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/v1/caveman",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": "8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "changelog-generator",
-      "description": "Automatically creates user-facing changelogs from git commits by analyzing commit history, categorizing changes, and transforming technical commits into clear, customer-friendly release notes. Turns hours of manual changelog writing into minutes of automated generation.",
-      "local_path": "configs/skills/changelog-generator",
-      "collection": "skills",
-      "license": {
-        "spdx": "Apache-2.0",
-        "source": "frontmatter",
-        "file": null
-      },
-      "version": {
-        "value": "git:be2a406907dbc61b73e6827ded415c96139d13a2",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/ComposioHQ/awesome-claude-skills/tree/master/changelog-generator",
-        "repo_url": "https://github.com/ComposioHQ/awesome-claude-skills",
-        "declared_commit": null,
-        "head_commit": "be2a406907dbc61b73e6827ded415c96139d13a2",
         "head_error": null
       }
     },
@@ -806,257 +476,15 @@
         "file": "configs/skills/diagnose/LICENSE.txt"
       },
       "version": {
-        "value": "git:ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnosing-bugs",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "eas-update-insights",
-      "description": "Check the health of published EAS Updates: crash rates, install/launch counts, unique users, payload size, and the split between embedded and OTA users per channel. Use when the user asks how an update is performing, whether a rollout is healthy, how many users are on the embedded build vs OTA, or wants to gate CI on update health.",
-      "local_path": "configs/skills/eas-update-insights",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/eas-update-insights/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "emil-design-eng",
-      "description": "This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.",
-      "local_path": "configs/skills/emil-design-eng",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/emil-design-eng/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:ecf66bbd1fb33c25332b6b0e454d08049978284c",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/emilkowalski/skills/tree/main/skills/emil-design-eng",
-        "repo_url": "https://github.com/emilkowalski/skills",
-        "declared_commit": "ecf66bbd1fb33c25332b6b0e454d08049978284c",
-        "head_commit": "e695d13cb298db0f46d5ef05be2ad13fa12908a6",
-        "head_error": null
-      }
-    },
-    {
-      "name": "expo-api-routes",
-      "description": "Guidelines for creating API routes in Expo Router with EAS Hosting",
-      "local_path": "configs/skills/expo-api-routes",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/expo-api-routes/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "expo-brownfield",
-      "description": "Integrate Expo and React Native into an existing native iOS or Android app. Use when the user mentions brownfield, embedding React Native in a native app, AAR/XCFramework, or adding Expo to an existing Kotlin/Swift project. Covers both the isolated approach and the integrated approach.",
-      "local_path": "configs/skills/expo-brownfield",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/expo-brownfield/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:956a92b",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "expo-cicd-workflows",
-      "description": "Helps understand and write EAS workflow YAML files for Expo projects. Use this skill when the user asks about CI/CD or workflows in an Expo or EAS context, mentions .eas/workflows/, or wants help with EAS build pipelines or deployment automation.",
-      "local_path": "configs/skills/expo-cicd-workflows",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/expo-cicd-workflows/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "expo-deployment",
-      "description": "Deploying Expo apps to iOS App Store, Android Play Store, web hosting, and API routes",
-      "local_path": "configs/skills/expo-deployment",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/expo-deployment/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "expo-dev-client",
-      "description": "Build and distribute Expo development clients locally or via TestFlight",
-      "local_path": "configs/skills/expo-dev-client",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/expo-dev-client/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "expo-module",
-      "description": "Guide for creating and writing Expo native modules and views using the Expo Modules API (Swift, Kotlin, TypeScript). Covers module definition DSL, native views, shared objects, config plugins, lifecycle hooks, autolinking, and type system. Use when building or modifying native modules for Expo.",
-      "local_path": "configs/skills/expo-module",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/expo-module/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "expo-tailwind-setup",
-      "description": "Set up Tailwind CSS v4 in Expo with react-native-css and NativeWind v5 for universal styling",
-      "local_path": "configs/skills/expo-tailwind-setup",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/expo-tailwind-setup/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "expo-ui-jetpack-compose",
-      "description": "`@expo/ui/jetpack-compose` package lets you use Jetpack Compose Views and modifiers in your app.",
-      "local_path": "configs/skills/expo-ui-jetpack-compose",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/expo-ui-jetpack-compose/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:956a92b",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "expo-ui-swift-ui",
-      "description": "`@expo/ui/swift-ui` package lets you use SwiftUI Views and modifiers in your app.",
-      "local_path": "configs/skills/expo-ui-swift-ui",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/expo-ui-swift-ui/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:956a92b",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -1070,7 +498,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -1078,94 +506,6 @@
         "repo_url": null,
         "declared_commit": null,
         "head_commit": null,
-        "head_error": null
-      }
-    },
-    {
-      "name": "frontend-design",
-      "description": "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.",
-      "local_path": "configs/skills/frontend-design",
-      "collection": "skills",
-      "license": {
-        "spdx": "Apache-2.0",
-        "source": "readme-attribution",
-        "file": null
-      },
-      "version": {
-        "value": "git:b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/anthropics/skills",
-        "repo_url": "https://github.com/anthropics/skills",
-        "declared_commit": null,
-        "head_commit": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
-        "head_error": null
-      }
-    },
-    {
-      "name": "gpt-taste",
-      "description": "Elite UX/UI & Advanced GSAP Motion Engineer. Enforces Python-driven true randomization for layout variance, strict AIDA page structure, wide editorial typography (bans 6-line wraps), gapless bento grids, strict GSAP ScrollTriggers (pinning, stacking, scrubbing), inline micro-images, and massive section spacing.",
-      "local_path": "configs/skills/gpt-tasteskill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/gpt-tasteskill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "grill-me",
-      "description": "Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to stress-test a plan, get grilled on their design, or mentions \"grill me\".",
-      "local_path": "configs/skills/grill-me",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/grill-me/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/v1/grill-me",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": "8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "grill-with-docs",
-      "description": "Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.",
-      "local_path": "configs/skills/grill-with-docs",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/grill-with-docs/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": null,
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
         "head_error": null
       }
     },
@@ -1187,30 +527,8 @@
         "source_url": "https://github.com/trycua/cua/tree/main/skills/gui-automation",
         "repo_url": "https://github.com/trycua/cua",
         "declared_commit": "73fe822",
-        "head_commit": "bdc3e41a1bf04f8c6320bcb9c0723fd611c68cdf",
-        "head_error": null
-      }
-    },
-    {
-      "name": "hallmark",
-      "description": "Anti-AI-slop design skill for greenfield pages, audits, redesigns, and design extraction from URLs or screenshots. Use when the user asks to build a new app or landing page, wants to redesign something, invokes Hallmark by name, or uses audit/redesign/study.",
-      "local_path": "configs/skills/hallmark",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/hallmark/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/nutlope/hallmark",
-        "repo_url": "https://github.com/nutlope/hallmark",
-        "declared_commit": "9aba10e",
-        "head_commit": "aeb42fb354ff4efa36ab475773a082315a3af2ce",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/trycua/cua: fatal: unable to access 'https://github.com/trycua/cua/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -1224,411 +542,15 @@
         "file": "configs/skills/handoff/LICENSE.txt"
       },
       "version": {
-        "value": "git:ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "image-to-code",
-      "description": "Elite website image-to-code skill for Codex. For visually important web tasks, it must first generate the design image(s) itself, deeply analyze them, then implement the website to match them as closely as possible. In Codex, it must prefer large, readable, section-specific images instead of tiny compressed boards, generate fresh standalone images for sections or detail views instead of cropping old ones, avoid lazy under-generation, avoid cards-inside-cards-inside-cards UI, and keep the hero clean, spacious, readable, and visible on a small laptop.",
-      "local_path": "configs/skills/image-to-code-skill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/image-to-code-skill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "imagegen-frontend-mobile",
-      "description": "Elite mobile app image-generation skill for creating premium, app-native screen concepts and flows. Designed for iOS, Android, and cross-platform mobile products. Prioritizes clean hierarchy, comfortably readable text, strong multi-screen consistency, controlled color palettes, non-generic creative direction, textured surfaces, image-led composition, tasteful custom iconography, and clean phone mockup framing. By default, screens should be shown inside a subtle premium iPhone or similar phone mockup with a visible frame, while the main focus stays on the app content itself. This skill generates images only. It does not write code.",
-      "local_path": "configs/skills/imagegen-frontend-mobile",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/imagegen-frontend-mobile/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "imagegen-frontend-web",
-      "description": "Elite frontend image-direction skill for generating premium, conversion-aware website design references. CRITICAL OUTPUT RULE — generate ONE separate horizontal image FOR EVERY section. A landing page with 8 sections produces 8 images. Never compress multiple sections into one image. Enforces composition variety (not always left-text / right-image), background-image freedom, varied CTAs, varied hero scales (giant / mid / mini minimalist), narrative concept spine, second-read moments, and a single consistent palette across all images. Optimized for landing pages, marketing sites, and product comps that developers or coding models can accurately recreate.",
-      "local_path": "configs/skills/imagegen-frontend-web",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/imagegen-frontend-web/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "improve-codebase-architecture",
-      "description": "Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable.",
-      "local_path": "configs/skills/improve-codebase-architecture",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/improve-codebase-architecture/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": null,
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "karpathy-guidelines",
-      "description": "Behavioral guidelines to reduce common LLM coding mistakes. Use when writing, reviewing, or refactoring code to avoid overcomplication, make surgical changes, surface assumptions, and define verifiable success criteria.",
-      "local_path": "configs/skills/karpathy-guidelines",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": null
-      },
-      "version": {
-        "value": "git:2c606141936f1eeef17fa3043a72095b4765b9c2",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/forrestchang/andrej-karpathy-skills",
-        "repo_url": "https://github.com/forrestchang/andrej-karpathy-skills",
-        "declared_commit": null,
-        "head_commit": "2c606141936f1eeef17fa3043a72095b4765b9c2",
-        "head_error": null
-      }
-    },
-    {
-      "name": "mcp-builder",
-      "description": "Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
-      "local_path": "configs/skills/mcp-builder",
-      "collection": "skills",
-      "license": {
-        "spdx": "Apache-2.0",
-        "source": "license-file",
-        "file": "configs/skills/mcp-builder/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/anthropics/skills",
-        "repo_url": "https://github.com/anthropics/skills",
-        "declared_commit": null,
-        "head_commit": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
-        "head_error": null
-      }
-    },
-    {
-      "name": "minimalist-ui",
-      "description": "Clean editorial-style interfaces. Warm monochrome palette, typographic contrast, flat bento grids, muted pastels. No gradients, no heavy shadows.",
-      "local_path": "configs/skills/minimalist-skill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/minimalist-skill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "native-data-fetching",
-      "description": "Use when implementing or debugging ANY network request, API call, or data fetching. Covers fetch API, React Query, SWR, error handling, caching, offline support, and Expo Router data loaders (`useLoaderData`).",
-      "local_path": "configs/skills/native-data-fetching",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/native-data-fetching/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "full-output-enforcement",
-      "description": "Overrides default LLM truncation behavior. Enforces complete code generation, bans placeholder patterns, and handles token-limit splits cleanly. Apply to any task requiring exhaustive, unabridged output.",
-      "local_path": "configs/skills/output-skill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/output-skill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "ponytail",
-      "description": "Forces the laziest solution that actually works, simplest, shortest, most minimal. Channels a senior dev who has seen everything: question whether the task needs to exist at all (YAGNI), reach for the standard library before custom code, native platform features before dependencies, one line before fifty. Supports intensity levels: lite, full (default), ultra. Use on ANY coding task: writing, adding, refactoring, fixing, reviewing, or designing code, and choosing libraries or dependencies. Also use whenever the user says \"ponytail\", \"be lazy\", \"lazy mode\", \"simplest solution\", \"minimal solution\", \"yagni\", \"do less\", or \"shortest path\", or complains about over-engineering, bloat, boilerplate, or unnecessary dependencies. Do NOT use for non-coding requests (general knowledge, prose, translation, summaries, recipes).",
-      "local_path": "configs/skills/ponytail",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/ponytail/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:40e50d9",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/DietrichGebert/ponytail",
-        "repo_url": "https://github.com/DietrichGebert/ponytail",
-        "declared_commit": "40e50d9",
-        "head_commit": "16f29800fd2681bdf24f3eb4ccffe38be3baec6b",
-        "head_error": null
-      }
-    },
-    {
-      "name": "ponytail-audit",
-      "description": "Whole-repo audit for over-engineering. Like ponytail-review, but scans the entire codebase instead of a diff: a ranked list of what to delete, simplify, or replace with stdlib/native equivalents. Use when the user says \"audit this codebase\", \"audit for over-engineering\", \"what can I delete from this repo\", \"find bloat\", \"ponytail-audit\", or \"/ponytail-audit\". One-shot report, does not apply fixes.",
-      "local_path": "configs/skills/ponytail-audit",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/ponytail-audit/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:40e50d9",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/DietrichGebert/ponytail",
-        "repo_url": "https://github.com/DietrichGebert/ponytail",
-        "declared_commit": "40e50d9",
-        "head_commit": "16f29800fd2681bdf24f3eb4ccffe38be3baec6b",
-        "head_error": null
-      }
-    },
-    {
-      "name": "ponytail-debt",
-      "description": "Harvest every `ponytail:` comment in the codebase into a debt ledger, so the deliberate shortcuts and deferrals ponytail leaves behind get tracked instead of rotting into \"later means never\". Use when the user says \"ponytail debt\", \"/ponytail-debt\", \"what did ponytail defer\", \"list the shortcuts\", \"ponytail ledger\", or \"what did we mark to do later\". One-shot report, changes nothing.",
-      "local_path": "configs/skills/ponytail-debt",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/ponytail-debt/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:40e50d9",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/DietrichGebert/ponytail",
-        "repo_url": "https://github.com/DietrichGebert/ponytail",
-        "declared_commit": "40e50d9",
-        "head_commit": "16f29800fd2681bdf24f3eb4ccffe38be3baec6b",
-        "head_error": null
-      }
-    },
-    {
-      "name": "ponytail-gain",
-      "description": "Show ponytail's measured impact as a compact scoreboard: less code, less cost, more speed, from the benchmark medians. One-shot display, not a persistent mode, and not a per-repo number. Trigger: /ponytail-gain, \"ponytail gain\", \"what does ponytail save\", \"show ponytail impact\", \"ponytail scoreboard\".",
-      "local_path": "configs/skills/ponytail-gain",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/ponytail-gain/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:40e50d9",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/DietrichGebert/ponytail",
-        "repo_url": "https://github.com/DietrichGebert/ponytail",
-        "declared_commit": "40e50d9",
-        "head_commit": "16f29800fd2681bdf24f3eb4ccffe38be3baec6b",
-        "head_error": null
-      }
-    },
-    {
-      "name": "ponytail-help",
-      "description": "Quick-reference card for all ponytail modes, skills, and commands. One-shot display, not a persistent mode. Trigger: /ponytail-help, \"ponytail help\", \"what ponytail commands\", \"how do I use ponytail\".",
-      "local_path": "configs/skills/ponytail-help",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/ponytail-help/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:40e50d9",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/DietrichGebert/ponytail",
-        "repo_url": "https://github.com/DietrichGebert/ponytail",
-        "declared_commit": "40e50d9",
-        "head_commit": "16f29800fd2681bdf24f3eb4ccffe38be3baec6b",
-        "head_error": null
-      }
-    },
-    {
-      "name": "ponytail-review",
-      "description": "Code review focused exclusively on over-engineering. Finds what to delete: reinvented standard library, unneeded dependencies, speculative abstractions, dead flexibility. One line per finding: location, what to cut, what replaces it. Use when the user says \"review for over-engineering\", \"what can we delete\", \"is this over-engineered\", \"simplify review\", or invokes /ponytail-review. Complements correctness-focused review, this one only hunts complexity.",
-      "local_path": "configs/skills/ponytail-review",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/ponytail-review/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:40e50d9",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/DietrichGebert/ponytail",
-        "repo_url": "https://github.com/DietrichGebert/ponytail",
-        "declared_commit": "40e50d9",
-        "head_commit": "16f29800fd2681bdf24f3eb4ccffe38be3baec6b",
-        "head_error": null
-      }
-    },
-    {
-      "name": "prototype",
-      "description": "Build a throwaway prototype to flesh out a design before committing to it. Routes between two branches — a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route. Use when the user wants to prototype, sanity-check a data model or state machine, mock up a UI, explore design options, or says \"prototype this\", \"let me play with it\", \"try a few designs\".",
-      "local_path": "configs/skills/prototype",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/prototype/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": null,
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "react-doctor",
-      "description": "Use when finishing a feature, fixing a bug, before committing React code, or when the user asks to scan, triage, or clean up React diagnostics. Covers lint, accessibility, bundle size, architecture, regression checks, and local triage with React Doctor.",
-      "local_path": "configs/skills/react-doctor",
-      "collection": "skills",
-      "license": {
-        "spdx": "LicenseRef-Million-Modified-MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/react-doctor/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.2.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/millionco/react-doctor/tree/main/skills/react-doctor",
-        "repo_url": "https://github.com/millionco/react-doctor",
-        "declared_commit": "0b64af58b16329c5cae7a210463d2842e34b150d",
-        "head_commit": "b31fd85b9ee469c6b588d4e446f44385466193a2",
-        "head_error": null
-      }
-    },
-    {
-      "name": "redesign-existing-projects",
-      "description": "Upgrades existing websites and apps to premium quality. Audits current design, identifies generic AI patterns, and applies high-end design standards without breaking functionality. Works with any CSS framework or vanilla CSS.",
-      "local_path": "configs/skills/redesign-skill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/redesign-skill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -1642,103 +564,15 @@
         "file": "configs/skills/skill-creator/LICENSE.txt"
       },
       "version": {
-        "value": "git:b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/anthropics/skills",
         "repo_url": "https://github.com/anthropics/skills",
         "declared_commit": null,
-        "head_commit": "b29e7cf65e5cb78a5ac33d582270551bc74a14eb",
-        "head_error": null
-      }
-    },
-    {
-      "name": "high-end-visual-design",
-      "description": "Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows, card structures, and animations that make a website feel expensive. Blocks all the common defaults that make AI designs look cheap or generic.",
-      "local_path": "configs/skills/soft-skill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/soft-skill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "stitch-design-taste",
-      "description": "Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files that enforce premium, anti-generic UI standards — strict typography, calibrated color, asymmetric layouts, perpetual micro-motion, and hardware-accelerated performance.",
-      "local_path": "configs/skills/stitch-skill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/stitch-skill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "design-taste-frontend",
-      "description": "Anti-slop frontend skill for landing pages, portfolios, and redesigns. The agent reads the brief, infers the right design direction, and ships interfaces that do not look templated. Real design systems when applicable, audit-first on redesigns, strict pre-flight check.",
-      "local_path": "configs/skills/taste-skill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/taste-skill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
-      }
-    },
-    {
-      "name": "design-taste-frontend-v1",
-      "description": "The original v1 taste-skill, preserved for projects depending on its exact behavior. The current default is `design-taste-frontend` (v2 experimental), which is a substantial rewrite. Use this v1 install name only if you need exact backward compatibility.",
-      "local_path": "configs/skills/taste-skill-v1",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/taste-skill-v1/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:339afcb",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/Leonxlnx/taste-skill",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "declared_commit": "339afcb",
-        "head_commit": "e988add20dab0fa97d7a76781c48961c8184288e",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/anthropics/skills: fatal: unable to access 'https://github.com/anthropics/skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -1752,81 +586,15 @@
         "file": "configs/skills/tdd/LICENSE.txt"
       },
       "version": {
-        "value": "git:ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": null,
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "to-issues",
-      "description": "Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.",
-      "local_path": "configs/skills/to-issues",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/to-issues/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/to-issues",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": null,
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "to-prd",
-      "description": "Turn the current conversation context into a PRD and publish it to the project issue tracker. Use when user wants to create a PRD from the current context.",
-      "local_path": "configs/skills/to-prd",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/to-prd/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/to-prd",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": null,
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "triage",
-      "description": "Triage issues through a state machine driven by triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent, or manage issue workflow.",
-      "local_path": "configs/skills/triage",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "license-file",
-        "file": "configs/skills/triage/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "source": "origin-head"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/triage",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": null,
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -1847,52 +615,8 @@
         "source_url": "https://github.com/jxnl/dots/tree/master/agents/skills/ultragoal",
         "repo_url": "https://github.com/jxnl/dots",
         "declared_commit": "1eb180fe83e259fc292b8e8766876c9b9b79571e",
-        "head_commit": "34d197b7e2ede7c57d11b601250b42b8a2ae303a",
-        "head_error": null
-      }
-    },
-    {
-      "name": "upgrading-expo",
-      "description": "Guidelines for upgrading Expo SDK versions and fixing dependency issues",
-      "local_path": "configs/skills/upgrading-expo",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/upgrading-expo/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "use-dom",
-      "description": "Use Expo DOM components to run web code in a webview on native and as-is on web. Migrate web code to native incrementally.",
-      "local_path": "configs/skills/use-dom",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/use-dom/LICENSE.txt"
-      },
-      "version": {
-        "value": "1.0.0",
-        "source": "frontmatter"
-      },
-      "origin": {
-        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
-        "repo_url": "https://github.com/expo/skills",
-        "declared_commit": "956a92b",
-        "head_commit": "09eb052410e7f609624cb161ea4cd9576c69cd5d",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/jxnl/dots: fatal: unable to access 'https://github.com/jxnl/dots/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -1906,7 +630,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -1914,28 +638,6 @@
         "repo_url": null,
         "declared_commit": null,
         "head_commit": null,
-        "head_error": null
-      }
-    },
-    {
-      "name": "write-a-skill",
-      "description": "Create new agent skills with proper structure, progressive disclosure, and bundled resources. Use when user wants to create, write, or build a new skill.",
-      "local_path": "configs/skills/write-a-skill",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/write-a-skill/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/v1/write-a-skill",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": "8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
         "head_error": null
       }
     },
@@ -1957,30 +659,8 @@
         "source_url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/writing-great-skills/SKILL.md",
         "repo_url": "https://github.com/mattpocock/skills",
         "declared_commit": "d574778",
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
-      }
-    },
-    {
-      "name": "zoom-out",
-      "description": "Tell the agent to zoom out and give broader context or a higher-level perspective. Use when you're unfamiliar with a section of code or need to understand how it fits into the bigger picture.",
-      "local_path": "configs/skills/zoom-out",
-      "collection": "skills",
-      "license": {
-        "spdx": "MIT",
-        "source": "frontmatter",
-        "file": "configs/skills/zoom-out/LICENSE.txt"
-      },
-      "version": {
-        "value": "git:8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
-        "source": "declared-origin-commit"
-      },
-      "origin": {
-        "source_url": "https://github.com/mattpocock/skills/tree/v1/zoom-out",
-        "repo_url": "https://github.com/mattpocock/skills",
-        "declared_commit": "8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
-        "head_commit": "ed37663cc5fbef691ddfecd080dff42f7e7e350d",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -1994,7 +674,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -2016,7 +696,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -2028,9 +708,9 @@
       }
     },
     {
-      "name": "ios",
-      "description": "iOS and Swift/SwiftUI development guidance, including UI patterns, Liquid Glass styling, performance audits, view refactors, Swift concurrency, and iOS debugging. Use when building or reviewing iOS apps, SwiftUI views, or troubleshooting iOS issues.",
-      "local_path": "configs/stacks/ios",
+      "name": "design",
+      "description": "Route visual design, frontend art direction, motion, image generation, branding, and redesign work to focused design skills. Use when the task is primarily about how an interface or brand should look and feel.",
+      "local_path": "configs/stacks/design",
       "collection": "stack",
       "license": {
         "spdx": "MIT",
@@ -2038,7 +718,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -2047,6 +727,1018 @@
         "declared_commit": null,
         "head_commit": null,
         "head_error": null
+      }
+    },
+    {
+      "name": "apple-design",
+      "description": "Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.",
+      "local_path": "configs/stacks/design/apple-design",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/apple-design/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:56de6f5d6642f761b5e17629fccf53e303b3da9b",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/emilkowalski/skills/tree/main/skills/apple-design",
+        "repo_url": "https://github.com/emilkowalski/skills",
+        "declared_commit": "56de6f5d6642f761b5e17629fccf53e303b3da9b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/emilkowalski/skills: fatal: unable to access 'https://github.com/emilkowalski/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "brandkit",
+      "description": "Premium brand-kit image generation skill for creating high-end brand-guidelines boards, logo systems, identity decks, and visual-world presentations. Trained for minimalist, cinematic, editorial, dark-tech, luxury, cultural, security, gaming, developer-tool, and consumer-app brand systems. Optimized for intentional logo concepting, refined composition, sparse typography, strong symbolic meaning, premium mockups, art-directed imagery, and flexible grid layouts.",
+      "local_path": "configs/stacks/design/brandkit",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/brandkit/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "industrial-brutalist-ui",
+      "description": "Raw mechanical interfaces fusing Swiss typographic print with military terminal aesthetics. Rigid grids, extreme type scale contrast, utilitarian color, analog degradation effects. For data-heavy dashboards, portfolios, or editorial sites that need to feel like declassified blueprints.",
+      "local_path": "configs/stacks/design/brutalist-skill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/brutalist-skill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "emil-design-eng",
+      "description": "This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.",
+      "local_path": "configs/stacks/design/emil-design-eng",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/emil-design-eng/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:ecf66bbd1fb33c25332b6b0e454d08049978284c",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/emilkowalski/skills/tree/main/skills/emil-design-eng",
+        "repo_url": "https://github.com/emilkowalski/skills",
+        "declared_commit": "ecf66bbd1fb33c25332b6b0e454d08049978284c",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/emilkowalski/skills: fatal: unable to access 'https://github.com/emilkowalski/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "frontend-design",
+      "description": "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples include websites, landing pages, dashboards, React components, HTML/CSS layouts, or when styling/beautifying any web UI). Generates creative, polished code and UI design that avoids generic AI aesthetics.",
+      "local_path": "configs/stacks/design/frontend-design",
+      "collection": "stack",
+      "license": {
+        "spdx": "Apache-2.0",
+        "source": "readme-attribution",
+        "file": null
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/anthropics/skills",
+        "repo_url": "https://github.com/anthropics/skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/anthropics/skills: fatal: unable to access 'https://github.com/anthropics/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "gpt-taste",
+      "description": "Elite UX/UI & Advanced GSAP Motion Engineer. Enforces Python-driven true randomization for layout variance, strict AIDA page structure, wide editorial typography (bans 6-line wraps), gapless bento grids, strict GSAP ScrollTriggers (pinning, stacking, scrubbing), inline micro-images, and massive section spacing.",
+      "local_path": "configs/stacks/design/gpt-tasteskill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/gpt-tasteskill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "hallmark",
+      "description": "Anti-AI-slop design skill for greenfield pages, audits, redesigns, and design extraction from URLs or screenshots. Use when the user asks to build a new app or landing page, wants to redesign something, invokes Hallmark by name, or uses audit/redesign/study.",
+      "local_path": "configs/stacks/design/hallmark",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/hallmark/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/nutlope/hallmark",
+        "repo_url": "https://github.com/nutlope/hallmark",
+        "declared_commit": "9aba10e",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/nutlope/hallmark: fatal: unable to access 'https://github.com/nutlope/hallmark/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "image-to-code",
+      "description": "Elite website image-to-code skill for Codex. For visually important web tasks, it must first generate the design image(s) itself, deeply analyze them, then implement the website to match them as closely as possible. In Codex, it must prefer large, readable, section-specific images instead of tiny compressed boards, generate fresh standalone images for sections or detail views instead of cropping old ones, avoid lazy under-generation, avoid cards-inside-cards-inside-cards UI, and keep the hero clean, spacious, readable, and visible on a small laptop.",
+      "local_path": "configs/stacks/design/image-to-code-skill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/image-to-code-skill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "imagegen-frontend-mobile",
+      "description": "Elite mobile app image-generation skill for creating premium, app-native screen concepts and flows. Designed for iOS, Android, and cross-platform mobile products. Prioritizes clean hierarchy, comfortably readable text, strong multi-screen consistency, controlled color palettes, non-generic creative direction, textured surfaces, image-led composition, tasteful custom iconography, and clean phone mockup framing. By default, screens should be shown inside a subtle premium iPhone or similar phone mockup with a visible frame, while the main focus stays on the app content itself. This skill generates images only. It does not write code.",
+      "local_path": "configs/stacks/design/imagegen-frontend-mobile",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/imagegen-frontend-mobile/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "imagegen-frontend-web",
+      "description": "Elite frontend image-direction skill for generating premium, conversion-aware website design references. CRITICAL OUTPUT RULE — generate ONE separate horizontal image FOR EVERY section. A landing page with 8 sections produces 8 images. Never compress multiple sections into one image. Enforces composition variety (not always left-text / right-image), background-image freedom, varied CTAs, varied hero scales (giant / mid / mini minimalist), narrative concept spine, second-read moments, and a single consistent palette across all images. Optimized for landing pages, marketing sites, and product comps that developers or coding models can accurately recreate.",
+      "local_path": "configs/stacks/design/imagegen-frontend-web",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/imagegen-frontend-web/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "minimalist-ui",
+      "description": "Clean editorial-style interfaces. Warm monochrome palette, typographic contrast, flat bento grids, muted pastels. No gradients, no heavy shadows.",
+      "local_path": "configs/stacks/design/minimalist-skill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/minimalist-skill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "redesign-existing-projects",
+      "description": "Upgrades existing websites and apps to premium quality. Audits current design, identifies generic AI patterns, and applies high-end design standards without breaking functionality. Works with any CSS framework or vanilla CSS.",
+      "local_path": "configs/stacks/design/redesign-skill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/redesign-skill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "high-end-visual-design",
+      "description": "Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows, card structures, and animations that make a website feel expensive. Blocks all the common defaults that make AI designs look cheap or generic.",
+      "local_path": "configs/stacks/design/soft-skill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/soft-skill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "stitch-design-taste",
+      "description": "Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files that enforce premium, anti-generic UI standards — strict typography, calibrated color, asymmetric layouts, perpetual micro-motion, and hardware-accelerated performance.",
+      "local_path": "configs/stacks/design/stitch-skill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/stitch-skill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "design-taste-frontend",
+      "description": "Anti-slop frontend skill for landing pages, portfolios, and redesigns. The agent reads the brief, infers the right design direction, and ships interfaces that do not look templated. Real design systems when applicable, audit-first on redesigns, strict pre-flight check.",
+      "local_path": "configs/stacks/design/taste-skill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/taste-skill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "design-taste-frontend-v1",
+      "description": "The original v1 taste-skill, preserved for projects depending on its exact behavior. The current default is `design-taste-frontend` (v2 experimental), which is a substantial rewrite. Use this v1 install name only if you need exact backward compatibility.",
+      "local_path": "configs/stacks/design/taste-skill-v1",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/design/taste-skill-v1/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "engineering",
+      "description": "Route architecture, shell, MCP, prototyping, planning, issue, and release-maintenance work to focused engineering skills. Use for specialized engineering workflows that are not language-stack specific.",
+      "local_path": "configs/stacks/engineering",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": null
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": null,
+        "repo_url": null,
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": null
+      }
+    },
+    {
+      "name": "bash-expert",
+      "description": "Expert Bash help for writing, debugging, and optimizing safe, portable shell one-liners and scripts on macOS/Linux. Use when users ask for Bash or POSIX sh commands, script reviews, ShellCheck fixes, quoting/pipeline issues, process/file automation, or converting requirements into shell scripts.",
+      "local_path": "configs/stacks/engineering/bash-expert",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": null
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": null,
+        "repo_url": null,
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": null
+      }
+    },
+    {
+      "name": "changelog-generator",
+      "description": "Automatically creates user-facing changelogs from git commits by analyzing commit history, categorizing changes, and transforming technical commits into clear, customer-friendly release notes. Turns hours of manual changelog writing into minutes of automated generation.",
+      "local_path": "configs/stacks/engineering/changelog-generator",
+      "collection": "stack",
+      "license": {
+        "spdx": "Apache-2.0",
+        "source": "frontmatter",
+        "file": null
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/ComposioHQ/awesome-claude-skills/tree/master/changelog-generator",
+        "repo_url": "https://github.com/ComposioHQ/awesome-claude-skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/ComposioHQ/awesome-claude-skills: fatal: unable to access 'https://github.com/ComposioHQ/awesome-claude-skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "cli-for-agents",
+      "description": "Designs or reviews CLIs so coding agents can run them reliably: non-interactive flags, layered --help with examples, stdin/pipelines, fast actionable errors, idempotency, dry-run, and predictable structure. Use when building a CLI, adding commands, writing --help, or when the user mentions agents, terminals, or automation-friendly CLIs.",
+      "local_path": "configs/stacks/engineering/cli-for-agents",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/engineering/cli-for-agents/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:21327be",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/cursor/plugins/tree/main/cli-for-agent/skills/cli-for-agents",
+        "repo_url": "https://github.com/cursor/plugins",
+        "declared_commit": "21327be",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/cursor/plugins: fatal: unable to access 'https://github.com/cursor/plugins/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "grill-with-docs",
+      "description": "Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.",
+      "local_path": "configs/stacks/engineering/grill-with-docs",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/engineering/grill-with-docs/LICENSE.txt"
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/grill-with-docs",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "improve-codebase-architecture",
+      "description": "Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable.",
+      "local_path": "configs/stacks/engineering/improve-codebase-architecture",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/engineering/improve-codebase-architecture/LICENSE.txt"
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/improve-codebase-architecture",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "mcp-builder",
+      "description": "Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
+      "local_path": "configs/stacks/engineering/mcp-builder",
+      "collection": "stack",
+      "license": {
+        "spdx": "Apache-2.0",
+        "source": "license-file",
+        "file": "configs/stacks/engineering/mcp-builder/LICENSE.txt"
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/anthropics/skills",
+        "repo_url": "https://github.com/anthropics/skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/anthropics/skills: fatal: unable to access 'https://github.com/anthropics/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "prototype",
+      "description": "Build a throwaway prototype to flesh out a design before committing to it. Routes between two branches — a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route. Use when the user wants to prototype, sanity-check a data model or state machine, mock up a UI, explore design options, or says \"prototype this\", \"let me play with it\", \"try a few designs\".",
+      "local_path": "configs/stacks/engineering/prototype",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/engineering/prototype/LICENSE.txt"
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/prototype",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "to-issues",
+      "description": "Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.",
+      "local_path": "configs/stacks/engineering/to-issues",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/engineering/to-issues/LICENSE.txt"
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/to-issues",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "to-prd",
+      "description": "Turn the current conversation context into a PRD and publish it to the project issue tracker. Use when user wants to create a PRD from the current context.",
+      "local_path": "configs/stacks/engineering/to-prd",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/engineering/to-prd/LICENSE.txt"
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/to-prd",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "triage",
+      "description": "Triage issues through a state machine driven by triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent, or manage issue workflow.",
+      "local_path": "configs/stacks/engineering/triage",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/engineering/triage/LICENSE.txt"
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/main/skills/engineering/triage",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "write-a-skill",
+      "description": "Create new agent skills with proper structure, progressive disclosure, and bundled resources. Use when user wants to create, write, or build a new skill.",
+      "local_path": "configs/stacks/engineering/write-a-skill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/engineering/write-a-skill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/v1/write-a-skill",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": "8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo",
+      "description": "Route Expo application, EAS, native module, styling, deployment, and upgrade work to focused Expo skills. Use when building or operating an Expo or Expo Router project.",
+      "local_path": "configs/stacks/expo",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": null
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": null,
+        "repo_url": null,
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": null
+      }
+    },
+    {
+      "name": "building-native-ui",
+      "description": "Complete guide for building beautiful apps with Expo Router. Covers fundamentals, styling, components, navigation, animations, patterns, and native tabs.",
+      "local_path": "configs/stacks/expo/building-native-ui",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/building-native-ui/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.1",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "eas-update-insights",
+      "description": "Check the health of published EAS Updates: crash rates, install/launch counts, unique users, payload size, and the split between embedded and OTA users per channel. Use when the user asks how an update is performing, whether a rollout is healthy, how many users are on the embedded build vs OTA, or wants to gate CI on update health.",
+      "local_path": "configs/stacks/expo/eas-update-insights",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/eas-update-insights/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo-api-routes",
+      "description": "Guidelines for creating API routes in Expo Router with EAS Hosting",
+      "local_path": "configs/stacks/expo/expo-api-routes",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/expo-api-routes/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo-brownfield",
+      "description": "Integrate Expo and React Native into an existing native iOS or Android app. Use when the user mentions brownfield, embedding React Native in a native app, AAR/XCFramework, or adding Expo to an existing Kotlin/Swift project. Covers both the isolated approach and the integrated approach.",
+      "local_path": "configs/stacks/expo/expo-brownfield",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/expo-brownfield/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:956a92b",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo-cicd-workflows",
+      "description": "Helps understand and write EAS workflow YAML files for Expo projects. Use this skill when the user asks about CI/CD or workflows in an Expo or EAS context, mentions .eas/workflows/, or wants help with EAS build pipelines or deployment automation.",
+      "local_path": "configs/stacks/expo/expo-cicd-workflows",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/expo-cicd-workflows/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo-deployment",
+      "description": "Deploying Expo apps to iOS App Store, Android Play Store, web hosting, and API routes",
+      "local_path": "configs/stacks/expo/expo-deployment",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/expo-deployment/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo-dev-client",
+      "description": "Build and distribute Expo development clients locally or via TestFlight",
+      "local_path": "configs/stacks/expo/expo-dev-client",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/expo-dev-client/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo-module",
+      "description": "Guide for creating and writing Expo native modules and views using the Expo Modules API (Swift, Kotlin, TypeScript). Covers module definition DSL, native views, shared objects, config plugins, lifecycle hooks, autolinking, and type system. Use when building or modifying native modules for Expo.",
+      "local_path": "configs/stacks/expo/expo-module",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/expo-module/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo-tailwind-setup",
+      "description": "Set up Tailwind CSS v4 in Expo with react-native-css and NativeWind v5 for universal styling",
+      "local_path": "configs/stacks/expo/expo-tailwind-setup",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/expo-tailwind-setup/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo-ui-jetpack-compose",
+      "description": "`@expo/ui/jetpack-compose` package lets you use Jetpack Compose Views and modifiers in your app.",
+      "local_path": "configs/stacks/expo/expo-ui-jetpack-compose",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/expo-ui-jetpack-compose/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:956a92b",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "expo-ui-swift-ui",
+      "description": "`@expo/ui/swift-ui` package lets you use SwiftUI Views and modifiers in your app.",
+      "local_path": "configs/stacks/expo/expo-ui-swift-ui",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/expo-ui-swift-ui/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:956a92b",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "native-data-fetching",
+      "description": "Use when implementing or debugging ANY network request, API call, or data fetching. Covers fetch API, React Query, SWR, error handling, caching, offline support, and Expo Router data loaders (`useLoaderData`).",
+      "local_path": "configs/stacks/expo/native-data-fetching",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/native-data-fetching/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "upgrading-expo",
+      "description": "Guidelines for upgrading Expo SDK versions and fixing dependency issues",
+      "local_path": "configs/stacks/expo/upgrading-expo",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/upgrading-expo/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "use-dom",
+      "description": "Use Expo DOM components to run web code in a webview on native and as-is on web. Migrate web code to native incrementally.",
+      "local_path": "configs/stacks/expo/use-dom",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/expo/use-dom/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.0.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "ios",
+      "description": "iOS and Swift/SwiftUI development guidance, including App Clips, haptics, UI patterns, Liquid Glass styling, performance audits, view refactors, Swift concurrency, and iOS debugging. Use when building or reviewing iOS apps, SwiftUI views, or troubleshooting iOS issues.",
+      "local_path": "configs/stacks/ios",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": null
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": null,
+        "repo_url": null,
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": null
+      }
+    },
+    {
+      "name": "add-app-clip",
+      "description": "Add an iOS App Clip target to an Expo app. Use when the user mentions App Clip, AASA, apple-app-site-association, appclips, smart app banner, or wants to ship a lightweight iOS Clip invoked from a URL alongside their parent app.",
+      "local_path": "configs/stacks/ios/add-app-clip",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/ios/add-app-clip/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:956a92b",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/expo/skills/tree/main/plugins/expo/skills",
+        "repo_url": "https://github.com/expo/skills",
+        "declared_commit": "956a92b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/expo/skills: fatal: unable to access 'https://github.com/expo/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "audio-math-haptics",
+      "description": "Derive and implement first-principles audio-coupled haptic and kinetic UI feedback. Use when designing, reviewing, or coding haptics/audio for mobile apps, native iOS/Android, React Native/Expo, SwiftUI, games, detent pickers, toggles, sliders, page curls, scroll gestures, wallet/signature flows, Solana transactions, backend/realtime state changes, confirmations, settlements, and semantic UI events where feedback should follow signal math instead of ad hoc vibration calls.",
+      "local_path": "configs/stacks/ios/audio-math-haptics",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/ios/audio-math-haptics/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:dc2ba99",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/heyAyushh/audio-math-haptics",
+        "repo_url": "https://github.com/heyAyushh/audio-math-haptics",
+        "declared_commit": "dc2ba99",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/heyAyushh/audio-math-haptics: fatal: unable to access 'https://github.com/heyAyushh/audio-math-haptics/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2060,15 +1752,15 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills/tree/main/ios-debugger-agent",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Dimillian/Skills: fatal: unable to access 'https://github.com/Dimillian/Skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2082,15 +1774,15 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills/tree/main/swift-concurrency-expert",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Dimillian/Skills: fatal: unable to access 'https://github.com/Dimillian/Skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2104,15 +1796,15 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills/tree/main/swiftui-liquid-glass",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Dimillian/Skills: fatal: unable to access 'https://github.com/Dimillian/Skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2126,15 +1818,15 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills/tree/main/swiftui-performance-audit",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Dimillian/Skills: fatal: unable to access 'https://github.com/Dimillian/Skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2148,15 +1840,15 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills/tree/main/swiftui-ui-patterns",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Dimillian/Skills: fatal: unable to access 'https://github.com/Dimillian/Skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2170,15 +1862,15 @@
         "file": null
       },
       "version": {
-        "value": "git:05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/Dimillian/Skills/tree/main/swiftui-view-refactor",
         "repo_url": "https://github.com/Dimillian/Skills",
         "declared_commit": null,
-        "head_commit": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Dimillian/Skills: fatal: unable to access 'https://github.com/Dimillian/Skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2192,7 +1884,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -2214,7 +1906,7 @@
         "file": null
       },
       "version": {
-        "value": "local-git:aaf1f2dfed33220e530f3edfb686adf14fe8351a",
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
         "source": "local-repo-head"
       },
       "origin": {
@@ -2265,8 +1957,8 @@
         "source_url": "https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices",
         "repo_url": "https://github.com/vercel-labs/agent-skills",
         "declared_commit": "7c180d9044c9ae2b442b567aad4e42a28dd5ed62",
-        "head_commit": "7c180d9044c9ae2b442b567aad4e42a28dd5ed62",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/vercel-labs/agent-skills: fatal: unable to access 'https://github.com/vercel-labs/agent-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2287,8 +1979,184 @@
         "source_url": "https://github.com/vercel-labs/web-interface-guidelines",
         "repo_url": "https://github.com/vercel-labs/web-interface-guidelines",
         "declared_commit": "4e799d45c17aec1498c269287a83b9dba22b966b",
-        "head_commit": "4e799d45c17aec1498c269287a83b9dba22b966b",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/vercel-labs/web-interface-guidelines: fatal: unable to access 'https://github.com/vercel-labs/web-interface-guidelines/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "productivity",
+      "description": "Route communication modes, learning workflows, retrospectives, output discipline, and perspective shifts to focused productivity skills.",
+      "local_path": "configs/stacks/productivity",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": null
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": null,
+        "repo_url": null,
+        "declared_commit": null,
+        "head_commit": null,
         "head_error": null
+      }
+    },
+    {
+      "name": "caveman",
+      "description": "Ultra-compressed communication mode. Cuts token usage ~75% by dropping filler, articles, and pleasantries while keeping full technical accuracy. Use when user says \"caveman mode\", \"talk like caveman\", \"use caveman\", \"less tokens\", \"be brief\", or invokes /caveman.",
+      "local_path": "configs/stacks/productivity/caveman",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/productivity/caveman/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/v1/caveman",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": "8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "create-learning-path",
+      "description": "Build a personalized learning roadmap with milestones and practice checkpoints",
+      "local_path": "configs/stacks/productivity/create-learning-path",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/productivity/create-learning-path/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:21327be",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/cursor/plugins/tree/main/teaching/skills/create-learning-path",
+        "repo_url": "https://github.com/cursor/plugins",
+        "declared_commit": "21327be",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/cursor/plugins: fatal: unable to access 'https://github.com/cursor/plugins/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "grill-me",
+      "description": "Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when user wants to stress-test a plan, get grilled on their design, or mentions \"grill me\".",
+      "local_path": "configs/stacks/productivity/grill-me",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/productivity/grill-me/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/v1/grill-me",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": "8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "full-output-enforcement",
+      "description": "Overrides default LLM truncation behavior. Enforces complete code generation, bans placeholder patterns, and handles token-limit splits cleanly. Apply to any task requiring exhaustive, unabridged output.",
+      "local_path": "configs/stacks/productivity/output-skill",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/productivity/output-skill/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:339afcb",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/Leonxlnx/taste-skill",
+        "repo_url": "https://github.com/Leonxlnx/taste-skill",
+        "declared_commit": "339afcb",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/Leonxlnx/taste-skill: fatal: unable to access 'https://github.com/Leonxlnx/taste-skill/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "run-learning-retrospective",
+      "description": "Evaluate learning progress, identify blockers, and adjust the learning plan",
+      "local_path": "configs/stacks/productivity/run-learning-retrospective",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/productivity/run-learning-retrospective/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:21327be",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/cursor/plugins/tree/main/teaching/skills/run-learning-retrospective",
+        "repo_url": "https://github.com/cursor/plugins",
+        "declared_commit": "21327be",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/cursor/plugins: fatal: unable to access 'https://github.com/cursor/plugins/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "what-did-i-get-done",
+      "description": "Summarize authored commits over a user-specified time period into a concise update",
+      "local_path": "configs/stacks/productivity/what-did-i-get-done",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/productivity/what-did-i-get-done/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:21327be",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/what-did-i-get-done",
+        "repo_url": "https://github.com/cursor/plugins",
+        "declared_commit": "21327be",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/cursor/plugins: fatal: unable to access 'https://github.com/cursor/plugins/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "zoom-out",
+      "description": "Tell the agent to zoom out and give broader context or a higher-level perspective. Use when you're unfamiliar with a section of code or need to understand how it fits into the bigger picture.",
+      "local_path": "configs/stacks/productivity/zoom-out",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/productivity/zoom-out/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/mattpocock/skills/tree/v1/zoom-out",
+        "repo_url": "https://github.com/mattpocock/skills",
+        "declared_commit": "8a54bc33a374ffbed769d7c3ea1c4a0e82034cbd",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/mattpocock/skills: fatal: unable to access 'https://github.com/mattpocock/skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2314,6 +2182,248 @@
       }
     },
     {
+      "name": "review",
+      "description": "Route code cleanup, maintainability, React diagnostics, and over-engineering review to focused review modes. Use when auditing code quality or asking for a particular review lens.",
+      "local_path": "configs/stacks/review",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": null
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": null,
+        "repo_url": null,
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": null
+      }
+    },
+    {
+      "name": "deslop",
+      "description": "Remove AI-generated code slop and clean up code style",
+      "local_path": "configs/stacks/review/deslop",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/review/deslop/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:21327be",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/deslop",
+        "repo_url": "https://github.com/cursor/plugins",
+        "declared_commit": "21327be",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/cursor/plugins: fatal: unable to access 'https://github.com/cursor/plugins/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "karpathy-guidelines",
+      "description": "Behavioral guidelines to reduce common LLM coding mistakes. Use when writing, reviewing, or refactoring code to avoid overcomplication, make surgical changes, surface assumptions, and define verifiable success criteria.",
+      "local_path": "configs/stacks/review/karpathy-guidelines",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": null
+      },
+      "version": {
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
+      },
+      "origin": {
+        "source_url": "https://github.com/forrestchang/andrej-karpathy-skills",
+        "repo_url": "https://github.com/forrestchang/andrej-karpathy-skills",
+        "declared_commit": null,
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/forrestchang/andrej-karpathy-skills: fatal: unable to access 'https://github.com/forrestchang/andrej-karpathy-skills/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "ponytail",
+      "description": "Forces the laziest solution that actually works, simplest, shortest, most minimal. Channels a senior dev who has seen everything: question whether the task needs to exist at all (YAGNI), reach for the standard library before custom code, native platform features before dependencies, one line before fifty. Supports intensity levels: lite, full (default), ultra. Use on ANY coding task: writing, adding, refactoring, fixing, reviewing, or designing code, and choosing libraries or dependencies. Also use whenever the user says \"ponytail\", \"be lazy\", \"lazy mode\", \"simplest solution\", \"minimal solution\", \"yagni\", \"do less\", or \"shortest path\", or complains about over-engineering, bloat, boilerplate, or unnecessary dependencies. Do NOT use for non-coding requests (general knowledge, prose, translation, summaries, recipes).",
+      "local_path": "configs/stacks/review/ponytail",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/review/ponytail/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:40e50d9",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/DietrichGebert/ponytail",
+        "repo_url": "https://github.com/DietrichGebert/ponytail",
+        "declared_commit": "40e50d9",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/DietrichGebert/ponytail: fatal: unable to access 'https://github.com/DietrichGebert/ponytail/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "ponytail-audit",
+      "description": "Whole-repo audit for over-engineering. Like ponytail-review, but scans the entire codebase instead of a diff: a ranked list of what to delete, simplify, or replace with stdlib/native equivalents. Use when the user says \"audit this codebase\", \"audit for over-engineering\", \"what can I delete from this repo\", \"find bloat\", \"ponytail-audit\", or \"/ponytail-audit\". One-shot report, does not apply fixes.",
+      "local_path": "configs/stacks/review/ponytail-audit",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/review/ponytail-audit/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:40e50d9",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/DietrichGebert/ponytail",
+        "repo_url": "https://github.com/DietrichGebert/ponytail",
+        "declared_commit": "40e50d9",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/DietrichGebert/ponytail: fatal: unable to access 'https://github.com/DietrichGebert/ponytail/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "ponytail-debt",
+      "description": "Harvest every `ponytail:` comment in the codebase into a debt ledger, so the deliberate shortcuts and deferrals ponytail leaves behind get tracked instead of rotting into \"later means never\". Use when the user says \"ponytail debt\", \"/ponytail-debt\", \"what did ponytail defer\", \"list the shortcuts\", \"ponytail ledger\", or \"what did we mark to do later\". One-shot report, changes nothing.",
+      "local_path": "configs/stacks/review/ponytail-debt",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/review/ponytail-debt/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:40e50d9",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/DietrichGebert/ponytail",
+        "repo_url": "https://github.com/DietrichGebert/ponytail",
+        "declared_commit": "40e50d9",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/DietrichGebert/ponytail: fatal: unable to access 'https://github.com/DietrichGebert/ponytail/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "ponytail-gain",
+      "description": "Show ponytail's measured impact as a compact scoreboard: less code, less cost, more speed, from the benchmark medians. One-shot display, not a persistent mode, and not a per-repo number. Trigger: /ponytail-gain, \"ponytail gain\", \"what does ponytail save\", \"show ponytail impact\", \"ponytail scoreboard\".",
+      "local_path": "configs/stacks/review/ponytail-gain",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/review/ponytail-gain/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:40e50d9",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/DietrichGebert/ponytail",
+        "repo_url": "https://github.com/DietrichGebert/ponytail",
+        "declared_commit": "40e50d9",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/DietrichGebert/ponytail: fatal: unable to access 'https://github.com/DietrichGebert/ponytail/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "ponytail-help",
+      "description": "Quick-reference card for all ponytail modes, skills, and commands. One-shot display, not a persistent mode. Trigger: /ponytail-help, \"ponytail help\", \"what ponytail commands\", \"how do I use ponytail\".",
+      "local_path": "configs/stacks/review/ponytail-help",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/review/ponytail-help/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:40e50d9",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/DietrichGebert/ponytail",
+        "repo_url": "https://github.com/DietrichGebert/ponytail",
+        "declared_commit": "40e50d9",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/DietrichGebert/ponytail: fatal: unable to access 'https://github.com/DietrichGebert/ponytail/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "ponytail-review",
+      "description": "Code review focused exclusively on over-engineering. Finds what to delete: reinvented standard library, unneeded dependencies, speculative abstractions, dead flexibility. One line per finding: location, what to cut, what replaces it. Use when the user says \"review for over-engineering\", \"what can we delete\", \"is this over-engineered\", \"simplify review\", or invokes /ponytail-review. Complements correctness-focused review, this one only hunts complexity.",
+      "local_path": "configs/stacks/review/ponytail-review",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "license-file",
+        "file": "configs/stacks/review/ponytail-review/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:40e50d9",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/DietrichGebert/ponytail",
+        "repo_url": "https://github.com/DietrichGebert/ponytail",
+        "declared_commit": "40e50d9",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/DietrichGebert/ponytail: fatal: unable to access 'https://github.com/DietrichGebert/ponytail/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "react-doctor",
+      "description": "Use when finishing a feature, fixing a bug, before committing React code, or when the user asks to scan, triage, or clean up React diagnostics. Covers lint, accessibility, bundle size, architecture, regression checks, and local triage with React Doctor.",
+      "local_path": "configs/stacks/review/react-doctor",
+      "collection": "stack",
+      "license": {
+        "spdx": "LicenseRef-Million-Modified-MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/review/react-doctor/LICENSE.txt"
+      },
+      "version": {
+        "value": "1.2.0",
+        "source": "frontmatter"
+      },
+      "origin": {
+        "source_url": "https://github.com/millionco/react-doctor/tree/main/skills/react-doctor",
+        "repo_url": "https://github.com/millionco/react-doctor",
+        "declared_commit": "0b64af58b16329c5cae7a210463d2842e34b150d",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/millionco/react-doctor: fatal: unable to access 'https://github.com/millionco/react-doctor/': Could not resolve host: github.com\n"
+      }
+    },
+    {
+      "name": "thermo-nuclear-code-quality-review",
+      "description": "Run an extremely strict maintainability review for abstraction quality, giant files, and spaghetti-condition growth. Use for a thermo-nuclear code quality review, thermonuclear review, deep code quality audit, or especially harsh maintainability review.",
+      "local_path": "configs/stacks/review/thermo-nuclear-code-quality-review",
+      "collection": "stack",
+      "license": {
+        "spdx": "MIT",
+        "source": "frontmatter",
+        "file": "configs/stacks/review/thermo-nuclear-code-quality-review/LICENSE.txt"
+      },
+      "version": {
+        "value": "git:21327be",
+        "source": "declared-origin-commit"
+      },
+      "origin": {
+        "source_url": "https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review",
+        "repo_url": "https://github.com/cursor/plugins",
+        "declared_commit": "21327be",
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/cursor/plugins: fatal: unable to access 'https://github.com/cursor/plugins/': Could not resolve host: github.com\n"
+      }
+    },
+    {
       "name": "rust",
       "description": "Provides Rust coding best practices for structure, patterns, performance, and error handling. Use when writing or reviewing Rust code, or when the user asks for Rust style guidance.",
       "local_path": "configs/stacks/rust",
@@ -2324,15 +2434,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2346,15 +2456,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2368,15 +2478,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2390,15 +2500,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2412,15 +2522,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2434,15 +2544,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2456,15 +2566,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2478,15 +2588,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2500,15 +2610,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2522,15 +2632,15 @@
         "file": null
       },
       "version": {
-        "value": "git:fa60f7931223646fb71c4586b4a6c8545016076a",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/actionbook/rust-skills/tree/main/skills",
         "repo_url": "https://github.com/actionbook/rust-skills",
         "declared_commit": null,
-        "head_commit": "fa60f7931223646fb71c4586b4a6c8545016076a",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/actionbook/rust-skills: fatal: unable to access 'https://github.com/actionbook/rust-skills/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2544,15 +2654,15 @@
         "file": null
       },
       "version": {
-        "value": "git:9fe309a516ca0d0639bbe18f9f3c8699142f04a2",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/solana-foundation/solana-dev-skill",
         "repo_url": "https://github.com/solana-foundation/solana-dev-skill",
         "declared_commit": null,
-        "head_commit": "9fe309a516ca0d0639bbe18f9f3c8699142f04a2",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/solana-foundation/solana-dev-skill: fatal: unable to access 'https://github.com/solana-foundation/solana-dev-skill/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2588,15 +2698,15 @@
         "file": null
       },
       "version": {
-        "value": "git:8fbf26908531c127a6076be0e55fbe17b57fb2d8",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/sanjeed5/awesome-cursor-rules-mdc",
         "repo_url": "https://github.com/sanjeed5/awesome-cursor-rules-mdc",
         "declared_commit": null,
-        "head_commit": "8fbf26908531c127a6076be0e55fbe17b57fb2d8",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/sanjeed5/awesome-cursor-rules-mdc: fatal: unable to access 'https://github.com/sanjeed5/awesome-cursor-rules-mdc/': Could not resolve host: github.com\n"
       }
     },
     {
@@ -2610,22 +2720,22 @@
         "file": null
       },
       "version": {
-        "value": "git:8fbf26908531c127a6076be0e55fbe17b57fb2d8",
-        "source": "origin-head"
+        "value": "local-git:c060333d5441ca89e6260a017cb26aad9e8e1526",
+        "source": "local-repo-head"
       },
       "origin": {
         "source_url": "https://github.com/sanjeed5/awesome-cursor-rules-mdc",
         "repo_url": "https://github.com/sanjeed5/awesome-cursor-rules-mdc",
         "declared_commit": null,
-        "head_commit": "8fbf26908531c127a6076be0e55fbe17b57fb2d8",
-        "head_error": null
+        "head_commit": null,
+        "head_error": "git ls-remote failed for https://github.com/sanjeed5/awesome-cursor-rules-mdc: fatal: unable to access 'https://github.com/sanjeed5/awesome-cursor-rules-mdc/': Could not resolve host: github.com\n"
       }
     }
   ],
   "hooks": [
     {
       "name": "continual-learning",
-      "local_path": "configs/cursor-plugins/hooks/continual-learning",
+      "local_path": "configs/plugins/cursor/hooks/continual-learning",
       "source": "cursor-plugin"
     }
   ],

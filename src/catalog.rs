@@ -118,6 +118,16 @@ impl Category {
         }
     }
 
+    pub fn source_path(self, root: &Path) -> PathBuf {
+        let configs = root.join(CONFIGS_DIR);
+        match self {
+            Category::Stack => configs.join("stacks"),
+            Category::CursorPlugins => configs.join("plugins").join("cursor"),
+            Category::CodexSkills | Category::CodexPlugins => configs.join("plugins").join("codex"),
+            _ => configs.join(self.install_value()),
+        }
+    }
+
     pub fn label(self) -> &'static str {
         match self {
             Category::Commands => "Commands",
@@ -214,13 +224,10 @@ impl Category {
     }
 
     pub fn source_exists(self, root: &Path) -> bool {
-        match self {
-            Category::Stack => root.join(CONFIGS_DIR).join("stacks").is_dir(),
-            Category::Hooks => hooks_source_exists(root),
-            Category::CursorPlugins => root.join(CONFIGS_DIR).join("cursor-plugins").is_dir(),
-            Category::CodexSkills => root.join(CONFIGS_DIR).join("codex-skills").is_dir(),
-            Category::CodexPlugins => root.join(CONFIGS_DIR).join("codex-plugins").is_dir(),
-            _ => root.join(CONFIGS_DIR).join(self.install_value()).is_dir(),
+        if self == Category::Hooks {
+            hooks_source_exists(root)
+        } else {
+            self.source_path(root).is_dir()
         }
     }
 }
@@ -363,9 +370,8 @@ fn discover_mcp_servers(root: &Path) -> Result<Vec<String>> {
 }
 
 fn discover_codex_plugins(root: &Path) -> Result<Vec<String>> {
-    let path = root
-        .join(CONFIGS_DIR)
-        .join("codex-plugins")
+    let path = Category::CodexPlugins
+        .source_path(root)
         .join(CODEX_PLUGINS_CONFIG_FILE);
     if !path.is_file() {
         return Ok(Vec::new());
@@ -385,7 +391,7 @@ fn discover_hook_packages(root: &Path) -> Result<Vec<HookPackage>> {
     let generic_hooks = root.join(CONFIGS_DIR).join("hooks");
     append_hook_packages(&mut packages, &generic_hooks, HookSource::Generic)?;
 
-    let cursor_hooks = root.join(CONFIGS_DIR).join("cursor-plugins").join("hooks");
+    let cursor_hooks = Category::CursorPlugins.source_path(root).join("hooks");
     append_hook_packages(&mut packages, &cursor_hooks, HookSource::CursorPlugin)?;
 
     packages.sort_by(|left, right| left.path.cmp(&right.path));
@@ -394,9 +400,8 @@ fn discover_hook_packages(root: &Path) -> Result<Vec<HookPackage>> {
 
 fn hooks_source_exists(root: &Path) -> bool {
     root.join(CONFIGS_DIR).join("hooks").is_dir()
-        || root
-            .join(CONFIGS_DIR)
-            .join("cursor-plugins")
+        || Category::CursorPlugins
+            .source_path(root)
             .join("hooks")
             .is_dir()
 }
@@ -425,8 +430,8 @@ fn count_skill_files(root: &Path) -> Result<usize> {
     let mut paths = BTreeSet::new();
     let roots = [
         root.join(CONFIGS_DIR).join("skills"),
-        root.join(CONFIGS_DIR).join("codex-skills").join("skills"),
-        root.join(CONFIGS_DIR).join("cursor-plugins").join("skills"),
+        Category::CodexSkills.source_path(root).join("skills"),
+        Category::CursorPlugins.source_path(root).join("skills"),
         root.join(CONFIGS_DIR).join("stacks"),
     ];
     for path in roots {
@@ -477,15 +482,31 @@ mod tests {
     }
 
     #[test]
+    fn plugin_categories_map_to_editor_source_roots() {
+        let root = Path::new("/repo");
+        assert_eq!(
+            Category::CursorPlugins.source_path(root),
+            root.join("configs/plugins/cursor")
+        );
+        assert_eq!(
+            Category::CodexSkills.source_path(root),
+            root.join("configs/plugins/codex")
+        );
+        assert_eq!(
+            Category::CodexPlugins.source_path(root),
+            root.join("configs/plugins/codex")
+        );
+    }
+
+    #[test]
     fn cursor_plugin_hooks_enable_cursor_hooks_only() {
         let unique = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .expect("test clock should be valid")
             .as_nanos();
         let root = std::env::temp_dir().join(format!("stacc-catalog-hooks-{unique}"));
-        let hook_dir = root
-            .join(CONFIGS_DIR)
-            .join("cursor-plugins")
+        let hook_dir = Category::CursorPlugins
+            .source_path(&root)
             .join("hooks")
             .join("continual-learning");
         fs::create_dir_all(&hook_dir).expect("hook dir should be created");

@@ -820,20 +820,14 @@ fn syncable_skill_sources(root: &Path, editor: Editor) -> Result<Vec<SkillSource
         append_skill_source_packages(
             &mut sources,
             Category::CursorPlugins,
-            &root
-                .join(CONFIGS_DIR)
-                .join(Category::CursorPlugins.install_value())
-                .join(SKILLS_DIR),
+            &Category::CursorPlugins.source_path(root).join(SKILLS_DIR),
         )?;
     }
     if editor == Editor::Codex {
         append_skill_source_packages(
             &mut sources,
             Category::CodexSkills,
-            &root
-                .join(CONFIGS_DIR)
-                .join(Category::CodexSkills.install_value())
-                .join(SKILLS_DIR),
+            &Category::CodexSkills.source_path(root).join(SKILLS_DIR),
         )?;
     }
 
@@ -1461,10 +1455,7 @@ fn install_cursor_plugins(request: &InstallRequest, plan: &mut InstallPlan) -> R
     if plan.editor != Editor::Cursor {
         anyhow::bail!("cursor-plugins category is only supported for Cursor");
     }
-    let source = request
-        .root
-        .join(CONFIGS_DIR)
-        .join(Category::CursorPlugins.install_value());
+    let source = Category::CursorPlugins.source_path(&request.root);
     let skills = source.join(SKILLS_DIR);
     if skills.is_dir() {
         let destination = skills_root_for(plan.editor, plan.scope, &plan.target_root)?;
@@ -1499,10 +1490,8 @@ fn install_codex_skills(request: &InstallRequest, plan: &mut InstallPlan) -> Res
     if plan.editor != Editor::Codex {
         anyhow::bail!("codex-skills category is only supported for Codex");
     }
-    let source = request
-        .root
-        .join(CONFIGS_DIR)
-        .join(Category::CodexSkills.install_value())
+    let source = Category::CodexSkills
+        .source_path(&request.root)
         .join(SKILLS_DIR);
     if source.is_dir() {
         let destination = skills_root_for(plan.editor, plan.scope, &plan.target_root)?;
@@ -1583,10 +1572,8 @@ fn selected_codex_plugins(request: &InstallRequest) -> Result<Vec<SelectedCodexP
 }
 
 fn read_codex_plugin_catalog(request: &InstallRequest) -> Result<CodexPluginCatalog> {
-    let path = request
-        .root
-        .join(CONFIGS_DIR)
-        .join(Category::CodexPlugins.install_value())
+    let path = Category::CodexPlugins
+        .source_path(&request.root)
         .join(CODEX_PLUGINS_CONFIG_FILE);
     let contents =
         fs::read_to_string(&path).with_context(|| format!("failed to read {}", path.display()))?;
@@ -3223,9 +3210,8 @@ mod tests {
 
     fn write_codex_plugin_catalog(root: &Path) {
         write_test_file(
-            &root
-                .join(CONFIGS_DIR)
-                .join("codex-plugins")
+            &Category::CodexPlugins
+                .source_path(root)
                 .join(CODEX_PLUGINS_CONFIG_FILE),
             r#"{
               "plugins": {

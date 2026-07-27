@@ -18,7 +18,7 @@ const STACC_BUNDLE_ROOT_ENV: &str = "STACC_BUNDLE_ROOT";
 
 const JSON_FILES: [&str; 4] = [
     "configs/mcps/mcp.json",
-    "configs/codex-plugins/plugins.json",
+    "configs/plugins/codex/plugins.json",
     "configs/stacc-panel.json",
     "configs/metadata/skills.lock.json",
 ];

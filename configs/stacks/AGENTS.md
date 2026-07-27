@@ -2,13 +2,14 @@
 
 ## PURPOSE
 
-`configs/stacks/` is the canonical source for framework- and language-specific
-bundles installed by the `stack` category. Each immediate child directory is one
-selectable stack.
+`configs/stacks/` is the canonical source for focused domain, workflow,
+framework, and language bundles installed by the `stack` category. Each
+immediate child directory is one selectable stack.
 
 ## PACKAGE BOUNDARY
 
-- `bun/`, `databases/`, `ios/`, `nextjs/`, `react-native/`, `rust/`, `solana/`,
+- `bun/`, `databases/`, `design/`, `engineering/`, `expo/`, `ios/`, `nextjs/`,
+  `productivity/`, `react-native/`, `review/`, `rust/`, `solana/`,
   `turborepo/`, and `typescript/` are the selectable units.
 - The installer discovers only those immediate children and copies a selected
   directory wholesale into the destination skill root.

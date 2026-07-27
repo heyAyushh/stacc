@@ -15,10 +15,11 @@ child guides add detail only for their subtree.
 | --- | --- | --- |
 | CLI, TUI, install plans, manifests, metadata | `src/` | `src/AGENTS.md` |
 | Editor-neutral skills | `configs/skills/` | `configs/skills/AGENTS.md` |
-| Framework/language bundles | `configs/stacks/` | `configs/stacks/AGENTS.md` |
-| Orchestration plugin | `configs/cursor-plugins/skills/orchestrate/` | local `AGENTS.md` |
+| Focused domain/framework bundles | `configs/stacks/` | `configs/stacks/AGENTS.md` |
+| Editor-specific adapters | `configs/plugins/` | `configs/plugins/AGENTS.md` |
+| Orchestration plugin | `configs/plugins/cursor/skills/orchestrate/` | local `AGENTS.md` |
 | MCP catalog | `configs/mcps/mcp.json` | this file |
-| Codex plugin catalog | `configs/codex-plugins/plugins.json` | this file |
+| Codex plugin catalog | `configs/plugins/codex/plugins.json` | this file |
 | Landing page and documentation | `docs/` | `docs/AGENTS.md` |
 | Bootstrap compatibility | `install.sh` | this file |
 
@@ -43,7 +44,7 @@ child guides add detail only for their subtree.
 - Managed update and uninstall require matching
   `<target-root>/.stacc/manifest.json` entries. Never scan arbitrary editor
   folders as if stacc owned them.
-- `configs/codex-plugins/plugins.json` is an opt-in, Codex-global reference
+- `configs/plugins/codex/plugins.json` is an opt-in, Codex-global reference
   catalog. Do not vendor plugin payloads into this repository.
 - JSON MCP targets merge recursively; Codex TOML uses `toml_edit`; AMP MCP
   settings remain nested under `amp.mcpServers`.
