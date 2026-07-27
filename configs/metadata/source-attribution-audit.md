@@ -59,12 +59,13 @@ Freshness:
 | `configs/cursor-plugins/skills/what-did-i-get-done/` | `cursor/plugins/cursor-team-kit/skills/what-did-i-get-done` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/add-app-clip/` | `expo/skills/plugins/expo/skills/add-app-clip` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/agent-browser/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
+| `configs/skills/apple-design/` | `emilkowalski/skills/skills/apple-design` | `exact-current` | `MIT` | `yes` | Imported at `56de6f5`; upstream path and repository MIT license verified. |
 | `configs/skills/audio-math-haptics/` | `heyAyushh/audio-math-haptics/skill/audio-math-haptics` | `exact-current` | `MIT` | `no` | Current upstream path found; see source mapping. |
 | `configs/skills/bash-expert/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
 | `configs/skills/brandkit/` | `Leonxlnx/taste-skill/skills/brandkit` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/brutalist-skill/` | `Leonxlnx/taste-skill/skills/brutalist-skill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/building-native-ui/` | `expo/skills/plugins/expo/skills/building-native-ui` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
-| `configs/skills/caveman/` | `mattpocock/skills@v1/caveman` | `historical-exact` | `MIT` | `no` | Local `SKILL.md` and `LICENSE.txt` Git blobs exactly match the pinned `v1` branch at `8a54bc3`. |
+| `configs/skills/caveman/` | `mattpocock/skills@v1/caveman` | `historical-exact` | `MIT` | `yes` | Local `SKILL.md` and `LICENSE.txt` Git blobs exactly match the pinned `v1` branch at `8a54bc3`; repository default HEAD is newer. |
 | `configs/skills/changelog-generator/` | `ComposioHQ/awesome-claude-skills/changelog-generator` | `exact-current` | `Apache-2.0` | `not pinned` | Current upstream path found; see source mapping. |
 | `configs/skills/diagnose/` | `mattpocock/skills/skills/engineering/diagnosing-bugs` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
 | `configs/skills/eas-update-insights/` | `expo/skills/plugins/expo/skills/eas-update-insights` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
@@ -82,7 +83,7 @@ Freshness:
 | `configs/skills/frontend-design/` | `anthropics/skills/skills/frontend-design` | `exact-current` | `Apache-2.0` | `not pinned` | Current upstream path found; see source mapping. |
 | `configs/skills/gpt-tasteskill/` | `Leonxlnx/taste-skill/skills/gpt-tasteskill` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/gui-automation/` | `trycua/cua/skills/gui-automation` | `exact-current` | `MIT` | `yes` | Imported at `73fe822`; current upstream path and MIT license found. |
-| `configs/skills/grill-me/` | `mattpocock/skills@v1/grill-me` | `historical-exact` | `MIT` | `no` | Local `SKILL.md` Git blob exactly matches the pinned `v1` branch at `8a54bc3`. |
+| `configs/skills/grill-me/` | `mattpocock/skills@v1/grill-me` | `historical-exact` | `MIT` | `yes` | Local `SKILL.md` Git blob exactly matches the pinned `v1` branch at `8a54bc3`; repository default HEAD is newer. |
 | `configs/skills/grill-with-docs/` | `mattpocock/skills/skills/engineering/grill-with-docs` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
 | `configs/skills/hallmark/` | `nutlope/hallmark/skills/hallmark` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/handoff/` | `mattpocock/skills/skills/productivity/handoff` | `exact-current` | `MIT` | `not pinned` | Current upstream path found; see source mapping. |
@@ -117,9 +118,9 @@ Freshness:
 | `configs/skills/upgrading-expo/` | `expo/skills/plugins/expo/skills/upgrading-expo` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/use-dom/` | `expo/skills/plugins/expo/skills/use-dom` | `exact-current` | `MIT` | `yes` | Current upstream path found; see source mapping. |
 | `configs/skills/using-git-worktrees/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
-| `configs/skills/write-a-skill/` | `mattpocock/skills@v1/write-a-skill` | `historical-exact` | `MIT` | `no` | Local `SKILL.md` Git blob exactly matches the pinned `v1` branch at `8a54bc3`. |
+| `configs/skills/write-a-skill/` | `mattpocock/skills@v1/write-a-skill` | `historical-exact` | `MIT` | `yes` | Local `SKILL.md` Git blob exactly matches the pinned `v1` branch at `8a54bc3`; repository default HEAD is newer. |
 | `configs/skills/writing-great-skills/` | `mattpocock/skills/skills/productivity/writing-great-skills` | `exact-current` | `MIT` | `yes` | Imported at `d574778`; current upstream path and MIT license found. |
-| `configs/skills/zoom-out/` | `mattpocock/skills@v1/zoom-out` | `historical-adapted` | `MIT` | `no` | Adapted from the pinned `v1` package at `8a54bc3`; local frontmatter differs while the instruction payload is retained. |
+| `configs/skills/zoom-out/` | `mattpocock/skills@v1/zoom-out` | `historical-adapted` | `MIT` | `yes` | Adapted from the pinned `v1` package at `8a54bc3`; local frontmatter differs and repository default HEAD is newer. |
 | `configs/stacks/bun/` | `local stacc` | `local-original` | `MIT AND CC0-1.0` | `n/a` | Stacc-authored skill package with no external freshness target. |
 | `configs/stacks/databases/` | `local stacc` | `local-original` | `MIT AND CC0-1.0` | `n/a` | Stacc-authored skill package with no external freshness target. |
 | `configs/stacks/ios/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
