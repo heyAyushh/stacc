@@ -80,7 +80,20 @@ pub struct SyncReport {
     pub missing_license_count: usize,
     pub missing_version_count: usize,
     pub origin_error_count: usize,
+    pub outdated: bool,
+    pub outdated_count: usize,
+    pub outdated_sources: Vec<OutdatedSource>,
     pub dry_run: bool,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+pub struct OutdatedSource {
+    pub freshness_scope: String,
+    pub name: String,
+    pub local_path: String,
+    pub source_url: Option<String>,
+    pub declared_commit: String,
+    pub repo_head_commit: String,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -104,6 +117,8 @@ struct Attribution {
 
 pub fn sync_metadata(options: &SyncOptions) -> Result<SyncReport> {
     let lockfile = build_lockfile(&options.root, options.refresh_origin)?;
+    let outdated_sources = outdated_sources_for(&lockfile.skills);
+    let outdated_count = outdated_sources.len();
     let report = SyncReport {
         output: options.output.clone(),
         skill_count: lockfile.skills.len(),
@@ -122,6 +137,9 @@ pub fn sync_metadata(options: &SyncOptions) -> Result<SyncReport> {
             .iter()
             .filter(|skill| skill.origin.head_error.is_some())
             .count(),
+        outdated: outdated_count > 0,
+        outdated_count,
+        outdated_sources,
         dry_run: options.dry_run,
     };
 
@@ -139,6 +157,41 @@ pub fn sync_metadata(options: &SyncOptions) -> Result<SyncReport> {
         .with_context(|| format!("failed to write {}", options.output.display()))?;
 
     Ok(report)
+}
+
+fn skill_origin_is_outdated(skill: &SkillMetadata) -> bool {
+    match (
+        skill.origin.declared_commit.as_deref(),
+        skill.origin.head_commit.as_deref(),
+    ) {
+        (Some(declared), Some(head)) => !commit_refs_match(declared, head),
+        _ => false,
+    }
+}
+
+fn outdated_sources_for(skills: &[SkillMetadata]) -> Vec<OutdatedSource> {
+    skills
+        .iter()
+        .filter(|skill| skill_origin_is_outdated(skill))
+        .filter_map(|skill| {
+            Some(OutdatedSource {
+                freshness_scope: "repo-head".to_string(),
+                name: skill.name.clone(),
+                local_path: skill.local_path.clone(),
+                source_url: skill.origin.source_url.clone(),
+                declared_commit: skill.origin.declared_commit.clone()?,
+                repo_head_commit: skill.origin.head_commit.clone()?,
+            })
+        })
+        .collect()
+}
+
+fn commit_refs_match(declared: &str, head: &str) -> bool {
+    let declared = declared.trim();
+    let head = head.trim();
+    !declared.is_empty()
+        && !head.is_empty()
+        && (declared == head || declared.starts_with(head) || head.starts_with(declared))
 }
 
 pub fn default_sync_options(root: PathBuf) -> SyncOptions {
@@ -543,6 +596,7 @@ fn discover_skill_dirs(root: &Path) -> Result<Vec<PathBuf>> {
     let mut dirs = BTreeSet::new();
     let roots = [
         root.join("configs").join("skills"),
+        root.join("configs").join("commands").join("skills"),
         root.join("configs").join("codex-skills").join("skills"),
         root.join("configs").join("cursor-plugins").join("skills"),
         root.join("configs").join("stacks"),
@@ -718,6 +772,8 @@ fn github_repo_url(source_url: &str) -> Option<String> {
 fn collection_for_path(relative_path: &str) -> String {
     if relative_path.starts_with("configs/codex-skills/") {
         "codex-skills".to_string()
+    } else if relative_path.starts_with("configs/commands/skills/") {
+        "command-skills".to_string()
     } else if relative_path.starts_with("configs/cursor-plugins/") {
         "cursor-plugins".to_string()
     } else if relative_path.starts_with("configs/stacks/") {
@@ -772,5 +828,63 @@ mod tests {
             github_repo_url("https://github.com/expo/skills/tree/main/plugins/expo/skills"),
             Some("https://github.com/expo/skills".to_string())
         );
+    }
+
+    #[test]
+    fn classifies_command_skill_collection() {
+        assert_eq!(
+            collection_for_path("configs/commands/skills/commit"),
+            "command-skills"
+        );
+    }
+
+    #[test]
+    fn accepts_short_declared_commit_that_matches_head() {
+        assert!(commit_refs_match(
+            "21327be",
+            "21327be9616025a337c41f3fe41a0a780c58c009"
+        ));
+    }
+
+    #[test]
+    fn detects_outdated_declared_commit() {
+        assert!(!commit_refs_match(
+            "21327be",
+            "cfd81b3961ef5fddc90e9f2994fa1c87cd454e61"
+        ));
+    }
+
+    #[test]
+    fn outdated_source_report_names_repo_head_scope() {
+        let skill = SkillMetadata {
+            name: "demo".to_string(),
+            description: None,
+            local_path: "configs/skills/demo".to_string(),
+            collection: "skills".to_string(),
+            license: LicenseMetadata {
+                spdx: Some("MIT".to_string()),
+                source: "frontmatter".to_string(),
+                file: None,
+            },
+            version: VersionMetadata {
+                value: None,
+                source: "missing".to_string(),
+            },
+            origin: OriginMetadata {
+                source_url: Some(
+                    "https://github.com/example/demo/tree/main/skills/demo".to_string(),
+                ),
+                repo_url: Some("https://github.com/example/demo".to_string()),
+                declared_commit: Some("1111111".to_string()),
+                head_commit: Some("2222222".to_string()),
+                head_error: None,
+            },
+        };
+
+        let sources = outdated_sources_for(&[skill]);
+
+        assert_eq!(sources.len(), 1);
+        assert_eq!(sources[0].freshness_scope, "repo-head");
+        assert_eq!(sources[0].repo_head_commit, "2222222");
     }
 }

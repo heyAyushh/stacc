@@ -2,7 +2,7 @@
 name: swiftui-ui-patterns
 description: Best practices and example-driven guidance for building SwiftUI views and components. Use when creating or refactoring SwiftUI UI, designing tab architecture with TabView, composing screens, or needing component-specific patterns and examples.
 license: MIT
-origin_url: https://github.com/Dimillian/Skills
+origin_url: https://github.com/Dimillian/Skills/tree/main/swiftui-ui-patterns
 ---
 
 # SwiftUI UI Patterns

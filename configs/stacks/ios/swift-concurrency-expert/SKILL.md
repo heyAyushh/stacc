@@ -2,7 +2,7 @@
 name: swift-concurrency-expert
 description: Swift Concurrency review and remediation for Swift 6.2+. Use when asked to review Swift Concurrency usage, improve concurrency compliance, or fix Swift concurrency compiler errors in a feature or file.
 license: MIT
-origin_url: https://github.com/Dimillian/Skills
+origin_url: https://github.com/Dimillian/Skills/tree/main/swift-concurrency-expert
 ---
 
 # Swift Concurrency Expert

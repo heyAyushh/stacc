@@ -2,7 +2,7 @@
 name: rust-performance
 description: Guides Rust performance optimization. Use when profiling, benchmarking, reducing allocations, improving cache locality, choosing between rayon/async/threads, or applying SIMD/parallelism.
 license: MIT
-origin_url: https://github.com/actionbook/rust-skills
+origin_url: https://github.com/actionbook/rust-skills/tree/main/skills
 ---
 
 # Performance Optimization

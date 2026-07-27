@@ -2,7 +2,7 @@
 name: rust
 description: Provides Rust coding best practices for structure, patterns, performance, and error handling. Use when writing or reviewing Rust code, or when the user asks for Rust style guidance.
 license: MIT
-origin_url: https://github.com/actionbook/rust-skills
+origin_url: https://github.com/actionbook/rust-skills/tree/main/skills
 ---
 
 # Rust Best Practices

@@ -175,6 +175,8 @@ struct SyncMetadataArgs {
     output: Option<PathBuf>,
     #[arg(long, help = "Refresh current GitHub origin HEAD commits")]
     refresh_origin: bool,
+    #[arg(long, help = "Exit non-zero when pinned external sources are outdated")]
+    fail_on_outdated: bool,
     #[arg(long, help = "Audit without writing the lockfile")]
     dry_run: bool,
     #[arg(long, help = "Print machine-readable JSON report")]
@@ -244,6 +246,7 @@ const SYNC_METADATA_EXAMPLES: &str = "\
 Examples:
   stacc sync-metadata --dry-run --json
   stacc sync-metadata --refresh-origin
+  stacc sync-metadata --refresh-origin --dry-run --fail-on-outdated
 ";
 
 const BOOTSTRAP_EXAMPLES: &str = "\
@@ -314,8 +317,9 @@ fn run_panel_command(root: PathBuf, config_path: Option<PathBuf>) -> Result<()> 
             PanelOutcome::SyncMetadata(options) => {
                 let report = sync_metadata(&options)?;
                 message = Some(format!(
-                    "metadata synced: {} skills, {} missing license, {} missing version, {} origin errors",
+                    "metadata synced: {} skills, outdated {}, {} missing license, {} missing version, {} origin errors",
                     report.skill_count,
+                    report.outdated,
                     report.missing_license_count,
                     report.missing_version_count,
                     report.origin_error_count
@@ -443,7 +447,30 @@ fn run_sync_metadata_command(root: PathBuf, args: SyncMetadataArgs) -> Result<()
         println!("missing license: {}", report.missing_license_count);
         println!("missing version: {}", report.missing_version_count);
         println!("origin errors: {}", report.origin_error_count);
+        println!("outdated: {}", report.outdated);
+        println!("outdated count: {}", report.outdated_count);
+        if !report.outdated_sources.is_empty() {
+            println!("outdated sources:");
+            println!("freshness scope | local path | declared | repo head | source");
+            println!("--- | --- | --- | --- | ---");
+            for source in &report.outdated_sources {
+                println!(
+                    "{} | {} | {} | {} | {}",
+                    source.freshness_scope,
+                    source.local_path,
+                    source.declared_commit,
+                    source.repo_head_commit,
+                    source.source_url.as_deref().unwrap_or("")
+                );
+            }
+        }
         println!("output: {}", report.output.display());
+    }
+    if args.fail_on_outdated && report.outdated {
+        anyhow::bail!(
+            "external source metadata is outdated for {} skill(s)",
+            report.outdated_count
+        );
     }
     Ok(())
 }

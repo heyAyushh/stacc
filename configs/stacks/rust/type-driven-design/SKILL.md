@@ -2,7 +2,7 @@
 name: rust-type-driven-design
 description: Guides type-driven design in Rust. Use when encoding invariants in types, applying newtype pattern, implementing type state machines, using PhantomData, or making invalid states unrepresentable.
 license: MIT
-origin_url: https://github.com/actionbook/rust-skills
+origin_url: https://github.com/actionbook/rust-skills/tree/main/skills
 ---
 
 # Type-Driven Design

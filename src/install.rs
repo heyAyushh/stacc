@@ -2645,7 +2645,16 @@ mod tests {
 
     #[test]
     fn build_plan_uses_native_operations() {
-        let mut request = dry_run_request(vec![Category::Rules]);
+        let root = TestDir::new("native-ops");
+        write_test_file(
+            &root
+                .path
+                .join(CONFIGS_DIR)
+                .join(Category::Rules.install_value())
+                .join("example.mdc"),
+            "---\ndescription: test rule\n---\nUse native operations.\n",
+        );
+        let mut request = dry_run_request_with_root(root.path.clone(), vec![Category::Rules]);
         request.editors = vec![Editor::Cursor];
 
         let plans = build_install_plan(&request).expect("plan should build");

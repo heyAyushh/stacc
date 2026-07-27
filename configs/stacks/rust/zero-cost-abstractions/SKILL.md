@@ -2,7 +2,7 @@
 name: rust-zero-cost-abstractions
 description: Guides generic vs trait object decisions in Rust. Use when choosing between static and dynamic dispatch, designing traits, handling E0277/E0038, or deciding between enum and dyn Trait.
 license: MIT
-origin_url: https://github.com/actionbook/rust-skills
+origin_url: https://github.com/actionbook/rust-skills/tree/main/skills
 ---
 
 # Zero-Cost Abstractions

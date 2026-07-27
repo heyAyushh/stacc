@@ -138,6 +138,13 @@ fn run_installed_binary_checks(root: &Path) -> Result<()> {
     run_command_with_env(
         &check_root,
         binary.as_os_str(),
+        string_args(&["sync-metadata", "--dry-run", "--json"]),
+        &[(STACC_BUNDLE_ROOT_ENV, bundle_root.as_os_str())],
+        OutputMode::Quiet,
+    )?;
+    run_command_with_env(
+        &check_root,
+        binary.as_os_str(),
         string_args(&[
             "install",
             "--editor",

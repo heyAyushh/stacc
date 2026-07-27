@@ -2,7 +2,7 @@
 name: rust-anti-patterns
 description: Identifies and fixes common Rust anti-patterns. Use during code review, when seeing excessive clones/unwraps/index loops, or when code fights the borrow checker instead of working with it.
 license: MIT
-origin_url: https://github.com/actionbook/rust-skills
+origin_url: https://github.com/actionbook/rust-skills/tree/main/skills
 ---
 
 # Anti-Patterns

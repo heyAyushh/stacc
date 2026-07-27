@@ -21,7 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE (http
 - `configs/`
   - `rules/` and `stack/*.mdc`: always-applied rules + optional stack-specific rule packs.
   - `commands/`: slash commands (markdown prompts).
-  - `skills/`: skill folders; each contains a `SKILL.md` and optional references/scripts.
+  - `skills/`: editor-neutral skill folders. See `configs/skills/AGENTS.md` for category and progressive-disclosure rules.
   - `agents/`: agent prompts used by some workflows.
   - `hooks/`: hook prompts/docs.
   - `mcps/`: MCP server configuration (`mcp.json`) and notes.
@@ -68,13 +68,12 @@ The installer provides several conflict resolution strategies:
 
 ## Available skills
 Skills in `configs/skills/` provide specialized capabilities:
-- **karpathy-guidelines**: Behavioral guidelines to reduce common LLM coding mistakes.
-- **bash-expert**: Bash/shell scripting help and debugging
-- **changelog-generator**: Generate changelogs from git history
-- **find-skills**: Discover and install agent skills
-- **frontend-design**: Production-grade UI/frontend development
-- **mcp-builder**: Guide for creating MCP servers
-- **skill-creator**: Guide for creating new skills
+- **Authoring/maintenance**: `skill-creator`, `writing-great-skills`, `find-skills`, `mcp-builder`, `changelog-generator`
+- **Engineering workflow**: `diagnose`, `tdd`, `prototype`, `to-prd`, `to-issues`, `triage`, `zoom-out`
+- **Code style/review modes**: `karpathy-guidelines`, `ponytail*`, `caveman`, `bash-expert`
+- **Frontend/product craft**: `frontend-design`, `hallmark`, `brandkit`, `stitch-skill`, `imagegen-*`, `taste-skill*`
+- **Platform/runtime**: Expo skills, native UI skills, `gui-automation`, `agent-browser`, `audio-math-haptics`
+- Keep `SKILL.md` as the trigger and first screen; move long references, command catalogs, examples, or scripts into `references/` or `scripts/`.
 
 ## Available stacks
 Stacks in `configs/stacks/` are framework/language-specific skill bundles:

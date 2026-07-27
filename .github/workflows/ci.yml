@@ -1,0 +1,60 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: stacc check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run repository gate
+        run: cargo run -- check
+
+  source-freshness:
+    name: source freshness
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Report external source freshness
+        shell: bash
+        run: |
+          set -euo pipefail
+          report="$(cargo run -- sync-metadata --refresh-origin --dry-run --json)"
+          printf '%s\n' "${report}"
+          REPORT_JSON="${report}" python3 - "${GITHUB_STEP_SUMMARY}" <<'PY'
+          import json
+          import os
+          import sys
+
+          summary_path = sys.argv[1]
+          report = json.loads(os.environ["REPORT_JSON"])
+          with open(summary_path, "a", encoding="utf-8") as summary:
+              summary.write("## External source freshness\n\n")
+              summary.write(f"- outdated: `{str(report['outdated']).lower()}`\n")
+              summary.write(f"- outdated count: `{report['outdated_count']}`\n")
+              summary.write(f"- origin errors: `{report['origin_error_count']}`\n")
+              if report["outdated_sources"]:
+                  summary.write("\n| Freshness scope | Local path | Declared | Repo head | Source |\n")
+                  summary.write("| --- | --- | --- | --- | --- |\n")
+                  for source in report["outdated_sources"]:
+                      summary.write(
+                          f"| `{source['freshness_scope']}` | `{source['local_path']}` "
+                          f"| `{source['declared_commit']}` | `{source['repo_head_commit']}` "
+                          f"| {source.get('source_url') or ''} |\n"
+                      )
+          PY
