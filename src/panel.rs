@@ -11,13 +11,13 @@ use crate::bootstrap::{default_bootstrap_options, BootstrapOptions};
 use crate::catalog::{default_metadata_path, Catalog, Category, ConflictMode, Editor, Scope};
 use crate::config::PanelConfig;
 use crate::git_utils::{repository_status, RepositoryStatus};
-use crate::install::InstallRequest;
+use crate::install::{build_install_plan, InstallRequest};
 use crate::metadata::{default_sync_options, SyncOptions};
 
 const EVENT_POLL_MS: u64 = 200;
 const LEFT_PANEL_PERCENT: u16 = 48;
 const HEADER_HEIGHT: u16 = 3;
-const FOOTER_HEIGHT: u16 = 3;
+const FOOTER_HEIGHT: u16 = 4;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum PanelOutcome {
@@ -126,26 +126,25 @@ pub fn run_panel(
     let metadata_path = default_metadata_path(&root);
     let status = repository_status(&root, &metadata_path)?;
     let mut terminal = ratatui::init();
-    let result = run_panel_loop(
-        &mut PanelState {
-            root,
-            catalog,
-            segment: Segment::Installation,
-            cursor: 0,
-            editors: config.default_editors,
-            scope: config.default_scope,
-            categories: config.default_categories,
-            stacks: config.default_stacks,
-            mcp_servers: config.default_mcp_servers,
-            hook_packages: config.default_hook_packages,
-            codex_plugins: config.default_codex_plugins,
-            conflict_mode: config.conflict_mode,
-            dry_run: config.dry_run,
-            status,
-            message: initial_message.unwrap_or_else(|| "ready".to_string()),
-        },
-        &mut terminal,
-    );
+    let mut state = PanelState {
+        root,
+        catalog,
+        segment: Segment::Installation,
+        cursor: 0,
+        editors: config.default_editors,
+        scope: config.default_scope,
+        categories: config.default_categories,
+        stacks: config.default_stacks,
+        mcp_servers: config.default_mcp_servers,
+        hook_packages: config.default_hook_packages,
+        codex_plugins: config.default_codex_plugins,
+        conflict_mode: config.conflict_mode,
+        dry_run: config.dry_run,
+        status,
+        message: initial_message.unwrap_or_else(|| "ready".to_string()),
+    };
+    state.normalize_bulk_selections();
+    let result = run_panel_loop(&mut state, &mut terminal);
     ratatui::restore();
     result
 }
@@ -277,6 +276,41 @@ fn render_footer(frame: &mut Frame<'_>, state: &PanelState, area: ratatui::layou
 }
 
 impl PanelState {
+    fn normalize_bulk_selections(&mut self) {
+        if self.categories.contains(&Category::Mcps) && self.mcp_servers.is_empty() {
+            self.mcp_servers.clone_from(&self.catalog.mcp_servers);
+        }
+        if self.categories.contains(&Category::Hooks) && self.hook_packages.is_empty() {
+            for hook in &self.catalog.hook_packages {
+                if !self.hook_packages.contains(&hook.name) {
+                    self.hook_packages.push(hook.name.clone());
+                }
+            }
+        }
+    }
+
+    fn toggle_category(&mut self, category: Category) {
+        let was_selected = self.categories.contains(&category);
+        toggle_value(&mut self.categories, category, false);
+        let is_selected = self.categories.contains(&category);
+        if was_selected == is_selected {
+            return;
+        }
+
+        match (category, is_selected) {
+            (Category::Mcps, true) => self.mcp_servers.clone_from(&self.catalog.mcp_servers),
+            (Category::Hooks, true) => {
+                self.hook_packages.clear();
+                self.normalize_bulk_selections();
+            }
+            (Category::Stack, false) => self.stacks.clear(),
+            (Category::Mcps, false) => self.mcp_servers.clear(),
+            (Category::Hooks, false) => self.hook_packages.clear(),
+            (Category::CodexPlugins, false) => self.codex_plugins.clear(),
+            _ => {}
+        }
+    }
+
     fn items(&self) -> Vec<PanelItem> {
         match self.segment {
             Segment::Installation => self.installation_items(),
@@ -442,7 +476,7 @@ fn handle_enter(state: &mut PanelState) -> Result<Option<PanelOutcome>> {
     };
     match &item.action {
         PanelItemAction::RunInstall => {
-            return Ok(Some(PanelOutcome::RunInstall(InstallRequest {
+            let request = InstallRequest {
                 root: state.root.clone(),
                 editors: state.editors.clone(),
                 scope: state.scope,
@@ -454,11 +488,21 @@ fn handle_enter(state: &mut PanelState) -> Result<Option<PanelOutcome>> {
                 conflict_mode: state.conflict_mode,
                 yes: true,
                 dry_run: state.dry_run,
-            })));
+            };
+            if let Err(error) = request.validate() {
+                state.message = format!("cannot run install: {error}");
+                return Ok(None);
+            }
+            if let Err(error) = build_install_plan(&request) {
+                state.message = format!("cannot run install: {error}");
+                return Ok(None);
+            }
+            return Ok(Some(PanelOutcome::RunInstall(request)));
         }
         PanelItemAction::SyncMetadata => {
             let mut options = default_sync_options(state.root.clone());
             options.refresh_origin = true;
+            options.dry_run = state.dry_run;
             return Ok(Some(PanelOutcome::SyncMetadata(options)));
         }
         PanelItemAction::RunChecks => return Ok(Some(PanelOutcome::RunChecks)),
@@ -493,14 +537,35 @@ fn handle_item_action(state: &mut PanelState, action: &PanelItemAction) {
         }
         PanelItemAction::CycleConflict => state.conflict_mode = state.conflict_mode.next(),
         PanelItemAction::ToggleDryRun => state.dry_run = !state.dry_run,
-        PanelItemAction::ToggleCategory(category) => {
-            toggle_value(&mut state.categories, *category, true)
-        }
-        PanelItemAction::ToggleStack(stack) => toggle_string(&mut state.stacks, stack),
-        PanelItemAction::ToggleMcpServer(server) => toggle_string(&mut state.mcp_servers, server),
-        PanelItemAction::ToggleHookPackage(hook) => toggle_string(&mut state.hook_packages, hook),
+        PanelItemAction::ToggleCategory(category) => state.toggle_category(*category),
+        PanelItemAction::ToggleStack(stack) => toggle_scoped_string(
+            &mut state.stacks,
+            stack,
+            &mut state.categories,
+            Category::Stack,
+        ),
+        PanelItemAction::ToggleMcpServer(server) => toggle_scoped_string(
+            &mut state.mcp_servers,
+            server,
+            &mut state.categories,
+            Category::Mcps,
+        ),
+        PanelItemAction::ToggleHookPackage(hook) => toggle_scoped_string(
+            &mut state.hook_packages,
+            hook,
+            &mut state.categories,
+            Category::Hooks,
+        ),
         PanelItemAction::ToggleCodexPlugin(plugin) => {
-            toggle_string(&mut state.codex_plugins, plugin)
+            toggle_scoped_string(
+                &mut state.codex_plugins,
+                plugin,
+                &mut state.categories,
+                Category::CodexPlugins,
+            );
+            if !state.codex_plugins.is_empty() && !state.editors.contains(&Editor::Codex) {
+                state.editors.push(Editor::Codex);
+            }
         }
         PanelItemAction::Noop
         | PanelItemAction::RunInstall
@@ -553,6 +618,20 @@ fn toggle_string(values: &mut Vec<String>, value: &str) {
     }
 }
 
+fn toggle_scoped_string(
+    values: &mut Vec<String>,
+    value: &str,
+    categories: &mut Vec<Category>,
+    category: Category,
+) {
+    toggle_string(values, value);
+    if values.is_empty() {
+        categories.retain(|selected| *selected != category);
+    } else if !categories.contains(&category) {
+        categories.push(category);
+    }
+}
+
 fn marker(selected: bool) -> &'static str {
     if selected {
         "[x]"
@@ -585,5 +664,154 @@ fn join_strings(values: &[String]) -> String {
         "-".to_string()
     } else {
         values.join(",")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use ratatui::backend::TestBackend;
+    use ratatui::Terminal;
+
+    fn test_state() -> PanelState {
+        PanelState {
+            root: PathBuf::from("."),
+            catalog: Catalog {
+                root: PathBuf::from("."),
+                categories: Vec::new(),
+                stacks: Vec::new(),
+                mcp_servers: Vec::new(),
+                hook_packages: Vec::new(),
+                codex_plugins: Vec::new(),
+                skill_count: 0,
+            },
+            segment: Segment::Installation,
+            cursor: 0,
+            editors: vec![Editor::Codex],
+            scope: Scope::Project,
+            categories: vec![Category::Skills],
+            stacks: Vec::new(),
+            mcp_servers: Vec::new(),
+            hook_packages: Vec::new(),
+            codex_plugins: Vec::new(),
+            conflict_mode: ConflictMode::Backup,
+            dry_run: true,
+            status: RepositoryStatus {
+                branch: "main".to_string(),
+                head: "abc123".to_string(),
+                origin_url: None,
+                changed_paths: 0,
+                metadata_lock_exists: true,
+            },
+            message: "ready".to_string(),
+        }
+    }
+
+    #[test]
+    fn metadata_sync_honors_panel_dry_run() {
+        let mut state = test_state();
+        state.segment = Segment::VersionControl;
+        state.cursor = 1;
+
+        let outcome = handle_enter(&mut state)
+            .expect("metadata action should succeed")
+            .expect("metadata action should exit the panel");
+
+        let PanelOutcome::SyncMetadata(options) = outcome else {
+            panic!("expected metadata sync outcome");
+        };
+        assert!(options.dry_run);
+    }
+
+    #[test]
+    fn mcp_selection_keeps_its_category_in_sync() {
+        let mut state = test_state();
+        state.categories.clear();
+
+        handle_item_action(
+            &mut state,
+            &PanelItemAction::ToggleMcpServer("github".to_string()),
+        );
+        assert_eq!(state.mcp_servers, vec!["github"]);
+        assert!(state.categories.contains(&Category::Mcps));
+
+        handle_item_action(
+            &mut state,
+            &PanelItemAction::ToggleMcpServer("github".to_string()),
+        );
+        assert!(state.mcp_servers.is_empty());
+        assert!(!state.categories.contains(&Category::Mcps));
+    }
+
+    #[test]
+    fn active_mcp_category_expands_empty_defaults_for_checkbox_accuracy() {
+        let mut state = test_state();
+        state.catalog.mcp_servers = vec!["github".to_string(), "grep".to_string()];
+        state.categories = vec![Category::Mcps];
+        state.mcp_servers.clear();
+
+        state.normalize_bulk_selections();
+
+        assert_eq!(state.mcp_servers, vec!["github", "grep"]);
+    }
+
+    #[test]
+    fn toggling_mcp_category_selects_and_clears_its_servers() {
+        let mut state = test_state();
+        state.catalog.mcp_servers = vec!["github".to_string(), "grep".to_string()];
+        state.categories.clear();
+
+        handle_item_action(&mut state, &PanelItemAction::ToggleCategory(Category::Mcps));
+        assert_eq!(state.mcp_servers, vec!["github", "grep"]);
+
+        handle_item_action(&mut state, &PanelItemAction::ToggleCategory(Category::Mcps));
+        assert!(state.mcp_servers.is_empty());
+    }
+
+    #[test]
+    fn invalid_install_selection_stays_in_panel_with_actionable_message() {
+        let mut state = test_state();
+        state.categories.clear();
+        state.cursor = state.installation_items().len() - 1;
+
+        let outcome = handle_enter(&mut state).expect("invalid selection should be handled");
+
+        assert!(outcome.is_none());
+        assert!(state
+            .message
+            .contains("install needs at least one category"));
+    }
+
+    #[test]
+    fn invalid_stack_selection_stays_in_panel_with_actionable_message() {
+        let mut state = test_state();
+        state.categories = vec![Category::Stack];
+        state.stacks.clear();
+        state.cursor = state.installation_items().len() - 1;
+
+        let outcome = handle_enter(&mut state).expect("invalid selection should be handled");
+
+        assert!(outcome.is_none());
+        assert!(state.message.contains("--stack <name> or --stack all"));
+    }
+
+    #[test]
+    fn footer_renders_the_action_result_message() {
+        let state = test_state();
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).expect("test terminal should initialize");
+
+        terminal
+            .draw(|frame| render(frame, &state))
+            .expect("panel should render");
+
+        let rendered = terminal
+            .backend()
+            .buffer()
+            .content
+            .iter()
+            .map(|cell| cell.symbol())
+            .collect::<String>();
+        assert!(rendered.contains("ready"));
     }
 }

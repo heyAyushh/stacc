@@ -26,6 +26,8 @@ const CODEX_PLUGINS_CONFIG_FILE: &str = "plugins.json";
 const CODEX_PLUGINS_KEY: &str = "plugins";
 const CODEX_PLUGIN_INSTALL_EXAMPLE: &str =
     "stacc install --editor codex --codex-plugin lazycodex --dry-run --print-plan";
+const INSTALL_DRY_RUN_EXAMPLE: &str =
+    "stacc install --editor codex --category skills --dry-run --print-plan";
 const COMMANDS_SKILLS_DIR: &str = "configs/commands/skills";
 const CONFIGS_DIR: &str = "configs";
 const CURSOR_RULES_DIR: &str = "rules";
@@ -238,10 +240,14 @@ impl InstallRequest {
         }
         let has_codex_plugin_request = has_codex_plugin_request(self);
         if self.categories.is_empty() && !has_codex_plugin_request {
-            anyhow::bail!("install needs at least one category or --codex-plugin");
+            anyhow::bail!(
+                "install needs at least one category or --codex-plugin.\nExample: {INSTALL_DRY_RUN_EXAMPLE}"
+            );
         }
         if !self.dry_run && !self.yes {
-            anyhow::bail!("review dry-run first, then pass --yes for writes");
+            anyhow::bail!(
+                "review a dry-run first, then repeat the command with --yes for writes.\nExample: {INSTALL_DRY_RUN_EXAMPLE}"
+            );
         }
         if !self.root.join(CONFIGS_DIR).is_dir() {
             anyhow::bail!("configs/ missing under {}", self.root.display());
@@ -314,15 +320,15 @@ pub fn build_install_plan(request: &InstallRequest) -> Result<Vec<InstallPlan>> 
     let context = InstallContext::new()?;
 
     let mut plans = Vec::new();
-    for editor in &request.editors {
-        let categories = filtered_categories(request, *editor);
+    for editor in unique_values(&request.editors) {
+        let categories = filtered_categories(request, editor);
         if categories.is_empty() {
             continue;
         }
 
-        let target_root = target_root_for(*editor, request.scope, &context)?;
+        let target_root = target_root_for(editor, request.scope, &context)?;
         let mut plan = InstallPlan {
-            editor: *editor,
+            editor,
             scope: request.scope,
             target_root,
             operations: Vec::new(),
@@ -360,10 +366,10 @@ pub fn build_manage_plan(
     let mut plans = Vec::new();
 
     if !selected_skills.is_empty() {
-        for editor in &request.editors {
-            let target_root = target_root_for(*editor, request.scope, &context)?;
+        for editor in unique_values(&request.editors) {
+            let target_root = target_root_for(editor, request.scope, &context)?;
             let mut plan = InstallPlan {
-                editor: *editor,
+                editor,
                 scope: request.scope,
                 target_root,
                 operations: Vec::new(),
@@ -402,10 +408,10 @@ pub fn build_sync_manifest_plan(request: &SyncManifestRequest) -> Result<Vec<Ins
     let selected_plugins = normalized_selected_names(&request.codex_plugins);
     let mut plans = Vec::new();
 
-    for editor in &request.editors {
-        let target_root = target_root_for(*editor, request.scope, &context)?;
+    for editor in unique_values(&request.editors) {
+        let target_root = target_root_for(editor, request.scope, &context)?;
         let mut plan = InstallPlan {
-            editor: *editor,
+            editor,
             scope: request.scope,
             target_root,
             operations: Vec::new(),
@@ -617,13 +623,21 @@ fn install_for_target(
 }
 
 fn filtered_categories(request: &InstallRequest, editor: Editor) -> Vec<Category> {
-    request
-        .categories
-        .iter()
-        .copied()
+    unique_values(&request.categories)
+        .into_iter()
         .filter(|category| *category != Category::CodexPlugins)
         .filter(|category| category.is_supported_for(editor, request.scope, &request.root))
         .collect()
+}
+
+fn unique_values<T: Copy + Eq>(values: &[T]) -> Vec<T> {
+    let mut unique = Vec::with_capacity(values.len());
+    for value in values {
+        if !unique.contains(value) {
+            unique.push(*value);
+        }
+    }
+    unique
 }
 
 fn has_codex_plugin_request(request: &InstallRequest) -> bool {
@@ -910,7 +924,7 @@ fn plan_managed_skills(
         match action {
             ManageAction::Update => {
                 let source = managed_entry_source_path(request, &entry)?;
-                copy_tree(
+                let fully_updated = copy_tree(
                     &source,
                     &destination,
                     None,
@@ -918,9 +932,11 @@ fn plan_managed_skills(
                     &install_request,
                     plan,
                 )?;
-                let mut updated = entry;
-                updated.updated_unix_seconds = managed_timestamp_for_dry_run(request.dry_run);
-                upsert.push(updated);
+                if fully_updated {
+                    let mut updated = entry;
+                    updated.updated_unix_seconds = managed_timestamp_for_dry_run(request.dry_run);
+                    upsert.push(updated);
+                }
             }
             ManageAction::Uninstall => {
                 if destination.exists() {
@@ -1099,7 +1115,7 @@ fn install_skill_packages(
     for package in package_names {
         let source = source_root.join(&package);
         let destination = destination_root.join(&package);
-        copy_tree(
+        let can_manage = copy_tree(
             &source,
             &destination,
             None,
@@ -1107,14 +1123,16 @@ fn install_skill_packages(
             request,
             plan,
         )?;
-        manifest_entries.push(skill_manifest_entry(
-            request,
-            plan,
-            category,
-            &package,
-            &source,
-            &destination,
-        )?);
+        if can_manage {
+            manifest_entries.push(skill_manifest_entry(
+                request,
+                plan,
+                category,
+                &package,
+                &source,
+                &destination,
+            )?);
+        }
     }
     plan_manifest_upsert(plan, manifest_entries);
     Ok(())
@@ -1407,6 +1425,7 @@ fn install_category(
         request,
         plan,
     )
+    .map(|_| ())
 }
 
 fn install_rules(
@@ -1443,12 +1462,14 @@ fn install_skills(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()
         .join(CONFIGS_DIR)
         .join(Category::Skills.install_value());
     let destination = skills_root_for(plan.editor, plan.scope, &plan.target_root)?;
-    let mode = if shares_skills_root(plan.editor) {
-        DirectoryConflictMode::PerFile
-    } else {
-        DirectoryConflictMode::WholeDirectory
-    };
-    install_skill_packages(request, plan, Category::Skills, &source, &destination, mode)
+    install_skill_packages(
+        request,
+        plan,
+        Category::Skills,
+        &source,
+        &destination,
+        DirectoryConflictMode::WholeDirectory,
+    )
 }
 
 fn install_cursor_plugins(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()> {
@@ -1465,7 +1486,7 @@ fn install_cursor_plugins(request: &InstallRequest, plan: &mut InstallPlan) -> R
             Category::CursorPlugins,
             &skills,
             &destination,
-            DirectoryConflictMode::PerFile,
+            DirectoryConflictMode::WholeDirectory,
         )?;
     }
 
@@ -1501,7 +1522,7 @@ fn install_codex_skills(request: &InstallRequest, plan: &mut InstallPlan) -> Res
             Category::CodexSkills,
             &source,
             &destination,
-            DirectoryConflictMode::PerFile,
+            DirectoryConflictMode::WholeDirectory,
         )?;
     }
     Ok(())
@@ -1595,7 +1616,7 @@ fn install_commands(request: &InstallRequest, plan: &mut InstallPlan) -> Result<
             request.root.join(COMMANDS_SKILLS_DIR),
             skills_root_for(plan.editor, plan.scope, &plan.target_root)?,
             None,
-            DirectoryConflictMode::PerFile,
+            DirectoryConflictMode::WholeDirectory,
         )
     } else {
         let source = request
@@ -1630,6 +1651,7 @@ fn install_commands(request: &InstallRequest, plan: &mut InstallPlan) -> Result<
         request,
         plan,
     )
+    .map(|_| ())
 }
 
 fn install_stacks(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()> {
@@ -1643,7 +1665,7 @@ fn install_stacks(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()
     for stack in selected_stacks {
         let source = request.root.join(STACKS_DIR).join(&stack);
         let destination = destination_root.join(&stack);
-        copy_tree(
+        let can_manage = copy_tree(
             &source,
             &destination,
             None,
@@ -1651,14 +1673,16 @@ fn install_stacks(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()
             request,
             plan,
         )?;
-        manifest_entries.push(skill_manifest_entry(
-            request,
-            plan,
-            Category::Stack,
-            &stack,
-            &source,
-            &destination,
-        )?);
+        if can_manage {
+            manifest_entries.push(skill_manifest_entry(
+                request,
+                plan,
+                Category::Stack,
+                &stack,
+                &source,
+                &destination,
+            )?);
+        }
     }
     plan_manifest_upsert(plan, manifest_entries);
     Ok(())
@@ -1687,11 +1711,14 @@ fn install_hooks(request: &InstallRequest, plan: &mut InstallPlan) -> Result<()>
 
 fn selected_stack_names(request: &InstallRequest) -> Result<Vec<String>> {
     let selected = normalized_selected_names(&request.stacks);
+    let available = available_stack_names(&request.root)?;
     if selected.is_empty() {
-        return Ok(selected);
+        anyhow::bail!(
+            "stack category requires --stack <name> or --stack all. Available: {}",
+            available.join(",")
+        );
     }
 
-    let available = available_stack_names(&request.root)?;
     if selected.iter().any(|stack| stack == "all") {
         if selected.len() > 1 {
             anyhow::bail!("--stack all cannot be combined with specific stack names");
@@ -1933,23 +1960,39 @@ fn copy_tree(
     directory_conflict_mode: DirectoryConflictMode,
     request: &InstallRequest,
     plan: &mut InstallPlan,
-) -> Result<()> {
+) -> Result<bool> {
     if !source.is_dir() {
         anyhow::bail!("missing source directory: {}", source.display());
     }
 
     let source_files = collect_source_files(source, exclude_prefix)?;
-    let destination_will_be_replaced = if directory_conflict_mode
-        == DirectoryConflictMode::WholeDirectory
-        && is_nonempty_directory(destination)?
-    {
+    let destination_exists = destination.exists();
+    let destination_is_directory = destination.is_dir();
+    let destination_has_entries = destination_is_directory && is_nonempty_directory(destination)?;
+    let destination_has_conflict =
+        destination_exists && !destination_is_directory || destination_has_entries;
+    let mut can_manage = !destination_has_conflict;
+    let destination_will_be_replaced = if destination_has_conflict {
         if source_tree_matches_destination(source, destination, &source_files)? {
-            return Ok(());
+            return Ok(true);
         }
-        if effective_conflict_mode(request) == ConflictMode::Selective {
+
+        if !destination_is_directory && effective_conflict_mode(request) == ConflictMode::Selective
+        {
+            anyhow::bail!(
+                "cannot selectively merge directory {} into file {}; use --conflict backup, overwrite, or skip",
+                source.display(),
+                destination.display()
+            );
+        }
+
+        if directory_conflict_mode == DirectoryConflictMode::PerFile
+            || effective_conflict_mode(request) == ConflictMode::Selective
+        {
+            can_manage = false;
             false
         } else if !plan_directory_conflict(request, plan, destination) {
-            return Ok(());
+            return Ok(false);
         } else {
             true
         }
@@ -1974,7 +2017,7 @@ fn copy_tree(
         )?;
     }
 
-    Ok(())
+    Ok(can_manage)
 }
 
 fn source_tree_matches_destination(
@@ -2654,6 +2697,68 @@ mod tests {
     }
 
     #[test]
+    fn repeated_editors_and_categories_do_not_duplicate_install_operations() {
+        let root = TestDir::new("deduplicate-install-request");
+        write_test_file(
+            &root
+                .path
+                .join(CONFIGS_DIR)
+                .join(Category::Rules.install_value())
+                .join("example.mdc"),
+            "---\ndescription: test rule\n---\n",
+        );
+        let mut expected = dry_run_request_with_root(root.path.clone(), vec![Category::Rules]);
+        expected.editors = vec![Editor::Cursor];
+        let expected_plan = build_install_plan(&expected).expect("single plan should build");
+
+        let mut repeated = expected;
+        repeated.editors = vec![Editor::Cursor, Editor::Cursor];
+        repeated.categories = vec![Category::Rules, Category::Rules];
+        let repeated_plan = build_install_plan(&repeated).expect("repeated plan should build");
+
+        assert_eq!(repeated_plan, expected_plan);
+    }
+
+    #[test]
+    fn skipped_conflicted_skill_is_not_recorded_as_managed() {
+        let root = TestDir::new("skip-conflicted-skill-ownership");
+        let source_root = root.path.join(CONFIGS_DIR).join(SKILLS_DIR);
+        write_test_file(
+            &source_root.join("demo").join(MANAGED_SKILL_FILE_NAME),
+            "---\nname: demo\ndescription: source\n---\n",
+        );
+        let target_root = root.path.join("target");
+        let destination_root = target_root.join(SKILLS_DIR);
+        write_test_file(
+            &destination_root.join("demo").join(MANAGED_SKILL_FILE_NAME),
+            "---\nname: demo\ndescription: user copy\n---\n",
+        );
+        let mut request = dry_run_request_with_root(root.path.clone(), vec![Category::Skills]);
+        request.conflict_mode = ConflictMode::Skip;
+        let mut plan = test_plan(target_root);
+
+        install_skill_packages(
+            &request,
+            &mut plan,
+            Category::Skills,
+            &source_root,
+            &destination_root,
+            DirectoryConflictMode::WholeDirectory,
+        )
+        .expect("skill plan should build");
+
+        assert!(plan
+            .operations
+            .iter()
+            .any(|operation| matches!(operation, InstallOperation::Skip { .. })));
+        assert!(!plan.operations.iter().any(|operation| matches!(
+            operation,
+            InstallOperation::UpdateManifest { upsert, .. }
+                if upsert.iter().any(|entry| entry.name == "demo")
+        )));
+    }
+
+    #[test]
     fn selected_stack_names_reject_unknown_values() {
         let root = TestDir::new("unknown-stack");
         fs::create_dir_all(root.path.join(STACKS_DIR).join("rust"))
@@ -2665,6 +2770,20 @@ mod tests {
 
         let message = error.to_string();
         assert!(message.contains("unknown stack(s): ../rust,missing"));
+        assert!(message.contains("Available: rust"));
+    }
+
+    #[test]
+    fn stack_category_requires_an_explicit_selection() {
+        let root = TestDir::new("missing-stack-selection");
+        fs::create_dir_all(root.path.join(STACKS_DIR).join("rust"))
+            .expect("stack dir should be created");
+        let request = dry_run_request_with_root(root.path.clone(), vec![Category::Stack]);
+
+        let error = selected_stack_names(&request).expect_err("stack selection should be required");
+
+        let message = error.to_string();
+        assert!(message.contains("--stack <name> or --stack all"));
         assert!(message.contains("Available: rust"));
     }
 
@@ -3344,6 +3463,33 @@ mod tests {
                     if file_destination == &destination.join("file.txt")
             )
         }));
+    }
+
+    #[test]
+    fn selective_directory_install_rejects_a_file_target() {
+        let root = TestDir::new("selective-file-target");
+        let source = root.path.join("source");
+        let destination = root.path.join("destination");
+        write_test_file(&source.join("file.txt"), "new");
+        write_test_file(&destination, "blocking file");
+        let mut request = dry_run_request(vec![Category::Rules]);
+        request.conflict_mode = ConflictMode::Selective;
+        let mut plan = test_plan(destination.clone());
+
+        let error = copy_tree(
+            &source,
+            &destination,
+            None,
+            DirectoryConflictMode::WholeDirectory,
+            &request,
+            &mut plan,
+        )
+        .expect_err("file target cannot be selectively merged");
+
+        assert!(error
+            .to_string()
+            .contains("use --conflict backup, overwrite, or skip"));
+        assert!(plan.operations.is_empty());
     }
 
     #[test]

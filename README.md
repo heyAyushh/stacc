@@ -41,7 +41,9 @@ Stacks are focused domain, workflow, framework, or language bundles under
 `configs/stacks/`. When you select the `stack` category, the installer prompts
 you to choose one or more stack folders and installs them into each editor's
 `skills/` directory. Each stack `SKILL.md` is a router; child skills are loaded
-only when their branch matches the task.
+only when their branch matches the task. CLI installs require an explicit
+`--stack <name>` or `--stack all`; selecting a stack in the TUI enables the
+category automatically.
 
 #### Installer options
 
@@ -169,7 +171,13 @@ cargo run -- install --editor cursor --scope project --category hooks --hook con
 | Checks | Version segment | `stacc check` |
 | Self install/upgrade | Version segment | `stacc bootstrap` |
 
-Panel actions return to the TUI with a result message after install dry-runs, installs, metadata sync, checks, and bootstrap dry-runs.
+Panel selectors keep their categories in sync. Enabling Hooks or MCPs selects
+the currently available entries, while clearing the last entry disables that
+category. The panel dry-run switch also applies to metadata sync and bootstrap.
+Invalid install selections stay in the panel with an actionable message.
+
+Panel actions return to the TUI with a result message after install dry-runs,
+installs, metadata audits or syncs, checks, and bootstrap dry-runs.
 
 #### Conflict modes
 
@@ -185,7 +193,7 @@ Use `backup`, `overwrite`, `skip`, or `--dry-run` for non-interactive agents.
 #### Metadata and defaults
 
 - Install execution is native Rust: file copying, conflict handling, rules summaries, hook package filtering, MCP JSON/TOML merge, and installed-binary smoke checks use typed Rust planning with explicit dry-run/yes gates.
-- Installs write a stacc ownership manifest at `<target-root>/.stacc/manifest.json`. `stacc update` and `stacc uninstall` only operate on skill, stack, and Codex plugin entries recorded there by stacc; they do not infer ownership from arbitrary files already present in an editor directory.
+- Installs write a stacc ownership manifest at `<target-root>/.stacc/manifest.json`. `stacc update` and `stacc uninstall` only operate on skill, stack, and Codex plugin entries recorded there by stacc; they do not infer ownership from arbitrary files already present in an editor directory. A skipped conflict or selectively preserved package is not newly claimed as managed; backup and overwrite resolve managed packages at the package-directory boundary before ownership is recorded.
 - Use `stacc sync --editor ... --scope ... --dry-run --print-plan` to backfill the ownership manifest for stacc skill folders that are already installed. With no `--skill`, it scans the small core in `configs/skills`, stack folders, editor adapters under `configs/plugins`, and command skills for editors that store commands as skills. Codex plugin backfill is explicit with `--codex-plugin` because Codex owns the plugin installation state.
 - Optional Codex plugins live in `configs/plugins/codex/plugins.json`. Explicit `--codex-plugin` keys imply the internal `codex-plugins` category and a global Codex target, so `--scope global` is not required. The installer plans fixed `codex plugin marketplace add ...` and `codex plugin add ...` commands, then runs them only with `--yes`. Managed updates use `codex plugin marketplace upgrade ...` plus `codex plugin add ...`; managed uninstalls use `codex plugin remove ...` and remove the marketplace when no other stacc-managed plugin entry uses it.
 - Metadata sync writes `configs/metadata/skills.lock.json` with each skill's local path, license, version, source URL, declared origin commit, and current upstream repo HEAD commit when GitHub lookup is enabled. Its report includes `outdated`, `outdated_count`, and an `outdated_sources` table with `freshness_scope: "repo-head"`, computed by comparing the declared imported commit with the current upstream repository HEAD. Use `stacc sync-metadata --refresh-origin --dry-run --json` for a non-mutating freshness report, or add `--fail-on-outdated` when CI should block on stale pinned source snapshots.

@@ -24,7 +24,7 @@ use config::{load_panel_config, PanelConfig};
 use install::{
     build_install_plan, build_manage_plan, build_sync_manifest_plan, execute_install_request,
     execute_manage_request, execute_sync_manifest_request, print_plan, InstallRequest,
-    ManageAction, ManageRequest, SyncManifestRequest,
+    InstallRunResult, ManageAction, ManageRequest, SyncManifestRequest,
 };
 use metadata::{default_sync_options, sync_metadata};
 use panel::{run_panel, PanelOutcome};
@@ -95,7 +95,10 @@ struct InstallArgs {
         help = "Config category to install; optional when --codex-plugin is set"
     )]
     categories: Vec<Category>,
-    #[arg(long = "stack", help = "Stack skill folder to install")]
+    #[arg(
+        long = "stack",
+        help = "Stack folder required by --category stack; repeat it or use `all`"
+    )]
     stacks: Vec<String>,
     #[arg(long = "mcp-server", help = "MCP server key to install")]
     mcp_servers: Vec<String>,
@@ -304,20 +307,17 @@ fn run_panel_command(root: PathBuf, config_path: Option<PathBuf>) -> Result<()> 
                     continue;
                 }
                 let results = execute_install_request(&request)?;
-                let operations = results
-                    .iter()
-                    .map(|result| result.operation_count)
-                    .sum::<usize>();
-                message = Some(format!(
-                    "install complete: {} target(s), {} operation(s)",
-                    results.len(),
-                    operations
-                ));
+                message = Some(format_run_summary("install", &results));
             }
             PanelOutcome::SyncMetadata(options) => {
                 let report = sync_metadata(&options)?;
+                let action = if report.dry_run {
+                    "metadata audit complete"
+                } else {
+                    "metadata synced"
+                };
                 message = Some(format!(
-                    "metadata synced: {} skills, outdated {}, {} missing license, {} missing version, {} origin errors",
+                    "{action}: {} skills, outdated {}, {} missing license, {} missing version, {} origin errors",
                     report.skill_count,
                     report.outdated,
                     report.missing_license_count,
@@ -385,7 +385,8 @@ fn run_install_command(root: PathBuf, args: InstallArgs) -> Result<()> {
         print_plan(&plan);
     }
     if !request.dry_run {
-        execute_install_request(&request)?;
+        let results = execute_install_request(&request)?;
+        println!("{}", format_run_summary("install", &results));
     }
     Ok(())
 }
@@ -406,7 +407,12 @@ fn run_manage_command(root: PathBuf, args: ManageArgs, action: ManageAction) -> 
         print_plan(&plan);
     }
     if !request.dry_run {
-        execute_manage_request(&request, action)?;
+        let results = execute_manage_request(&request, action)?;
+        let action_name = match action {
+            ManageAction::Update => "update",
+            ManageAction::Uninstall => "uninstall",
+        };
+        println!("{}", format_run_summary(action_name, &results));
     }
     Ok(())
 }
@@ -426,7 +432,8 @@ fn run_sync_command(root: PathBuf, args: SyncArgs) -> Result<()> {
         print_plan(&plan);
     }
     if !request.dry_run {
-        execute_sync_manifest_request(&request)?;
+        let results = execute_sync_manifest_request(&request)?;
+        println!("{}", format_run_summary("sync", &results));
     }
     Ok(())
 }
@@ -489,4 +496,41 @@ fn run_check_command(root: PathBuf, args: CheckArgs) -> Result<()> {
         root,
         require_shellcheck: args.require_shellcheck,
     })
+}
+
+fn format_run_summary(action: &str, results: &[InstallRunResult]) -> String {
+    let operation_count = results
+        .iter()
+        .map(|result| result.operation_count)
+        .sum::<usize>();
+    format!(
+        "{action} complete: {} target(s), {operation_count} operation(s)",
+        results.len()
+    )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn completed_write_summary_reports_targets_and_operations() {
+        let results = vec![
+            InstallRunResult {
+                editor: Editor::Cursor,
+                operation_count: 4,
+                target_root: PathBuf::from(".cursor"),
+            },
+            InstallRunResult {
+                editor: Editor::Codex,
+                operation_count: 3,
+                target_root: PathBuf::from(".codex"),
+            },
+        ];
+
+        assert_eq!(
+            format_run_summary("install", &results),
+            "install complete: 2 target(s), 7 operation(s)"
+        );
+    }
 }

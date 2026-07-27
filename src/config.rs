@@ -26,12 +26,7 @@ impl Default for PanelConfig {
         Self {
             default_editors: vec![Editor::Cursor, Editor::Claude, Editor::Codex],
             default_scope: Scope::Project,
-            default_categories: vec![
-                Category::Rules,
-                Category::Skills,
-                Category::Stack,
-                Category::Mcps,
-            ],
+            default_categories: vec![Category::Rules, Category::Skills, Category::Mcps],
             default_stacks: Vec::new(),
             default_mcp_servers: Vec::new(),
             default_hook_packages: Vec::new(),
