@@ -9,8 +9,8 @@ immediate child directory is one selectable stack.
 ## PACKAGE BOUNDARY
 
 - `bun/`, `databases/`, `design/`, `engineering/`, `expo/`, `ios/`, `nextjs/`,
-  `productivity/`, `react-native/`, `review/`, `rust/`, `solana/`,
-  `turborepo/`, and `typescript/` are the selectable units.
+  `product-docs/`, `productivity/`, `react-native/`, `review/`, `rust/`,
+  `solana/`, `turborepo/`, and `typescript/` are the selectable units.
 - The installer discovers only those immediate children and copies a selected
   directory wholesale into the destination skill root.
 - Nested skills, rules, references, scripts, metadata, and `AGENTS.md` files are

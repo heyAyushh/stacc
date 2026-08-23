@@ -1,6 +1,6 @@
 # Source Attribution Audit
 
-Audit date: 2026-07-27
+Audit date: 2026-08-15
 
 This table records the current upstream evidence for every canonical stacc skill package discovered by `stacc sync-metadata`. It separates exact copied packages, historical imports, broad subtree imports, reference-derived local packages, and stacc-authored local skills so freshness checks can be interpreted at the right granularity. Tracked non-canonical mirrors are inventoried separately below.
 
@@ -138,10 +138,12 @@ Freshness:
 | `configs/stacks/nextjs/composition-patterns/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
 | `configs/stacks/nextjs/react-best-practices/` | `vercel-labs/agent-skills/skills/react-best-practices` | `exact-current` | `MIT` | `no` | Imported from Vercel's agent skills at `7c180d9`; package frontmatter declares MIT. |
 | `configs/stacks/nextjs/web-interface-guidelines/` | `vercel-labs/web-interface-guidelines` | `exact-current` | `MIT` | `no` | Imported from the standalone Vercel Labs package at `4e799d4`; upstream repository publishes an MIT license. |
+| `configs/stacks/product-docs/` | `steveruizok/83ae5c53f2784ebf8f5fe0a3fb94480f` Gist | `adapted-current` | `LicenseRef-No-Published-License` | `yes` | Imported at Gist revision `f9435a3`; local package name shortened from `product-description` to `product-docs`; the public Gist publishes no license file. |
 | `configs/stacks/productivity/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored progressive router for bundled productivity modes. |
 | `configs/stacks/react-native/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored skill package with no external freshness target. |
 | `configs/stacks/review/` | `local stacc` | `local-original` | `MIT` | `n/a` | Stacc-authored progressive router for bundled review modes. |
 | `configs/stacks/rust/` | `actionbook/rust-skills/skills` | `subtree-current` | `MIT` | `not pinned` | Part of the imported Rust skills subtree; local names are normalized. |
+| `configs/stacks/rust/rust-guidelines/` | `microsoft/rust-guidelines` generated `agents/all.txt` | `reference-derived` | `MIT` | `no` | Website artifact fetched 2026-08-15; SHA-256 `c9f1ac1c9d52a65e0c4d524e6a5c2eb80a33669b8b26b7537f0d66a555f432f7`; upstream HEAD `bbf7b03`. |
 | `configs/stacks/rust/agent-friendly-cli/` | `actionbook/rust-skills/skills/domain-cli plus local cli-for-agents adaptation` | `subtree-current` | `MIT` | `not pinned` | Part of the imported Rust skills subtree; local names are normalized. |
 | `configs/stacks/rust/anti-patterns/` | `actionbook/rust-skills/skills/m15-anti-pattern` | `subtree-current` | `MIT` | `not pinned` | Part of the imported Rust skills subtree; local names are normalized. |
 | `configs/stacks/rust/coding-guidelines/` | `actionbook/rust-skills/skills/coding-guidelines` | `subtree-current` | `MIT` | `not pinned` | Part of the imported Rust skills subtree; local names are normalized. |
@@ -169,7 +171,7 @@ These packages are tracked in editor-specific folders but are outside the canoni
 
 | Local path | Status | Notes |
 | --- | --- | --- |
-| `configs/plugins/codex/plugins.json` | reference-only | Optional marketplace entry for LazyCodex; no LazyCodex payload is vendored. |
+| `configs/plugins/codex/plugins.json` | reference-only | Optional marketplace entries for LazyCodex and Compound Engineering; no plugin payloads are vendored. |
 | `configs/plugins/cursor/agents/agents-memory-updater.md` | exact-current | `cursor/plugins/continual-learning/agents/agents-memory-updater.md`; same upstream plugin as the continual-learning hook. |
 | `configs/plugins/cursor/hooks/continual-learning/` | exact-current | `cursor/plugins/continual-learning/hooks`; hook package, not a skill package. |
 | `configs/commands/ultrathink.md`, `configs/commands/init.md`, `configs/commands/review-pr.md`, `configs/agents/verifier.md` | local-original | stacc-authored non-skill references. |

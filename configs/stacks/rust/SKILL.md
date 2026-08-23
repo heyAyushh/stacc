@@ -53,6 +53,7 @@ Load these for focused guidance on specific topics:
 | `agent-friendly-cli` | Rust binaries, clap command trees, diagnostics/codegen tools |
 | `anti-patterns` | Code review, clone/unwrap overuse, idiomatic rewrites |
 | `coding-guidelines` | Naming, style, modern crate recommendations |
+| `rust-guidelines` | Microsoft Pragmatic Rust Guidelines for Rust API, correctness, documentation, and review work |
 
 ## Local Resources
 
