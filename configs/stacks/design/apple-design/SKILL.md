@@ -2,8 +2,9 @@
 name: apple-design
 description: Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.
 license: MIT
-origin_url: https://github.com/emilkowalski/skills/tree/main/skills/apple-design
-origin_commit: 56de6f5d6642f761b5e17629fccf53e303b3da9b
+metadata:
+  origin_url: https://github.com/emilkowalski/skills/tree/main/skills/apple-design
+  origin_commit: 56de6f5d6642f761b5e17629fccf53e303b3da9b
 ---
 
 # Apple Design
