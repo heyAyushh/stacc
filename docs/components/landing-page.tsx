@@ -3,37 +3,10 @@ import { WaveCanvas } from "@/components/wave-canvas";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { InstallCopyCard } from "@/components/install-copy-card";
 import { CommandSearch } from "@/components/command-search";
-import { getBinaryInventory } from "@/lib/inventory";
+import { getBinaryInventory, getSkillInventory } from "@/lib/inventory";
 
 const staccRepoUrl = "https://github.com/heyAyushh/stacc";
 const staccIssueUrl = `${staccRepoUrl}/issues/new`;
-
-const features = [
-  {
-    number: "01",
-    titleLines: ["One", "Setup"],
-    body: "Bring the same skills, rules, agents, and MCP servers to Cursor, Claude Code, Codex, OpenCode, and Amp.",
-    href: "/docs/installation#targets",
-    panelClassName: "border-b md:border-b-0 md:border-r border-black",
-    actionKind: "arrow",
-  },
-  {
-    number: "02",
-    titleLines: ["Focused", "Stacks"],
-    body: "Add deep expertise without bloating every prompt. Pick focused stacks for your language, framework, or workflow; agents load each skill only when the task calls for it.",
-    href: "/docs/skills#choose",
-    panelClassName: "border-b md:border-b-0 md:border-r border-black",
-    actionKind: "arrow",
-  },
-  {
-    number: "03",
-    titleLines: ["Managed", "Installs"],
-    body: "Update and remove only the skills, stacks, and plugins STACC has recorded as its own.",
-    href: "/docs/managed-lifecycle#ownership",
-    panelClassName: "bg-white",
-    actionKind: "status",
-  },
-] as const;
 
 const arrowAction = (
   <div className="w-8 h-8 border border-black rounded-full flex items-center justify-center group-hover:border-white">
@@ -52,7 +25,7 @@ const statusAction = (
   </div>
 );
 
-function getFeatureAction(actionKind: (typeof features)[number]["actionKind"]) {
+function getFeatureAction(actionKind: "arrow" | "status") {
   if (actionKind === "arrow") {
     return arrowAction;
   }
@@ -61,8 +34,37 @@ function getFeatureAction(actionKind: (typeof features)[number]["actionKind"]) {
 }
 
 export async function LandingPage() {
-  const binary = await getBinaryInventory();
-  const displayVersion = `v.${binary.crateVersion}`;
+  const [binary, skills] = await Promise.all([getBinaryInventory(), getSkillInventory()]);
+  const everydaySkills = skills.collections.find((collection) => collection.name === "skills")?.count ?? 0;
+  const focusedStackSkills = skills.collections.find((collection) => collection.name === "stack")?.count ?? 0;
+  const workflowPackages = skills.totalSkills - everydaySkills - focusedStackSkills;
+  const displayVersion = `v${binary.crateVersion}`;
+  const features = [
+    {
+      number: "01",
+      titleLines: ["One", "Setup"],
+      body: "Bring the same skills, rules, agents, and MCP servers to Cursor, Claude Code, Codex, OpenCode, and Amp.",
+      href: "/docs/installation#targets",
+      panelClassName: "border-b md:border-b-0 md:border-r border-black",
+      actionKind: "arrow",
+    },
+    {
+      number: "02",
+      titleLines: [String(skills.totalSkills), "Skills"],
+      body: `${everydaySkills} everyday skills, ${focusedStackSkills} focused stack skills, and ${workflowPackages} workflow and editor packages—generated from the checked-in catalog.`,
+      href: "/docs/skills#catalog",
+      panelClassName: "border-b md:border-b-0 md:border-r border-black",
+      actionKind: "arrow",
+    },
+    {
+      number: "03",
+      titleLines: ["Managed", "Installs"],
+      body: "Update and remove only the skills, stacks, and plugins STACC has recorded as its own.",
+      href: "/docs/managed-lifecycle#ownership",
+      panelClassName: "bg-white",
+      actionKind: "status",
+    },
+  ] as const;
 
   return (
     <main className="screen min-h-screen overflow-x-hidden" aria-label="STACC Variant landing page">
@@ -88,7 +90,7 @@ export async function LandingPage() {
                   <br />
                   SUITE
                 </h1>
-                <div className="suite-kicker">• RULES • AGENTS • HOOKS •</div>
+                <div className="suite-kicker">• {skills.totalSkills} SKILLS • {skills.collections.length} COLLECTIONS •</div>
                 <div className="spinner" aria-hidden="true" />
                 <div className="mobile-right-copy">
                   Universal
