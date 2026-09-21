@@ -16,7 +16,7 @@ APPEND_CSV_COUNT=0
 TRANSLATED_ARGS=()
 TRANSLATED_DRY_RUN=0
 
-# shellcheck disable=SC2329 # Invoked indirectly by trap on EXIT.
+# shellcheck disable=SC2317,SC2329 # Invoked indirectly by trap on EXIT.
 cleanup() {
   if [ -n "${TMP_ROOT}" ] && [ -d "${TMP_ROOT}" ]; then
     rm -rf "${TMP_ROOT}"
